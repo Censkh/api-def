@@ -15,6 +15,7 @@ import {
 } from "./ApiTypes";
 import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend from "./backend/RequestBackend";
+import EndpointBuilder from "./EndpointBuilder";
 
 export let backend: RequestBackend | null = null;
 
@@ -95,13 +96,8 @@ export class Api implements ApiInfo {
             });
     }
 
-    endpoint<R,
-        P extends Params | undefined = undefined,
-        Q extends Query | undefined = undefined,
-        B extends Body | undefined = undefined>(info: EndpointConfig<R, P, Q, B>): Endpoint<R, P, Q, B> {
-        const endpoint = new Endpoint<R, P, Q, B>(this, info);
-        this.endpoints[endpoint.id] = endpoint as Endpoint;
-        return endpoint;
+    endpoint(): EndpointBuilder {
+        return new EndpointBuilder(this);
     }
 
     getEventHandlers(): RequestEventHandlers<any> {

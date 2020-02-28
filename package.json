@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha1",
   "description": "Declarative async state to reduce boilerplate",
   "main": "index.js",
   "types": "index.d.ts",
