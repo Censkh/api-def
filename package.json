@@ -1,0 +1,43 @@
+{
+  "name": "api-def",
+  "version": "0.1.0",
+  "description": "Declarative async state to reduce boilerplate",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "esnext": "esm/index.js",
+  "scripts": {
+    "lint": "eslint --ext .tsx,.ts src",
+    "lint:fix": "eslint --fix --ext .tsx,.ts src",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module es2015 --target es5 --outDir esm",
+    "build:cjs": "tsc --module commonjs --target es5 --outDir cjs",
+    "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\""
+  },
+  "keywords": [
+    "typescript",
+    "react",
+    "async",
+    "state",
+    "hooks"
+  ],
+  "author": "James Waterhouse <09jwater@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "esm/",
+    "cjs/"
+  ],
+  "repository": "https://github.com/Censkh/api-def",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^2.21.0",
+    "eslint": "^6.8.0",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "localforage": "^1.7.3"
+  }
+}
