@@ -17,10 +17,10 @@ import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend from "./backend/RequestBackend";
 import EndpointBuilder from "./EndpointBuilder";
 
-export let backend: RequestBackend | null = null;
+export let requestBackend: RequestBackend | null = null;
 
-export const setBackend = (backendClass: { new(): RequestBackend }) => {
-    backend = new backendClass();
+export const setRequestBackend = (backendClass: { new(): RequestBackend }) => {
+    requestBackend = new backendClass();
 };
 
 export interface ApiInfo {
