@@ -1,10 +1,10 @@
 {
   "name": "api-def",
-  "version": "0.2.0-alpha3",
+  "version": "0.2.0-alpha5",
   "description": "Typed APIs with middleware support",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "esnext": "esm/index.js",
+  "main": "cjs/index.js",
+  "types": "esm/index.d.ts",
+  "module": "esm/index.js",
   "scripts": {
     "lint": "eslint --ext .tsx,.ts src",
     "lint:fix": "eslint --fix --ext .tsx,.ts src",
@@ -26,8 +26,6 @@
   "files": [
     "LICENSE",
     "README.md",
-    "index.js",
-    "index.d.ts",
     "esm/",
     "cjs/"
   ],

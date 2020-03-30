@@ -1,4 +1,5 @@
-import * as localforage from "localforage";
+// @ts-ignore
+import localforage from "localforage";
 
 export const DEFAULT_CACHE_EXPIRY = /* 15 mins*/ 60 * 1000 * 15;
 
