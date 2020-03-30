@@ -69,3 +69,7 @@ export const parseResponseDataToObject = (response: ApiResponse) => {
         }
     }
 };
+
+export const isPlainObj = (obj: any): obj is object => {
+    return typeof obj == "object" && obj.constructor == Object;
+}

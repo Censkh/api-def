@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "flatted": "^2.0.2",
     "localforage": "^1.7.3"
   }
 }

@@ -1,4 +1,7 @@
 import * as localforage from "localforage";
+import * as flatted from "flatted";
+
+import * as ApiUtils from "./ApiUtils";
 
 export const DEFAULT_CACHE_EXPIRY = /* 15 mins*/ 60 * 1000 * 15;
 
@@ -16,8 +19,14 @@ export interface CacheEntry {
 }
 
 export const setCachedItem = async <T>(key: string, value: T, expiry?: number): Promise<T> => {
+    let safeValue = value;
+
+    if (!ApiUtils.isPlainObj(value)) {
+        safeValue = flatted.parse(flatted.stringify(value));
+    }
+
     const entry: CacheEntry = {
-        data: value,
+        data: safeValue,
         expiry: expiry === undefined || isNaN(expiry) ? null : expiry,
     };
     await store.setItem(key, entry);
