@@ -1,7 +1,7 @@
 {
   "name": "api-def",
-  "version": "0.2.0-alpha1",
-  "description": "Declarative async state to reduce boilerplate",
+  "version": "0.2.0-alpha3",
+  "description": "Typed APIs with middleware support",
   "main": "index.js",
   "types": "index.d.ts",
   "esnext": "esm/index.js",
@@ -15,10 +15,11 @@
   },
   "keywords": [
     "typescript",
-    "react",
-    "async",
-    "state",
-    "hooks"
+    "javascript",
+    "node",
+    "web",
+    "api",
+    "typed"
   ],
   "author": "James Waterhouse <09jwater@gmail.com>",
   "license": "MIT",

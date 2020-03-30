@@ -15,10 +15,5 @@
     "quotes": 1,
     "react/display-name": 0,
     "@typescript-eslint/no-explicit-any": 0
-  },
-  "settings": {
-    "react": {
-      "version": "16.12.0"
-    }
   }
 }

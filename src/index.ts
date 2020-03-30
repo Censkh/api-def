@@ -1,4 +1,6 @@
 export * from "./lib/Api";
+export * from "./lib/ApiTypes";
+
 export {clearCache} from "./lib/Caching";
 
 export {default as AxiosBackend} from "./lib/backend/AxiosBackend";
