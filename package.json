@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.2.0-alpha3",
+  "version": "0.2.0-alpha4",
   "description": "Typed APIs with middleware support",
   "main": "index.js",
   "types": "index.d.ts",
