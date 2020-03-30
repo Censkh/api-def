@@ -20,11 +20,7 @@ export interface CacheEntry {
 }
 
 export const setCachedItem = async <T>(key: string, value: T, expiry?: number): Promise<T> => {
-    let safeValue = value;
-
-    if (!ApiUtils.isPlainObj(value)) {
-        safeValue = flatted.parse(flatted.stringify(value));
-    }
+    const safeValue = flatted.parse(flatted.stringify(value));
 
     const entry: CacheEntry = {
         data: safeValue,

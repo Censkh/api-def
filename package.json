@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.2.0-alpha6",
+  "version": "0.2.0-alpha7",
   "description": "Typed APIs with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -31,9 +31,9 @@
   ],
   "repository": "https://github.com/Censkh/api-def",
   "devDependencies": {
-    "@typescript-eslint/parser": "^2.21.0",
+    "@typescript-eslint/parser": "^2.25.0",
     "eslint": "^6.8.0",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "axios": "^0.19.2",
