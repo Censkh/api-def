@@ -1,3 +1,6 @@
+/// <reference types="typescript" />
+"use strict";
+
 export * from "./lib/Api";
 export * from "./lib/ApiTypes";
 

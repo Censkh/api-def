@@ -1,4 +1,5 @@
-import * as localforage from "localforage";
+// @ts-ignore
+import localforage from "localforage";
 import * as flatted from "flatted";
 
 import * as ApiUtils from "./ApiUtils";
