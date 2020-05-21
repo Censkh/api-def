@@ -1,75 +1,75 @@
 import {ApiResponse, CancelledRequestError, RequestError} from "./ApiTypes";
 
 export class ResponseBuilder<R> {
-    private _data: R | undefined;
-    private _status: number = 200;
+  private _data: R | undefined;
+  private _status: number = 200;
 
-    send(data: R): ApiResponse<R> {
-        this.data(data);
-        return this.build();
+  send(data: R): ApiResponse<R> {
+    this.data(data);
+    return this.build();
+  }
+
+  data(data: R): this {
+    this._data = data;
+    return this;
+  }
+
+  status(status: number): this {
+    this._status = status;
+    return this;
+  }
+
+  build(): ApiResponse<R> {
+    if (this._data === undefined) {
+      throw new Error("Response builder doesn't have a response");
     }
 
-    data(data: R): this {
-        this._data = data;
-        return this;
-    }
-
-    status(status: number): this {
-        this._status = status;
-        return this;
-    }
-
-    build(): ApiResponse<R> {
-        if (this._data === undefined) {
-            throw new Error("Response builder doesn't have a response");
-        }
-
-        return {
-            headers: {},
-            data: this._data,
-            status: this._status,
-        };
-    }
+    return {
+      headers: {},
+      data   : this._data,
+      status : this._status,
+    };
+  }
 }
 
 export const isCancelledError = (
-    error: Error,
+  error: Error,
 ): error is CancelledRequestError => {
-    return "isCancelledRequest" in error;
+  return "isCancelledRequest" in error;
 };
 
 export const isNetworkError = (error: Error): boolean => {
-    return (
-        error.name === "NetworkError" ||
-        error.message === "Network Error" ||
-        (error as any).constructor?.name === "NetworkError"
-    );
+  return (
+    error.name === "NetworkError" ||
+    error.message === "Network Error" ||
+    (error as any).constructor?.name === "NetworkError"
+  );
 };
 
 export const isRequestError = (error: Error): error is RequestError => {
-    return "response" in error;
+  return "response" in error;
 };
 
 export const parseResponseDataToObject = (response: ApiResponse) => {
-    if (
-        window.TextDecoder &&
-        response.data &&
-        typeof response.data === "object"
-    ) {
-        const data = response.data;
-        if (data.constructor && data.constructor.name === "ArrayBuffer") {
-            try {
-                const decodedData = (response.data = new TextDecoder("utf-8").decode(
-                    data,
-                ) as any);
-                response.data = JSON.parse(decodedData);
-            } catch (e) {
-                console.warn("Couldn't parse array buffer content to JSON response", e);
-            }
-        }
+  if (
+    window.TextDecoder &&
+    response.data &&
+    typeof response.data === "object"
+  ) {
+    const data = response.data;
+    if (data.constructor && data.constructor.name === "ArrayBuffer") {
+      try {
+        const decodedData = (response.data = new TextDecoder("utf-8").decode(
+          data,
+        ) as any);
+        response.data = JSON.parse(decodedData);
+      } catch (e) {
+        console.warn("Couldn't parse array buffer content to JSON response", e);
+      }
     }
+  }
 };
 
 export const isPlainObj = (obj: any): obj is object => {
-    return typeof obj == "object" && obj.constructor == Object;
-}
+  return typeof obj == "object" && obj.constructor == Object;
+};
