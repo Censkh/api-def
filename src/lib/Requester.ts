@@ -4,8 +4,6 @@ import * as ApiUtils  from "./ApiUtils";
 import RequestContext from "./RequestContext";
 import * as Api       from "./Api";
 
-export const MAX_RETRIES = 5;
-
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
@@ -117,8 +115,10 @@ const makeRequest = async <R>(
             errorEventResult?.type === EventResultType.Retry ||
             ApiUtils.isNetworkError(error);
 
+    const retries = context.computedConfig.options?.retries;
+
     // retry request with same config
-    if (shouldRetry && context.stats.attempt < MAX_RETRIES) {
+    if (shouldRetry && retries && context.stats.attempt < retries) {
       return makeRequest(context);
     }
 

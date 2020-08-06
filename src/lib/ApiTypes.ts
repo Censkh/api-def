@@ -33,6 +33,7 @@ export type RequestConfig<P extends Params | undefined = Params,
 export interface RequestConfigOptions {
   cache?: number | boolean;
   lock?: string | false;
+  retries?: number;
 }
 
 export enum RequestMethod {

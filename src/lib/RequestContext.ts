@@ -34,7 +34,7 @@ export default class RequestContext<R = any,
   error: RequestError | null = null;
   readonly cacheInfo: RequestCacheInfo = {cached: false, source: null};
 
-  cancelled: boolean = false;
+  cancelled = false;
   readonly computedConfig: RequestConfig<P, Q, B>;
 
   constructor(

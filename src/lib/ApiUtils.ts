@@ -2,7 +2,7 @@ import {ApiResponse, CancelledRequestError, RequestError} from "./ApiTypes";
 
 export class ResponseBuilder<R> {
   private _data: R | undefined;
-  private _status: number = 200;
+  private _status = 200;
 
   send(data: R): ApiResponse<R> {
     this.data(data);
@@ -68,8 +68,4 @@ export const parseResponseDataToObject = (response: ApiResponse) => {
       }
     }
   }
-};
-
-export const isPlainObj = (obj: any): obj is object => {
-  return typeof obj == "object" && obj.constructor == Object;
 };
