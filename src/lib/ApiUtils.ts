@@ -50,7 +50,7 @@ export const isRequestError = (error: Error): error is RequestError => {
   return "response" in error;
 };
 
-export const parseResponseDataToObject = (response: ApiResponse) => {
+export const parseResponseDataToObject = (response: ApiResponse): void => {
   if (
     window.TextDecoder &&
     response.data &&

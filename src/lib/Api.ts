@@ -1,6 +1,7 @@
 import Endpoint                             from "./Endpoint";
 import * as Requester                       from "./Requester";
 import {
+  ApiResponse,
   BaseRequestConfig,
   Body,
   ModulePossiblyDefault,
@@ -12,14 +13,14 @@ import {
   RequestMethod,
   RequestMiddleware,
   ResponseType,
-}                                           from "./ApiTypes";
+} from "./ApiTypes";
 import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend                       from "./backend/RequestBackend";
 import EndpointBuilder                      from "./EndpointBuilder";
 
 export let requestBackend: RequestBackend | null = null;
 
-export const setRequestBackend = (backendClass: { new(): RequestBackend }) => {
+export const setRequestBackend = (backendClass: { new(): RequestBackend }): void => {
   requestBackend = new backendClass();
 };
 
@@ -104,14 +105,14 @@ export class Api implements ApiInfo {
     return {};
   }
 
-  async get(path: string, config: RequestConfig) {
+  async get<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
     return await Requester.submit(
       new HotRequestHost(this, path, RequestMethod.Get),
       config,
     );
   }
 
-  async post(path: string, config: RequestConfig) {
+  async post<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
     return await Requester.submit(
       new HotRequestHost(this, path, RequestMethod.Post),
       config,

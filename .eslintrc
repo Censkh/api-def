@@ -9,10 +9,21 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "comma-dangle": [1, "always-multiline"],
-    "semi": 1,
+    "comma-dangle": [
+      1,
+      "always-multiline"
+    ],
+    "semi": 0,
     "quotes": 1,
     "react/display-name": 0,
-    "@typescript-eslint/no-explicit-any": 0
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/semi": 1,
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      {
+        "args": "none"
+      }
+    ]
   }
 }
