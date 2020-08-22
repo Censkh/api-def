@@ -47,7 +47,7 @@ export default class FetchBackend implements RequestBackend<Response, Error> {
     }
 
     // abort controller is a newer feature than fetch
-    const abortController = window.AbortController && new AbortController();
+    const abortController = AbortController && new AbortController();
     const abortSignal = abortController ? abortController.signal : undefined;
     let softAbort = false;
     let responded = false;

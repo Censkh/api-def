@@ -52,7 +52,7 @@ export const isRequestError = (error: Error): error is RequestError => {
 
 export const parseResponseDataToObject = (response: ApiResponse): void => {
   if (
-    window.TextDecoder &&
+    TextDecoder &&
     response.data &&
     typeof response.data === "object"
   ) {
