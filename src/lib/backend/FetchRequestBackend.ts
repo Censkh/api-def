@@ -2,11 +2,20 @@ import RequestBackend, {RequestOperation} from "./RequestBackend";
 import {ApiResponse, RequestMethod}       from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
 
+let fetch: typeof window.fetch = typeof window === "undefined" ? undefined as any : window.fetch;
+
 class FetchError extends Error {
   response?: Response;
 }
 
-export default class FetchBackend implements RequestBackend<Response, Error> {
+export default class FetchRequestBackend implements RequestBackend<Response, Error> {
+
+  constructor(fetchLibrary?: typeof window.fetch) {
+    if (fetchLibrary !== undefined) {
+      fetch = fetchLibrary;
+    }
+  }
+
   async extractResponseFromError(
     error: Error,
   ): Promise<ApiResponse | null | undefined> {

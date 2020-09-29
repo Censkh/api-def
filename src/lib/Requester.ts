@@ -68,7 +68,7 @@ const makeRequest = async <R>(
 ): Promise<ApiResponse<R>> => {
   const backend = Api.requestBackend;
   if (!backend) {
-    throw new Error("Please specify a backend you wish to use, this can be done either with 'apiDef.setRequestBackend(AxiosBackend/FetchBackend)'");
+    throw new Error("Please specify a backend you wish to use, this can be done either with 'apiDef.setRequestBackend(AxiosRequestBackend/FetchRequestBackend)'");
   }
 
   context.stats.attempt++;

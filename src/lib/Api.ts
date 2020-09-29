@@ -20,8 +20,8 @@ import EndpointBuilder                      from "./EndpointBuilder";
 
 export let requestBackend: RequestBackend | null = null;
 
-export const setRequestBackend = (backendClass: { new(): RequestBackend }): void => {
-  requestBackend = new backendClass();
+export const setRequestBackend = (backend: RequestBackend): void => {
+  requestBackend = backend;
 };
 
 export interface ApiInfo {

@@ -1,5 +1,5 @@
 import {CacheSource, EventResultType, RequestEvent, RequestMethod, RequestMiddleware} from "../ApiTypes";
-import * as Caching                                                                   from "../Caching";
+import * as Caching                                                                   from "../cache/Caching";
 
 export interface CacheMiddlewareOptions {
   defaultExpiry?: number;

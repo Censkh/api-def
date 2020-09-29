@@ -1,14 +1,20 @@
-import RequestBackend, {RequestOperation} from "./RequestBackend";
-import {ApiResponse}                      from "../ApiTypes";
-import axios, {AxiosError, AxiosResponse} from "axios";
-import RequestContext                     from "../RequestContext";
+import RequestBackend, {RequestOperation}            from "./RequestBackend";
+import {ApiResponse}                                 from "../ApiTypes";
+import type {AxiosError, AxiosResponse, AxiosStatic} from "axios";
+import RequestContext                                from "../RequestContext";
+
+let axios: AxiosStatic;
 
 export const isAxiosError = (error: Error): error is AxiosError => {
   return "isAxiosError" in error;
 };
 
-export default class AxiosBackend
-  implements RequestBackend<AxiosResponse, AxiosError> {
+export default class AxiosRequestBackend implements RequestBackend<AxiosResponse, AxiosError> {
+
+  constructor(axiosLibrary: AxiosStatic) {
+    axios = axiosLibrary;
+  }
+
   async extractResponseFromError(
     error: Error,
   ): Promise<ApiResponse | null | undefined> {
