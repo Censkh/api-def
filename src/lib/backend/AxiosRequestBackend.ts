@@ -11,7 +11,7 @@ export const isAxiosError = (error: Error): error is AxiosError => {
 
 export default class AxiosRequestBackend implements RequestBackend<AxiosResponse, AxiosError> {
 
-  constructor(axiosLibrary: AxiosStatic) {
+  constructor(axiosLibrary: any) {
     axios = axiosLibrary;
   }
 
