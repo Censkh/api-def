@@ -28,7 +28,7 @@ export interface ApiInfo {
   readonly name: string;
   readonly baseUrl: string;
   readonly middleware?: RequestMiddleware[];
-  readonly defaults?: BaseRequestConfig;
+  readonly defaults?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: MockingConfig;
 }
 
@@ -56,15 +56,17 @@ class HotRequestHost implements RequestHost {
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
+    const apiDefaults = this.api.getDefaults();
+
     const computedConfig: RequestConfig<P, Q, B> = Object.assign(
       {},
-      this.api.defaults || {},
+      apiDefaults,
       config,
     );
     computedConfig.options = Object.assign(
       {},
-      this.api.defaults?.options || {},
-      config?.options || {},
+      apiDefaults.options,
+      config?.options,
     );
     return computedConfig;
   }
@@ -78,7 +80,7 @@ export class Api implements ApiInfo {
   readonly baseUrl: string;
   readonly name: string;
   readonly middleware: RequestMiddleware[];
-  readonly defaults: BaseRequestConfig;
+  readonly defaults?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking: ApiMocking | undefined;
 
   private readonly endpoints: Record<string, Endpoint> = {};
@@ -88,7 +90,7 @@ export class Api implements ApiInfo {
     this.baseUrl = info.baseUrl;
     this.middleware = info.middleware || [];
     this.endpoints = {};
-    this.defaults = info.defaults || {};
+    this.defaults = info.defaults;
     this.mocking =
       info.mocking &&
       Object.assign(info.mocking, {
@@ -99,6 +101,13 @@ export class Api implements ApiInfo {
 
   endpoint(): EndpointBuilder {
     return new EndpointBuilder(this);
+  }
+
+  getDefaults(): BaseRequestConfig {
+    return (
+      (typeof this.defaults === "function" ? this.defaults() : this.defaults) ||
+      {}
+    );
   }
 
   getEventHandlers(): RequestEventHandlers<any> {
