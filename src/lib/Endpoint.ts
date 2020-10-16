@@ -111,10 +111,11 @@ export default class Endpoint<R = any,
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
+    const apiDefaults = this.api.getDefaults();
     const computedConfig: RequestConfig<P, Q, B> = Object.assign(
       {},
-      this.api.defaults || {},
-      this.defaults || {},
+      apiDefaults,
+      this.defaults,
       config,
     );
 
@@ -122,9 +123,9 @@ export default class Endpoint<R = any,
     for (const key of ["options", "headers"]) {
       (computedConfig as any)[key] = Object.assign(
         {},
-        this.api.defaults ? (this.api.defaults as any)[key] : {},
-        this.defaults ? (this.defaults as any)[key] : {},
-        (config as any)[key] ?? {},
+        (apiDefaults as any)[key],
+        this.defaults ? (this.defaults as any)[key] : undefined,
+        (config as any)[key],
       );
     }
 

@@ -1,5 +1,5 @@
 import RequestBackend, {RequestOperation} from "./RequestBackend";
-import {ApiResponse, RequestMethod}       from "../ApiTypes";
+import {ApiResponse}                      from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
 
 let fetch: typeof window.fetch = typeof window === "undefined" ? undefined as any : window.fetch;
@@ -61,14 +61,17 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
     let softAbort = false;
     let responded = false;
 
+    const bodyJsonify = computedConfig.body !== null && computedConfig.body === "object";
+
+    const headers = Object.assign({
+      // logic from axios
+      "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
+    }, computedConfig.headers);
+
     const promise: Promise<ApiResponse<T>> = fetch(url.href, {
       method : context.method,
-      body   :
-        context.method === RequestMethod.Get ||
-        typeof computedConfig.body !== "object"
-          ? undefined
-          : JSON.stringify(computedConfig.body),
-      headers: computedConfig.headers || {},
+      body   : bodyJsonify ? JSON.stringify(computedConfig.body) : computedConfig.body as any,
+      headers: headers,
       mode   : "cors",
       signal : abortSignal,
     }).then((response) => {

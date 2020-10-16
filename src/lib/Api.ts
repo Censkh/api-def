@@ -13,7 +13,7 @@ import {
   RequestMethod,
   RequestMiddleware,
   ResponseType,
-} from "./ApiTypes";
+}                                           from "./ApiTypes";
 import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend                       from "./backend/RequestBackend";
 import EndpointBuilder                      from "./EndpointBuilder";

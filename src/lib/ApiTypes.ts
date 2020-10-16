@@ -8,7 +8,7 @@ export type ModulePossiblyDefault<T> = T & {
 export type Params = string;
 export type Query = Record<string,
   string | number | boolean | undefined | null>;
-export type Body = Record<string, any>;
+export type Body = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
   status: number;

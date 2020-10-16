@@ -45,7 +45,7 @@ export default class RequestContext<R = any,
     this.id = contextIdCounter++;
     this.host = host;
     this.computedConfig = config;
-    Object.assign(this.computedConfig.headers, {"Request-Id": this.id});
+    Object.assign({}, this.computedConfig.headers, {"Request-Id": this.id});
     this.computedPath = computedPath;
 
     this.key = this.generateKey();
