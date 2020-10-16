@@ -19,8 +19,9 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
   async extractResponseFromError(
     error: Error,
   ): Promise<ApiResponse | null | undefined> {
-    if (error instanceof FetchError) {
-      return error.response ? this.convertResponse(error.response) : null;
+    if ("response" in error) {
+      const fetchError = error as FetchError;
+      return fetchError.response ? this.convertResponse(fetchError.response) : null;
     }
     return undefined;
   }
@@ -61,7 +62,7 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
     let softAbort = false;
     let responded = false;
 
-    const bodyJsonify = computedConfig.body !== null && computedConfig.body === "object";
+    const bodyJsonify = computedConfig.body !== null && typeof computedConfig.body === "object";
 
     const headers = Object.assign({
       // logic from axios

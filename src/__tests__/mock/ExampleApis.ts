@@ -1,5 +1,5 @@
-import {Api}           from "../..";
-import {RequestMethod} from "../../lib/ApiTypes";
+import {Api}           from "../../Api";
+import {RequestMethod} from "../../ApiTypes";
 
 const api = new Api({
   baseUrl: "example.com",
