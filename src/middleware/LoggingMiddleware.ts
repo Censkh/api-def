@@ -1,13 +1,7 @@
 import {ApiResponse, RequestError, RequestEvent, RequestMiddleware} from "../ApiTypes";
 import RequestContext                                               from "../RequestContext";
 import * as ApiUtils                                                from "../ApiUtils";
-
-export const padNumber = (stringOrNumber: string | number, maxLength: number): string => {
-  const string = stringOrNumber.toString();
-  return string.length >= maxLength
-    ? string
-    : "0".repeat(maxLength - string.length) + string;
-};
+import * as Utils                                                   from "../Utils";
 
 export interface LoggingMiddlewareOptions {
   predicate?: () => boolean;
@@ -54,10 +48,10 @@ const diagnoseError = (error: RequestError): DiagnosedError => {
 };
 
 const formatTime = (time: Date): string => {
-  return `${padNumber(time.getHours(), 2)}:${padNumber(
+  return `${Utils.padNumber(time.getHours(), 2)}:${Utils.padNumber(
     time.getMinutes(),
     2,
-  )}:${padNumber(time.getSeconds(), 2)}.${padNumber(
+  )}:${Utils.padNumber(time.getSeconds(), 2)}.${Utils.padNumber(
     time.getMilliseconds(),
     3,
   )}`;
@@ -91,7 +85,7 @@ const log = (
   /* eslint-disable-next-line no-console */
   console.groupCollapsed(...args);
   /* eslint-disable-next-line no-console */
-  console.log(Object.assign({context: context}, objects || {}));
+  console.log(Utils.assign({context: context}, objects || {}));
   /* eslint-disable-next-line no-console */
   console.groupEnd();
 };

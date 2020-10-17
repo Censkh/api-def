@@ -84,10 +84,10 @@ const makeRequest = async <R>(
   }
 
   try {
-    const {promise, canceler} = backend.makeRequest<R>(context);
+    const {promise, canceler} = backend.makeRequest(context);
     context.addCanceller(canceler);
     const response = await promise;
-    context.response = response;
+    context.response = await backend.convertResponse(response);
     return response;
   } catch (error) {
     if (context.cancelled) {
@@ -97,8 +97,8 @@ const makeRequest = async <R>(
     context.error = error;
     const errorResponse = await backend.extractResponseFromError(error);
     if (errorResponse !== undefined) {
-      context.response = errorResponse;
-      error.response = errorResponse;
+      context.response = await backend.convertResponse(errorResponse);
+      error.response = context.response;
     }
 
     // transform array buffer responses to objs

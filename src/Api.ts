@@ -17,6 +17,7 @@ import {
 import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend                       from "./backend/RequestBackend";
 import EndpointBuilder                      from "./EndpointBuilder";
+import * as Utils                           from "./Utils";
 
 export let requestBackend: RequestBackend | null = null;
 
@@ -58,12 +59,12 @@ class HotRequestHost implements RequestHost {
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
     const apiDefaults = this.api.getDefaults();
 
-    const computedConfig: RequestConfig<P, Q, B> = Object.assign(
+    const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
       {},
       apiDefaults,
       config,
     );
-    computedConfig.options = Object.assign(
+    computedConfig.options = Utils.assign(
       {},
       apiDefaults.options,
       config?.options,
@@ -93,7 +94,7 @@ export class Api implements ApiInfo {
     this.defaults = info.defaults;
     this.mocking =
       info.mocking &&
-      Object.assign(info.mocking, {
+      Utils.assign(info.mocking, {
         loaderPromise: null,
         loaded       : false,
       });

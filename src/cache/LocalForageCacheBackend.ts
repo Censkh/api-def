@@ -1,5 +1,4 @@
 import {CacheBackend} from "./CacheBackend";
-import * as flatted   from "flatted";
 
 export default class LocalForageCacheBackend implements CacheBackend {
 
@@ -24,8 +23,7 @@ export default class LocalForageCacheBackend implements CacheBackend {
   }
 
   setItem<T>(key: string, value: T): Promise<void> {
-    const safeValue = flatted.parse(flatted.stringify(value));
-    return this.store.setItem(key, safeValue);
+    return this.store.setItem(key, value);
   }
 
 }

@@ -2,6 +2,7 @@ import {
   ApiResponse,
   Body,
   EventResult,
+  Headers,
   Params,
   Query,
   RequestCacheInfo,
@@ -13,8 +14,9 @@ import {
   RequestHost,
   RequestMethod,
   ResponseType,
-}            from "./ApiTypes";
-import {Api} from "./Api";
+}                 from "./ApiTypes";
+import {Api}      from "./Api";
+import * as Utils from "./Utils";
 
 let contextIdCounter = 0;
 
@@ -45,7 +47,7 @@ export default class RequestContext<R = any,
     this.id = contextIdCounter++;
     this.host = host;
     this.computedConfig = config;
-    Object.assign({}, this.computedConfig.headers, {"Request-Id": this.id});
+    Utils.assign({}, this.computedConfig.headers, {"Request-Id": this.id});
     this.computedPath = computedPath;
 
     this.key = this.generateKey();
@@ -109,16 +111,17 @@ export default class RequestContext<R = any,
     return key;
   }
 
-  updateHeaders(newHeaders: Record<string, string>): this {
-    this.computedConfig.headers = Object.assign(
-      this.computedConfig.headers || {},
+  updateHeaders(newHeaders: Headers): this {
+    this.computedConfig.headers = Utils.assign(
+      {},
+      this.computedConfig.headers,
       newHeaders,
     );
     return this;
   }
 
   updateQuery(newQuery: Partial<Q>): this {
-    this.computedConfig.query = Object.assign(
+    this.computedConfig.query = Utils.assign(
       this.computedConfig.query || {},
       newQuery,
     );

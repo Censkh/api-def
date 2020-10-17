@@ -14,6 +14,7 @@ import {
 }                                             from "./ApiTypes";
 import * as Mocking                           from "./Mocking";
 import {EndpointMockingInfo, MockingFunction} from "./Mocking";
+import * as Utils                             from "./Utils";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
@@ -112,7 +113,7 @@ export default class Endpoint<R = any,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
     const apiDefaults = this.api.getDefaults();
-    const computedConfig: RequestConfig<P, Q, B> = Object.assign(
+    const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
       {},
       apiDefaults,
       this.defaults,
@@ -121,7 +122,7 @@ export default class Endpoint<R = any,
 
     // merge other values
     for (const key of ["options", "headers"]) {
-      (computedConfig as any)[key] = Object.assign(
+      (computedConfig as any)[key] = Utils.assign(
         {},
         (apiDefaults as any)[key],
         this.defaults ? (this.defaults as any)[key] : undefined,

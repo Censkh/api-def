@@ -5,6 +5,8 @@ export type ModulePossiblyDefault<T> = T & {
   default?: T;
 };
 
+export type Headers = Record<string, string | number | boolean | null | undefined>;
+
 export type Params = string;
 export type Query = Record<string,
   string | number | boolean | undefined | null>;
@@ -18,7 +20,7 @@ export interface ApiResponse<T = any> {
 
 export interface BaseRequestConfig {
   options?: RequestConfigOptions;
-  headers?: Readonly<Record<string, string>>;
+  headers?: Readonly<Headers>;
 }
 
 export type RequestConfig<P extends Params | undefined = Params,

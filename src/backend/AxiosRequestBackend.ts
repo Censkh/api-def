@@ -9,7 +9,7 @@ export const isAxiosError = (error: Error): error is AxiosError => {
   return "isAxiosError" in error;
 };
 
-export default class AxiosRequestBackend implements RequestBackend<AxiosResponse, AxiosError> {
+export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
 
   constructor(axiosLibrary: any) {
     axios = axiosLibrary;
@@ -17,9 +17,9 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
 
   async extractResponseFromError(
     error: Error,
-  ): Promise<ApiResponse | null | undefined> {
+  ): Promise<AxiosResponse | null | undefined> {
     if (isAxiosError(error)) {
-      return error.response ? await this.convertResponse(error.response) : null;
+      return error.response ? error.response : null;
     }
     return undefined;
   }
@@ -28,11 +28,11 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     return response;
   }
 
-  makeRequest<T>(context: RequestContext): RequestOperation<T> {
+  makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
     const {computedConfig} = context;
 
     let canceler: (() => void) | null = null;
-    const promise: Promise<ApiResponse<T>> = axios({
+    const promise: Promise<AxiosResponse> = axios({
       method      : context.method,
       baseURL     : context.baseUrl,
       url         : context.computedPath,
@@ -43,7 +43,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       cancelToken : new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),
-    }).then((response) => this.convertResponse(response));
+    });
     return {
       promise : promise,
       canceler: () => canceler && canceler(),

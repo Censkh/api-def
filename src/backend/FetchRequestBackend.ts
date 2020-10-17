@@ -1,6 +1,7 @@
 import RequestBackend, {RequestOperation} from "./RequestBackend";
 import {ApiResponse}                      from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
+import * as Utils                         from "../Utils";
 
 let fetch: typeof window.fetch = typeof window === "undefined" ? undefined as any : window.fetch;
 
@@ -8,7 +9,7 @@ class FetchError extends Error {
   response?: Response;
 }
 
-export default class FetchRequestBackend implements RequestBackend<Response, Error> {
+export default class FetchRequestBackend implements RequestBackend<Response> {
 
   constructor(fetchLibrary?: typeof window.fetch) {
     if (fetchLibrary !== undefined) {
@@ -18,10 +19,10 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
 
   async extractResponseFromError(
     error: Error,
-  ): Promise<ApiResponse | null | undefined> {
+  ): Promise<Response | null | undefined> {
     if ("response" in error) {
       const fetchError = error as FetchError;
-      return fetchError.response ? this.convertResponse(fetchError.response) : null;
+      return fetchError.response ? fetchError.response : null;
     }
     return undefined;
   }
@@ -34,7 +35,7 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
     };
   }
 
-  makeRequest<T>(context: RequestContext): RequestOperation<T> {
+  makeRequest(context: RequestContext): RequestOperation<Response> {
     const {computedConfig} = context;
 
     let path = !context.baseUrl.endsWith("/")
@@ -64,15 +65,23 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
 
     const bodyJsonify = computedConfig.body !== null && typeof computedConfig.body === "object";
 
-    const headers = Object.assign({
+    const headers = Utils.assign({
       // logic from axios
       "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
     }, computedConfig.headers);
 
-    const promise: Promise<ApiResponse<T>> = fetch(url.href, {
+    const parsedHeaders = Object.keys(headers).reduce((parsedHeaders, key) => {
+      const value = headers[key];
+      if (value !== undefined) {
+        parsedHeaders[key] = value;
+      }
+      return parsedHeaders;
+    }, {} as any);
+
+    const promise: Promise<Response> = fetch(url.href, {
       method : context.method,
       body   : bodyJsonify ? JSON.stringify(computedConfig.body) : computedConfig.body as any,
-      headers: headers,
+      headers: parsedHeaders,
       mode   : "cors",
       signal : abortSignal,
     }).then((response) => {
@@ -85,7 +94,7 @@ export default class FetchRequestBackend implements RequestBackend<Response, Err
       if (softAbort) {
         throw new Error("Request was aborted");
       }
-      return this.convertResponse(response);
+      return response;
     });
     return {
       promise : promise,

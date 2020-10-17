@@ -1,5 +1,4 @@
 import {CacheBackend} from "./CacheBackend";
-import * as flatted   from "flatted";
 
 export default class LocalStorageCacheBackend implements CacheBackend {
 
@@ -9,7 +8,7 @@ export default class LocalStorageCacheBackend implements CacheBackend {
 
   async getItem<T>(key: string): Promise<T | null> {
     const value = localStorage.getItem(key);
-    return value ? flatted.parse(value) : null;
+    return value ? JSON.parse(value) : null;
   }
 
   async removeItem(key: string): Promise<void> {
@@ -17,7 +16,7 @@ export default class LocalStorageCacheBackend implements CacheBackend {
   }
 
   async setItem<T>(key: string, value: T): Promise<void> {
-    localStorage.setItem(key, flatted.stringify(value));
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
 }
