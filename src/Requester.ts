@@ -87,8 +87,9 @@ const makeRequest = async <R>(
     const {promise, canceler} = backend.makeRequest(context);
     context.addCanceller(canceler);
     const response = await promise;
-    context.response = await backend.convertResponse(response);
-    return response;
+    const parsedResponse = await backend.convertResponse<R>(response);
+    context.response = parsedResponse;
+    return parsedResponse;
   } catch (error) {
     if (context.cancelled) {
       error.isCancelledRequest = true;
@@ -111,14 +112,17 @@ const makeRequest = async <R>(
       return errorEventResult.response;
     }
 
-    const shouldRetry =
-            errorEventResult?.type === EventResultType.Retry ||
-            ApiUtils.isNetworkError(error);
-
     const retries = context.computedConfig.options?.retries;
 
+    const shouldNaturallyRetry  = ApiUtils.isNetworkError(error) && retries && context.stats.attempt < retries;
+
+    // if we have an event that tells us to retry, we must do it
+    const shouldRetry =
+            errorEventResult?.type === EventResultType.Retry ||
+            shouldNaturallyRetry;
+
     // retry request with same config
-    if (shouldRetry && retries && context.stats.attempt < retries) {
+    if (shouldRetry) {
       return makeRequest(context);
     }
 
