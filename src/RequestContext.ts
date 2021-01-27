@@ -9,14 +9,12 @@ import {
   RequestConfig,
   RequestContextStats,
   RequestError,
-  RequestEvent,
   RequestEventHandlers,
   RequestHost,
-  RequestMethod,
-  ResponseType,
-}                 from "./ApiTypes";
-import {Api}      from "./Api";
-import * as Utils from "./Utils";
+}                                                  from "./ApiTypes";
+import {Api}                                       from "./Api";
+import * as Utils                                  from "./Utils";
+import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
 
 let contextIdCounter = 0;
 

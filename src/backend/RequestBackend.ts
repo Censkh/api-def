@@ -9,7 +9,7 @@ export interface RequestOperation<R> {
 export default interface RequestBackend<R = any> {
   makeRequest(context: RequestContext): RequestOperation<R>;
 
-  convertResponse<T>(response: R): Promise<ApiResponse<T>>;
+  convertResponse<T>(context: RequestContext, response: R): Promise<ApiResponse<T>>;
 
   extractResponseFromError(
     error: Error,

@@ -10,18 +10,21 @@ import {
   RequestConfig,
   RequestEventHandlers,
   RequestHost,
-  RequestMethod,
   RequestMiddleware,
-  ResponseType,
 }                                           from "./ApiTypes";
 import {EndpointMockingInfo, MockingConfig} from "./Mocking";
 import RequestBackend                       from "./backend/RequestBackend";
 import EndpointBuilder                      from "./EndpointBuilder";
 import * as Utils                           from "./Utils";
+import FetchRequestBackend                  from "./backend/FetchRequestBackend";
+import {RequestMethod, ResponseType}        from "./ApiConstants";
 
-export let requestBackend: RequestBackend | null = null;
+// use fetch as default if it is present
+export let requestBackend: RequestBackend | null = typeof window.fetch === "undefined" ? new FetchRequestBackend() : null;
+export let requestBackendIsDefault = true;
 
 export const setRequestBackend = (backend: RequestBackend): void => {
+  requestBackendIsDefault = false;
   requestBackend = backend;
 };
 

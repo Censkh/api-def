@@ -24,7 +24,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     return undefined;
   }
 
-  async convertResponse<T>(response: AxiosResponse): Promise<ApiResponse<T>> {
+  async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ApiResponse<T>> {
     return response;
   }
 

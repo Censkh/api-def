@@ -1,5 +1,5 @@
 import {Api}           from "../../Api";
-import {RequestMethod} from "../../ApiTypes";
+import {RequestMethod} from "../../ApiConstants";
 
 const api = new Api({
   baseUrl: "example.com",

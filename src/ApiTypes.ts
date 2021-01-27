@@ -1,5 +1,6 @@
-import RequestContext from "./RequestContext";
-import {Api}          from "./Api";
+import RequestContext                                                            from "./RequestContext";
+import {Api}                                                                     from "./Api";
+import {CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
 
 export type ModulePossiblyDefault<T> = T & {
   default?: T;
@@ -38,22 +39,6 @@ export interface RequestConfigOptions {
   retries?: number;
 }
 
-export enum RequestMethod {
-  Post = "post",
-  Get  = "get",
-}
-
-export enum RequestEvent {
-  BeforeSend         = "beforeSend",
-  Success            = "success",
-  Error              = "error",
-  UnrecoverableError = "unrecoverableError",
-}
-
-export enum EventResultType {
-  Respond = "respond",
-  Retry   = "retry",
-}
 
 interface BaseEventResult<T extends EventResultType> {
   type: T;
@@ -89,8 +74,6 @@ export interface RequestError extends Error {
   response?: ApiResponse;
 }
 
-export type RequestCanceler = () => boolean;
-
 export interface RequestHost {
   readonly method: RequestMethod;
   readonly api: Api;
@@ -111,18 +94,8 @@ export interface CancelledRequestError extends Error {
   isCancelledRequest: true;
 }
 
-export enum CacheSource {
-  Api   = "api",
-  Local = "local",
-}
-
 export interface RequestCacheInfo {
   cached: boolean;
   source: CacheSource | null;
 }
 
-export enum ResponseType {
-  Json        = "json",
-  Text        = "text",
-  ArrayBuffer = "arraybuffer",
-}

@@ -1,4 +1,9 @@
-# 0.3.x
+# 0.3.11
+
+- Make fetch backend default if fetch is present
+- Fix fetch backends text response type support
+
+# 0.3.0
 
 ## Features
 

@@ -1,7 +1,8 @@
-import {ApiResponse, RequestError, RequestEvent, RequestMiddleware} from "../ApiTypes";
-import RequestContext                                               from "../RequestContext";
-import * as ApiUtils                                                from "../ApiUtils";
-import * as Utils                                                   from "../Utils";
+import {ApiResponse, RequestError, RequestMiddleware} from "../ApiTypes";
+import RequestContext                                 from "../RequestContext";
+import * as ApiUtils                                  from "../ApiUtils";
+import * as Utils                                     from "../Utils";
+import {RequestEvent}                                 from "../ApiConstants";
 
 export interface LoggingMiddlewareOptions {
   predicate?: () => boolean;

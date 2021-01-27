@@ -15,11 +15,11 @@ API def provides a unified way to type your endpoints allowing for compile time 
 Let's define a simple API which will house a base URL to our backend. I recommend using a file name such as `api.ts` for this file:
 
 ```typescript
-import {Api} from "api-def";
+import {Api} from "website";
 
 const apiDef = new Api({
-  baseUrl   : "https://example.com/fancy-api/v1",
-  name      : "Example API",
+  baseUrl: "https://example.com/fancy-api/v1",
+  name: "Example API",
 });
 
 export default apiDef;

@@ -2,6 +2,7 @@ import RequestBackend, {RequestOperation} from "./RequestBackend";
 import {ApiResponse}                      from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
 import * as Utils                         from "../Utils";
+import {ResponseType}                     from "../ApiConstants";
 
 let fetch: typeof window.fetch = typeof window === "undefined" ? undefined as any : window.fetch;
 
@@ -27,9 +28,17 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  async convertResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  async convertResponse<T>(context: RequestContext, response: Response): Promise<ApiResponse<T>> {
+    let data;
+    if (context.responseType === ResponseType.Text) {
+      data = await response.text();
+    } else if (context.responseType === ResponseType.ArrayBuffer) {
+      data = await response.arrayBuffer();
+    } else if (context.responseType === ResponseType.Json) {
+      data = await response.json();
+    }
     return {
-      data   : await response.json(),
+      data   : data,
       status : response.status,
       headers: response.headers as any,
     };

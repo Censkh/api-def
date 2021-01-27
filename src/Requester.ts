@@ -1,8 +1,9 @@
-import {ApiResponse, Body, EventResultType, Params, Query, RequestConfig, RequestEvent, RequestHost} from "./ApiTypes";
+import {ApiResponse, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
 
-import * as ApiUtils  from "./ApiUtils";
-import RequestContext from "./RequestContext";
-import * as Api       from "./Api";
+import * as ApiUtils                   from "./ApiUtils";
+import RequestContext                  from "./RequestContext";
+import * as Api                        from "./Api";
+import {EventResultType, RequestEvent} from "./ApiConstants";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
@@ -63,12 +64,20 @@ export const submit = async <R,
   }
 };
 
+let defaultBackendMessageShown = false;
+
 const makeRequest = async <R>(
   context: RequestContext<R>,
 ): Promise<ApiResponse<R>> => {
   const backend = Api.requestBackend;
   if (!backend) {
-    throw new Error("Please specify a backend you wish to use, this can be done either with 'apiDef.setRequestBackend(AxiosRequestBackend/FetchRequestBackend)'");
+    throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
+  }
+  if (process.env.NODE_ENV === "development") {
+    if (Api.requestBackendIsDefault && !defaultBackendMessageShown) {
+      defaultBackendMessageShown = true;
+      console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
+    }
   }
 
   context.stats.attempt++;
@@ -87,7 +96,7 @@ const makeRequest = async <R>(
     const {promise, canceler} = backend.makeRequest(context);
     context.addCanceller(canceler);
     const response = await promise;
-    const parsedResponse = await backend.convertResponse<R>(response);
+    const parsedResponse = await backend.convertResponse<R>(context, response);
     context.response = parsedResponse;
     return parsedResponse;
   } catch (error) {
@@ -98,7 +107,7 @@ const makeRequest = async <R>(
     context.error = error;
     const errorResponse = await backend.extractResponseFromError(error);
     if (errorResponse !== undefined) {
-      context.response = await backend.convertResponse(errorResponse);
+      context.response = await backend.convertResponse(context, errorResponse);
       error.response = context.response;
     }
 
@@ -114,7 +123,7 @@ const makeRequest = async <R>(
 
     const retries = context.computedConfig.options?.retries;
 
-    const shouldNaturallyRetry  = ApiUtils.isNetworkError(error) && retries && context.stats.attempt < retries;
+    const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retries && context.stats.attempt < retries;
 
     // if we have an event that tells us to retry, we must do it
     const shouldRetry =
