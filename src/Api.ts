@@ -20,7 +20,7 @@ import FetchRequestBackend                  from "./backend/FetchRequestBackend"
 import {RequestMethod, ResponseType}        from "./ApiConstants";
 
 // use fetch as default if it is present
-export let requestBackend: RequestBackend | null = typeof window.fetch === "undefined" ? new FetchRequestBackend() : null;
+export let requestBackend: RequestBackend | null = typeof window.fetch !== "undefined" ? new FetchRequestBackend() : null;
 export let requestBackendIsDefault = true;
 
 export const setRequestBackend = (backend: RequestBackend): void => {

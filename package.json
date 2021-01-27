@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Typed APIs with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
