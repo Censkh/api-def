@@ -5,7 +5,7 @@ module.exports = {
       "config",
       "middleware",
       "caching",
-      "support",
+      "node",
       //"example",
     ],
   },

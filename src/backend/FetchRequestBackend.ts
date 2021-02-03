@@ -2,19 +2,19 @@ import RequestBackend, {RequestOperation} from "./RequestBackend";
 import {ApiResponse}                      from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
 import * as Utils                         from "../Utils";
+import {Fetch, getGlobalFetch}            from "../Utils";
 import {ResponseType}                     from "../ApiConstants";
-
-let fetch: typeof window.fetch = typeof window === "undefined" ? undefined as any : window.fetch;
 
 class FetchError extends Error {
   response?: Response;
 }
 
 export default class FetchRequestBackend implements RequestBackend<Response> {
+  fetch = getGlobalFetch();
 
-  constructor(fetchLibrary?: typeof window.fetch) {
+  constructor(fetchLibrary?: Fetch) {
     if (fetchLibrary !== undefined) {
-      fetch = fetchLibrary;
+      this.fetch = fetchLibrary;
     }
   }
 
@@ -45,6 +45,10 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
   }
 
   makeRequest(context: RequestContext): RequestOperation<Response> {
+    if (!this.fetch) {
+      throw new Error("[api-def] No fetch impl was provided to FetchRequestBackend");
+    }
+
     const {computedConfig} = context;
 
     let path = !context.baseUrl.endsWith("/")
@@ -87,7 +91,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       return parsedHeaders;
     }, {} as any);
 
-    const promise: Promise<Response> = fetch(url.href, {
+    const promise: Promise<Response> = this.fetch(url.href, {
       method : context.method,
       body   : bodyJsonify ? JSON.stringify(computedConfig.body) : computedConfig.body as any,
       headers: parsedHeaders,

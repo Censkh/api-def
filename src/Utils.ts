@@ -30,3 +30,12 @@ export const padNumber = (stringOrNumber: string | number, maxLength: number): s
 };
 
 export type EnumOf<T extends Record<string, any>> = T[keyof T];
+
+export type Fetch = typeof window.fetch;
+
+export const getGlobalFetch = ():  Fetch | undefined => {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+  return window.fetch;
+};
