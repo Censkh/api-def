@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://censkh.github.io/style-composer/blog</id>
+    <title>ApiDef Blog</title>
+    <updated>2015-10-25T23:29:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://censkh.github.io/style-composer/blog"/>
+    <subtitle>ApiDef Blog</subtitle>
+    <icon>https://censkh.github.io/style-composer/img/favicon.ico</icon>
+</feed>
