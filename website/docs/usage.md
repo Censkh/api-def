@@ -4,7 +4,7 @@ id: usage
 title: Usage
 ---
 
-Strongly type your APIs and use the power of typescript to your benefit
+API def provides a unified way to type your endpoints allowing for compile time checking of query, body, response and even url parameters.
 
 ## Getting Started
 
