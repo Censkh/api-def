@@ -22,7 +22,11 @@
     "node",
     "web",
     "api",
-    "typed"
+    "typed",
+    "cache",
+    "fetch",
+    "retry",
+    "middleware"
   ],
   "author": "James Waterhouse <09jwater@gmail.com>",
   "license": "MIT",
