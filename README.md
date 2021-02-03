@@ -6,8 +6,6 @@ API def provides a unified way to type your endpoints allowing for compile time 
 
 ``` npm i api-def ```
 
-**Note:** this package is in early development, use with caution
-
 - [Documentation](https://censkh.github.io/api-def/]
 
 ```typescript
