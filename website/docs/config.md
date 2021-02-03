@@ -5,7 +5,7 @@ title: Config
 
 When define your API and endpoints you can give them some default config which are cascaded down to requests:
 
-```typescript {4}
+```typescript {4,5,6,7,8,9,15,16,17,18}
 const api = new Api({
   name   : "My Backend",
   baseUrl: "http://localhost:5000/v1",

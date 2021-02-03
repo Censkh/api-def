@@ -6,7 +6,7 @@ module.exports = {
       "middleware",
       "caching",
       "support",
-      "example",
+      //"example",
     ],
   },
 };
