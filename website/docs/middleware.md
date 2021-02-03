@@ -1,0 +1,97 @@
+---
+id: middleware
+title: Middleware
+---
+
+When we make requests a lot of the time there is some consistent logic between all of our endpoints such as authentication or error handling. This is where middleware come in!
+
+## Defining & Adding Middleware
+
+Middleware are functions that return an object whose keys are event names and values are listeners to those events. These event listeners must be async
+
+```typescript title="/auth-middleware.ts"
+import {RequestMiddleware} from "api-def";
+
+const getAuthToken = (): Promise<string> => {
+  return ...;
+}
+
+/*
+ Add auth header to requests
+*/
+const AuthMiddleware = (): RequestMiddleware => {
+  return {
+  
+    // called before a send occurs
+    "beforeSend": async (context) => {
+      const authToken = await getAuthToken();
+      
+      if (authToken) {
+        context.updateHeaders({
+          "Authorization": `Referer ${authToken}`,
+        });
+      }
+    },
+    
+  };
+};
+
+export default AuthMiddleware;
+```
+
+Now that we have our fancy new middleware we can add it to our api:
+
+```typescript {6} title="/api.ts"
+import {Api} from "api-def";
+
+const api = new Api({
+  name   : "My Backend",
+  baseUrl: "http://localhost:5000/v1",
+  middleware: [AuthMiddleware()]
+});
+
+export default api;
+```
+
+## Events
+
+| Name                  | Usage
+| ---                   | ---
+| `beforeSend`          | Called before send.
+| `success`             | When the request was a success.
+| `error`               | The request failed. May be called multiple times due to retries 
+| `unrecoverableError`  | The request failed. Called only once when all retires have been tried. A normal error event is also triggered with this one
+
+
+## Event Results
+
+Your event listeners can also return special objects that will trigger certain things
+
+### Respond
+
+Applicable in the `beforeSend` event.
+
+Your middleware can respond instead of going to the network which is used in the built-in [cache middleware](./caching)
+
+```typescript
+return {
+  type: "respond",
+  response: {
+    status: 200,
+    data: ...,
+    headers: {}
+  }
+};
+```
+
+### Retry 
+
+Applicable in the `error` event.
+
+Trigger a retry despite the `retry` option. Be careful of causing infinite loops with this!
+
+```typescript
+return {
+    type: "retry"
+};
+```

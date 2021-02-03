@@ -1,7 +1,7 @@
 {
   "name": "api-def",
-  "version": "0.3.12",
-  "description": "Typed APIs with middleware support",
+  "version": "0.4.0-alpha1",
+  "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",
@@ -12,7 +12,9 @@
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --module es2015 --target es5 --outDir esm",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs",
-    "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\""
+    "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\"",
+    "website:dev": "cd website && npm run start",
+    "website:deploy": "cd website && npm run deploy"
   },
   "keywords": [
     "typescript",

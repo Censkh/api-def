@@ -62,10 +62,10 @@ const log = (
   context: RequestContext,
   type: LogType,
   message: string,
-  options: LoggingMiddlewareOptions,
+  config: LoggingMiddlewareOptions,
   objects?: Object,
 ) => {
-  if (typeof options.predicate === "function" && !options.predicate()) {
+  if (typeof config.predicate === "function" && !config.predicate()) {
     return;
   }
 
@@ -92,7 +92,7 @@ const log = (
 };
 
 const LoggingMiddleware = (
-  options: LoggingMiddlewareOptions = {},
+  config: LoggingMiddlewareOptions = {},
 ): RequestMiddleware => {
   return {
     [RequestEvent.BeforeSend]        : (context) => {
@@ -100,7 +100,7 @@ const LoggingMiddleware = (
         context,
         LogType.Info,
         context.stats.attempt > 1 ? "retrying" : "sending",
-        options,
+        config,
       );
     },
     [RequestEvent.Success]           : (context) => {
@@ -112,7 +112,7 @@ const LoggingMiddleware = (
         `responded with ${context.response?.status}${
           cacheSource ? ` (cached by ${cacheSource})` : ""
         }`,
-        options,
+        config,
       );
     },
     [RequestEvent.Error]             : (context) => {
@@ -122,7 +122,7 @@ const LoggingMiddleware = (
           context,
           LogType.Warn,
           `error on attempt ${context.stats.attempt} - ${message}`,
-          options,
+          config,
           {error: error},
         );
       }
@@ -130,7 +130,7 @@ const LoggingMiddleware = (
     [RequestEvent.UnrecoverableError]: (context) => {
       if (context.error) {
         const {error, message} = diagnoseError(context.error);
-        log(context, LogType.Error, `failed - ${message}`, options, {
+        log(context, LogType.Error, `failed - ${message}`, config, {
           error: error,
         });
       }

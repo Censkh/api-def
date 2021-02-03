@@ -20,7 +20,9 @@ export interface ApiResponse<T = any> {
 }
 
 export interface BaseRequestConfig {
-  options?: RequestConfigOptions;
+  cache?: number | boolean;
+  lock?: string | false;
+  retry?: number | false;
   headers?: Readonly<Headers>;
 }
 
@@ -33,22 +35,15 @@ export type RequestConfig<P extends Params | undefined = Params,
   (B extends undefined ? { body?: never } : { body: B }) &
   BaseRequestConfig;
 
-export interface RequestConfigOptions {
-  cache?: number | boolean;
-  lock?: string | false;
-  retries?: number;
-}
-
-
 interface BaseEventResult<T extends EventResultType> {
   type: T;
 }
 
-export type ResponseEventResult<R> = BaseEventResult<EventResultType.Respond> & {
+export type ResponseEventResult<R> = BaseEventResult<typeof EventResultType.Respond> & {
   response: ApiResponse<R>;
 };
 
-export type RetryEventResult<R> = BaseEventResult<EventResultType.Retry>;
+export type RetryEventResult<R> = BaseEventResult<typeof EventResultType.Retry>;
 
 export type EventResult<R> = ResponseEventResult<R> | RetryEventResult<R>;
 

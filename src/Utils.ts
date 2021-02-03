@@ -28,3 +28,5 @@ export const padNumber = (stringOrNumber: string | number, maxLength: number): s
     ? string
     : "0".repeat(maxLength - string.length) + string;
 };
+
+export type EnumOf<T extends Record<string, any>> = T[keyof T];

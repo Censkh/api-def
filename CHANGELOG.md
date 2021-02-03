@@ -1,4 +1,19 @@
+# 0.4.0
+
+## Breaking Changes
+
+- Move config values from options object up one layer
+- In config `retries` -> `retry`
+- `defaults` -> `config`
+
+## Changes
+
+- Remove need for enum imports
+- Make `name` and `description` optional in endpoint definition 
+
 # 0.3.11
+
+## Changes
 
 - Make fetch backend default if fetch is present
 - Fix fetch backends text response type support

@@ -30,7 +30,7 @@ export const submit = async <R,
     return sameRequest;
   }
 
-  const {lock} = context.computedConfig.options || {};
+  const {lock} = context.computedConfig || {};
 
   if (lock) {
     const lockedContext = locks[lock];
@@ -121,9 +121,9 @@ const makeRequest = async <R>(
       return errorEventResult.response;
     }
 
-    const retries = context.computedConfig.options?.retries;
+    const retry = context.computedConfig?.retry;
 
-    const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retries && context.stats.attempt < retries;
+    const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retry && context.stats.attempt < retry;
 
     // if we have an event that tells us to retry, we must do it
     const shouldRetry =

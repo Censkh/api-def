@@ -14,7 +14,7 @@ const CacheMiddleware = (
     [RequestEvent.Success]   : async (context) => {
       if (context.method !== RequestMethod.Get) return;
 
-      const {cache} = context.computedConfig.options || {};
+      const {cache} = context.computedConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {
@@ -25,7 +25,7 @@ const CacheMiddleware = (
     [RequestEvent.BeforeSend]: async (context) => {
       if (context.method !== RequestMethod.Get) return;
 
-      const {cache} = context.computedConfig.options || {};
+      const {cache} = context.computedConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {

@@ -2,7 +2,7 @@ import {Api}          from "./Api";
 import * as Requester from "./Requester";
 
 import {ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
-import * as Mocking                                                                       from "./Mocking";
+import * as Mocking                                                                      from "./Mocking";
 import {EndpointMockingInfo, MockingFunction}                                             from "./Mocking";
 import * as Utils                                                                         from "./Utils";
 import {RequestMethod, ResponseType}                                                      from "./ApiConstants";
@@ -13,10 +13,10 @@ export interface EndpointConfig<R,
   B extends Body | undefined> {
   readonly id: string;
   readonly method: RequestMethod;
-  readonly name: string;
-  readonly description: string;
+  readonly name?: string;
+  readonly description?: string;
   readonly path: string;
-  readonly defaults?: BaseRequestConfig;
+  readonly config?: BaseRequestConfig;
   readonly responseType?: ResponseType;
 }
 
@@ -29,9 +29,9 @@ export default class Endpoint<R = any,
   readonly id: string;
   readonly method: RequestMethod;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly path: string;
-  readonly defaults?: BaseRequestConfig;
+  readonly config?: BaseRequestConfig;
   readonly responseType: ResponseType;
 
   public mocking: EndpointMockingInfo<R, P, Q, B> | null = null;
@@ -40,10 +40,10 @@ export default class Endpoint<R = any,
     this.api = api;
     this.id = info.id;
     this.method = info.method;
-    this.name = info.name;
+    this.name = info.name || info.id;
     this.description = info.description;
     this.path = info.path;
-    this.defaults = info.defaults;
+    this.config = info.config;
     this.responseType = info.responseType || ResponseType.Json;
   }
 
@@ -103,20 +103,20 @@ export default class Endpoint<R = any,
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
-    const apiDefaults = this.api.getDefaults();
+    const apiDefaults = this.api.getConfig();
     const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
       {},
       apiDefaults,
-      this.defaults,
+      this.config,
       config,
     );
 
     // merge other values
-    for (const key of ["options", "headers"]) {
+    for (const key of ["headers"]) {
       (computedConfig as any)[key] = Utils.assign(
         {},
         (apiDefaults as any)[key],
-        this.defaults ? (this.defaults as any)[key] : undefined,
+        this.config ? (this.config as any)[key] : undefined,
         (config as any)[key],
       );
     }

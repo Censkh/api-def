@@ -10,7 +10,7 @@ export const hello = api.endpoint()
   .queryOf<{ id: string }>()
   .build({
     name       : "hello",
-    defaults   : {},
+    config   : {},
     description: "asdasd",
     id         : "hello",
     method     : RequestMethod.Get,

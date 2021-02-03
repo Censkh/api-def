@@ -1,5 +1,5 @@
 import {ApiResponse, Body, ModulePossiblyDefault, Params, Query, RequestConfig} from "./ApiTypes";
-import Endpoint                                                                 from "./Endpoint";
+import Endpoint                                                                  from "./Endpoint";
 
 export interface MockingConfig {
   loader?: () => Promise<ModulePossiblyDefault<any>>;

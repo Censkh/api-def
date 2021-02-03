@@ -32,7 +32,7 @@ export interface ApiInfo {
   readonly name: string;
   readonly baseUrl: string;
   readonly middleware?: RequestMiddleware[];
-  readonly defaults?: BaseRequestConfig | (() => BaseRequestConfig);
+  readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: MockingConfig;
 }
 
@@ -60,19 +60,13 @@ class HotRequestHost implements RequestHost {
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
-    const apiDefaults = this.api.getDefaults();
+    const apiDefaults = this.api.getConfig();
 
-    const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
+    return Utils.assign(
       {},
       apiDefaults,
       config,
     );
-    computedConfig.options = Utils.assign(
-      {},
-      apiDefaults.options,
-      config?.options,
-    );
-    return computedConfig;
   }
 
   computePath(path: string, config: RequestConfig): string {
@@ -84,7 +78,7 @@ export class Api implements ApiInfo {
   readonly baseUrl: string;
   readonly name: string;
   readonly middleware: RequestMiddleware[];
-  readonly defaults?: BaseRequestConfig | (() => BaseRequestConfig);
+  readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking: ApiMocking | undefined;
 
   private readonly endpoints: Record<string, Endpoint> = {};
@@ -94,7 +88,7 @@ export class Api implements ApiInfo {
     this.baseUrl = info.baseUrl;
     this.middleware = info.middleware || [];
     this.endpoints = {};
-    this.defaults = info.defaults;
+    this.config = info.config;
     this.mocking =
       info.mocking &&
       Utils.assign(info.mocking, {
@@ -107,9 +101,9 @@ export class Api implements ApiInfo {
     return new EndpointBuilder(this);
   }
 
-  getDefaults(): BaseRequestConfig {
+  getConfig(): BaseRequestConfig {
     return (
-      (typeof this.defaults === "function" ? this.defaults() : this.defaults) ||
+      (typeof this.config === "function" ? this.config() : this.config) ||
       {}
     );
   }

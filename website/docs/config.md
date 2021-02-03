@@ -1,0 +1,38 @@
+---
+id: config
+title: Config
+---
+
+When define your API and endpoints you can give them some default config which are cascaded down to requests:
+
+```typescript {4}
+const api = new Api({
+  name   : "My Backend",
+  baseUrl: "http://localhost:5000/v1",
+  config: {
+    retry: 2,
+    headers: {
+      "Cool-Header": "hello!"
+    }
+  }
+});
+
+export const fetchData = api.endpoint()
+  .build({
+    id: "fetch_data",
+    config: {
+      retry: false,
+      cache: 1000 * 60 * 15 // 15 mins
+    }
+  })
+```
+
+## Properties
+
+Request config properties:
+
+| Name        | Type                    | Default           | Usage
+| ---         | ---                     | ---               | ---
+| `retry`     | `number` or `false`               | `false`   | How many times should the request be retried if there was a non-network error?
+| `cache`     | `number` or `boolean`     | `false`           | If a number, how long to cache response for in ms
+| `headers`   | `Record<string, string` | `undefined`       | Base headers for the request
