@@ -44,6 +44,7 @@ export const submit = async <R,
     let response = await (runningOperations[key] = makeRequest(
       context as RequestContext<R>,
     ));
+
     const successEventResult = await context.triggerEvent(RequestEvent.Success);
     if (
       successEventResult &&

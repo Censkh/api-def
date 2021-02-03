@@ -37,5 +37,5 @@ export const getGlobalFetch = ():  Fetch | undefined => {
   if (typeof window === "undefined") {
     return undefined;
   }
-  return window.fetch;
+  return window.fetch.bind(window);
 };
