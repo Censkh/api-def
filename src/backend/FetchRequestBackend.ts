@@ -28,14 +28,34 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  async convertResponse<T>(context: RequestContext, response: Response): Promise<ApiResponse<T>> {
+  inferResponseType(response:Response): ResponseType {
+    const contentType = response.headers.get("Content-Type");
+    if (contentType?.startsWith("json")) {
+      return "json";
+    }
+    return "text";
+}
+
+  async convertResponse<T>(context: RequestContext, response: Response & {__text?: string}, error?: boolean): Promise<ApiResponse<T>> {
     let data;
-    if (context.responseType === ResponseType.Text) {
-      data = await response.text();
-    } else if (context.responseType === ResponseType.ArrayBuffer) {
-      data = await response.arrayBuffer();
-    } else if (context.responseType === ResponseType.Json) {
-      data = await response.json();
+    const responseType =  error ? this.inferResponseType(response) : context.responseType;
+
+    try {
+      if (!response.__text) {
+        response.__text = await response.clone().text();
+      }
+
+      if (responseType === ResponseType.Text) {
+        data = response.__text;
+      } else if (responseType === ResponseType.ArrayBuffer) {
+        data = await response.clone().arrayBuffer();
+      } else if (responseType === ResponseType.Json) {
+        data = JSON.parse(response.__text);
+      }
+    } catch (error) {
+      throw Object.assign(new Error(`[api-def] Invalid '${context.responseType}' response, got: '${response.__text}'`), {
+        response,
+      });
     }
     return {
       data   : data,

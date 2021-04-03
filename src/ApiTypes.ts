@@ -26,9 +26,9 @@ export interface BaseRequestConfig {
   headers?: Readonly<Headers>;
 }
 
-export type RequestConfig<P extends Params | undefined = Params,
-  Q extends Query | undefined = Query,
-  B extends Body | undefined = Body> = (P extends undefined
+export type RequestConfig<P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined> = (P extends undefined
   ? { params?: never }
   : { params: Record<P extends Params ? P : never, string> }) &
   (Q extends undefined ? { query?: never } : { query: Q }) &

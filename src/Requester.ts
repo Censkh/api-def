@@ -108,7 +108,7 @@ const makeRequest = async <R>(
     context.error = error;
     const errorResponse = await backend.extractResponseFromError(error);
     if (errorResponse !== undefined) {
-      context.response = await backend.convertResponse(context, errorResponse);
+      context.response = await backend.convertResponse(context, errorResponse, true);
       error.response = context.response;
     }
 

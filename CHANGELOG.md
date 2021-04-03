@@ -1,3 +1,7 @@
+# 0.4.1
+
+- add better error handling on parse
+
 # 0.4.0
 
 ## Breaking Changes
