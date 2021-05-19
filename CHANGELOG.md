@@ -1,5 +1,6 @@
 # 0.4.1
 
+- fix fetch backend not working with unbound fetch
 - add better error handling on parse
 
 # 0.4.0

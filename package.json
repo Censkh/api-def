@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.4.1-alpha3",
+  "version": "0.4.1",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "eslint --ext .tsx,.ts src",
     "lint:fix": "eslint --fix --ext .tsx,.ts src",
-    "build": "npm run build:esm && npm run build:cjs",
+    "cleanup": "rimraf esm && rimraf cjs",
+    "build": "npm run cleanup && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --module es2015 --target es5 --outDir esm",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs",
     "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\"",
