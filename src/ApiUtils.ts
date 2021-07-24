@@ -1,4 +1,7 @@
-import {ApiResponse, CancelledRequestError, RequestError} from "./ApiTypes";
+import { ApiResponse,
+         CancelledRequestError,
+         RequestError }           from "./ApiTypes";
+import { isAcceptableStatus }     from "./Utils";
 
 export class ResponseBuilder<R> {
   private _data: R | undefined;
@@ -25,6 +28,7 @@ export class ResponseBuilder<R> {
     }
 
     return {
+      success: isAcceptableStatus(this._status),
       headers: {},
       data   : this._data,
       status : this._status,

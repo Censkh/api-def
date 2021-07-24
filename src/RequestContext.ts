@@ -1,4 +1,5 @@
 import {
+  AcceptableStatus,
   ApiResponse,
   Body,
   EventResult,
@@ -27,6 +28,7 @@ export default class RequestContext<R = any,
   readonly computedPath: string;
   readonly stats: RequestContextStats;
   private readonly host: RequestHost;
+  readonly acceptableStatus?: AcceptableStatus[];
   readonly eventHandlers: RequestEventHandlers<R>;
 
   private canceler: (() => void) | null = null;

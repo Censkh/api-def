@@ -1,5 +1,6 @@
 import {ApiResponse, Body, ModulePossiblyDefault, Params, Query, RequestConfig} from "./ApiTypes";
 import Endpoint                                                                  from "./Endpoint";
+import { isAcceptableStatus } from "./Utils";
 
 export interface MockingConfig {
   loader?: () => Promise<ModulePossiblyDefault<any>>;
@@ -80,6 +81,7 @@ export const mockRequest = async <R = any,
   }
 
   return {
+    success: isAcceptableStatus(res.statusCode),
     headers: {},
     data   : res.response,
     status : res.statusCode,

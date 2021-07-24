@@ -1,11 +1,11 @@
-import {Api}          from "./Api";
+import { Api } from "./Api";
 import * as Requester from "./Requester";
 
-import {ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
-import * as Mocking                                                                      from "./Mocking";
-import {EndpointMockingInfo, MockingFunction}                                             from "./Mocking";
-import * as Utils                                                                         from "./Utils";
-import {RequestMethod, ResponseType}                                                      from "./ApiConstants";
+import { ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
+import * as Mocking from "./Mocking";
+import { EndpointMockingInfo, MockingFunction } from "./Mocking";
+import * as Utils from "./Utils";
+import { RequestMethod, ResponseType } from "./ApiConstants";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,

@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -49,6 +49,5 @@
   },
   "optionalDependencies": {
     "axios": "^0.19.0"
-  },
-  "dependencies": {}
+  }
 }

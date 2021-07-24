@@ -6,6 +6,8 @@ export type ModulePossiblyDefault<T> = T & {
   default?: T;
 };
 
+export type AcceptableStatus = number | [min: number, max: number];
+
 export type Headers = Record<string, string | number | boolean | null | undefined>;
 
 export type Params = string;
@@ -14,16 +16,18 @@ export type Query = Record<string,
 export type Body = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
-  status: number;
-  data: T;
-  headers: Record<string, string>;
+  success : boolean;
+  status  : number;
+  data    : T;
+  headers : Record<string, string>;
 }
 
 export interface BaseRequestConfig {
-  cache?: number | boolean;
-  lock?: string | false;
-  retry?: number | false;
-  headers?: Readonly<Headers>;
+  cache?            : number | boolean;
+  lock?             : string | false;
+  retry?            : number | false;
+  headers?          : Readonly<Headers>;
+  acceptableStatus? : AcceptableStatus[];
 }
 
 export type RequestConfig<P extends Params | undefined = Params | undefined,

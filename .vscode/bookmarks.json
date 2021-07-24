@@ -1,0 +1,24 @@
+{
+	"files": [
+		{
+			"path": "src/backend/AxiosRequestBackend.ts",
+			"bookmarks": [
+				{
+					"line": 27,
+					"column": 40,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/backend/FetchRequestBackend.ts",
+			"bookmarks": [
+				{
+					"line": 38,
+					"column": 24,
+					"label": ""
+				}
+			]
+		}
+	]
+}

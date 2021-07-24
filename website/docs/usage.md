@@ -125,3 +125,24 @@ const res = await updateUser.submit({
 });
 return res.data // { uid: "exampleId", firstName: "Test", age: 22 }
 ```
+
+## Setting Expected Return Statuses
+
+By default a successful call is one that returns a status of `200` to `299`. You can override this in the endpoint config with a combination of ranges, and single values.
+
+```typescript title="/api.ts (status override)"
+export const fetchHealthCheck = api.endpoint()
+  .responseOf<{ success: boolean; }>()
+  .build({
+    id: "fetch_health_check",
+
+    name       : "Health Check",
+    description: "Returns success as true",
+
+    path        : "/status/health-check",
+    method      : "get",
+    config      : {
+      acceptableStatus : [[301, 302], 200],
+    },
+  });
+```

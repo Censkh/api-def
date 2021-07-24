@@ -57,10 +57,13 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
         response,
       });
     }
+
+    const { status } = response;
     return {
-      data   : data,
-      status : response.status,
-      headers: response.headers as any,
+      success : Utils.isAcceptableStatus(status, context.acceptableStatus),
+      data    : data,
+      status  : status,
+      headers : response.headers as any,
     };
   }
 

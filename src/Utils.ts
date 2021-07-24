@@ -1,3 +1,5 @@
+import { AcceptableStatus } from "./ApiTypes";
+
 // polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 export const assign: typeof Object["assign"] = Object.assign || function(target: any, varArgs: any) {
   if (target === null || target === undefined) {
@@ -38,4 +40,24 @@ export const getGlobalFetch = ():  Fetch | undefined => {
     return undefined;
   }
   return window.fetch.bind(window);
+};
+
+export const isAcceptableStatus = (status: number, acceptableStatus?: AcceptableStatus[]): boolean => {
+
+  const acceptable = acceptableStatus ?? [[200, 299]];
+
+  for (const cmpStatus of acceptable) {
+    if (Array.isArray(cmpStatus)) {
+      const [min, max] = cmpStatus;
+      if (status >= min && status <= max) {
+        return(true);
+      }
+    } else if (!isNaN(cmpStatus)) {
+      if (status === cmpStatus) {
+        return(true);
+      }
+    }
+  }
+
+  return(false);
 };
