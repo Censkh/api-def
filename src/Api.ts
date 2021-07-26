@@ -115,19 +115,17 @@ export class Api implements ApiInfo {
     return {};
   }
 
-  async get<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
-    return await Requester.submit(
-      new HotRequestHost(this, path, RequestMethod.Get),
+  private hotRequest = (requestMethod: RequestMethod) => async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> => (
+    await Requester.submit(
+      new HotRequestHost(this, path, requestMethod),
       config,
-    );
-  }
+    )
+  );
 
-  async post<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
-    return await Requester.submit(
-      new HotRequestHost(this, path, RequestMethod.Post),
-      config,
-    );
-  }
+  public get    = this.hotRequest(RequestMethod.GET);
+  public post   = this.hotRequest(RequestMethod.POST);
+  public put    = this.hotRequest(RequestMethod.PUT);
+  public delete = this.hotRequest(RequestMethod.DELETE);
 
   getEndpointMocks(): Record<string, EndpointMockingInfo | null> {
     return Object.keys(this.endpoints).reduce((mocks, key) => {
