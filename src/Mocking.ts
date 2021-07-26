@@ -1,6 +1,16 @@
-import {ApiResponse, Body, ModulePossiblyDefault, Params, Query, RequestConfig} from "./ApiTypes";
-import Endpoint                                                                  from "./Endpoint";
-import { isAcceptableStatus } from "./Utils";
+import { ApiResponse,
+         Body,
+         ModulePossiblyDefault,
+         Params,
+         Query,
+         RequestConfig }        from "./ApiTypes";
+import Endpoint                 from "./Endpoint";
+import { isAcceptableStatus }   from "./Utils";
+
+export interface LiveMockingConfig {
+  enable    : boolean;
+  delayMs?  : number;
+}
 
 export interface MockingConfig {
   loader?: () => Promise<ModulePossiblyDefault<any>>;
@@ -38,9 +48,9 @@ export interface MockResponse<R = any,
 }
 
 export type MockingFunction<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> = (req: MockRequest<R, P, Q, B>, res: MockResponse<R, P, Q, B>) => void;
+                            P extends Params | undefined = Params | undefined,
+                            Q extends Query  | undefined = Query  | undefined,
+                            B extends Body   | undefined = Body   | undefined> = (req: MockRequest<R, P, Q, B>, res: MockResponse<R, P, Q, B>) => void;
 
 export const mockRequest = async <R = any,
   P extends Params | undefined = Params | undefined,

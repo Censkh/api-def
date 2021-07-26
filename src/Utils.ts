@@ -61,3 +61,24 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
 
   return(false);
 };
+
+/**
+ * Just used to simulate lag, or loading times.
+ * @param value   The value you want to return after the delay
+ * @param delayMs The delay in ms
+ * @returns The `value` param as a Promise
+ */
+ export const delayThenReturn = <T>(value: T, delayMs: number): Promise<T> => {
+
+  return(
+    new Promise( (resolve) => {
+      if (delayMs > 0) {
+        setTimeout(() => {
+          resolve(value);
+        }, delayMs);
+      } else {
+        resolve(value);
+      }
+    })
+  );
+};

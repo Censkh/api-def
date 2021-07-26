@@ -5,6 +5,7 @@ module.exports = {
       "config",
       "middleware",
       "caching",
+      "mocking",
       "node",
       //"example",
     ],

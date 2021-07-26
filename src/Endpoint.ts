@@ -9,8 +9,8 @@ import { RequestMethod, ResponseType } from "./ApiConstants";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined> {
+  Q extends Query  | undefined,
+  B extends Body   | undefined> {
   readonly id: string;
   readonly method: RequestMethod;
   readonly name?: string;
@@ -48,7 +48,9 @@ export default class Endpoint<R = any,
   }
 
   public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {
-    const apiMocking = this.api.mocking;
+
+    const {mocking: apiMocking, liveMocking} = this.api;
+
     if (!this.mocking?.bypass && apiMocking?.predicate()) {
       if (apiMocking?.loader && !apiMocking.loaded) {
         await (apiMocking.loaderPromise ||
@@ -57,6 +59,9 @@ export default class Endpoint<R = any,
       }
 
       return Mocking.mockRequest(this, config);
+    } else if (liveMocking?.enable ?? false) {
+      const mockedResponse = await Utils.delayThenReturn( Mocking.mockRequest(this, config), this.api.liveMocking?.delayMs ?? 0);
+      return(mockedResponse);
     }
 
     return Requester.submit(this, config);
@@ -89,10 +94,29 @@ export default class Endpoint<R = any,
     return this;
   }
 
-  mockBypass(): this {
-    this.mocking = {
-      bypass: true,
+  /**
+   * Shortcut method for specifying a mocked response for use in live runs
+   * @param mockFn
+   * @returns
+   */
+  setLiveMockFn( mockFn: (req: Mocking.MockRequest<R, P, Q, B>) => [statusCode: number, response: R]): this {
+
+    // convert mockFn into a MockingFunction, then pass it into this.mock
+    const mocker: MockingFunction<R, P, Q, B> = (req, res) => {
+      const [statusCode, response] = mockFn(req);
+      res.response   = response;
+      res.statusCode = statusCode;
     };
+
+    return( this.mock(mocker) );
+  }
+
+  mockBypass(bypass?: boolean): this {
+    if (bypass ?? false) {
+      this.mocking = {
+        bypass: true,
+      };
+    }
     return this;
   }
 

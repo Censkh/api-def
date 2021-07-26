@@ -12,7 +12,7 @@ import {
   RequestHost,
   RequestMiddleware,
 }                                           from "./ApiTypes";
-import {EndpointMockingInfo, MockingConfig} from "./Mocking";
+import {EndpointMockingInfo, LiveMockingConfig, MockingConfig} from "./Mocking";
 import RequestBackend                       from "./backend/RequestBackend";
 import EndpointBuilder                      from "./EndpointBuilder";
 import * as Utils                           from "./Utils";
@@ -34,6 +34,7 @@ export interface ApiInfo {
   readonly middleware?: RequestMiddleware[];
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: MockingConfig;
+  readonly liveMocking?: LiveMockingConfig;
 }
 
 export interface ApiMocking extends MockingConfig {
@@ -80,6 +81,7 @@ export class Api implements ApiInfo {
   readonly middleware: RequestMiddleware[];
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking: ApiMocking | undefined;
+  readonly liveMocking?: LiveMockingConfig;
 
   private readonly endpoints: Record<string, Endpoint> = {};
 
@@ -95,6 +97,7 @@ export class Api implements ApiInfo {
         loaderPromise: null,
         loaded       : false,
       });
+    this.liveMocking = info.liveMocking;
   }
 
   endpoint(): EndpointBuilder {
