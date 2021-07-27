@@ -7,6 +7,7 @@
   "module": "esm/index.js",
   "sideEffects": false,
   "scripts": {
+    "example:start": "cd example && npm run start",
     "lint": "eslint --ext .tsx,.ts src",
     "lint:fix": "eslint --fix --ext .tsx,.ts src",
     "cleanup": "rimraf esm && rimraf cjs",
