@@ -1,7 +1,8 @@
 import { ApiResponse,
          CancelledRequestError,
-         RequestError }           from "./ApiTypes";
-import { isAcceptableStatus }     from "./Utils";
+         RequestError }             from "./ApiTypes";
+import { isAcceptableStatus,
+         txtDecoder }               from "./Utils";
 
 export class ResponseBuilder<R> {
   private _data: R | undefined;
@@ -56,17 +57,14 @@ export const isRequestError = (error: Error): error is RequestError => {
 
 export const parseResponseDataToObject = (response: ApiResponse): void => {
   if (
-    TextDecoder &&
     response.data &&
     typeof response.data === "object"
   ) {
     const data = response.data;
     if (data.constructor && data.constructor.name === "ArrayBuffer") {
       try {
-        const decodedData = (response.data = new TextDecoder("utf-8").decode(
-          data,
-        ) as any);
-        response.data = JSON.parse(decodedData);
+        const decodedData = (response.data = txtDecoder(data) as any);
+        response.data     = JSON.parse(decodedData);
       } catch (e) {
         console.warn("Couldn't parse array buffer content to JSON response", e);
       }
