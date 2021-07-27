@@ -4,6 +4,7 @@
       "es6",
       "dom"
     ],
+    "allowJs": true,
     "moduleResolution": "node",
     "module": "esnext",
     "target": "ES5",

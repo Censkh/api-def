@@ -4,6 +4,7 @@ import * as ApiUtils                   from "./ApiUtils";
 import RequestContext                  from "./RequestContext";
 import * as Api                        from "./Api";
 import {EventResultType, RequestEvent} from "./ApiConstants";
+import retry, {RetryOptions}           from "./util/retry";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
@@ -67,13 +68,13 @@ export const submit = async <R,
 
 let defaultBackendMessageShown = false;
 
-const makeRequest = async <R>(
-  context: RequestContext<R>,
-): Promise<ApiResponse<R>> => {
+const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R>> => {
+
   const backend = Api.requestBackend;
   if (!backend) {
     throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
   }
+
   if (process.env.NODE_ENV === "development") {
     if (Api.requestBackendIsDefault && !defaultBackendMessageShown) {
       defaultBackendMessageShown = true;
@@ -81,11 +82,8 @@ const makeRequest = async <R>(
     }
   }
 
-  context.stats.attempt++;
 
-  const beforeSendEventResult = await context.triggerEvent(
-    RequestEvent.BeforeSend,
-  );
+  const beforeSendEventResult = await context.triggerEvent(RequestEvent.BeforeSend);
   if (
     beforeSendEventResult &&
     beforeSendEventResult.type === EventResultType.Respond
@@ -93,57 +91,74 @@ const makeRequest = async <R>(
     return (context.response = beforeSendEventResult.response);
   }
 
-  try {
-    const {promise, canceler} = backend.makeRequest(context);
-    context.addCanceller(canceler);
-    const response = await promise;
-    const parsedResponse = await backend.convertResponse<R>(context, response);
-    context.response = parsedResponse;
-    return parsedResponse;
-  } catch (error) {
-    if (context.cancelled) {
-      error.isCancelledRequest = true;
-    }
+  const maxRetries = (context.computedConfig?.retry) || 0;
 
-    context.error = error;
-    const errorResponse = await backend.extractResponseFromError(error);
-    if (errorResponse !== undefined) {
-      context.response = await backend.convertResponse(context, errorResponse, true);
-      error.response = context.response;
-    }
+  const retryOpts: RetryOptions = {
+    retries    : maxRetries,
+    // assume most users won't want to tune the delay between retries
+    minTimeout : 1 * 1000,
+    maxTimeout : 5 * 1000,
+    randomize  : true,
+  };
 
-    // transform array buffer responses to objs
-    if (context.response) {
-      ApiUtils.parseResponseDataToObject(context.response);
-    }
+  const response = await retry( async (fnBail, attemptCount) => {
 
-    const errorEventResult = await context.triggerEvent(RequestEvent.Error);
-    if (errorEventResult?.type === EventResultType.Respond) {
-      return errorEventResult.response;
-    }
+    context.stats.attempt = attemptCount;
 
-    const retry = context.computedConfig?.retry;
-
-    const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retry && context.stats.attempt < retry;
-
-    // if we have an event that tells us to retry, we must do it
-    const shouldRetry =
-            errorEventResult?.type === EventResultType.Retry ||
-            shouldNaturallyRetry;
-
-    // retry request with same config
-    if (shouldRetry) {
-      return makeRequest(context);
-    }
-
-    const unrecoverableErrorEventResult = await context.triggerEvent(
-      RequestEvent.UnrecoverableError,
-    );
-    if (unrecoverableErrorEventResult) {
-      if (unrecoverableErrorEventResult.type === EventResultType.Respond) {
-        return unrecoverableErrorEventResult.response;
+    try {
+      const {promise, canceler} = backend.makeRequest(context);
+      context.addCanceller(canceler);
+      const response       = await promise;
+      const parsedResponse = await backend.convertResponse<R>(context, response);
+      context.response     = parsedResponse;
+      return(parsedResponse);
+    } catch (error) {
+      if (context.cancelled) {
+        error.isCancelledRequest = true;
       }
+
+      context.error = error;
+      const errorResponse = await backend.extractResponseFromError(error);
+      if (errorResponse !== undefined) {
+        context.response = await backend.convertResponse(context, errorResponse, true);
+        error.response = context.response;
+      }
+
+      // transform array buffer responses to objs
+      if (context.response) {
+        ApiUtils.parseResponseDataToObject(context.response);
+      }
+
+      const errorEventResult = await context.triggerEvent(RequestEvent.Error);
+      if (errorEventResult?.type === EventResultType.Respond) {
+        return errorEventResult.response;
+      }
+
+      const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retry;
+
+      // if we have an event that tells us to retry, we must do it
+      const shouldRetry = errorEventResult?.type === EventResultType.Retry
+                        || shouldNaturallyRetry;
+
+      // retry request with same config
+      if (shouldRetry) {
+        // return makeRequest(context);
+        throw error;
+      }
+
+      const unrecoverableErrorEventResult = await context.triggerEvent(
+        RequestEvent.UnrecoverableError,
+      );
+      if (unrecoverableErrorEventResult) {
+        if (unrecoverableErrorEventResult.type === EventResultType.Respond) {
+          return unrecoverableErrorEventResult.response;
+        }
+      }
+
+      fnBail(error);
     }
-    throw error;
-  }
+
+  }, retryOpts);
+
+  return(response!);
 };
