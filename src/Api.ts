@@ -1,5 +1,5 @@
-import Endpoint                             from "./Endpoint";
-import * as Requester                       from "./Requester";
+import Endpoint                      from "./Endpoint";
+import * as Requester                from "./Requester";
 import {
   ApiResponse,
   BaseRequestConfig,
@@ -8,20 +8,27 @@ import {
   Params,
   Query,
   RequestConfig,
-  RequestEventHandlers,
   RequestHost,
   RequestMiddleware,
-}                                           from "./ApiTypes";
-import {EndpointMockingInfo, MockingConfig} from "./Mocking";
-import RequestBackend                       from "./backend/RequestBackend";
-import EndpointBuilder                      from "./EndpointBuilder";
-import * as Utils                           from "./Utils";
-import FetchRequestBackend                  from "./backend/FetchRequestBackend";
-import {RequestMethod, ResponseType}        from "./ApiConstants";
+}                                    from "./ApiTypes";
+import {MockingConfig, MockingInfo}  from "./MockingTypes";
+import RequestBackend                from "./backend/RequestBackend";
+import EndpointBuilder               from "./EndpointBuilder";
+import * as Utils                    from "./Utils";
+import FetchRequestBackend           from "./backend/FetchRequestBackend";
+import {RequestMethod, ResponseType} from "./ApiConstants";
 
 // use fetch as default if it is present
-export let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
-export let requestBackendIsDefault = true;
+let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
+let requestBackendIsDefault = true;
+
+export const getRequestBackend = (): RequestBackend | null => {
+  return requestBackend;
+};
+
+export const isRequestBackendDefault = (): boolean => {
+  return requestBackendIsDefault;
+};
 
 export const setRequestBackend = (backend: RequestBackend): void => {
   requestBackendIsDefault = false;
@@ -108,14 +115,11 @@ export class Api implements ApiInfo {
     );
   }
 
-  getEventHandlers(): RequestEventHandlers<any> {
-    return {};
-  }
-
   async get<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
     return await Requester.submit(
       new HotRequestHost(this, path, RequestMethod.Get),
       config,
+      null,
     );
   }
 
@@ -123,10 +127,11 @@ export class Api implements ApiInfo {
     return await Requester.submit(
       new HotRequestHost(this, path, RequestMethod.Post),
       config,
+      null,
     );
   }
 
-  getEndpointMocks(): Record<string, EndpointMockingInfo | null> {
+  getEndpointMocks(): Record<string, MockingInfo | null> {
     return Object.keys(this.endpoints).reduce((mocks, key) => {
       (mocks as any)[key] = this.endpoints[key].mocking;
       return mocks;

@@ -21,7 +21,7 @@ export class ResponseBuilder<R> {
 
   build(): ApiResponse<R> {
     if (this._data === undefined) {
-      throw new Error("Response builder doesn't have a response");
+      throw new Error("[api-def] Response builder doesn't have a response");
     }
 
     return {

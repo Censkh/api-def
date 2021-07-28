@@ -39,3 +39,6 @@ export const getGlobalFetch = ():  Fetch | undefined => {
   }
   return window.fetch.bind(window);
 };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = (): void => {};

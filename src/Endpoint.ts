@@ -2,10 +2,9 @@ import {Api}          from "./Api";
 import * as Requester from "./Requester";
 
 import {ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
-import * as Mocking                                                                      from "./Mocking";
-import {EndpointMockingInfo, MockingFunction}                                             from "./Mocking";
-import * as Utils                                                                         from "./Utils";
-import {RequestMethod, ResponseType}                                                      from "./ApiConstants";
+import {MockingInfo, MockingFunction} from "./MockingTypes";
+import * as Utils                     from "./Utils";
+import {RequestMethod, ResponseType}                                                     from "./ApiConstants";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
@@ -24,6 +23,7 @@ export default class Endpoint<R = any,
   P extends Params | undefined = Params | undefined,
   Q extends Query | undefined = Query | undefined,
   B extends Body | undefined = Body | undefined> implements EndpointConfig<R, P, Q, B>, RequestHost {
+
   public readonly api: Api;
 
   readonly id: string;
@@ -34,7 +34,7 @@ export default class Endpoint<R = any,
   readonly config?: BaseRequestConfig;
   readonly responseType: ResponseType;
 
-  public mocking: EndpointMockingInfo<R, P, Q, B> | null = null;
+  public mocking: MockingInfo<R, P, Q, B> | null = null;
 
   constructor(api: Api, info: EndpointConfig<R, P, Q, B>) {
     this.api = api;
@@ -48,6 +48,8 @@ export default class Endpoint<R = any,
   }
 
   public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {
+    let mock = false;
+
     const apiMocking = this.api.mocking;
     if (!this.mocking?.bypass && apiMocking?.predicate()) {
       if (apiMocking?.loader && !apiMocking.loaded) {
@@ -56,10 +58,14 @@ export default class Endpoint<R = any,
         apiMocking.loaded = true;
       }
 
-      return Mocking.mockRequest(this, config);
+      if (!this.mocking?.func) {
+        throw new Error(`[api-def] Endpoint for '${this.path}' has no mocking`);
+      }
+
+      mock = true;
     }
 
-    return Requester.submit(this, config);
+    return Requester.submit(this, config, mock ? this.mocking : null);
   }
 
   computePath(path: string, request: RequestConfig): string {
@@ -76,7 +82,7 @@ export default class Endpoint<R = any,
     }
     if (computedPath.includes(":")) {
       throw new Error(
-        `Not all path params have been resolved: '${computedPath}'`,
+        `[api-def] Not all path params have been resolved: '${computedPath}'`,
       );
     }
     return computedPath;
