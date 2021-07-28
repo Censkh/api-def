@@ -15,6 +15,7 @@ import {
 import {Api}                                       from "./Api";
 import * as Utils                                  from "./Utils";
 import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
+import {MockingInfo}                               from "./MockingTypes";
 
 let contextIdCounter = 0;
 
@@ -37,10 +38,13 @@ export default class RequestContext<R = any,
   cancelled = false;
   readonly computedConfig: RequestConfig<P, Q, B>;
 
+  readonly mocking: MockingInfo<R, P, Q, B> | null;
+
   constructor(
     host: RequestHost,
     config: RequestConfig<P, Q, B>,
     computedPath: string,
+    mocking: MockingInfo<R, P, Q, B> | null
   ) {
     this.id = contextIdCounter++;
     this.host = host;
@@ -54,6 +58,7 @@ export default class RequestContext<R = any,
       cached : false,
     };
     this.eventHandlers = {};
+    this.mocking = mocking;
     this.initMiddleware();
   }
 

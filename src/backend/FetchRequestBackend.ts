@@ -125,7 +125,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
         throw error;
       }
       if (softAbort) {
-        throw new Error("Request was aborted");
+        throw new Error("[api-def] Request was aborted");
       }
       return response;
     });

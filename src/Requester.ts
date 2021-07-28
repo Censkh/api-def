@@ -4,9 +4,14 @@ import * as ApiUtils                   from "./ApiUtils";
 import RequestContext                  from "./RequestContext";
 import * as Api                        from "./Api";
 import {EventResultType, RequestEvent} from "./ApiConstants";
+import RequestBackend                  from "./backend/RequestBackend";
+import {MockingInfo}                   from "./MockingTypes";
+import MockRequestBackend              from "./backend/MockRequestBackend";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
+
+const mockBackend = new MockRequestBackend();
 
 export const submit = async <R,
   P extends Params | undefined,
@@ -14,6 +19,7 @@ export const submit = async <R,
   B extends Body | undefined>(
   host: RequestHost,
   config: RequestConfig<P, Q, B>,
+  mocking: MockingInfo<R, P, Q, B> | null,
 ): Promise<ApiResponse<R>> => {
   const computedConfig: RequestConfig<P, Q, B> = host.computeConfig(config);
 
@@ -21,6 +27,7 @@ export const submit = async <R,
     host,
     computedConfig,
     host.computePath(host.path, config as RequestConfig),
+    mocking,
   );
 
   // if we are already running this request just return the same promise, no need to do it again
@@ -43,6 +50,7 @@ export const submit = async <R,
   try {
     let response = await (runningOperations[key] = makeRequest(
       context as RequestContext<R>,
+      mocking ? mockBackend : undefined,
     ));
 
     const successEventResult = await context.triggerEvent(RequestEvent.Success);
@@ -69,13 +77,14 @@ let defaultBackendMessageShown = false;
 
 const makeRequest = async <R>(
   context: RequestContext<R>,
+  backend?: RequestBackend,
 ): Promise<ApiResponse<R>> => {
-  const backend = Api.requestBackend;
-  if (!backend) {
+  const resolvedBackend = backend || Api.getRequestBackend();
+  if (!resolvedBackend) {
     throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
   }
   if (process.env.NODE_ENV === "development") {
-    if (Api.requestBackendIsDefault && !defaultBackendMessageShown) {
+    if (Api.isRequestBackendDefault() && !defaultBackendMessageShown) {
       defaultBackendMessageShown = true;
       console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
     }
@@ -94,10 +103,10 @@ const makeRequest = async <R>(
   }
 
   try {
-    const {promise, canceler} = backend.makeRequest(context);
+    const {promise, canceler} = resolvedBackend.makeRequest(context);
     context.addCanceller(canceler);
     const response = await promise;
-    const parsedResponse = await backend.convertResponse<R>(context, response);
+    const parsedResponse = await resolvedBackend.convertResponse<R>(context, response);
     context.response = parsedResponse;
     return parsedResponse;
   } catch (error) {
@@ -106,9 +115,9 @@ const makeRequest = async <R>(
     }
 
     context.error = error;
-    const errorResponse = await backend.extractResponseFromError(error);
+    const errorResponse = await resolvedBackend.extractResponseFromError(error);
     if (errorResponse !== undefined) {
-      context.response = await backend.convertResponse(context, errorResponse, true);
+      context.response = await resolvedBackend.convertResponse(context, errorResponse, true);
       error.response = context.response;
     }
 
@@ -133,7 +142,7 @@ const makeRequest = async <R>(
 
     // retry request with same config
     if (shouldRetry) {
-      return makeRequest(context);
+      return makeRequest(context, backend);
     }
 
     const unrecoverableErrorEventResult = await context.triggerEvent(
