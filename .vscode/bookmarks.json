@@ -19,6 +19,31 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "src/Endpoint.ts",
+			"bookmarks": [
+				{
+					"line": 49,
+					"column": 19,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/ApiTypes.ts",
+			"bookmarks": [
+				{
+					"line": 17,
+					"column": 22,
+					"label": ""
+				},
+				{
+					"line": 24,
+					"column": 22,
+					"label": ""
+				}
+			]
 		}
 	]
 }

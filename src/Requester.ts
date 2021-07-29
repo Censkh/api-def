@@ -3,8 +3,10 @@ import {ApiResponse, Body, Params, Query, RequestConfig, RequestHost} from "./Ap
 import * as ApiUtils                   from "./ApiUtils";
 import RequestContext                  from "./RequestContext";
 import * as Api                        from "./Api";
-import {EventResultType, RequestEvent} from "./ApiConstants";
-import retry, {RetryOptions}           from "./util/retry";
+import { EventResultType,
+         RequestEvent }                from "./ApiConstants";
+import retry                           from "./util/retry";
+import { RetryOptions }                from "./util/retry/interfaces";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
