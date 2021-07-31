@@ -74,7 +74,7 @@ export const fetchUser = api.endpoint()
     id: "fetch_user",
 
     name       : "Fetch User",
-    description: "Fetch a user, will respond with error code 'auth/permission-denied' if unathorized",
+    description: "Fetch a user, will respond with error code 'auth/permission-denied' if unauthorized",
 
     path        : "/user/:uid",
     method      : "get",
@@ -105,7 +105,7 @@ export const updateUser = api.endpoint()
     id: "update_user",
 
     name       : "Update User",
-    description: "Updates a user, will respond with error code 'auth/permission-denied' if unathorized",
+    description: "Updates a user, will respond with error code 'auth/permission-denied' if unauthorized",
 
     path        : "/user/:uid",
     method      : "post",

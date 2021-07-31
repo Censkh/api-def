@@ -222,3 +222,11 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
     })
   );
 };
+
+export const randInt = (min: number, max: number): number => {
+
+  const minI = Math.ceil(min);
+  const maxI = Math.floor(max);
+
+  return(Math.floor(Math.random() * (maxI - minI + 1)) + minI);
+};

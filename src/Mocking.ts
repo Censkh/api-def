@@ -1,38 +1,20 @@
 import { ApiResponse,
          Body,
-         ModulePossiblyDefault,
          Params,
          Query,
          RequestConfig }        from "./ApiTypes";
-import Endpoint                 from "./Endpoint";
-import { isAcceptableStatus }   from "./Utils";
-
-export interface LiveMockingConfig {
-  enable    : boolean;
-  delayMs?  : number;
-}
-
-export interface MockingConfig {
-  loader?: () => Promise<ModulePossiblyDefault<any>>;
-  predicate: () => boolean;
-}
-
-export interface EndpointMockingInfo<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> {
-  func?: MockingFunction<R, P, Q, B>;
-  bypass?: boolean;
-}
+import { delayThenReturn,
+         isAcceptableStatus,
+         randInt }              from "./Utils";
 
 export interface MockRequest<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> {
-  params: P extends Params ? Record<P, string> : {};
-  body: B;
-  query: Q;
-}
+                             P extends Params | undefined = Params | undefined,
+                             Q extends Query | undefined = Query | undefined,
+                             B extends Body | undefined = Body | undefined> {
+                               params: P extends Params ? Record<P, string> : {};
+                               body: B;
+                               query: Q;
+                             }
 
 export interface MockResponse<R = any,
   P extends Params | undefined = Params | undefined,
@@ -47,32 +29,50 @@ export interface MockResponse<R = any,
   send(response: R): this;
 }
 
-export type MockingFunction<R = any,
-                            P extends Params | undefined = Params | undefined,
-                            Q extends Query  | undefined = Query  | undefined,
-                            B extends Body   | undefined = Body   | undefined> = (req: MockRequest<R, P, Q, B>, res: MockResponse<R, P, Q, B>) => void;
+export type EndpointMockingFunction<R = any,
+                                    P extends Params | undefined = Params | undefined,
+                                    Q extends Query  | undefined = Query  | undefined,
+                                    B extends Body   | undefined = Body   | undefined> = (req: MockRequest<R,P,Q,B>, res: MockResponse<R,P,Q,B>) => Promise<MockResponse<R,P,Q,B>> | MockResponse<R,P,Q,B>;
+
+export interface EndpointMockingConfig<R = any,
+                                       P extends Params | undefined = Params | undefined,
+                                       Q extends Query  | undefined = Query  | undefined,
+                                       B extends Body   | undefined = Body   | undefined> {
+  /**-
+   * The range supplied will be used to simulate the lag in obtaining a response
+   * your endpoint. If no values are supplied, a response will be returned immediately
+   */
+  delay?   : [minMs: number, maxMs: number],
+  handler  : EndpointMockingFunction<R, P, Q, B>,
+
+  // TODO expand for random erroneous returns...or perhaps an error mode
+}
 
 export const mockRequest = async <R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined>(
-  endpoint: Endpoint<R, P, Q, B>,
-  config: RequestConfig<P, Q, B>,
-): Promise<ApiResponse<R>> => {
-  const mockingFunc = endpoint.mocking?.func;
-  if (!mockingFunc) {
-    throw new Error(`Endpoint for '${endpoint.path}' has no mocking`);
+                                  P extends Params | undefined = Params | undefined,
+                                  Q extends Query  | undefined = Query  | undefined,
+                                  B extends Body   | undefined = Body   | undefined>(
+                                    path           : string,
+                                    reqConfig      : RequestConfig<P, Q, B>,
+                                    mockingConfig? : EndpointMockingConfig<R, P, Q, B>,
+                                  ): Promise<ApiResponse<R>> => {
+
+  const mockingFnDefined = !!(mockingConfig?.handler);
+  if (!mockingFnDefined) {
+    throw new Error(`Endpoint for '${path}' has no mocking`);
   }
+
+  const { handler, delay } = mockingConfig!;
+
   const req: MockRequest<R, P, Q, B> = {
-    body  : config.body ?? ({} as any),
-    params: config.params ?? ({} as any),
-    query : config.query ?? ({} as any),
+    body  : reqConfig.body   ?? ({} as any),
+    params: reqConfig.params ?? ({} as any),
+    query : reqConfig.query  ?? ({} as any),
   };
 
   const res: MockResponse<R, P, Q, B> = {
-    statusCode: -1,
-
-    response: undefined,
+    statusCode : -1,
+    response   : undefined,
 
     status(statusCode) {
       res.statusCode = statusCode;
@@ -85,7 +85,16 @@ export const mockRequest = async <R = any,
     },
   };
 
-  await mockingFunc(req, res);
+  const [min, max] = delay ?? [0, 0];
+  if (max > min) {
+    const delayMs = randInt(min, max);
+    await delayThenReturn(await handler(req, res), delayMs);
+  } else {
+    await handler(req, res);
+  }
+
+  // res.response, res.status should have been set by the `handler` via `status(...)` and `send(...)`
+
   if (res.response === undefined) {
     throw new Error("Mocked API did not respond");
   }

@@ -2,10 +2,6 @@ import RequestContext                                                           
 import {Api}                                                                     from "./Api";
 import {CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
 
-export type ModulePossiblyDefault<T> = T & {
-  default?: T;
-};
-
 export type AcceptableStatus = number | [min: number, max: number];
 
 export type Headers = Record<string, string | number | boolean | null | undefined>;

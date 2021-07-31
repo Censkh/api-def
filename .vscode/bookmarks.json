@@ -21,26 +21,26 @@
 			]
 		},
 		{
-			"path": "src/Endpoint.ts",
+			"path": "src/ApiTypes.ts",
 			"bookmarks": [
 				{
-					"line": 49,
-					"column": 19,
+					"line": 13,
+					"column": 22,
+					"label": ""
+				},
+				{
+					"line": 20,
+					"column": 22,
 					"label": ""
 				}
 			]
 		},
 		{
-			"path": "src/ApiTypes.ts",
+			"path": "src/EndpointBuilder.ts",
 			"bookmarks": [
 				{
-					"line": 17,
-					"column": 22,
-					"label": ""
-				},
-				{
-					"line": 24,
-					"column": 22,
+					"line": 31,
+					"column": 5,
 					"label": ""
 				}
 			]
