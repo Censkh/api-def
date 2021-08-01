@@ -1,4 +1,4 @@
-import api, {fetchRequiresToken} from "./mock/ExampleApis";
+import api, {fetchRequiresToken} from "./mock/MockApi";
 
 test("allow for retries in middleware", async () => {
   let thrownError;

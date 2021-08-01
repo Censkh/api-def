@@ -6,7 +6,7 @@ const api = new Api({
   name   : "Example API",
 
   mocking: {
-    predicate: () => true,
+    enabled: true,
   },
 });
 
@@ -17,11 +17,15 @@ export const fetchUsers = api.endpoint()
     id    : "fetchUsers",
     method: RequestMethod.Get,
     path  : "/users",
-  })
-  .mock((req, res) => {
-    return res.status(200).send([
-      {name: "Test"},
-    ]);
+
+    mocking: {
+      handler: (req, res) => {
+        return res.status(200).send([
+          {name: "Test"},
+        ]);
+      },
+    },
+
   });
 
 export const fetchRequiresToken = api.endpoint()
@@ -30,14 +34,18 @@ export const fetchRequiresToken = api.endpoint()
     id    : "fetchRequiresToken",
     method: RequestMethod.Get,
     path  : "/requires-token",
-  }).mock((req, res) => {
-    if (!req.headers.token) {
-      return res.status(400).send({
-        code: "auth/invalid-token",
-      });
-    }
 
-    return res.status(200).send("hi");
+    mocking: {
+      handler: (req, res) => {
+        if (!req.headers.token) {
+          return res.status(400).send({
+            code: "auth/invalid-token",
+          });
+        }
+
+        return res.status(200).send("hi");
+      },
+    },
   });
 
 

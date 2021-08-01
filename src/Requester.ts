@@ -6,7 +6,7 @@ import RequestContext                                                          f
 import * as Api                                                                from "./Api";
 import {EventResultType, RequestEvent}                                         from "./ApiConstants";
 import retry                                                                   from "./util/retry";
-import {RetryOptions}                                                          from "./util/retry/interfaces";
+import {RetryFunction, RetryOptions}                                           from "./util/retry/interfaces";
 import MockRequestBackend                                                      from "./backend/MockRequestBackend";
 import {EndpointMockingConfig}                                                 from "./MockingTypes";
 import {convertToRequestError, isRequestError, RequestError, RequestErrorCode} from "./RequestError";
@@ -110,10 +110,10 @@ const makeRequest = async <R>(
     maxTimeout: 5 * 1000,
     randomize : true,
   };
+  context.stats.attempt = 0;
 
-  const response = await retry(async (fnBail, attemptCount) => {
-
-    context.stats.attempt = attemptCount;
+  const performRequest: RetryFunction<Promise<any>> = async (fnBail, attemptCount) => {
+    context.stats.attempt++;
 
     try {
       const {promise, canceler} = context.backend.makeRequest(context);
@@ -151,18 +151,19 @@ const makeRequest = async <R>(
         return errorEventResult.response;
       }
 
-      const shouldNaturallyRetry = ApiUtils.isNetworkError(error) && retry;
-
-      // if we have an event that tells us to retry, we must do it
-      const shouldRetry = errorEventResult?.type === EventResultType.Retry
-        || shouldNaturallyRetry;
-
-      // retry request with same config
-      if (shouldRetry) {
-        // return makeRequest(context, backend);
+      // allow retry logic to handle network errors
+      const shouldNaturallyRetry = ApiUtils.isNetworkError(error);
+      if (shouldNaturallyRetry) {
         throw error;
       }
 
+      // if we have an event that tells us to retry, we must do it
+      const forceRetry = errorEventResult?.type === EventResultType.Retry;
+      if (forceRetry) {
+        return performRequest(fnBail, attemptCount);
+      }
+
+      // error is unrecoverable, bail
       const unrecoverableErrorEventResult = await context.triggerEvent(
         RequestEvent.UnrecoverableError,
       );
@@ -174,8 +175,9 @@ const makeRequest = async <R>(
 
       fnBail(error);
     }
+  };
 
-  }, retryOpts);
+  const response = await retry(performRequest, retryOpts);
 
   return (response!);
 };
