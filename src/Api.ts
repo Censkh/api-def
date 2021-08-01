@@ -85,7 +85,7 @@ export class Api implements ApiInfo {
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
 
-  private readonly endpoints: Record<string, Endpoint> = {};
+  protected readonly endpoints: Record<string, Endpoint> = {};
 
   constructor(info: ApiInfo) {
     this.name = info.name;

@@ -83,7 +83,7 @@ export default class RequestContext<R = any,
     return this.host.responseType;
   }
 
-  initMiddleware() {
+  private initMiddleware(): void {
     const {middleware} = this.api;
     for (let i = 0; i < middleware.length; i++) {
       const events = middleware[i];
@@ -153,11 +153,11 @@ export default class RequestContext<R = any,
     return undefined;
   }
 
-  addCanceller(canceler: () => void) {
+  addCanceller(canceler: () => void): void {
     this.canceler = canceler;
   }
 
-  cancel() {
+  cancel(): void {
     this.cancelled = true;
     if (this.canceler) {
       this.canceler();

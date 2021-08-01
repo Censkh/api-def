@@ -4,6 +4,7 @@ export default class LocalForageCacheBackend implements CacheBackend {
 
   private readonly store: any;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(localforage: any) {
     this.store = localforage.createInstance({
       name: "requestCache",

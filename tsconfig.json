@@ -9,6 +9,7 @@
     "module": "esnext",
     "target": "ES5",
     "strict": true,
+    "noUnusedLocals": true,
     "declaration": true,
     "jsx": "react"
   },

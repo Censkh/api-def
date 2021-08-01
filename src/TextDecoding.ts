@@ -1,7 +1,8 @@
 /* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 // polyfill from https://github.com/anonyco/FastestSmallestTextEncoderDecoder/blob/master/EncoderDecoderTogether.src.js
-export const textDecode = (inputArrayOrBuffer: any, options?: any) => {
+export const textDecode = (inputArrayOrBuffer: any, options?: any): string => {
   if (typeof TextDecoder !== "undefined") {
     return new TextDecoder("utf-8").decode(
       inputArrayOrBuffer,
@@ -30,14 +31,18 @@ export const textDecode = (inputArrayOrBuffer: any, options?: any) => {
     inputAs8 = NativeUint8Array ? new patchedU8Array(inputAs8) : inputAs8 || [];
   }
 
-  let resultingString                                                        = "",
-      tmpStr                                                                 = "",
-      index                                                                  = 0,
-      len                                                                    = inputAs8.length | 0,
-      lenMinus32                                                             = len - 32 | 0,
-      nextEnd                                                                = 0,
-      nextStop                                                               = 0, cp0
-                      = 0, codePoint = 0, minBits = 0, cp1 = 0, pos = 0, tmp = -1;
+  let resultingString = "",
+      tmpStr          = "",
+      index           = 0,
+      len             = inputAs8.length | 0,
+      lenMinus32      = len - 32 | 0,
+      nextEnd         = 0,
+      cp0             = 0,
+      codePoint       = 0,
+      minBits         = 0,
+      cp1             = 0,
+      pos             = 0,
+      tmp             = -1;
   // Note that tmp represents the 2nd half of a surrogate pair incase a surrogate gets divided between blocks
   for (; index < len;) {
     nextEnd = index <= lenMinus32 ? 32 : len - index | 0;
