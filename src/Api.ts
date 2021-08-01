@@ -1,22 +1,20 @@
-import Endpoint                      from "./Endpoint";
-import * as Requester                from "./Requester";
-import {
-  ApiResponse,
-  BaseRequestConfig,
-  Body,
-  ModulePossiblyDefault,
-  Params,
-  Query,
-  RequestConfig,
-  RequestHost,
-  RequestMiddleware,
-}                                    from "./ApiTypes";
-import {MockingConfig, MockingInfo}  from "./MockingTypes";
-import RequestBackend                from "./backend/RequestBackend";
-import EndpointBuilder               from "./EndpointBuilder";
-import * as Utils                    from "./Utils";
-import FetchRequestBackend           from "./backend/FetchRequestBackend";
-import {RequestMethod, ResponseType} from "./ApiConstants";
+import Endpoint                             from "./Endpoint";
+import * as Requester                       from "./Requester";
+import { ApiResponse,
+         BaseRequestConfig,
+         Body,
+         Params,
+         Query,
+         RequestConfig,
+         RequestEventHandlers,
+         RequestHost,
+         RequestMiddleware }                from "./ApiTypes";
+import RequestBackend                       from "./backend/RequestBackend";
+import EndpointBuilder                      from "./EndpointBuilder";
+import * as Utils                           from "./Utils";
+import FetchRequestBackend                  from "./backend/FetchRequestBackend";
+import { RequestMethod,
+         ResponseType }                     from "./ApiConstants";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
@@ -35,17 +33,17 @@ export const setRequestBackend = (backend: RequestBackend): void => {
   requestBackend = backend;
 };
 
-export interface ApiInfo {
-  readonly name: string;
-  readonly baseUrl: string;
-  readonly middleware?: RequestMiddleware[];
-  readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
-  readonly mocking?: MockingConfig;
-}
+export type ApiMockingConfig = {
+  required: boolean,
+  // TODO expand to toggle between success and error mock returns
+};
 
-export interface ApiMocking extends MockingConfig {
-  loaderPromise: null | Promise<ModulePossiblyDefault<any>>;
-  loaded: boolean;
+export interface ApiInfo {
+  readonly name        : string;
+  readonly baseUrl     : string;
+  readonly middleware? : RequestMiddleware[];
+  readonly config?     : BaseRequestConfig | (() => BaseRequestConfig);
+  readonly mocking?    : ApiMockingConfig;
 }
 
 class HotRequestHost implements RequestHost {
@@ -82,26 +80,21 @@ class HotRequestHost implements RequestHost {
 }
 
 export class Api implements ApiInfo {
-  readonly baseUrl: string;
-  readonly name: string;
-  readonly middleware: RequestMiddleware[];
-  readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
-  readonly mocking: ApiMocking | undefined;
+  readonly baseUrl    : string;
+  readonly name       : string;
+  readonly middleware : RequestMiddleware[];
+  readonly config?    : BaseRequestConfig | (() => BaseRequestConfig);
+  readonly mocking?   : ApiMockingConfig;
 
   private readonly endpoints: Record<string, Endpoint> = {};
 
   constructor(info: ApiInfo) {
-    this.name = info.name;
-    this.baseUrl = info.baseUrl;
+    this.name       = info.name;
+    this.baseUrl    = info.baseUrl;
     this.middleware = info.middleware || [];
-    this.endpoints = {};
-    this.config = info.config;
-    this.mocking =
-      info.mocking &&
-      Utils.assign(info.mocking, {
-        loaderPromise: null,
-        loaded       : false,
-      });
+    this.endpoints  = {};
+    this.config     = info.config;
+    this.mocking    = info.mocking ?? undefined;
   }
 
   endpoint(): EndpointBuilder {
@@ -115,26 +108,17 @@ export class Api implements ApiInfo {
     );
   }
 
-  async get<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
-    return await Requester.submit(
-      new HotRequestHost(this, path, RequestMethod.Get),
+  private hotRequest = (requestMethod: RequestMethod) => async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> => (
+    await Requester.submit(
+      new HotRequestHost(this, path, requestMethod),
       config,
       null,
-    );
-  }
+    )
+  );
 
-  async post<R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> {
-    return await Requester.submit(
-      new HotRequestHost(this, path, RequestMethod.Post),
-      config,
-      null,
-    );
-  }
+  public get    = this.hotRequest(RequestMethod.GET);
+  public post   = this.hotRequest(RequestMethod.POST);
+  public put    = this.hotRequest(RequestMethod.PUT);
+  public delete = this.hotRequest(RequestMethod.DELETE);
 
-  getEndpointMocks(): Record<string, MockingInfo | null> {
-    return Object.keys(this.endpoints).reduce((mocks, key) => {
-      (mocks as any)[key] = this.endpoints[key].mocking;
-      return mocks;
-    }, {});
-  }
 }

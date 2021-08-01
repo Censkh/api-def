@@ -1,0 +1,49 @@
+{
+	"files": [
+		{
+			"path": "src/backend/AxiosRequestBackend.ts",
+			"bookmarks": [
+				{
+					"line": 27,
+					"column": 40,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/backend/FetchRequestBackend.ts",
+			"bookmarks": [
+				{
+					"line": 38,
+					"column": 24,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/ApiTypes.ts",
+			"bookmarks": [
+				{
+					"line": 13,
+					"column": 22,
+					"label": ""
+				},
+				{
+					"line": 20,
+					"column": 22,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/EndpointBuilder.ts",
+			"bookmarks": [
+				{
+					"line": 31,
+					"column": 5,
+					"label": ""
+				}
+			]
+		}
+	]
+}

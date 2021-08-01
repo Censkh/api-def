@@ -1,8 +1,13 @@
 import {EnumOf} from "./Utils";
 
 export const RequestMethod = {
-  Post: "post",
-  Get : "get",
+  Post   : "post",
+  Get    : "get",
+
+  POST   : "post",
+  GET    : "get",
+  PUT    : "put",
+  DELETE : "delete",
 } as const;
 export type RequestMethod = EnumOf<typeof RequestMethod>;
 
