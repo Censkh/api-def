@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   "modulePathIgnorePatterns": [
     "<rootDir>/cjs",
     "<rootDir>/esm",
