@@ -42,7 +42,7 @@ import {Api} from "api-def";
 const api = new Api({
   name     : "My Backend",
   baseUrl  : "http://localhost:5000/v1",
-  mocking  : {required: true},
+  mocking  : {enabled: true},
 });
 
 export default api;
