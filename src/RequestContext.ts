@@ -1,5 +1,4 @@
 import {
-  AcceptableStatus,
   ApiResponse,
   Body,
   EventResult,
@@ -9,14 +8,15 @@ import {
   RequestCacheInfo,
   RequestConfig,
   RequestContextStats,
-  RequestError,
   RequestEventHandlers,
   RequestHost,
 }                                                  from "./ApiTypes";
 import {Api}                                       from "./Api";
 import * as Utils                                  from "./Utils";
 import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
-import {MockingInfo}                               from "./MockingTypes";
+import {EndpointMockingConfig}                     from "./MockingTypes";
+import {RequestError}                              from "./RequestError";
+import RequestBackend                              from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 
@@ -29,25 +29,28 @@ export default class RequestContext<R = any,
   readonly computedPath: string;
   readonly stats: RequestContextStats;
   private readonly host: RequestHost;
-  readonly acceptableStatus?: AcceptableStatus[];
   readonly eventHandlers: RequestEventHandlers<R>;
 
+  readonly backend: RequestBackend;
+
   private canceler: (() => void) | null = null;
-  response: ApiResponse<R> | null = null;
+  response: ApiResponse<R> | null | undefined = undefined;
   error: RequestError | null = null;
   readonly cacheInfo: RequestCacheInfo = {cached: false, source: null};
 
   cancelled = false;
   readonly computedConfig: RequestConfig<P, Q, B>;
 
-  readonly mocking: MockingInfo<R, P, Q, B> | null;
+  readonly mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined;
 
   constructor(
+    backend: RequestBackend,
     host: RequestHost,
     config: RequestConfig<P, Q, B>,
     computedPath: string,
-    mocking: MockingInfo<R, P, Q, B> | null
+    mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
   ) {
+    this.backend = backend;
     this.id = contextIdCounter++;
     this.host = host;
     this.computedConfig = config;

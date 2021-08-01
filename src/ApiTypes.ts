@@ -12,7 +12,6 @@ export type Query = Record<string,
 export type Body = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
-  success : boolean;
   status  : number;
   data    : T;
   headers : Record<string, string>;
@@ -62,11 +61,6 @@ export type RequestMiddleware<O = undefined> = {
 export interface RequestContextStats {
   cached: false | { is: true; by: "local" | "api" };
   attempt: number;
-}
-
-export interface RequestError extends Error {
-  name: "RequestError";
-  response?: ApiResponse;
 }
 
 export interface RequestHost {

@@ -2,6 +2,8 @@ import {Api} from "api-def";
 
 let mockingEnabled = false;
 
+//setRequestBackend(new AxiosRequestBackend(axios as any));
+
 export const setMockingEnabled = (enabled: boolean): void => {
   mockingEnabled = enabled;
 };
@@ -14,7 +16,7 @@ const api = new Api({
   name   : "Test API",
   baseUrl: "https://jsonplaceholder.typicode.com/",
   mocking: {
-    predicate: isMockingEnabled,
+    enabled: isMockingEnabled,
   },
 });
 
@@ -26,18 +28,20 @@ export const fetchUsers = api.endpoint()
     id    : "fetch_users",
     path  : "/users",
     method: "get",
-  })
-  .mock(async (req, res) => {
-    await new Promise(resolve => setTimeout(resolve, 750));
 
-    return res.status(200).send([
-      {
-        id      : "asdad",
-        name    : "Mock User",
-        email   : "mock@user.com",
-        username: "mock_user",
+    mocking: {
+      delay  : [250, 500],
+      handler: async (req, res) => {
+        return res.status(200).send([
+          {
+            id      : "asdad",
+            name    : "Mock User",
+            email   : "mock@user.com",
+            username: "mock_user",
+          },
+        ]);
       },
-    ]);
+    },
   });
 
 export default api;

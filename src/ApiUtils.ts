@@ -1,41 +1,8 @@
-import { ApiResponse,
-         CancelledRequestError,
-         RequestError }             from "./ApiTypes";
-import { isAcceptableStatus,
-         txtDecoder }               from "./Utils";
-
-export class ResponseBuilder<R> {
-  private _data: R | undefined;
-  private _status = 200;
-
-  send(data: R): ApiResponse<R> {
-    this.data(data);
-    return this.build();
-  }
-
-  data(data: R): this {
-    this._data = data;
-    return this;
-  }
-
-  status(status: number): this {
-    this._status = status;
-    return this;
-  }
-
-  build(): ApiResponse<R> {
-    if (this._data === undefined) {
-      throw new Error("[api-def] Response builder doesn't have a response");
-    }
-
-    return {
-      success: isAcceptableStatus(this._status),
-      headers: {},
-      data   : this._data,
-      status : this._status,
-    };
-  }
-}
+import {
+  AcceptableStatus, ApiResponse,
+  CancelledRequestError,
+}                   from "./ApiTypes";
+import {textDecode} from "./TextDecoding";
 
 export const isCancelledError = (
   error: Error,
@@ -51,10 +18,6 @@ export const isNetworkError = (error: Error): boolean => {
   );
 };
 
-export const isRequestError = (error: Error): error is RequestError => {
-  return "response" in error;
-};
-
 export const parseResponseDataToObject = (response: ApiResponse): void => {
   if (
     response.data &&
@@ -63,11 +26,32 @@ export const parseResponseDataToObject = (response: ApiResponse): void => {
     const data = response.data;
     if (data.constructor && data.constructor.name === "ArrayBuffer") {
       try {
-        const decodedData = (response.data = txtDecoder(data) as any);
+        const decodedData = (response.data = textDecode(data) as any);
         response.data     = JSON.parse(decodedData);
       } catch (e) {
         console.warn("Couldn't parse array buffer content to JSON response", e);
       }
     }
   }
+};
+
+const DEFAULT_ACCEPTABLE_STATUS = [[200, 299], 304];
+
+export const isAcceptableStatus = (status: number, acceptableStatus?: AcceptableStatus[]): boolean => {
+  const acceptable = acceptableStatus ?? DEFAULT_ACCEPTABLE_STATUS;
+
+  for (const cmpStatus of acceptable) {
+    if (Array.isArray(cmpStatus)) {
+      const [min, max] = cmpStatus;
+      if (status >= min && status <= max) {
+        return (true);
+      }
+    } else if (!isNaN(cmpStatus)) {
+      if (status === cmpStatus) {
+        return (true);
+      }
+    }
+  }
+
+  return (false);
 };

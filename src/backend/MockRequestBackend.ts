@@ -1,10 +1,13 @@
-import RequestBackend, {RequestOperation}            from "./RequestBackend";
-import {ApiResponse}                                 from "../ApiTypes";
-import RequestContext                                from "../RequestContext";
-import * as Utils                                    from "../Utils";
-import {MockRequest, MockRequestError, MockResponse} from "../MockingTypes";
+import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
+import {ApiResponse}                                               from "../ApiTypes";
+import RequestContext                                          from "../RequestContext";
+import * as Utils                                              from "../Utils";
+import {delayThenReturn, randInt}                              from "../Utils";
+import {MockRequest, MockRequestError, MockResponse}           from "../MockingTypes";
+import {convertToRequestError, RequestError, RequestErrorCode} from "../RequestError";
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
+
   async convertResponse<T>(context: RequestContext, response: ApiResponse, error?: boolean): Promise<ApiResponse<T>> {
     return response;
   }
@@ -18,10 +21,13 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   }
 
   private async runRequest(context: RequestContext): Promise<ApiResponse> {
-    const mockingFunc = context.mocking?.func;
+    const mockingFunc = context.mocking?.handler;
 
     if (!mockingFunc) {
-      throw new Error("[api-def] Attempted to run mocked request without mocking function");
+      throw convertToRequestError({
+        error: new Error("[api-def] Attempted to run mocked request without mocking function"),
+        code : RequestErrorCode.INVALID_CONFIG,
+      });
     }
 
     const req: MockRequest = {
@@ -47,25 +53,38 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       },
     };
 
-    await mockingFunc(req, res);
-    if (res.response === undefined) {
-      throw new Error("[api-def] Mocked API did not respond");
+    if (context.mocking?.delay) {
+      const delay = context.mocking.delay;
+      let delayMs;
+      if (typeof delay === "number") {
+        delayMs = delay;
+      } else {
+        const [min, max] = delay;
+        if (min > max) {
+          throw convertToRequestError({
+            error: new Error("[api-def] Min delay cannot be greater than max delay"),
+            code : RequestErrorCode.INVALID_CONFIG,
+          });
+        }
+        delayMs = randInt(min, max);
+      }
+      await delayThenReturn(await mockingFunc(req, res), delayMs);
+    } else {
+      await mockingFunc(req, res);
     }
 
-    const response: ApiResponse = {
+    if (res.response === undefined) {
+      throw convertToRequestError({
+        error: new Error("[api-def] Mocked API did not respond"),
+        code : RequestErrorCode.INVALID_CONFIG,
+      });
+    }
+
+    return {
       headers: {},
       data   : res.response,
       status : res.statusCode,
     };
-
-    // TODO: replace with dylan's isAcceptableStatus
-    if (res.statusCode >= 400) {
-      throw Object.assign(new Error("[api-def] Mocked request failed"), {
-        response: response,
-      });
-    }
-
-    return response;
   }
 
   makeRequest(context: RequestContext): RequestOperation<ApiResponse> {
@@ -73,6 +92,10 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       canceler: Utils.noop,
       promise : this.runRequest(context),
     };
+  }
+
+  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+    return undefined;
   }
 
 }

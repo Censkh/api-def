@@ -8,13 +8,14 @@ import { ApiResponse,
          RequestConfig,
          RequestEventHandlers,
          RequestHost,
-         RequestMiddleware }                from "./ApiTypes";
-import RequestBackend                       from "./backend/RequestBackend";
-import EndpointBuilder                      from "./EndpointBuilder";
-import * as Utils                           from "./Utils";
-import FetchRequestBackend                  from "./backend/FetchRequestBackend";
+         RequestMiddleware } from "./ApiTypes";
+import RequestBackend        from "./backend/RequestBackend";
+import EndpointBuilder       from "./EndpointBuilder";
+import * as Utils            from "./Utils";
+import FetchRequestBackend   from "./backend/FetchRequestBackend";
 import { RequestMethod,
-         ResponseType }                     from "./ApiConstants";
+         ResponseType }      from "./ApiConstants";
+import {ApiMockingConfig}    from "./MockingTypes";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
@@ -31,11 +32,6 @@ export const isRequestBackendDefault = (): boolean => {
 export const setRequestBackend = (backend: RequestBackend): void => {
   requestBackendIsDefault = false;
   requestBackend = backend;
-};
-
-export type ApiMockingConfig = {
-  required: boolean,
-  // TODO expand to toggle between success and error mock returns
 };
 
 export interface ApiInfo {

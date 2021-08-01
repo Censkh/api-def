@@ -1,9 +1,10 @@
-import RequestBackend, {RequestOperation} from "./RequestBackend";
-import {ApiResponse}                      from "../ApiTypes";
+import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
+import {ApiResponse}                                               from "../ApiTypes";
 import RequestContext                     from "../RequestContext";
 import * as Utils                         from "../Utils";
 import {Fetch, getGlobalFetch}            from "../Utils";
 import {ResponseType}                     from "../ApiConstants";
+import {RequestError}                     from "../RequestError";
 
 class FetchError extends Error {
   response?: Response;
@@ -60,7 +61,6 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const { status } = response;
     return {
-      success : Utils.isAcceptableStatus(status, context.acceptableStatus),
       data    : data,
       status  : status,
       headers : response.headers as any,
@@ -141,5 +141,9 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
           softAbort = true;
         },
     };
+  }
+
+  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+    return undefined;
   }
 }

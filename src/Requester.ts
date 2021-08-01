@@ -1,17 +1,20 @@
 import {ApiResponse, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
 
-import * as ApiUtils                   from "./ApiUtils";
-import RequestContext                  from "./RequestContext";
-import * as Api                        from "./Api";
-import { EventResultType,
-         RequestEvent }                from "./ApiConstants";
-import retry                           from "./util/retry";
-import { RetryOptions }                from "./util/retry/interfaces";
+import * as ApiUtils                                                           from "./ApiUtils";
+import {isAcceptableStatus, isNetworkError}                                    from "./ApiUtils";
+import RequestContext                                                          from "./RequestContext";
+import * as Api                                                                from "./Api";
+import {EventResultType, RequestEvent}                                         from "./ApiConstants";
+import retry                                                                   from "./util/retry";
+import {RetryOptions}                                                          from "./util/retry/interfaces";
+import MockRequestBackend                                                      from "./backend/MockRequestBackend";
+import {EndpointMockingConfig}                                                 from "./MockingTypes";
+import {convertToRequestError, isRequestError, RequestError, RequestErrorCode} from "./RequestError";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
-const mockBackend = new MockRequestBackend();
+const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
 export const submit = async <R,
   P extends Params | undefined,
@@ -19,11 +22,17 @@ export const submit = async <R,
   B extends Body | undefined>(
   host: RequestHost,
   config: RequestConfig<P, Q, B>,
-  mocking: MockingInfo<R, P, Q, B> | null,
+  mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
 ): Promise<ApiResponse<R>> => {
   const computedConfig: RequestConfig<P, Q, B> = host.computeConfig(config);
 
+  const backend = mocking ? MOCK_REQUEST_BACKEND : Api.getRequestBackend();
+  if (!backend) {
+    throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
+  }
+
   const context = new RequestContext<R, P, Q, B>(
+    backend,
     host,
     computedConfig,
     host.computePath(host.path, config as RequestConfig),
@@ -50,7 +59,6 @@ export const submit = async <R,
   try {
     let response = await (runningOperations[key] = makeRequest(
       context as RequestContext<R>,
-      mocking ? mockBackend : undefined,
     ));
 
     const successEventResult = await context.triggerEvent(RequestEvent.Success);
@@ -77,20 +85,13 @@ let defaultBackendMessageShown = false;
 
 const makeRequest = async <R>(
   context: RequestContext<R>,
-  backend?: RequestBackend,
 ): Promise<ApiResponse<R>> => {
-  const resolvedBackend = backend || Api.getRequestBackend();
-  if (!resolvedBackend) {
-    throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
-  }
-
   if (process.env.NODE_ENV === "development") {
     if (Api.isRequestBackendDefault() && !defaultBackendMessageShown) {
       defaultBackendMessageShown = true;
       console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
     }
   }
-
 
   const beforeSendEventResult = await context.triggerEvent(RequestEvent.BeforeSend);
   if (
@@ -103,35 +104,42 @@ const makeRequest = async <R>(
   const maxRetries = (context.computedConfig?.retry) || 0;
 
   const retryOpts: RetryOptions = {
-    retries    : maxRetries,
+    retries: maxRetries,
     // assume most users won't want to tune the delay between retries
-    minTimeout : 1 * 1000,
-    maxTimeout : 5 * 1000,
-    randomize  : true,
+    minTimeout: 1 * 1000,
+    maxTimeout: 5 * 1000,
+    randomize : true,
   };
 
-  const response = await retry( async (fnBail, attemptCount) => {
+  const response = await retry(async (fnBail, attemptCount) => {
 
     context.stats.attempt = attemptCount;
 
     try {
-      const {promise, canceler} = resolvedBackend.makeRequest(context);
+      const {promise, canceler} = context.backend.makeRequest(context);
       context.addCanceller(canceler);
-      const response       = await promise;
-      const parsedResponse = await resolvedBackend.convertResponse<R>(context, response);
-      context.response     = parsedResponse;
-      return(parsedResponse);
-    } catch (error) {
-      if (context.cancelled) {
-        error.isCancelledRequest = true;
+      const response = await promise;
+      const parsedResponse = (await parseResponse<R>(context, response))!;
+
+      if (!isAcceptableStatus(parsedResponse.status, context.computedConfig.acceptableStatus)) {
+        throw convertToRequestError({
+          error   : new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
+          response: parsedResponse,
+          code    : RequestErrorCode.INVALID_STATUS,
+        });
       }
 
-      context.error = error;
-      const errorResponse = await resolvedBackend.extractResponseFromError(error);
-      if (errorResponse !== undefined) {
-        context.response = await resolvedBackend.convertResponse(context, errorResponse, true);
-        error.response = context.response;
+
+      context.response = parsedResponse;
+      return (parsedResponse);
+    } catch (rawError) {
+      if (context.cancelled) {
+        rawError.isCancelledRequest = true;
       }
+
+      const error = await parseError(context, rawError);
+      context.error = error;
+      context.response = error.response;
 
       // transform array buffer responses to objs
       if (context.response) {
@@ -147,7 +155,7 @@ const makeRequest = async <R>(
 
       // if we have an event that tells us to retry, we must do it
       const shouldRetry = errorEventResult?.type === EventResultType.Retry
-                        || shouldNaturallyRetry;
+        || shouldNaturallyRetry;
 
       // retry request with same config
       if (shouldRetry) {
@@ -169,5 +177,45 @@ const makeRequest = async <R>(
 
   }, retryOpts);
 
-  return(response!);
+  return (response!);
+};
+
+const parseResponse = async <R = any>(context: RequestContext, response: any, error?: boolean): Promise<ApiResponse<R> | null | undefined> => {
+  if (response) {
+    const parsedResponse = await context.backend.convertResponse<R>(context, response, error);
+    if (parsedResponse) {
+      ApiUtils.parseResponseDataToObject(parsedResponse);
+    }
+    return parsedResponse;
+  }
+  return response;
+};
+
+const parseError = async (context: RequestContext, rawError: Error) => {
+  let error: RequestError;
+  if (isRequestError(rawError)) {
+    error = rawError;
+  } else {
+    const extractedResponse = await context.backend.extractResponseFromError(rawError);
+    let errorResponse: ApiResponse | undefined | null = undefined;
+    if (extractedResponse !== undefined) {
+      errorResponse = await parseResponse(context, extractedResponse, true);
+    }
+
+    let code: string = isNetworkError(rawError) ? RequestErrorCode.NETWORK_ERROR : RequestErrorCode.UNKNOWN_ERROR;
+    if (errorResponse) {
+      if (!isAcceptableStatus(errorResponse.status, context.computedConfig.acceptableStatus)) {
+        code = RequestErrorCode.INVALID_STATUS;
+      }
+    }
+
+    const errorInfo = context.backend.getErrorInfo(rawError, errorResponse);
+    error = convertToRequestError({
+      error   : rawError,
+      response: errorResponse,
+      code    : code,
+      ...errorInfo,
+    });
+  }
+  return error;
 };

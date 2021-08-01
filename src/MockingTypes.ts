@@ -1,17 +1,7 @@
-import {ApiResponse, Body, Headers, ModulePossiblyDefault, Params, Query, RequestConfig} from "./ApiTypes";
-import Endpoint                                                                          from "./Endpoint";
+import {ApiResponse, Body, Headers, Params, Query} from "./ApiTypes";
 
-export interface MockingConfig {
-  loader?: () => Promise<ModulePossiblyDefault<any>>;
-  predicate: () => boolean;
-}
-
-export interface MockingInfo<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> {
-  func?: MockingFunction<R, P, Q, B>;
-  bypass?: boolean;
+export interface ApiMockingConfig {
+  enabled: boolean | (() => boolean),
 }
 
 export interface MockRequest<R = any,
@@ -39,7 +29,21 @@ export interface MockResponse<R = any,
 
 export type MockRequestError = Error & {response?: ApiResponse};
 
-export type MockingFunction<R = any,
+export type EndpointMockingFunction<R = any,
   P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> = (req: MockRequest<R, P, Q, B>, res: MockResponse<R, P, Q, B>) => void;
+  Q extends Query  | undefined = Query  | undefined,
+  B extends Body   | undefined = Body   | undefined> = (req: MockRequest<R,P,Q,B>, res: MockResponse<R,P,Q,B>) => Promise<MockResponse<R,P,Q,B>> | MockResponse<R,P,Q,B>;
+
+export interface EndpointMockingConfig<R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query  | undefined = Query  | undefined,
+  B extends Body   | undefined = Body   | undefined> {
+  /**-
+   * The range supplied will be used to simulate the lag in obtaining a response
+   * your endpoint. If no values are supplied, a response will be returned immediately
+   */
+  delay?   : number | [minMs: number, maxMs: number],
+  handler  : EndpointMockingFunction<R, P, Q, B>,
+
+  // TODO expand for random erroneous returns...or perhaps an error mode
+}

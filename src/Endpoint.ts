@@ -2,7 +2,7 @@ import { Api } from "./Api";
 import * as Requester from "./Requester";
 
 import { ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
-import * as Mocking from "./Mocking";
+import * as Mocking from "./MockingTypes";
 import * as Utils from "./Utils";
 import { RequestMethod, ResponseType } from "./ApiConstants";
 
@@ -67,15 +67,18 @@ export default class Endpoint<R = any,
   }
 
   public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {
+    let mock = false;
 
-    const mockingEnabled = this.api.mocking?.required ?? false;
+    const apiMocking = this.api.mocking;
+    if (apiMocking) {
+      const mockingEnabled = (typeof apiMocking.enabled === "function" ? apiMocking.enabled() : apiMocking.enabled) ?? false;
+      if (mockingEnabled) {
+        if (!this.mocking?.handler) {
+          throw new Error(`[api-def] Endpoint for '${this.path}' has no mocking`);
+        }
 
-    if (mockingEnabled) {
-      if (!this.mocking?.handler) {
-        throw new Error(`[api-def] Endpoint for '${this.path}' has no mocking`);
+        mock = true;
       }
-
-      mock = true;
     }
 
     return Requester.submit(this, config, mock ? this.mocking : null);

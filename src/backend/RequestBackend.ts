@@ -1,9 +1,16 @@
-import RequestContext from "../RequestContext";
-import {ApiResponse}  from "../ApiTypes";
+import RequestContext   from "../RequestContext";
+import {ApiResponse}    from "../ApiTypes";
+import {RequestError}   from "../RequestError";
+import {Api}            from "../Api";
+import {isNetworkError} from "../ApiUtils";
 
 export interface RequestOperation<R> {
   promise: Promise<R>;
   canceler: () => void;
+}
+
+export interface RequestBackendErrorInfo {
+  code: string;
 }
 
 export default interface RequestBackend<R = any> {
@@ -14,4 +21,9 @@ export default interface RequestBackend<R = any> {
   extractResponseFromError(
     error: Error,
   ): Promise<R | null | undefined>;
+
+  getErrorInfo(
+    error: Error,
+    response: ApiResponse  | undefined | null,
+  ): RequestBackendErrorInfo | undefined;
 }

@@ -1,8 +1,7 @@
-import RequestBackend, {RequestOperation}            from "./RequestBackend";
-import {ApiResponse}                                 from "../ApiTypes";
+import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
+import {ApiResponse}                                               from "../ApiTypes";
 import type {AxiosError, AxiosResponse, AxiosStatic} from "axios";
 import RequestContext                                from "../RequestContext";
-import { isAcceptableStatus }                        from "../Utils";
 
 let axios: AxiosStatic;
 
@@ -26,11 +25,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ApiResponse<T>> {
-
-    return({
-      success : isAcceptableStatus(response.status, context.acceptableStatus),
-      ...response,
-    });
+    return response;
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
@@ -53,5 +48,9 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       promise : promise,
       canceler: () => canceler && canceler(),
     };
+  }
+
+  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+    return undefined;
   }
 }

@@ -5,7 +5,7 @@ export * from "./Api";
 export * from "./ApiTypes";
 export * from "./ApiConstants";
 
-export {isRequestError} from "./ApiUtils";
+export {isRequestError} from "./RequestError";
 
 export {clearCache, setCacheBackend}         from "./cache/Caching";
 export {default as LocalStorageCacheBackend} from "./cache/LocalStorageCacheBackend";
