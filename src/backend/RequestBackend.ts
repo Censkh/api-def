@@ -1,8 +1,5 @@
-import RequestContext   from "../RequestContext";
-import {ApiResponse}    from "../ApiTypes";
-import {RequestError}   from "../RequestError";
-import {Api}            from "../Api";
-import {isNetworkError} from "../ApiUtils";
+import RequestContext from "../RequestContext";
+import {ApiResponse}  from "../ApiTypes";
 
 export interface RequestOperation<R> {
   promise: Promise<R>;
@@ -24,6 +21,6 @@ export default interface RequestBackend<R = any> {
 
   getErrorInfo(
     error: Error,
-    response: ApiResponse  | undefined | null,
+    response: ApiResponse | undefined | null,
   ): RequestBackendErrorInfo | undefined;
 }

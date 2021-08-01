@@ -1,10 +1,9 @@
 import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
 import {ApiResponse}                                               from "../ApiTypes";
-import RequestContext                     from "../RequestContext";
-import * as Utils                         from "../Utils";
-import {Fetch, getGlobalFetch}            from "../Utils";
-import {ResponseType}                     from "../ApiConstants";
-import {RequestError}                     from "../RequestError";
+import RequestContext                                              from "../RequestContext";
+import * as Utils                                                  from "../Utils";
+import {Fetch, getGlobalFetch}                                     from "../Utils";
+import {ResponseType}                                              from "../ApiConstants";
 
 class FetchError extends Error {
   response?: Response;
@@ -29,17 +28,17 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  inferResponseType(response:Response): ResponseType {
+  inferResponseType(response: Response): ResponseType {
     const contentType = response.headers.get("Content-Type");
     if (contentType?.startsWith("json")) {
       return "json";
     }
     return "text";
-}
+  }
 
-  async convertResponse<T>(context: RequestContext, response: Response & {__text?: string}, error?: boolean): Promise<ApiResponse<T>> {
+  async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }, error?: boolean): Promise<ApiResponse<T>> {
     let data;
-    const responseType =  error ? this.inferResponseType(response) : context.responseType;
+    const responseType = error ? this.inferResponseType(response) : context.responseType;
 
     try {
       if (!response.__text) {
@@ -59,11 +58,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       });
     }
 
-    const { status } = response;
+    const {status} = response;
     return {
-      data    : data,
-      status  : status,
-      headers : response.headers as any,
+      data   : data,
+      status : status,
+      headers: response.headers as any,
     };
   }
 

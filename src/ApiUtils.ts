@@ -1,8 +1,5 @@
-import {
-  AcceptableStatus, ApiResponse,
-  CancelledRequestError,
-}                   from "./ApiTypes";
-import {textDecode} from "./TextDecoding";
+import {AcceptableStatus, ApiResponse, CancelledRequestError} from "./ApiTypes";
+import {textDecode}                                            from "./TextDecoding";
 
 export const isCancelledError = (
   error: Error,
@@ -27,7 +24,7 @@ export const parseResponseDataToObject = (response: ApiResponse): void => {
     if (data.constructor && data.constructor.name === "ArrayBuffer") {
       try {
         const decodedData = (response.data = textDecode(data) as any);
-        response.data     = JSON.parse(decodedData);
+        response.data = JSON.parse(decodedData);
       } catch (e) {
         console.warn("Couldn't parse array buffer content to JSON response", e);
       }

@@ -3,7 +3,7 @@ import {EnumOf}      from "./Utils";
 
 export const RequestErrorCode = {
   UNKNOWN_ERROR : "unknown-error",
-  NETWORK_ERROR: "network-error",
+  NETWORK_ERROR : "network-error",
   INVALID_STATUS: "invalid-status",
   INVALID_CONFIG: "invalid-config",
 } as const;
@@ -25,12 +25,12 @@ export interface RequestErrorConfig {
   response?: ApiResponse | null;
 }
 
-export const convertToRequestError = (config : RequestErrorConfig): RequestError => {
+export const convertToRequestError = (config: RequestErrorConfig): RequestError => {
   const {error, response, code} = config;
   return Object.assign(error, {
-    name: error.name === "Error" ? "RequestError" : error.name,
-    response: response,
-    code: code,
+    name          : error.name === "Error" ? "RequestError" : error.name,
+    response      : response,
+    code          : code,
     isRequestError: true as const,
   });
 };

@@ -1,29 +1,29 @@
-import { Api } from "./Api";
+import {Api}          from "./Api";
 import * as Requester from "./Requester";
 
-import { ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
-import * as Mocking from "./MockingTypes";
-import * as Utils from "./Utils";
-import { RequestMethod, ResponseType } from "./ApiConstants";
+import {ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
+import * as Mocking                                                                      from "./MockingTypes";
+import * as Utils                                                                        from "./Utils";
+import {RequestMethod, ResponseType}                                                     from "./ApiConstants";
 
 export interface EndpointConfig<R,
-                                P extends Params | undefined,
-                                Q extends Query  | undefined,
-                                B extends Body   | undefined> {
-  readonly id          : string;
-  readonly method      : RequestMethod;
-  readonly path        : string;
+  P extends Params | undefined,
+  Q extends Query | undefined,
+  B extends Body | undefined> {
+  readonly id: string;
+  readonly method: RequestMethod;
+  readonly path: string;
 
   /**
    * Name your endpoint to help with debugging and documentation
    * @default `id` is used as the name if no name is supplied
    */
-  readonly name?        : string;
+  readonly name?: string;
   /**
    * Describe your endpoint to help with debugging and documentation
    */
-  readonly description? : string;
-  readonly config?      : BaseRequestConfig;
+  readonly description?: string;
+  readonly config?: BaseRequestConfig;
   /**
    * Let the backend requestor (fetch, axios, etc.) know what type of response
    * you are expecting from this endpoint
@@ -40,30 +40,30 @@ export interface EndpointConfig<R,
 }
 
 export default class Endpoint<R = any,
-                              P extends Params | undefined = Params | undefined,
-                              Q extends Query  | undefined = Query  | undefined,
-                              B extends Body   | undefined = Body   | undefined> implements EndpointConfig<R, P, Q, B>, RequestHost {
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined> implements EndpointConfig<R, P, Q, B>, RequestHost {
   public readonly api: Api;
 
-  readonly id            : string;
-  readonly method        : RequestMethod;
-  readonly name          : string;
-  readonly description?  : string;
-  readonly path          : string;
-  readonly config?       : BaseRequestConfig;
-  readonly responseType  : ResponseType;
-  readonly mocking?      : Mocking.EndpointMockingConfig<R, P, Q, B>;
+  readonly id: string;
+  readonly method: RequestMethod;
+  readonly name: string;
+  readonly description?: string;
+  readonly path: string;
+  readonly config?: BaseRequestConfig;
+  readonly responseType: ResponseType;
+  readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
 
   constructor(api: Api, info: EndpointConfig<R, P, Q, B>) {
-    this.api           = api;
-    this.id            = info.id;
-    this.method        = info.method;
-    this.name          = info.name || info.id;
-    this.description   = info.description;
-    this.path          = info.path;
-    this.config        = info.config;
-    this.responseType  = info.responseType || ResponseType.Json;
-    this.mocking       = info.mocking;
+    this.api = api;
+    this.id = info.id;
+    this.method = info.method;
+    this.name = info.name || info.id;
+    this.description = info.description;
+    this.path = info.path;
+    this.config = info.config;
+    this.responseType = info.responseType || ResponseType.Json;
+    this.mocking = info.mocking;
   }
 
   public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {

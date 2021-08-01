@@ -3,9 +3,9 @@ import Endpoint, {EndpointConfig} from "./Endpoint";
 import {Api}                      from "./Api";
 
 export default class EndpointBuilder<R = any,
-                                     P extends Params | undefined = undefined,
-                                     Q extends Query  | undefined = undefined,
-                                     B extends Body   | undefined = undefined> {
+  P extends Params | undefined = undefined,
+  Q extends Query | undefined = undefined,
+  B extends Body | undefined = undefined> {
 
   private api: Api;
 

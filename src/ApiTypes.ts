@@ -12,17 +12,17 @@ export type Query = Record<string,
 export type Body = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
-  status  : number;
-  data    : T;
-  headers : Record<string, string>;
+  status: number;
+  data: T;
+  headers: Record<string, string>;
 }
 
 export interface BaseRequestConfig {
-  cache?            : number | boolean;
-  lock?             : string | false;
-  retry?            : number | false;
-  headers?          : Readonly<Headers>;
-  acceptableStatus? : AcceptableStatus[];
+  cache?: number | boolean;
+  lock?: string | false;
+  retry?: number | false;
+  headers?: Readonly<Headers>;
+  acceptableStatus?: AcceptableStatus[];
 }
 
 export type RequestConfig<P extends Params | undefined = Params | undefined,

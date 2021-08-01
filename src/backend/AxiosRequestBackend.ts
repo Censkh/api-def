@@ -1,7 +1,7 @@
 import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
 import {ApiResponse}                                               from "../ApiTypes";
-import type {AxiosError, AxiosResponse, AxiosStatic} from "axios";
-import RequestContext                                from "../RequestContext";
+import type {AxiosError, AxiosResponse, AxiosStatic}               from "axios";
+import RequestContext                                              from "../RequestContext";
 
 let axios: AxiosStatic;
 
