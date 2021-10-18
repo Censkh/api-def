@@ -1,20 +1,22 @@
-import RequestContext                                                            from "./RequestContext";
-import {Api}                                                                     from "./Api";
-import {CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
+import RequestContext                   from "./RequestContext";
+import { Api }                          from "./Api";
+import { CacheSource,
+         EventResultType,
+         RequestEvent,
+         RequestMethod,
+         ResponseType }                 from "./ApiConstants";
 
 export type AcceptableStatus = number | [min: number, max: number];
-
-export type Headers = Record<string, string | number | boolean | null | undefined>;
-
-export type Params = string;
-export type Query = Record<string,
-  string | number | boolean | undefined | null>;
-export type Body = string | number | Record<string, any>;
+export type Headers          = Record<string, string | number | boolean | null | undefined>;
+export type Params           = string;
+export type Query            = Record<string, string | number | boolean | undefined | null>;
+export type Body             = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
-  status: number;
-  data: T;
-  headers: Record<string, string>;
+  success : boolean;    // provided for convenience if the caller didn't want to examine this.status
+  status  : number;
+  data    : T;
+  headers : Record<string, string>;
 }
 
 export interface BaseRequestConfig {

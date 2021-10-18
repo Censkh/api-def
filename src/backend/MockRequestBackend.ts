@@ -2,7 +2,6 @@ import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./Reque
 import {ApiResponse}                                               from "../ApiTypes";
 import RequestContext                                              from "../RequestContext";
 import * as Utils                                                  from "../Utils";
-import {delayThenReturn, randInt}                                  from "../Utils";
 import {MockRequest, MockRequestError, MockResponse}               from "../MockingTypes";
 import {convertToRequestError, RequestErrorCode}                   from "../RequestError";
 
@@ -66,9 +65,9 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
             code : RequestErrorCode.INVALID_CONFIG,
           });
         }
-        delayMs = randInt(min, max);
+        delayMs = Utils.randInt(min, max);
       }
-      await delayThenReturn(await mockingFunc(req, res), delayMs);
+      await Utils.delayThenReturn(await mockingFunc(req, res), delayMs);
     } else {
       await mockingFunc(req, res);
     }
@@ -80,11 +79,12 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       });
     }
 
-    return {
+    return({
+      success: Utils.isAcceptableStatus(res.statusCode),
       headers: {},
       data   : res.response,
       status : res.statusCode,
-    };
+    });
   }
 
   makeRequest(context: RequestContext): RequestOperation<ApiResponse> {

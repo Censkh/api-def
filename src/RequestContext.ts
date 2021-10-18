@@ -10,6 +10,7 @@ import {
   RequestContextStats,
   RequestEventHandlers,
   RequestHost,
+  AcceptableStatus,
 }                                                  from "./ApiTypes";
 import {Api}                                       from "./Api";
 import * as Utils                                  from "./Utils";
@@ -29,6 +30,7 @@ export default class RequestContext<R = any,
   readonly computedPath: string;
   readonly stats: RequestContextStats;
   private readonly host: RequestHost;
+  readonly acceptableStatus?: AcceptableStatus[];
   readonly eventHandlers: RequestEventHandlers<R>;
 
   readonly backend: RequestBackend;

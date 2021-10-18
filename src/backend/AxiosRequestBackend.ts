@@ -2,6 +2,7 @@ import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./Reque
 import {ApiResponse}                                               from "../ApiTypes";
 import type {AxiosError, AxiosResponse, AxiosStatic}               from "axios";
 import RequestContext                                              from "../RequestContext";
+import { isAcceptableStatus }                                      from "../Utils";
 
 let axios: AxiosStatic;
 
@@ -25,7 +26,11 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ApiResponse<T>> {
-    return response;
+
+    return({
+      success : isAcceptableStatus(response.status, context.acceptableStatus),
+      ...response,
+    });
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {

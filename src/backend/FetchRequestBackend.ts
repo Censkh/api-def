@@ -59,11 +59,12 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     }
 
     const {status} = response;
-    return {
+    return({
+      success : Utils.isAcceptableStatus(status, context.acceptableStatus),
       data   : data,
       status : status,
       headers: response.headers as any,
-    };
+    });
   }
 
   makeRequest(context: RequestContext): RequestOperation<Response> {
