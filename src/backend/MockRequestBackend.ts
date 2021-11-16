@@ -26,7 +26,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
     if (!mockingFunc) {
       throw convertToRequestError({
         error: new Error("[api-def] Attempted to run mocked request without mocking function"),
-        code : RequestErrorCode.INVALID_CONFIG,
+        code : RequestErrorCode.REQUEST_INVALID_CONFIG,
       });
     }
 
@@ -63,7 +63,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
         if (min > max) {
           throw convertToRequestError({
             error: new Error("[api-def] Min delay cannot be greater than max delay"),
-            code : RequestErrorCode.INVALID_CONFIG,
+            code : RequestErrorCode.REQUEST_INVALID_CONFIG,
           });
         }
         delayMs = randInt(min, max);
@@ -76,7 +76,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
     if (res.response === undefined) {
       throw convertToRequestError({
         error: new Error("[api-def] Mocked API did not respond"),
-        code : RequestErrorCode.INVALID_CONFIG,
+        code : RequestErrorCode.REQUEST_INVALID_CONFIG,
       });
     }
 

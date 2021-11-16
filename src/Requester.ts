@@ -125,7 +125,7 @@ const makeRequest = async <R>(
         throw convertToRequestError({
           error   : new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,
-          code    : RequestErrorCode.INVALID_STATUS,
+          code    : RequestErrorCode.REQUEST_INVALID_STATUS,
         });
       }
 
@@ -204,10 +204,10 @@ const parseError = async (context: RequestContext, rawError: Error) => {
       errorResponse = await parseResponse(context, extractedResponse, true);
     }
 
-    let code: string = isNetworkError(rawError) ? RequestErrorCode.NETWORK_ERROR : RequestErrorCode.UNKNOWN_ERROR;
+    let code: string = isNetworkError(rawError) ? RequestErrorCode.REQUEST_NETWORK_ERROR : RequestErrorCode.MISC_UNKNOWN_ERROR;
     if (errorResponse) {
       if (!isAcceptableStatus(errorResponse.status, context.computedConfig.acceptableStatus)) {
-        code = RequestErrorCode.INVALID_STATUS;
+        code = RequestErrorCode.REQUEST_INVALID_STATUS;
       }
     }
 

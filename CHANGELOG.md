@@ -7,8 +7,8 @@
 ## Changes
 
 - Add mocking!
+  - Restructured mocking so that mocks are defined on the endpoint level (documentation updated)
 - Add `acceptableStatus` to specify which status codes are considered successful
-- Restructured mocking so that mocks are defined on the endpoint level (documentation updated)
 - Extend retry logic to use exponential back-off, rather than retrying immediately
 - Support for additional hot-request methods:
   - PUT, DELETE
