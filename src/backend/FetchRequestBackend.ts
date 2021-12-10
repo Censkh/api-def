@@ -4,6 +4,8 @@ import RequestContext                                              from "../Requ
 import * as Utils                                                  from "../Utils";
 import {Fetch, getGlobalFetch}                                     from "../Utils";
 import {ResponseType}                                              from "../ApiConstants";
+import {inferResponseType}                                         from "../ApiUtils";
+import {convertToRequestError, RequestErrorCode}                   from "../RequestError";
 
 class FetchError extends Error {
   response?: Response;
@@ -11,6 +13,8 @@ class FetchError extends Error {
 
 export default class FetchRequestBackend implements RequestBackend<Response> {
   fetch = getGlobalFetch();
+
+  readonly id = "fetch";
 
   constructor(fetchLibrary?: Fetch) {
     if (fetchLibrary !== undefined) {
@@ -28,17 +32,18 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  inferResponseType(response: Response): ResponseType {
-    const contentType = response.headers.get("Content-Type");
-    if (contentType?.startsWith("json")) {
-      return "json";
-    }
-    return "text";
-  }
-
   async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }, error?: boolean): Promise<ApiResponse<T>> {
     let data;
-    const responseType = error ? this.inferResponseType(response) : context.responseType;
+    const inferredResponseType = inferResponseType(response.headers.get("Content-Type"));
+    const responseType = error ? inferredResponseType : context.responseType;
+
+    // expand to array buffer once we support that in inferResponseType
+    if (inferredResponseType === "text" && context.responseType === "json") {
+      throw convertToRequestError({
+        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}'`),
+        code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+      });
+    }
 
     try {
       if (!response.__text) {
@@ -80,7 +85,12 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       ? context.computedPath.substring(1)
       : context.computedPath;
 
-    const url = new URL(path);
+    let origin: string | undefined = undefined;
+    if (typeof window !== "undefined") {
+      origin = window.origin;
+    }
+
+    const url = new URL(path, origin);
     if (computedConfig.query) {
       const queryKeys = Object.keys(computedConfig.query);
       for (let i = 0; i < queryKeys.length; i++) {

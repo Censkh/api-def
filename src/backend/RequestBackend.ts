@@ -11,6 +11,8 @@ export interface RequestBackendErrorInfo {
 }
 
 export default interface RequestBackend<R = any> {
+  readonly id: string;
+
   makeRequest(context: RequestContext): RequestOperation<R>;
 
   convertResponse<T>(context: RequestContext, response: R, error?: boolean): Promise<ApiResponse<T>>;

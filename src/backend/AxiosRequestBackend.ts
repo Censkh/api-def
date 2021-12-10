@@ -2,6 +2,8 @@ import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./Reque
 import {ApiResponse}                                               from "../ApiTypes";
 import type {AxiosError, AxiosResponse, AxiosStatic}               from "axios";
 import RequestContext                                              from "../RequestContext";
+import {inferResponseType}                                         from "../ApiUtils";
+import {convertToRequestError, RequestErrorCode}                   from "../RequestError";
 
 let axios: AxiosStatic;
 
@@ -11,7 +13,10 @@ export const isAxiosError = (error: Error): error is AxiosError => {
 
 export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
 
-  constructor(axiosLibrary: AxiosStatic) {
+  readonly id = "axios";
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(axiosLibrary: any) {
     axios = axiosLibrary;
   }
 
@@ -25,6 +30,15 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ApiResponse<T>> {
+    const inferredResponseType = inferResponseType(response.headers["Content-Type"]);
+    // expand to array buffer once we support that in inferResponseType
+    if (inferredResponseType === "text" && context.responseType === "json") {
+      throw convertToRequestError({
+        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}'`),
+        code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+      });
+    }
+
     return response;
   }
 
@@ -53,4 +67,5 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
+
 }

@@ -2,10 +2,11 @@ import {ApiResponse} from "./ApiTypes";
 import {EnumOf}      from "./Utils";
 
 export const RequestErrorCode = {
-  MISC_UNKNOWN_ERROR    : "misc/unknown-error",
-  REQUEST_NETWORK_ERROR : "request/network-error",
-  REQUEST_INVALID_STATUS: "request/invalid-status",
-  REQUEST_INVALID_CONFIG: "request/invalid-config",
+  MISC_UNKNOWN_ERROR            : "misc/unknown-error",
+  REQUEST_NETWORK_ERROR         : "request/network-error",
+  REQUEST_INVALID_STATUS        : "request/invalid-status",
+  REQUEST_INVALID_CONFIG        : "request/invalid-config",
+  REQUEST_MISMATCH_RESPONSE_TYPE: "request/mismatch-response-type",
 } as const;
 export type RequestErrorCode = EnumOf<typeof RequestErrorCode>;
 

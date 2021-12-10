@@ -8,6 +8,8 @@ import {convertToRequestError, RequestErrorCode}                   from "../Requ
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
+  readonly id = "mock";
+
   async convertResponse<T>(context: RequestContext, response: ApiResponse, error?: boolean): Promise<ApiResponse<T>> {
     return response;
   }

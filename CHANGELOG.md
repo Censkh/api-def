@@ -1,3 +1,13 @@
+# 0.6.0
+
+## Breaking Changes
+
+- axios will enforce ResponseType
+
+### Fixes
+
+- absolute paths as `baseUrl` is now supported in fetch backend
+
 # 0.5.0
 
 ## Breaking Changes

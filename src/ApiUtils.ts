@@ -1,5 +1,6 @@
 import {AcceptableStatus, ApiResponse, CancelledRequestError} from "./ApiTypes";
-import {textDecode}                                            from "./TextDecoding";
+import {textDecode}                                           from "./TextDecoding";
+import {ResponseType}                                         from "./ApiConstants";
 
 export const isCancelledError = (
   error: Error,
@@ -51,4 +52,14 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
   }
 
   return (false);
+};
+
+const JSON_CONTENT_TYPES = ["text/json", "application/json"];
+
+export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
+  const contentTypePart = contentType?.split(";")[0].trim();
+  if (contentTypePart && JSON_CONTENT_TYPES.includes(contentTypePart)) {
+    return "json";
+  }
+  return "text";
 };

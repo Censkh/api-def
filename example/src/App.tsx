@@ -1,6 +1,9 @@
-import React, {useCallback, useState}                          from "react";
-import AsyncState, {useAsyncState}                             from "react-async-stateful";
-import {fetchUsers, isMockingEnabled, setMockingEnabled, User} from "../Api";
+import React, {ChangeEvent, useCallback, useState}                                      from "react";
+import AsyncState, {useAsyncState}                                                      from "react-async-stateful";
+import {fetchUsers, isMockingEnabled, setMockingEnabled, User}                          from "../Api";
+import {fetchTest}                                                                      from "../BaseUrlApi";
+import {AxiosRequestBackend, FetchRequestBackend, getRequestBackend, setRequestBackend} from "api-def";
+import axios from "axios";
 
 const useForceUpdate = () => {
   const [, setKey] = useState(0);
@@ -23,14 +26,46 @@ const App = () => {
     forceUpdate();
   }, []);
 
+  const handleRequestBackendChange = useCallback((e: ChangeEvent) => {
+    const value = (e.target as HTMLSelectElement).value;
+    if (value === "axios") {
+      setRequestBackend(new AxiosRequestBackend(axios));
+    } else {
+      setRequestBackend(new FetchRequestBackend());
+    }
+    forceUpdate();
+  }, []);
+
   return <div>
     <h2>api-def examples</h2>
 
     <p>
-      Enabled mocks <input type={"checkbox"} checked={isMockingEnabled()} onChange={handleMockingChange}/>
+      <b>Backend:</b>
+      <select value={getRequestBackend().id} onChange={handleRequestBackendChange}>
+        <option value={"axios"}>Axios</option>
+        <option value={"fetch"}>Fetch</option>
+      </select>
     </p>
 
-    <button disabled={asyncState.pending} onClick={handleFetch}>{asyncState.pending ? "Fetching..." : "Fetch"}</button>
+    <b>Enable Mocks:</b>
+    <p>
+      <input type={"checkbox"} checked={isMockingEnabled()} onChange={handleMockingChange}/>
+    </p>
+
+    <b>
+      Base URL Test:
+    </b>
+
+    <p>
+      <button onClick={() => fetchTest.submit({})}>Attempt Base URL</button>
+    </p>
+
+    <b>Fetch Test:</b>
+
+    <p>
+      <button disabled={asyncState.pending}
+              onClick={handleFetch}>{asyncState.pending ? "Fetching..." : "Fetch"}</button>
+    </p>
 
     {AsyncState.isResolved(asyncState) && asyncState.value.map(user => <div key={user.id}>
       {user.name}
