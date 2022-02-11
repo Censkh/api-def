@@ -57,6 +57,7 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
 const JSON_CONTENT_TYPES = ["text/json", "application/json"];
 
 export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
+  console.log(contentType);
   const contentTypePart = contentType?.split(";")[0].trim();
   if (contentTypePart && JSON_CONTENT_TYPES.includes(contentTypePart)) {
     return "json";

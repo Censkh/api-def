@@ -34,13 +34,14 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
   async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }, error?: boolean): Promise<ApiResponse<T>> {
     let data;
-    const inferredResponseType = inferResponseType(response.headers.get("Content-Type"));
+    const contentType = response.headers.get("Content-Type");
+    const inferredResponseType = inferResponseType(contentType);
     const responseType = error ? inferredResponseType : context.responseType;
 
     // expand to array buffer once we support that in inferResponseType
     if (inferredResponseType === "text" && context.responseType === "json") {
       throw convertToRequestError({
-        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}'`),
+        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
         code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
       });
     }

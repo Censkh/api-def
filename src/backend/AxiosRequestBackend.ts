@@ -30,12 +30,13 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ApiResponse<T>> {
-    const inferredResponseType = inferResponseType(response.headers["Content-Type"]);
+    const contentType = response.headers["content-type"];
+    const inferredResponseType = inferResponseType(contentType);
     // expand to array buffer once we support that in inferResponseType
     if (inferredResponseType === "text" && context.responseType === "json") {
       throw convertToRequestError({
-        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}'`),
-        code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+        error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+        code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
       });
     }
 
