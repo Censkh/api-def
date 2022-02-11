@@ -39,12 +39,16 @@ export const submit = async <R,
     mocking,
   );
 
-  // if we are already running this request just return the same promise, no need to do it again
   const {key} = context;
+
+  // don't do this -- should only be for GET requests anyway and should be opt-in
+  /*
+  // if we are already running this request just return the same promise, no need to do it again
   const sameRequest = runningOperations[key];
   if (sameRequest) {
     return sameRequest;
   }
+  */
 
   const {lock} = context.computedConfig || {};
 
