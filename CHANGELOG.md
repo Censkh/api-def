@@ -11,6 +11,7 @@
 ## Fixes
 
 - absolute paths as `baseUrl` is now supported in fetch backend
+- don't re-use same requests based upon URL to allow for concurrent POST requests
 
 # 0.5.0
 
