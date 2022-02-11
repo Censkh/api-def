@@ -3,6 +3,7 @@
 
 export * from "./Api";
 export * from "./ApiTypes";
+export * from "./UtilTypes";
 export * from "./ApiConstants";
 
 export {isRequestError} from "./RequestError";

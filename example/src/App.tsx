@@ -2,8 +2,8 @@ import React, {ChangeEvent, useCallback, useState}                              
 import AsyncState, {useAsyncState}                                                      from "react-async-stateful";
 import {fetchUsers, isMockingEnabled, setMockingEnabled, User}                          from "../Api";
 import {fetchTest}                                                                      from "../BaseUrlApi";
-import {AxiosRequestBackend, FetchRequestBackend, getRequestBackend, setRequestBackend} from "api-def";
-import axios from "axios";
+import {AxiosRequestBackend, FetchRequestBackend, getRequestBackend, setRequestBackend, ResponseOf} from "api-def";
+import axios                                                                            from "axios";
 
 const useForceUpdate = () => {
   const [, setKey] = useState(0);
@@ -11,7 +11,7 @@ const useForceUpdate = () => {
 };
 
 const App = () => {
-  const [asyncState, , updateAsyncState] = useAsyncState<User[]>();
+  const [asyncState, , updateAsyncState] = useAsyncState<ResponseOf<typeof fetchUsers>>();
   const forceUpdate = useForceUpdate();
 
   const handleFetch = useCallback(() => {

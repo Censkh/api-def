@@ -2,9 +2,13 @@
 
 ## Breaking Changes
 
-- axios will enforce ResponseType
+- axios will enforce `ResponseType`
 
-### Fixes
+## Features
+
+- add `ResponseOf`, `QueryOf`, `BodyOf`, `ParamsOf` to quickly get types from endpoints
+
+## Fixes
 
 - absolute paths as `baseUrl` is now supported in fetch backend
 
