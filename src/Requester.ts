@@ -93,6 +93,7 @@ const makeRequest = async <R>(
   if (process.env.NODE_ENV === "development") {
     if (Api.isRequestBackendDefault() && !defaultBackendMessageShown) {
       defaultBackendMessageShown = true;
+      // eslint-disable-next-line
       console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
     }
   }

@@ -93,13 +93,17 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const url = new URL(path, origin);
     if (computedConfig.query) {
-      const queryKeys = Object.keys(computedConfig.query);
-      for (let i = 0; i < queryKeys.length; i++) {
-        const key = queryKeys[i];
-        url.searchParams.append(
-          key,
-          computedConfig.query[key]?.toString() || "",
-        );
+      if (context.computedConfig.queryParser) {
+        url.search = context.computedConfig.queryParser(computedConfig.query);
+      } else {
+        const queryKeys = Object.keys(computedConfig.query);
+        for (let i = 0; i < queryKeys.length; i++) {
+          const key = queryKeys[i];
+          url.searchParams.append(
+            key,
+            computedConfig.query[key]?.toString() || "",
+          );
+        }
       }
     }
 
@@ -147,7 +151,6 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       canceler: abortSignal
         ? () => !responded && abortController.abort()
         : () => {
-          console.warn("Request aborted");
           softAbort = true;
         },
     };

@@ -35,8 +35,8 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     // expand to array buffer once we support that in inferResponseType
     if (inferredResponseType === "text" && context.responseType === "json") {
       throw convertToRequestError({
-        error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
-        code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+        code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
       });
     }
 
@@ -48,16 +48,17 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
 
     let canceler: (() => void) | null = null;
     const promise: Promise<AxiosResponse> = axios({
-      method      : context.method,
-      baseURL     : context.baseUrl,
-      url         : context.computedPath,
-      data        : computedConfig.body || {},
-      params      : computedConfig.query || {},
-      headers     : computedConfig.headers || {},
-      responseType: context.responseType,
-      cancelToken : new axios.CancelToken((cancellerFunc) => {
+      method          : context.method,
+      baseURL         : context.baseUrl,
+      url             : context.computedPath,
+      data            : computedConfig.body || {},
+      params          : computedConfig.query || {},
+      headers         : computedConfig.headers || {},
+      responseType    : context.responseType,
+      cancelToken     : new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),
+      paramsSerializer: context.computedConfig.queryParser,
     });
     return {
       promise : promise,

@@ -7,8 +7,7 @@ export type AcceptableStatus = number | [min: number, max: number];
 export type Headers = Record<string, string | number | boolean | null | undefined>;
 
 export type Params = string;
-export type Query = Record<string,
-  string | number | boolean | undefined | null>;
+export type Query = Record<string, any>;
 export type Body = string | number | Record<string, any>;
 
 export interface ApiResponse<T = any> {
@@ -23,6 +22,7 @@ export interface BaseRequestConfig {
   retry?: number | false;
   headers?: Readonly<Headers>;
   acceptableStatus?: AcceptableStatus[];
+  queryParser?: (query: any) => string,
 }
 
 export type RequestConfig<P extends Params | undefined = Params | undefined,

@@ -7,6 +7,7 @@
 ## Features
 
 - add `ResponseOf`, `QueryOf`, `BodyOf`, `ParamsOf` to quickly get types from endpoints
+- new `queryParser` config option to allow custom query string parsing
 
 ## Fixes
 

@@ -27,7 +27,8 @@ export const parseResponseDataToObject = (response: ApiResponse): void => {
         const decodedData = (response.data = textDecode(data) as any);
         response.data = JSON.parse(decodedData);
       } catch (e) {
-        console.warn("Couldn't parse array buffer content to JSON response", e);
+        // eslint-disable-next-line
+        console.warn("[api-def] Couldn't parse array buffer content to JSON response", e);
       }
     }
   }
