@@ -1,11 +1,10 @@
-import RequestBackend, {RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
-import {ApiResponse}                                               from "../ApiTypes";
+import RequestBackend, {ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
+import {ApiResponse}                                                                     from "../ApiTypes";
 import RequestContext                                              from "../RequestContext";
 import * as Utils                                                  from "../Utils";
 import {Fetch, getGlobalFetch}                                     from "../Utils";
 import {ResponseType}                                              from "../ApiConstants";
 import {inferResponseType}                                         from "../ApiUtils";
-import {convertToRequestError, RequestErrorCode}                   from "../RequestError";
 
 class FetchError extends Error {
   response?: Response;
@@ -32,28 +31,19 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }, error?: boolean): Promise<ApiResponse<T>> {
-    let data;
+  async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }): Promise<ConvertedApiResponse<T>> {
     const contentType = response.headers.get("Content-Type");
-    const inferredResponseType = inferResponseType(contentType);
-    const responseType = error ? inferredResponseType : context.responseType;
+    const responseType = inferResponseType(contentType);
 
-    // expand to array buffer once we support that in inferResponseType
-    if (inferredResponseType === "text" && context.responseType === "json") {
-      throw convertToRequestError({
-        error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
-        code : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
-      });
+    if (!response.__text) {
+      response.__text = await response.clone().text();
     }
+    let data: any = response.__text;
+
+    const {status, headers} = response;
 
     try {
-      if (!response.__text) {
-        response.__text = await response.clone().text();
-      }
-
-      if (responseType === ResponseType.Text) {
-        data = response.__text;
-      } else if (responseType === ResponseType.ArrayBuffer) {
+      if (responseType === ResponseType.ArrayBuffer) {
         data = await response.clone().arrayBuffer();
       } else if (responseType === ResponseType.Json) {
         data = JSON.parse(response.__text);
@@ -64,11 +54,10 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       });
     }
 
-    const {status} = response;
     return {
       data   : data,
       status : status,
-      headers: response.headers as any,
+      headers: headers as any,
     };
   }
 

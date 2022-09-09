@@ -1,7 +1,7 @@
 import {ApiResponse, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
 
 import * as ApiUtils                                                           from "./ApiUtils";
-import {isAcceptableStatus, isNetworkError}                                    from "./ApiUtils";
+import {inferResponseType, isAcceptableStatus, isNetworkError}                 from "./ApiUtils";
 import RequestContext                                                          from "./RequestContext";
 import * as Api                                                                from "./Api";
 import {EventResultType, RequestEvent}                                         from "./ApiConstants";
@@ -10,6 +10,7 @@ import {RetryFunction, RetryOptions}                                           f
 import MockRequestBackend                                                      from "./backend/MockRequestBackend";
 import {EndpointMockingConfig}                                                 from "./MockingTypes";
 import {convertToRequestError, isRequestError, RequestError, RequestErrorCode} from "./RequestError";
+import {textDecode}                                                            from "./TextDecoding";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
@@ -146,11 +147,6 @@ const makeRequest = async <R>(
       context.error = error;
       context.response = error.response;
 
-      // transform array buffer responses to objs
-      if (context.response) {
-        ApiUtils.parseResponseDataToObject(context.response);
-      }
-
       const errorEventResult = await context.triggerEvent(RequestEvent.Error);
       if (errorEventResult?.type === EventResultType.Respond) {
         return errorEventResult.response;
@@ -189,10 +185,51 @@ const makeRequest = async <R>(
 
 const parseResponse = async <R = any>(context: RequestContext, response: any, error?: boolean): Promise<ApiResponse<R> | null | undefined> => {
   if (response) {
-    const parsedResponse = await context.backend.convertResponse<R>(context, response, error);
-    if (parsedResponse) {
-      ApiUtils.parseResponseDataToObject(parsedResponse);
+    const parsedResponse = await context.backend.convertResponse<R>(context, response);
+
+    // lowercase all header names
+    parsedResponse.headers = parsedResponse.__lowercaseHeaders || Object.keys(parsedResponse.headers).reduce((headers, header) => {
+      headers[header.toLowerCase()] = parsedResponse.headers[header];
+      return headers;
+    }, {} as any);
+
+    const contentType = parsedResponse.headers["content-type"];
+    const inferredResponseType = inferResponseType(contentType);
+
+    if (!error) {
+
+      // expand to array buffer once we support that in inferResponseType
+      if (inferredResponseType === "text" && context.responseType === "json") {
+        throw convertToRequestError({
+          error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+          code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+          response: parsedResponse,
+        });
+      }
+
+      // transform arrayBuffer to json
+      if (inferredResponseType === "arraybuffer" && context.responseType === "json") {
+        if (
+          parsedResponse.data &&
+          typeof parsedResponse.data === "object"
+        ) {
+          const data = response.data;
+          if (data.constructor?.name === "ArrayBuffer") {
+            try {
+              const decodedData = (response.data = textDecode(data) as any);
+              response.data = JSON.parse(decodedData);
+            } catch (e) {
+              throw convertToRequestError({
+                error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+                code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+                response: parsedResponse,
+              });
+            }
+          }
+        }
+      }
     }
+
     return parsedResponse;
   }
   return response;

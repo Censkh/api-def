@@ -1,6 +1,5 @@
-import {AcceptableStatus, ApiResponse, CancelledRequestError} from "./ApiTypes";
-import {textDecode}                                           from "./TextDecoding";
-import {ResponseType}                                         from "./ApiConstants";
+import {AcceptableStatus, CancelledRequestError} from "./ApiTypes";
+import {ResponseType}                            from "./ApiConstants";
 
 export const isCancelledError = (
   error: Error,
@@ -14,24 +13,6 @@ export const isNetworkError = (error: Error): boolean => {
     error.message === "Network Error" ||
     (error as any).constructor?.name === "NetworkError"
   );
-};
-
-export const parseResponseDataToObject = (response: ApiResponse): void => {
-  if (
-    response.data &&
-    typeof response.data === "object"
-  ) {
-    const data = response.data;
-    if (data.constructor && data.constructor.name === "ArrayBuffer") {
-      try {
-        const decodedData = (response.data = textDecode(data) as any);
-        response.data = JSON.parse(decodedData);
-      } catch (e) {
-        // eslint-disable-next-line
-        console.warn("[api-def] Couldn't parse array buffer content to JSON response", e);
-      }
-    }
-  }
 };
 
 const DEFAULT_ACCEPTABLE_STATUS = [[200, 299], 304];
@@ -55,12 +36,20 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
   return (false);
 };
 
+const TEXT_CONTENT_TYPES = ["text/plain"];
 const JSON_CONTENT_TYPES = ["text/json", "application/json"];
+const ARRRAY_BUFFER_CONTENT_TYPES = ["application/octet-stream"];
 
 export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
   const contentTypePart = contentType?.split(";")[0].trim();
-  if (contentTypePart && JSON_CONTENT_TYPES.includes(contentTypePart)) {
-    return "json";
+  if (contentTypePart) {
+    if (TEXT_CONTENT_TYPES.includes(contentTypePart)) {
+      return "text";
+    } else if (JSON_CONTENT_TYPES.includes(contentTypePart)) {
+      return "json";
+    } else if (ARRRAY_BUFFER_CONTENT_TYPES.includes(contentTypePart)) {
+      return "arraybuffer";
+    }
   }
   return "text";
 };
