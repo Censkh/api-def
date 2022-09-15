@@ -119,5 +119,6 @@ export class Api implements ApiInfo {
   public post = this.hotRequest(RequestMethod.POST);
   public put = this.hotRequest(RequestMethod.PUT);
   public delete = this.hotRequest(RequestMethod.DELETE);
+  public patch = this.hotRequest(RequestMethod.PATCH);
 
 }

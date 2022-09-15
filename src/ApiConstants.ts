@@ -10,6 +10,7 @@ export const RequestMethod = {
   GET   : "get",
   PUT   : "put",
   DELETE: "delete",
+  PATCH : "patch",
 } as const;
 export type RequestMethod = EnumOf<typeof RequestMethod>;
 
