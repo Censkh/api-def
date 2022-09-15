@@ -1,7 +1,7 @@
 import RequestBackend, {ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
 import {ApiResponse}                                                                     from "../ApiTypes";
-import type {AxiosError, AxiosResponse, AxiosStatic}               from "axios";
-import RequestContext                                              from "../RequestContext";
+import type {AxiosError, AxiosResponse, AxiosStatic}                                     from "axios";
+import RequestContext                                                                    from "../RequestContext";
 
 let axios: AxiosStatic;
 
@@ -28,8 +28,12 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
-    (response as ConvertedApiResponse<T>).__lowercaseHeaders = (response as any)._lowerCaseResponseHeaders;
-    return response;
+    return {
+      data              : response.data,
+      headers           : response.headers,
+      status            : response.status,
+      __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
+    };
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {

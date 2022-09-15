@@ -28,10 +28,15 @@ export interface RequestErrorConfig {
 
 export const convertToRequestError = (config: RequestErrorConfig): RequestError => {
   const {error, response, code} = config;
+
+
   return Object.assign(error, {
-    name          : error.name === "Error" ? "RequestError" : error.name,
+    name          : "RequestError",
     response      : response,
     code          : code,
     isRequestError: true as const,
+    config        : undefined,
+    isAxiosError  : undefined,
+    toJSON        : undefined,
   });
 };
