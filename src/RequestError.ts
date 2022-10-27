@@ -1,5 +1,6 @@
-import {ApiResponse} from "./ApiTypes";
-import {EnumOf}      from "./Utils";
+import {ApiResponse}     from "./ApiTypes";
+import {EnumOf}          from "./Utils";
+import RequestContext    from "./RequestContext";
 
 export const RequestErrorCode = {
   MISC_UNKNOWN_ERROR            : "misc/unknown-error",
@@ -23,19 +24,32 @@ export const isRequestError = (error: Error): error is RequestError => {
 export interface RequestErrorConfig {
   error: Error;
   code: string;
+  context: RequestContext,
   response?: ApiResponse | null;
 }
 
 export const convertToRequestError = (config: RequestErrorConfig): RequestError => {
-  const {error, response, code} = config;
+  const {error, context, response, code} = config;
 
-  return Object.assign(error, {
+  const body = context.getParsedBody();
+
+  const resultError = Object.assign(error, {
     name          : "RequestError",
     response      : response,
     code          : code,
     isRequestError: true as const,
-    config        : undefined,
-    request       : undefined,
-    toJSON        : undefined,
+    request       : {
+      url    : context.getRequestUrl().href,
+      query  : context.computedConfig.query,
+      headers: context.computedConfig.headers,
+      body   : body,
+    },
   });
+
+  delete (resultError as any).config;
+  delete (resultError as any).toJSON;
+
+  Object.setPrototypeOf(error, Error);
+
+  return resultError;
 };

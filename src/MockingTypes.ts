@@ -22,6 +22,8 @@ export interface MockResponse<R = any,
 
   response: R | undefined;
 
+  headers: Headers,
+
   status(statusCode: number): this;
 
   send(response: R): this;

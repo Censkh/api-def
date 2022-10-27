@@ -1,14 +1,16 @@
+import test                      from "ava";
 import api, {fetchRequiresToken} from "./mock/MockApi";
 
-test("allow for retries in middleware", async () => {
+test("allow for retries in middleware", async (t) => {
   let thrownError;
   try {
     await fetchRequiresToken.submit({});
-  } catch (e) {
+  } catch (e: any) {
     thrownError = e;
   }
 
-  expect(thrownError).toMatchObject({
+  t.is(thrownError.toJSON, undefined);
+  t.like(thrownError, {
     response: {
       data  : {
         code: "auth/invalid-token",
@@ -17,13 +19,14 @@ test("allow for retries in middleware", async () => {
     },
   });
 
-  await expect(fetchRequiresToken.submit({
+
+  t.like(await fetchRequiresToken.submit({
     headers: {
       "token": "test",
     },
-  })).resolves.toMatchObject({
+  }), {
     status: 200,
-    data  : "hi",
+    data  : {hello: true},
   });
 
   api.middleware.push({
@@ -39,9 +42,8 @@ test("allow for retries in middleware", async () => {
     },
   });
 
-  await expect(fetchRequiresToken.submit({
-  })).resolves.toMatchObject({
+  t.like(await fetchRequiresToken.submit({}), {
     status: 200,
-    data  : "hi",
+    data  : {hello: true},
   });
 });

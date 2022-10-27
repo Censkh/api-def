@@ -30,7 +30,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
     return {
       data              : response.data,
-      headers           : response.headers,
+      headers           : response.headers as any,
       status            : response.status,
       __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
     };
@@ -44,14 +44,14 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       method          : context.method,
       baseURL         : context.baseUrl,
       url             : context.computedPath,
-      data            : computedConfig.body || {},
+      data            : context.getParsedBody() || {},
       params          : computedConfig.query || {},
       headers         : computedConfig.headers || {},
       responseType    : context.responseType,
       cancelToken     : new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),
-      paramsSerializer: context.computedConfig.queryParser,
+      paramsSerializer: context.computedConfig.queryParser as any,
     });
     return {
       promise : promise,

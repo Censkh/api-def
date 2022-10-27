@@ -132,13 +132,14 @@ const makeRequest = async <R>(
           error   : new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,
           code    : RequestErrorCode.REQUEST_INVALID_STATUS,
+          context : context,
         });
       }
 
 
       context.response = parsedResponse;
       return (parsedResponse);
-    } catch (rawError) {
+    } catch (rawError: any) {
       if (context.cancelled) {
         rawError.isCancelledRequest = true;
       }
@@ -204,6 +205,7 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
           error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
           code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
           response: parsedResponse,
+          context : context,
         });
       }
 
@@ -223,6 +225,7 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
                 error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
                 code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
                 response: parsedResponse,
+                context : context,
               });
             }
           }
@@ -258,6 +261,7 @@ const parseError = async (context: RequestContext, rawError: Error) => {
       error   : rawError,
       response: errorResponse,
       code    : code,
+      context : context,
       ...errorInfo,
     });
   }

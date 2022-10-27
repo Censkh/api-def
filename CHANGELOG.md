@@ -1,3 +1,13 @@
+# 0.7.0
+
+## Breaking Changes
+
+- parse body for `application/x-www-form-urlencoded`
+
+## Changes
+
+- add `request` info to errors
+
 # 0.6.0
 
 ## Breaking Changes

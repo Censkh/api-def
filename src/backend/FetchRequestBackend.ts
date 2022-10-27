@@ -67,42 +67,15 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     }
 
     const {computedConfig} = context;
-
-    let path = !context.baseUrl.endsWith("/")
-      ? context.baseUrl + "/"
-      : context.baseUrl;
-    path += context.computedPath.startsWith("/")
-      ? context.computedPath.substring(1)
-      : context.computedPath;
-
-    let origin: string | undefined = undefined;
-    if (typeof window !== "undefined") {
-      origin = window.origin;
-    }
-
-    const url = new URL(path, origin);
-    if (computedConfig.query) {
-      if (context.computedConfig.queryParser) {
-        url.search = context.computedConfig.queryParser(computedConfig.query);
-      } else {
-        const queryKeys = Object.keys(computedConfig.query);
-        for (let i = 0; i < queryKeys.length; i++) {
-          const key = queryKeys[i];
-          url.searchParams.append(
-            key,
-            computedConfig.query[key]?.toString() || "",
-          );
-        }
-      }
-    }
-
     // abort controller is a newer feature than fetch
     const abortController = AbortController && new AbortController();
     const abortSignal = abortController ? abortController.signal : undefined;
     let softAbort = false;
     let responded = false;
 
-    const bodyJsonify = computedConfig.body !== null && typeof computedConfig.body === "object";
+    const body = context.getParsedBody();
+
+    const bodyJsonify = body !== null && typeof body === "object";
 
     const headers = Utils.assign({
       // logic from axios
@@ -117,9 +90,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       return parsedHeaders;
     }, {} as any);
 
+    const url = context.getRequestUrl();
+
     const promise: Promise<Response> = this.fetch(url.href, {
       method : context.method,
-      body   : bodyJsonify ? JSON.stringify(computedConfig.body) : computedConfig.body as any,
+      body   : bodyJsonify ? JSON.stringify(body) : body as any,
       headers: parsedHeaders,
       mode   : "cors",
       signal : abortSignal,

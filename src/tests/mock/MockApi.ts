@@ -43,10 +43,35 @@ export const fetchRequiresToken = api.endpoint()
           });
         }
 
-        return res.status(200).send("hi");
+        return res.status(200).send({hello: true});
       },
     },
   });
 
+export const postFormUrlEncoded = api.endpoint()
+  .bodyOf<{
+    test: number,
+    b: string
+  }>()
+  .build({
+    id    : "sendFormUrlEncoded",
+    method: "post",
+    path  : "/send-data",
+
+    config: {
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+      },
+    },
+
+    mocking: {
+      handler: (req, res) => {
+        return res.status(200).send([
+          req.body.toString(),
+        ]);
+      },
+    },
+
+  });
 
 export default api;

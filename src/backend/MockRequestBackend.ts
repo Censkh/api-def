@@ -29,11 +29,12 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       throw convertToRequestError({
         error: new Error("[api-def] Attempted to run mocked request without mocking function"),
         code : RequestErrorCode.REQUEST_INVALID_CONFIG,
+        context,
       });
     }
 
     const req: MockRequest = {
-      body   : context.computedConfig.body,
+      body   : context.getParsedBody(),
       params : context.computedConfig.params ?? {},
       query  : context.computedConfig.query,
       headers: context.computedConfig.headers ?? {},
@@ -41,6 +42,8 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
     const res: MockResponse = {
       statusCode: -1,
+
+      headers: {},
 
       response: undefined,
 
@@ -51,6 +54,9 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
       send(response) {
         res.response = response;
+        if (response && typeof response === "object") {
+          res.headers["Content-Type"] = "application/json";
+        }
         return res;
       },
     };
@@ -66,6 +72,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
           throw convertToRequestError({
             error: new Error("[api-def] Min delay cannot be greater than max delay"),
             code : RequestErrorCode.REQUEST_INVALID_CONFIG,
+            context,
           });
         }
         delayMs = randInt(min, max);
@@ -79,11 +86,17 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       throw convertToRequestError({
         error: new Error("[api-def] Mocked API did not respond"),
         code : RequestErrorCode.REQUEST_INVALID_CONFIG,
+        context,
       });
     }
 
+    const parsedHeaders = Object.keys(res.headers).reduce((parsedHeaders, key) => {
+      parsedHeaders[key] = res.headers[key]!.toString();
+      return parsedHeaders;
+    }, {} as Record<string, string>);
+
     return {
-      headers: {},
+      headers: parsedHeaders,
       data   : res.response,
       status : res.statusCode,
     };

@@ -17,6 +17,6 @@
     "src"
   ],
   "exclude": [
-    "src/__tests__"
+    "src/tests"
   ]
 }

@@ -17,6 +17,7 @@ import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
 import {EndpointMockingConfig}                     from "./MockingTypes";
 import {RequestError}                              from "./RequestError";
 import RequestBackend                              from "./backend/RequestBackend";
+import {URLSearchParams}                           from "url";
 
 let contextIdCounter = 0;
 
@@ -43,6 +44,8 @@ export default class RequestContext<R = any,
 
   readonly mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined;
 
+  private parsedBody: any;
+
   constructor(
     backend: RequestBackend,
     host: RequestHost,
@@ -54,7 +57,7 @@ export default class RequestContext<R = any,
     this.id = contextIdCounter++;
     this.host = host;
     this.computedConfig = config;
-    Utils.assign({}, this.computedConfig.headers, {"Request-Id": this.id});
+    Utils.assign({}, this.computedConfig.headers);
     this.computedPath = computedPath;
 
     this.key = this.generateKey();
@@ -65,6 +68,7 @@ export default class RequestContext<R = any,
     this.eventHandlers = {};
     this.mocking = mocking;
     this.initMiddleware();
+    this.parseRequestBody();
   }
 
   get method(): RequestMethod {
@@ -125,7 +129,31 @@ export default class RequestContext<R = any,
       this.computedConfig.headers,
       newHeaders,
     );
+    this.parseRequestBody();
     return this;
+  }
+
+  private parseRequestBody() {
+    if (this.computedConfig.body && this.computedConfig.headers) {
+      const contentTypeKey = Object.keys(this.computedConfig.headers).find(key => key.toLowerCase() === "content-type");
+      const contentType = contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString();
+      if (contentType === "application/x-www-form-urlencoded") {
+        const searchParams = new URLSearchParams();
+        for (const key of Object.keys(this.computedConfig.body)) {
+          const value = (this.computedConfig.body as any)[key];
+          searchParams.append(key, value?.toString());
+        }
+        this.parsedBody = searchParams;
+      } else {
+        this.parsedBody = this.computedConfig.body;
+      }
+    } else {
+      this.parsedBody = undefined;
+    }
+  }
+
+  getParsedBody(): any {
+    return this.parsedBody;
   }
 
   updateQuery(newQuery: Partial<Q>): this {
@@ -162,5 +190,44 @@ export default class RequestContext<R = any,
     if (this.canceler) {
       this.canceler();
     }
+  }
+
+  getRequestUrl(): URL {
+    let path = !this.baseUrl.endsWith("/")
+      ? this.baseUrl + "/"
+      : this.baseUrl;
+    path += this.computedPath.startsWith("/")
+      ? this.computedPath.substring(1)
+      : this.computedPath;
+
+    let origin: string | undefined = undefined;
+    if (typeof window !== "undefined") {
+      origin = window.origin;
+    }
+
+    if (!origin) {
+      if (path.indexOf("://") === -1) {
+        path = `https://${path}`;
+      }
+    }
+
+    const url = new URL(path, origin);
+
+    if (this.computedConfig.query) {
+      if (this.computedConfig.queryParser) {
+        url.search = this.computedConfig.queryParser(this.computedConfig.query);
+      } else {
+        const queryKeys = Object.keys(this.computedConfig.query);
+        for (let i = 0; i < queryKeys.length; i++) {
+          const key = queryKeys[i];
+          url.searchParams.append(
+            key,
+            this.computedConfig.query[key]?.toString() || "",
+          );
+        }
+      }
+    }
+
+    return url;
   }
 }
