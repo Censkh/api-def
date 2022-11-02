@@ -74,4 +74,30 @@ export const postFormUrlEncoded = api.endpoint()
 
   });
 
+export const postIdVerifStatus = api.endpoint()
+  .bodyOf<{
+    validationService: 1;
+    forceReset: boolean; // i.e. create a new ID Verification
+  }>()
+  .responseOf<{
+    transactionStatus: any;
+    transactionId?: string;                 // the backend generates and assigns this for us
+    verifPayload?: any; // we'll only ever get one-shot to store this before the BE service deletes the transaction
+  }>()
+  .build({
+    id          : "id-verif-status",
+    method      : RequestMethod.POST,
+    path        : "/id-verif/verif-status",
+    responseType: "json",
+    config      : {
+      acceptableStatus: [200],
+      retry           : false, // outcome screen has it's own retry
+    },
+    mocking     : {
+      handler: (req, res) => {
+        return res.status(200).send({url: req.url} as any);
+      },
+    },
+  });
+
 export default api;

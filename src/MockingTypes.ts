@@ -12,6 +12,7 @@ export interface MockRequest<R = any,
   body: B;
   query: Q;
   headers: Readonly<Headers>;
+  url: string,
 }
 
 export interface MockResponse<R = any,

@@ -17,7 +17,6 @@ import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
 import {EndpointMockingConfig}                     from "./MockingTypes";
 import {RequestError}                              from "./RequestError";
 import RequestBackend                              from "./backend/RequestBackend";
-import {URLSearchParams}                           from "url";
 
 let contextIdCounter = 0;
 

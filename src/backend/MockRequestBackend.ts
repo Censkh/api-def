@@ -38,6 +38,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       params : context.computedConfig.params ?? {},
       query  : context.computedConfig.query,
       headers: context.computedConfig.headers ?? {},
+      url    : context.getRequestUrl().toString(),
     };
 
     const res: MockResponse = {
