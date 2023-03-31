@@ -1,3 +1,9 @@
+# 0.7.1
+
+## Fixes
+
+- don't pass body to GET requests
+
 # 0.7.0
 
 ## Breaking Changes

@@ -44,7 +44,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       method          : context.method,
       baseURL         : context.baseUrl,
       url             : context.computedPath,
-      data            : context.getParsedBody() || {},
+      data            : context.getParsedBody(),
       params          : computedConfig.query || {},
       headers         : computedConfig.headers || {},
       responseType    : context.responseType,
