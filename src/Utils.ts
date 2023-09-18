@@ -34,6 +34,9 @@ export type EnumOf<T extends Record<string, any>> = T[keyof T];
 export type Fetch = typeof window.fetch;
 
 export const getGlobalFetch = (): Fetch | undefined => {
+  if (typeof global !== "undefined" && typeof global.fetch === "function") {
+    return global.fetch;
+  }
   if (typeof window === "undefined") {
     return undefined;
   }

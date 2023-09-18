@@ -1,10 +1,10 @@
 import RequestBackend, {ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
 import {ApiResponse}                                                                     from "../ApiTypes";
-import RequestContext                                              from "../RequestContext";
-import * as Utils                                                  from "../Utils";
-import {Fetch, getGlobalFetch}                                     from "../Utils";
-import {ResponseType}                                              from "../ApiConstants";
-import {inferResponseType}                                         from "../ApiUtils";
+import RequestContext                                                                    from "../RequestContext";
+import * as Utils                                                                        from "../Utils";
+import {Fetch, getGlobalFetch}                                                           from "../Utils";
+import {ResponseType}                                                                    from "../ApiConstants";
+import {inferResponseType}                                                               from "../ApiUtils";
 
 class FetchError extends Error {
   response?: Response;
@@ -31,7 +31,9 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  async convertResponse<T>(context: RequestContext, response: Response & { __text?: string }): Promise<ConvertedApiResponse<T>> {
+  async convertResponse<T>(context: RequestContext, response: Response & {
+    __text?: string
+  }): Promise<ConvertedApiResponse<T>> {
     const contentType = response.headers.get("Content-Type");
     const responseType = inferResponseType(contentType);
 
@@ -54,10 +56,16 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       });
     }
 
+    const processedHeaders: Record<string, string> = {};
+    headers.forEach((value, key) => {
+      processedHeaders[key] = value;
+    });
+
     return {
-      data   : data,
-      status : status,
-      headers: headers as any,
+      __lowercaseHeaders: processedHeaders,
+      data              : data,
+      status            : status,
+      headers           : processedHeaders,
     };
   }
 

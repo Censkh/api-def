@@ -38,7 +38,7 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
 
 const TEXT_CONTENT_TYPES = ["text/plain"];
 const JSON_CONTENT_TYPES = ["text/json", "application/json"];
-const ARRRAY_BUFFER_CONTENT_TYPES = ["application/octet-stream"];
+const ARRAY_BUFFER_CONTENT_TYPES = ["application/octet-stream"];
 
 export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
   const contentTypePart = contentType?.split(";")[0].trim();
@@ -47,7 +47,7 @@ export const inferResponseType = (contentType: string | null | undefined): Respo
       return "text";
     } else if (JSON_CONTENT_TYPES.includes(contentTypePart)) {
       return "json";
-    } else if (ARRRAY_BUFFER_CONTENT_TYPES.includes(contentTypePart)) {
+    } else if (ARRAY_BUFFER_CONTENT_TYPES.includes(contentTypePart)) {
       return "arraybuffer";
     }
   }

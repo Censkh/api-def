@@ -1,3 +1,16 @@
+# 0.7.3
+
+## Changes
+
+- expose type for `Endpoint`
+- fix `fetch` detection in node
+
+# 0.7.2
+
+## Fixes
+
+- bad response type inferring
+
 # 0.7.1
 
 ## Fixes

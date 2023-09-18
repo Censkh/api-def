@@ -135,7 +135,7 @@ export default class RequestContext<R = any,
   private parseRequestBody() {
     if (this.computedConfig.body && this.computedConfig.headers) {
       const contentTypeKey = Object.keys(this.computedConfig.headers).find(key => key.toLowerCase() === "content-type");
-      const contentType = contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString();
+      const contentType = contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
       if (contentType === "application/x-www-form-urlencoded") {
         const searchParams = new URLSearchParams();
         for (const key of Object.keys(this.computedConfig.body)) {
