@@ -8,6 +8,8 @@ export * from "./ApiConstants";
 
 export {isRequestError} from "./RequestError";
 
+export {default as Endpoint, EndpointConfig} from "./Endpoint";
+
 export {clearCache, setCacheBackend}         from "./cache/Caching";
 export {default as LocalStorageCacheBackend} from "./cache/LocalStorageCacheBackend";
 export {default as LocaleForageCacheBackend} from "./cache/LocalForageCacheBackend";
