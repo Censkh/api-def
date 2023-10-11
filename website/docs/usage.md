@@ -18,7 +18,7 @@ First we define our base API and give it a base URL which is the root path of yo
 import {Api} from "api-def";
 
 const api = new Api({
-  name   : "My Backend",
+  name: "My Backend",
   baseUrl: "http://localhost:5000/v1",
 });
 
@@ -34,12 +34,12 @@ export const fetchHealthCheck = api.endpoint()
   .responseOf<{ success: boolean; }>()
   .build({
     id: "fetch_health_check",
+    path: "/status/health-check",
+    method: "get",
 
-    name       : "Health Check",
+    // optional
+    name: "Health Check",
     description: "Returns success as true",
-
-    path        : "/status/health-check",
-    method      : "get",
   });
 ```
 
