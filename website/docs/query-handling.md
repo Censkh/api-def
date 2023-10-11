@@ -14,9 +14,9 @@ const queryByObjectEndpoint = API.endpoint()
     bar: number;
   }>()
   .build({
-    id: "query-by-string",
+    id: "query-by-object",
     method: "get",
-    path: "/query-by-string",
+    path: "/query-by-object",
   });
 
 queryByObjectEndpoint.submit({
