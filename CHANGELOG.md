@@ -1,3 +1,9 @@
+# 0.8.2
+
+## Changes
+
+- add request backend at `Api` level too
+
 # 0.8.0
 
 ## Changes

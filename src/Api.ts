@@ -43,6 +43,7 @@ export interface ApiInfo {
   readonly middleware?: RequestMiddleware[];
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
+  readonly requestBackend?: RequestBackend;
 }
 
 class HotRequestHost implements RequestHost {
@@ -75,7 +76,13 @@ class HotRequestHost implements RequestHost {
   computePath(path: string, config: RequestConfig): string {
     return path.startsWith("/") ? path : `/${path}`;
   }
+
+  getRequestBackend(): RequestBackend {
+    return this.api.getRequestBackend();
+  }
 }
+
+let defaultBackendMessageShown = false;
 
 export class Api implements ApiInfo {
   readonly baseUrl: string;
@@ -83,6 +90,7 @@ export class Api implements ApiInfo {
   readonly middleware: RequestMiddleware[];
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
+  readonly requestBackend: RequestBackend;
 
   protected readonly endpoints: Record<string, Endpoint> = {};
 
@@ -93,10 +101,28 @@ export class Api implements ApiInfo {
     this.endpoints = {};
     this.config = info.config;
     this.mocking = info.mocking ?? undefined;
+    const requestBackend = info.requestBackend ?? getRequestBackend();
+    if (!requestBackend) {
+      throw new Error("[api-def] No request backend provided in either Api options or globally, use `setRequestBackend()` to set one or pass one via `requestBackend`");
+    }
+    this.requestBackend = requestBackend;
+    if (!info.requestBackend) {
+      if (process.env.NODE_ENV === "development") {
+        if (isRequestBackendDefault() && !defaultBackendMessageShown) {
+          defaultBackendMessageShown = true;
+          // eslint-disable-next-line
+          console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
+        }
+      }
+    }
   }
 
   endpoint(): EndpointBuilder {
     return new EndpointBuilder(this);
+  }
+
+  getRequestBackend(): RequestBackend {
+    return this.requestBackend;
   }
 
   getConfig(): BaseRequestConfig {

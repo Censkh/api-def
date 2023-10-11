@@ -1,6 +1,7 @@
 import RequestContext from "./RequestContext";
 import { Api } from "./Api";
 import { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import RequestBackend from "./backend/RequestBackend";
 
 export type AcceptableStatus = number | [ min: number, max: number ];
 
@@ -107,6 +108,8 @@ export interface RequestHost {
   ): ComputedRequestConfig<P, Q, B>;
 
   computePath(path: string, config: RequestConfig): string;
+
+  getRequestBackend(): RequestBackend;
 }
 
 export interface CancelledRequestError extends Error {

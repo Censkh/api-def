@@ -2,7 +2,7 @@ import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestO
 import { ApiResponse } from "../ApiTypes";
 import RequestContext from "../RequestContext";
 import * as Utils from "../Utils";
-import { Fetch, getGlobalFetch } from "../Utils";
+import { Fetch, getGlobal, getGlobalFetch } from "../Utils";
 import { inferResponseType } from "../ApiUtils";
 
 class FetchError extends Error {
@@ -17,6 +17,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
   constructor(fetchLibrary?: Fetch) {
     if (fetchLibrary !== undefined) {
       this.fetch = fetchLibrary;
+
+      // otherwise window throws illegal invocation
+      if (fetchLibrary === getGlobalFetch()) {
+        this.fetch = fetchLibrary.bind(getGlobal());
+      }
     }
   }
 

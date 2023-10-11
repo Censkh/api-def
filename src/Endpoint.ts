@@ -4,7 +4,7 @@ import * as Requester from "./Requester";
 import {
   ApiResponse,
   BaseRequestConfig,
-  Body, COMPUTED_CONFIG_SYMBOL,
+  Body,
   ComputedRequestConfig,
   Params,
   Query,
@@ -12,9 +12,9 @@ import {
   RequestHost,
 } from "./ApiTypes";
 import * as Mocking from "./MockingTypes";
-import * as Utils from "./Utils";
 import { RequestMethod, ResponseType } from "./ApiConstants";
 import { computeRequestConfig } from "./RequestConfig";
+import RequestBackend from "./backend/RequestBackend";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
@@ -122,25 +122,15 @@ export default class Endpoint<R = any,
     Q extends Query | undefined,
     B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
-    const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
-      {
-        [COMPUTED_CONFIG_SYMBOL]: true,
-      },
-      apiDefaults,
-      this.config,
-      config,
-    );
 
     return computeRequestConfig([
       apiDefaults,
       this.config,
       config,
     ]);
+  }
 
-
-
-    delete computedConfig.queryParser;
-
-    return computedConfig as any;
+  getRequestBackend(): RequestBackend {
+    return this.api.getRequestBackend();
   }
 }

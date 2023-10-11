@@ -33,14 +33,22 @@ export type EnumOf<T extends Record<string, any>> = T[keyof T];
 
 export type Fetch = typeof window.fetch;
 
+export const getGlobal = (): any => {
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  return undefined;
+};
+
 export const getGlobalFetch = (): Fetch | undefined => {
-  if (typeof global !== "undefined" && typeof global.fetch === "function") {
+  const global = getGlobal();
+  if (global && typeof global.fetch === "function") {
     return global.fetch.bind(global);
   }
-  if (typeof window === "undefined") {
-    return undefined;
-  }
-  return window.fetch.bind(window);
+  return undefined;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function

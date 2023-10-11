@@ -3,7 +3,6 @@ import { ApiResponse, Body, ComputedRequestConfig, Params, Query, RequestConfig,
 import * as ApiUtils from "./ApiUtils";
 import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
 import RequestContext from "./RequestContext";
-import * as Api from "./Api";
 import { EventResultType, RequestEvent } from "./ApiConstants";
 import retry from "./util/retry";
 import { RetryFunction, RetryOptions } from "./util/retry/interfaces";
@@ -27,10 +26,7 @@ export const submit = async <R,
 ): Promise<ApiResponse<R>> => {
   const computedConfig: ComputedRequestConfig<P, Q, B> = host.computeConfig(config);
 
-  const backend = mocking ? MOCK_REQUEST_BACKEND : Api.getRequestBackend();
-  if (!backend) {
-    throw new Error("[api-def] Please specify a backend you wish to use, this can be done either with 'setRequestBackend()'");
-  }
+  const backend = mocking ? MOCK_REQUEST_BACKEND : host.getRequestBackend();
 
   const context = new RequestContext<R, P, Q, B>(
     backend,
@@ -86,19 +82,9 @@ export const submit = async <R,
   }
 };
 
-let defaultBackendMessageShown = false;
-
 const makeRequest = async <R>(
   context: RequestContext<R>,
 ): Promise<ApiResponse<R>> => {
-  if (process.env.NODE_ENV === "development") {
-    if (Api.isRequestBackendDefault() && !defaultBackendMessageShown) {
-      defaultBackendMessageShown = true;
-      // eslint-disable-next-line
-      console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
-    }
-  }
-
   const beforeSendEventResult = await context.triggerEvent(RequestEvent.BeforeSend);
   if (
     beforeSendEventResult &&
