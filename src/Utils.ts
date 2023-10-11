@@ -35,7 +35,7 @@ export type Fetch = typeof window.fetch;
 
 export const getGlobalFetch = (): Fetch | undefined => {
   if (typeof global !== "undefined" && typeof global.fetch === "function") {
-    return global.fetch;
+    return global.fetch.bind(global);
   }
   if (typeof window === "undefined") {
     return undefined;
