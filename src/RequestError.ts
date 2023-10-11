@@ -1,12 +1,12 @@
-import {ApiResponse}     from "./ApiTypes";
-import {EnumOf}          from "./Utils";
-import RequestContext    from "./RequestContext";
+import { ApiResponse } from "./ApiTypes";
+import { EnumOf } from "./Utils";
+import RequestContext from "./RequestContext";
 
 export const RequestErrorCode = {
-  MISC_UNKNOWN_ERROR            : "misc/unknown-error",
-  REQUEST_NETWORK_ERROR         : "request/network-error",
-  REQUEST_INVALID_STATUS        : "request/invalid-status",
-  REQUEST_INVALID_CONFIG        : "request/invalid-config",
+  MISC_UNKNOWN_ERROR: "misc/unknown-error",
+  REQUEST_NETWORK_ERROR: "request/network-error",
+  REQUEST_INVALID_STATUS: "request/invalid-status",
+  REQUEST_INVALID_CONFIG: "request/invalid-config",
   REQUEST_MISMATCH_RESPONSE_TYPE: "request/mismatch-response-type",
 } as const;
 export type RequestErrorCode = EnumOf<typeof RequestErrorCode>;
@@ -34,15 +34,15 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
   const body = context.getParsedBody();
 
   const resultError = Object.assign(error, {
-    name          : "RequestError",
-    response      : response,
-    code          : code,
+    name: "RequestError",
+    response: response,
+    code: code,
     isRequestError: true as const,
-    request       : {
-      url    : context.getRequestUrl().href,
-      query  : context.computedConfig.query,
+    request: {
+      url: context.getRequestUrl().href,
+      query: context.computedConfig.queryObject,
       headers: context.computedConfig.headers,
-      body   : body,
+      body: body,
     },
   });
 

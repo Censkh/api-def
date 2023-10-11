@@ -1,4 +1,4 @@
-import {ApiResponse, Body, Headers, Params, Query} from "./ApiTypes";
+import { ApiResponse, Body, Headers, Params, Query } from "./ApiTypes";
 
 export interface ApiMockingConfig {
   enabled: boolean | (() => boolean),
@@ -45,7 +45,7 @@ export interface EndpointMockingConfig<R = any,
    * The range supplied will be used to simulate the lag in obtaining a response
    * your endpoint. If no values are supplied, a response will be returned immediately
    */
-  delay?: number | [minMs: number, maxMs: number],
+  delay?: number | [ minMs: number, maxMs: number ],
   handler: EndpointMockingFunction<R, P, Q, B>,
 
   // TODO expand for random erroneous returns...or perhaps an error mode

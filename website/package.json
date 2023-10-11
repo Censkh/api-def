@@ -12,17 +12,17 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.70",
-    "@docusaurus/preset-classic": "2.0.0-alpha.70",
-    "@docusaurus/theme-live-codeblock": "^2.0.0-alpha.70",
-    "@mdx-js/react": "^1.6.21",
-    "api-def": "file://..",
-    "clsx": "^1.1.1",
-    "docusaurus-plugin-sass": "git+https://github.com/slorber/docusaurus-plugin-sass.git#patch-1",
+    "@docusaurus/core": "2.4.3",
+    "@docusaurus/preset-classic": "2.4.3",
+    "@docusaurus/theme-live-codeblock": "^2.4.3",
+    "@mdx-js/react": "^1.6.22",
+    "api-def": "file:..",
+    "clsx": "^2.0.0",
+    "docusaurus-plugin-sass": "0.2.5",
     "react": "^16.8.4",
-    "react-async-stateful": "^0.8.2",
+    "react-async-stateful": "^0.9.4",
     "react-dom": "^16.8.4",
-    "typescript": "^4.0.3"
+    "typescript": "^5.2.2"
   },
   "browserslist": {
     "production": [

@@ -1,22 +1,21 @@
 import {
   ApiResponse,
-  Body,
+  Body, ComputedRequestConfig,
   EventResult,
   Headers,
   Params,
   Query,
   RequestCacheInfo,
-  RequestConfig,
   RequestContextStats,
   RequestEventHandlers,
   RequestHost,
-}                                                  from "./ApiTypes";
-import {Api}                                       from "./Api";
-import * as Utils                                  from "./Utils";
-import {RequestEvent, RequestMethod, ResponseType} from "./ApiConstants";
-import {EndpointMockingConfig}                     from "./MockingTypes";
-import {RequestError}                              from "./RequestError";
-import RequestBackend                              from "./backend/RequestBackend";
+} from "./ApiTypes";
+import { Api } from "./Api";
+import * as Utils from "./Utils";
+import { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import { EndpointMockingConfig } from "./MockingTypes";
+import { RequestError } from "./RequestError";
+import RequestBackend from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 
@@ -39,7 +38,7 @@ export default class RequestContext<R = any,
   readonly cacheInfo: RequestCacheInfo = {cached: false, source: null};
 
   cancelled = false;
-  readonly computedConfig: RequestConfig<P, Q, B>;
+  readonly computedConfig: ComputedRequestConfig<P, Q, B>;
 
   readonly mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined;
 
@@ -48,7 +47,7 @@ export default class RequestContext<R = any,
   constructor(
     backend: RequestBackend,
     host: RequestHost,
-    config: RequestConfig<P, Q, B>,
+    config: ComputedRequestConfig<P, Q, B>,
     computedPath: string,
     mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
   ) {
@@ -62,7 +61,7 @@ export default class RequestContext<R = any,
     this.key = this.generateKey();
     this.stats = {
       attempt: 0,
-      cached : false,
+      cached: false,
     };
     this.eventHandlers = {};
     this.mocking = mocking;
@@ -82,7 +81,7 @@ export default class RequestContext<R = any,
     return this.host.baseUrl;
   }
 
-  get responseType(): ResponseType {
+  get responseType(): ResponseType | undefined {
     return this.host.responseType;
   }
 
@@ -94,7 +93,7 @@ export default class RequestContext<R = any,
       for (let n = 0; n < eventTypes.length; n++) {
         const eventType = eventTypes[n] as RequestEvent;
         const eventHandlersForType =
-                this.eventHandlers[eventType] || (this.eventHandlers[eventType] = []);
+          this.eventHandlers[eventType] || (this.eventHandlers[eventType] = []);
         const middlewareEventHandlers = events[eventType];
         if (middlewareEventHandlers) {
           eventHandlersForType.push(middlewareEventHandlers);
@@ -104,19 +103,10 @@ export default class RequestContext<R = any,
   }
 
   private generateKey() {
-    const {computedConfig} = this;
     let key = this.computedPath.trim();
 
-    const queryStrings = [];
-    if (computedConfig.query) {
-      const queryKeys = Object.keys(computedConfig.query);
-      for (let i = 0; i < queryKeys.length; i++) {
-        const queryKey = queryKeys[i];
-        queryStrings.push(`${queryKey}=${computedConfig.query[queryKey]}`);
-      }
-    }
-    if (queryStrings.length > 0) {
-      key += "?" + queryStrings.join("&");
+    if (this.computedConfig.queryString) {
+      key += "?" + this.computedConfig.queryString;
     }
 
     return key;
@@ -156,8 +146,9 @@ export default class RequestContext<R = any,
   }
 
   updateQuery(newQuery: Partial<Q>): this {
-    this.computedConfig.query = Utils.assign(
-      this.computedConfig.query || {},
+    this.computedConfig.queryObject = Utils.assign(
+      {},
+      this.computedConfig.queryObject,
       newQuery,
     );
     return this;
@@ -211,20 +202,8 @@ export default class RequestContext<R = any,
     }
 
     const url = new URL(path, origin);
-
-    if (this.computedConfig.query) {
-      if (this.computedConfig.queryParser) {
-        url.search = this.computedConfig.queryParser(this.computedConfig.query);
-      } else {
-        const queryKeys = Object.keys(this.computedConfig.query);
-        for (let i = 0; i < queryKeys.length; i++) {
-          const key = queryKeys[i];
-          url.searchParams.append(
-            key,
-            this.computedConfig.query[key]?.toString() || "",
-          );
-        }
-      }
+    if (this.computedConfig.queryString) {
+      url.search = this.computedConfig.queryString;
     }
 
     return url;

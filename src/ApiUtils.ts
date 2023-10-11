@@ -1,5 +1,5 @@
-import {AcceptableStatus, CancelledRequestError} from "./ApiTypes";
-import {ResponseType}                            from "./ApiConstants";
+import { AcceptableStatus, CancelledRequestError } from "./ApiTypes";
+import { ResponseType } from "./ApiConstants";
 
 export const isCancelledError = (
   error: Error,
@@ -15,14 +15,14 @@ export const isNetworkError = (error: Error): boolean => {
   );
 };
 
-const DEFAULT_ACCEPTABLE_STATUS = [[200, 299], 304];
+const DEFAULT_ACCEPTABLE_STATUS = [ [ 200, 299 ], 304 ];
 
 export const isAcceptableStatus = (status: number, acceptableStatus?: AcceptableStatus[]): boolean => {
   const acceptable = acceptableStatus ?? DEFAULT_ACCEPTABLE_STATUS;
 
   for (const cmpStatus of acceptable) {
     if (Array.isArray(cmpStatus)) {
-      const [min, max] = cmpStatus;
+      const [ min, max ] = cmpStatus;
       if (status >= min && status <= max) {
         return (true);
       }
@@ -36,9 +36,9 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
   return (false);
 };
 
-const TEXT_CONTENT_TYPES = ["text/plain"];
-const JSON_CONTENT_TYPES = ["text/json", "application/json"];
-const ARRAY_BUFFER_CONTENT_TYPES = ["application/octet-stream"];
+const TEXT_CONTENT_TYPES = [ "text/plain", "text/html", "text/xml", "application/xml" ];
+const JSON_CONTENT_TYPES = [ "text/json", "application/json" ];
+const ARRAY_BUFFER_CONTENT_TYPES = [ "application/octet-stream" ];
 
 export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
   const contentTypePart = contentType?.split(";")[0].trim();

@@ -1,39 +1,21 @@
-import {Api}           from "../../Api";
-import {RequestMethod} from "../../ApiConstants";
+import { Api } from "../../Api";
+import { RequestMethod } from "../../ApiConstants";
 
 const api = new Api({
   baseUrl: "example.com",
-  name   : "Example API",
+  name: "Example API",
 
   mocking: {
     enabled: true,
   },
 });
 
-export const fetchUsers = api.endpoint()
-  .queryOf<{ id: string }>()
-  .build({
-    name  : "Fetch Users",
-    id    : "fetchUsers",
-    method: RequestMethod.Get,
-    path  : "/users",
-
-    mocking: {
-      handler: (req, res) => {
-        return res.status(200).send([
-          {name: "Test"},
-        ]);
-      },
-    },
-
-  });
-
 export const fetchRequiresToken = api.endpoint()
   .build({
-    name  : "Requires Token",
-    id    : "fetchRequiresToken",
+    name: "Requires Token",
+    id: "fetchRequiresToken",
     method: RequestMethod.Get,
-    path  : "/requires-token",
+    path: "/requires-token",
 
     mocking: {
       handler: (req, res) => {
@@ -54,9 +36,9 @@ export const postFormUrlEncoded = api.endpoint()
     b: string
   }>()
   .build({
-    id    : "sendFormUrlEncoded",
+    id: "sendFormUrlEncoded",
     method: "post",
-    path  : "/send-data",
+    path: "/send-data",
 
     config: {
       headers: {
@@ -85,15 +67,15 @@ export const postIdVerifStatus = api.endpoint()
     verifPayload?: any; // we'll only ever get one-shot to store this before the BE service deletes the transaction
   }>()
   .build({
-    id          : "id-verif-status",
-    method      : RequestMethod.POST,
-    path        : "/id-verif/verif-status",
+    id: "id-verif-status",
+    method: RequestMethod.POST,
+    path: "/id-verif/verif-status",
     responseType: "json",
-    config      : {
-      acceptableStatus: [200],
-      retry           : false, // outcome screen has it's own retry
+    config: {
+      acceptableStatus: [ 200 ],
+      retry: false, // outcome screen has it's own retry
     },
-    mocking     : {
+    mocking: {
       handler: (req, res) => {
         return res.status(200).send({url: req.url} as any);
       },

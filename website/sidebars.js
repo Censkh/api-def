@@ -6,6 +6,7 @@ module.exports = {
       "middleware",
       "caching",
       "mocking",
+      "query-handling",
       "node",
       //"example",
     ],

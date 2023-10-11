@@ -1,14 +1,16 @@
-import { RetryOptions,
-         RetryOptionsInt }   from "../interfaces";
-import RetryOperation        from "./retryOperation";
+import {
+  RetryOptions,
+  RetryOptionsInt,
+} from "../interfaces";
+import RetryOperation from "./retryOperation";
 
 export const operation = (options: RetryOptions): RetryOperation => {
   const timeouts = _timeouts(options);
-  return(
+  return (
     new RetryOperation(timeouts, {
-        forever: options && (options.forever || options.retries === Infinity),
-        unref: options && options.unref,
-        maxRetryTime: options && options.maxRetryTime,
+      forever: options && (options.forever || options.retries === Infinity),
+      unref: options && options.unref,
+      maxRetryTime: options && options.maxRetryTime,
     })
   );
 };
@@ -23,16 +25,16 @@ const _timeouts = (options: RetryOptions): number[] => {
     let timeout = Math.round(random * Math.max(opts.minTimeout, 1) * Math.pow(opts.factor, attempt));
     timeout = Math.min(timeout, opts.maxTimeout);
 
-    return(timeout);
+    return (timeout);
   };
 
   const defaultRetries = 10;
   const opts: RetryOptionsInt = {
-    retries     : defaultRetries,
-    factor      : 2,
-    minTimeout  : 1 * 1000,
-    maxTimeout  : Infinity,
-    randomize   : false,
+    retries: defaultRetries,
+    factor: 2,
+    minTimeout: 1 * 1000,
+    maxTimeout: Infinity,
+    randomize: false,
     ...options,
   };
 
@@ -44,11 +46,11 @@ const _timeouts = (options: RetryOptions): number[] => {
   const timeouts = [];
   const numRetries = opts.retries ?? defaultRetries;
   for (let i = 0; i < numRetries; i++) {
-    timeouts.push( createTimeout(i, opts) );
+    timeouts.push(createTimeout(i, opts));
   }
 
   if (options && options.forever && !timeouts.length) {
-    timeouts.push( createTimeout(numRetries, opts) );
+    timeouts.push(createTimeout(numRetries, opts));
   }
 
   // sort the array numerically ascending
@@ -56,5 +58,5 @@ const _timeouts = (options: RetryOptions): number[] => {
     return a - b;
   });
 
-  return(timeouts);
+  return (timeouts);
 };

@@ -1,10 +1,20 @@
-import {Api}          from "./Api";
+import { Api } from "./Api";
 import * as Requester from "./Requester";
 
-import {ApiResponse, BaseRequestConfig, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
-import * as Mocking                                                                      from "./MockingTypes";
-import * as Utils                                                                        from "./Utils";
-import {RequestMethod, ResponseType}                                                     from "./ApiConstants";
+import {
+  ApiResponse,
+  BaseRequestConfig,
+  Body, COMPUTED_CONFIG_SYMBOL,
+  ComputedRequestConfig,
+  Params,
+  Query,
+  RequestConfig,
+  RequestHost,
+} from "./ApiTypes";
+import * as Mocking from "./MockingTypes";
+import * as Utils from "./Utils";
+import { RequestMethod, ResponseType } from "./ApiConstants";
+import { computeRequestConfig } from "./RequestConfig";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
@@ -51,7 +61,7 @@ export default class Endpoint<R = any,
   readonly description?: string;
   readonly path: string;
   readonly config?: BaseRequestConfig;
-  readonly responseType: ResponseType;
+  readonly responseType: ResponseType | undefined;
   readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
 
   constructor(api: Api, info: EndpointConfig<R, P, Q, B>) {
@@ -62,7 +72,7 @@ export default class Endpoint<R = any,
     this.description = info.description;
     this.path = info.path;
     this.config = info.config;
-    this.responseType = info.responseType || ResponseType.Json;
+    this.responseType = info.responseType;
     this.mocking = info.mocking;
   }
 
@@ -110,25 +120,27 @@ export default class Endpoint<R = any,
 
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
-    B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
+    B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
     const computedConfig: RequestConfig<P, Q, B> = Utils.assign(
-      {},
+      {
+        [COMPUTED_CONFIG_SYMBOL]: true,
+      },
       apiDefaults,
       this.config,
       config,
     );
 
-    // merge other values
-    for (const key of ["headers"]) {
-      (computedConfig as any)[key] = Utils.assign(
-        {},
-        (apiDefaults as any)[key],
-        this.config ? (this.config as any)[key] : undefined,
-        (config as any)[key],
-      );
-    }
+    return computeRequestConfig([
+      apiDefaults,
+      this.config,
+      config,
+    ]);
 
-    return computedConfig;
+
+
+    delete computedConfig.queryParser;
+
+    return computedConfig as any;
   }
 }

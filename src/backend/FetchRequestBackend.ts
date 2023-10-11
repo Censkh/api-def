@@ -1,10 +1,9 @@
-import RequestBackend, {ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
-import {ApiResponse}                                                                     from "../ApiTypes";
-import RequestContext                                                                    from "../RequestContext";
-import * as Utils                                                                        from "../Utils";
-import {Fetch, getGlobalFetch}                                                           from "../Utils";
-import {ResponseType}                                                                    from "../ApiConstants";
-import {inferResponseType}                                                               from "../ApiUtils";
+import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import { ApiResponse } from "../ApiTypes";
+import RequestContext from "../RequestContext";
+import * as Utils from "../Utils";
+import { Fetch, getGlobalFetch } from "../Utils";
+import { inferResponseType } from "../ApiUtils";
 
 class FetchError extends Error {
   response?: Response;
@@ -45,9 +44,9 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const {status, headers} = response;
 
     try {
-      if (responseType === ResponseType.ArrayBuffer) {
+      if (responseType === "arraybuffer") {
         data = await response.clone().arrayBuffer();
-      } else if (responseType === ResponseType.Json) {
+      } else if (responseType === "json") {
         data = JSON.parse(response.__text);
       }
     } catch (error) {
@@ -63,9 +62,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     return {
       __lowercaseHeaders: processedHeaders,
-      data              : data,
-      status            : status,
-      headers           : processedHeaders,
+      method: context.method,
+      url: response.url,
+      data: data,
+      status: status,
+      headers: processedHeaders,
     };
   }
 
@@ -101,11 +102,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const url = context.getRequestUrl();
 
     const promise: Promise<Response> = this.fetch(url.href, {
-      method : context.method,
-      body   : bodyJsonify ? JSON.stringify(body) : body as any,
+      method: context.method,
+      body: bodyJsonify ? JSON.stringify(body) : body as any,
       headers: parsedHeaders,
-      mode   : "cors",
-      signal : abortSignal,
+      mode: "cors",
+      signal: abortSignal,
     }).then((response) => {
       responded = true;
       if (!response.ok) {
@@ -119,7 +120,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       return response;
     });
     return {
-      promise : promise,
+      promise: promise,
       canceler: abortSignal
         ? () => !responded && abortController.abort()
         : () => {

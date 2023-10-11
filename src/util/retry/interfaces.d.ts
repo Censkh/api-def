@@ -25,7 +25,7 @@ export interface RetryOptionsCore {
    * Randomizes the timeouts by multiplying a factor between 1-2.
    * @default false
    */
-   randomize: boolean;
+  randomize: boolean;
 }
 
 export interface RetryOptionsInt extends RetryOptionsCore {

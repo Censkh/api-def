@@ -1,6 +1,6 @@
-import {RequestMiddleware}                                         from "../ApiTypes";
-import * as Caching                                                from "../cache/Caching";
-import {CacheSource, EventResultType, RequestEvent, RequestMethod} from "../ApiConstants";
+import { RequestMiddleware } from "../ApiTypes";
+import * as Caching from "../cache/Caching";
+import { CacheSource, EventResultType, RequestEvent, RequestMethod } from "../ApiConstants";
 
 export interface CacheMiddlewareOptions {
   defaultExpiry?: number;
@@ -11,7 +11,7 @@ const CacheMiddleware = (
   options: CacheMiddlewareOptions = {},
 ): RequestMiddleware => {
   return {
-    [RequestEvent.Success]   : async (context) => {
+    [RequestEvent.Success]: async (context) => {
       if (context.method !== RequestMethod.Get) return;
 
       const {cache} = context.computedConfig || {};
@@ -41,7 +41,7 @@ const CacheMiddleware = (
             context.cacheInfo.cached = true;
 
             return {
-              type    : EventResultType.Respond,
+              type: EventResultType.Respond,
               response: cachedValue,
             } as any;
           }
@@ -52,7 +52,7 @@ const CacheMiddleware = (
           _bust: Math.floor(Math.random() * 9000) + 1000,
         });
         context.updateHeaders({
-          Pragma         : "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache, no-store, must-revalidate",
           "Cache-Control": "no-cache, no-store, must-revalidate",
         });
       }

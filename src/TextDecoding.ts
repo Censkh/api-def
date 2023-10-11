@@ -16,7 +16,7 @@ export const textDecode = (inputArrayOrBuffer: any, options?: any): string => {
   const NativeUint8Array = window.Uint8Array;
   const patchedU8Array = NativeUint8Array || Array;
   const nativeArrayBuffer = NativeUint8Array ? ArrayBuffer : patchedU8Array;
-  const arrayBuffer_isView = (nativeArrayBuffer as any).isView || function(x: any) {
+  const arrayBuffer_isView = (nativeArrayBuffer as any).isView || function (x: any) {
     return x && "length" in x;
   };
   const arrayBufferString = Object_prototype_toString.call(nativeArrayBuffer.prototype);
@@ -32,17 +32,17 @@ export const textDecode = (inputArrayOrBuffer: any, options?: any): string => {
   }
 
   let resultingString = "",
-      tmpStr          = "",
-      index           = 0,
-      len             = inputAs8.length | 0,
-      lenMinus32      = len - 32 | 0,
-      nextEnd         = 0,
-      cp0             = 0,
-      codePoint       = 0,
-      minBits         = 0,
-      cp1             = 0,
-      pos             = 0,
-      tmp             = -1;
+    tmpStr = "",
+    index = 0,
+    len = inputAs8.length | 0,
+    lenMinus32 = len - 32 | 0,
+    nextEnd = 0,
+    cp0 = 0,
+    codePoint = 0,
+    minBits = 0,
+    cp1 = 0,
+    pos = 0,
+    tmp = -1;
   // Note that tmp represents the 2nd half of a surrogate pair incase a surrogate gets divided between blocks
   for (; index < len;) {
     nextEnd = index <= lenMinus32 ? 32 : len - index | 0;

@@ -1,5 +1,5 @@
 import RequestContext from "../RequestContext";
-import {ApiResponse}  from "../ApiTypes";
+import { ApiResponse } from "../ApiTypes";
 
 export interface RequestOperation<R> {
   promise: Promise<R>;
@@ -10,7 +10,7 @@ export interface RequestBackendErrorInfo {
   code: string;
 }
 
-export type ConvertedApiResponse<T> = ApiResponse<T> & {__lowercaseHeaders?: any};
+export type ConvertedApiResponse<T> = ApiResponse<T> & { __lowercaseHeaders?: any };
 
 export default interface RequestBackend<R = any> {
   readonly id: string;

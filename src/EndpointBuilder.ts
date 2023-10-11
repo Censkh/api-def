@@ -1,6 +1,6 @@
-import {Body, Params, Query}      from "./ApiTypes";
-import Endpoint, {EndpointConfig} from "./Endpoint";
-import {Api}                      from "./Api";
+import { Body, Params, Query } from "./ApiTypes";
+import Endpoint, { EndpointConfig } from "./Endpoint";
+import { Api } from "./Api";
 
 export default class EndpointBuilder<R = any,
   P extends Params | undefined = undefined,

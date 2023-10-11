@@ -1,9 +1,9 @@
-import {ApiResponse, RequestMiddleware} from "../ApiTypes";
-import RequestContext                   from "../RequestContext";
-import * as ApiUtils                    from "../ApiUtils";
-import * as Utils                       from "../Utils";
-import {RequestEvent}                   from "../ApiConstants";
-import {RequestError}                   from "../RequestError";
+import { ApiResponse, RequestMiddleware } from "../ApiTypes";
+import RequestContext from "../RequestContext";
+import * as ApiUtils from "../ApiUtils";
+import * as Utils from "../Utils";
+import { RequestEvent } from "../ApiConstants";
+import { RequestError } from "../RequestError";
 
 export interface LoggingMiddlewareOptions {
   predicate?: () => boolean;
@@ -17,10 +17,10 @@ enum LogType {
 }
 
 const COLOR_MAP: Record<LogType, string> = {
-  [LogType.Error]  : "#c8646c",
-  [LogType.Info]   : "#85a6c7",
+  [LogType.Error]: "#c8646c",
+  [LogType.Info]: "#85a6c7",
   [LogType.Success]: "#a9c490",
-  [LogType.Warn]   : "#d19a66",
+  [LogType.Warn]: "#d19a66",
 };
 
 interface DiagnosedError {
@@ -44,7 +44,7 @@ const diagnoseError = (error: RequestError): DiagnosedError => {
   const {status, data} = error.response;
   const code = data?.code;
   return {
-    message : `responded with ${status}${code ? ` (${code})` : ""}`,
+    message: `responded with ${status}${code ? ` (${code})` : ""}`,
     response: error.response,
   };
 };
@@ -96,7 +96,7 @@ const LoggingMiddleware = (
   config: LoggingMiddlewareOptions = {},
 ): RequestMiddleware => {
   return {
-    [RequestEvent.BeforeSend]        : (context) => {
+    [RequestEvent.BeforeSend]: (context) => {
       log(
         context,
         LogType.Info,
@@ -104,7 +104,7 @@ const LoggingMiddleware = (
         config,
       );
     },
-    [RequestEvent.Success]           : (context) => {
+    [RequestEvent.Success]: (context) => {
       const cacheSource = context.cacheInfo.source;
 
       log(
@@ -116,7 +116,7 @@ const LoggingMiddleware = (
         config,
       );
     },
-    [RequestEvent.Error]             : (context) => {
+    [RequestEvent.Error]: (context) => {
       if (context.error) {
         const {error, message} = diagnoseError(context.error);
         log(

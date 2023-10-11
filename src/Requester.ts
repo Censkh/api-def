@@ -1,16 +1,16 @@
-import {ApiResponse, Body, Params, Query, RequestConfig, RequestHost} from "./ApiTypes";
+import { ApiResponse, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
 
-import * as ApiUtils                                                           from "./ApiUtils";
-import {inferResponseType, isAcceptableStatus, isNetworkError}                 from "./ApiUtils";
-import RequestContext                                                          from "./RequestContext";
-import * as Api                                                                from "./Api";
-import {EventResultType, RequestEvent}                                         from "./ApiConstants";
-import retry                                                                   from "./util/retry";
-import {RetryFunction, RetryOptions}                                           from "./util/retry/interfaces";
-import MockRequestBackend                                                      from "./backend/MockRequestBackend";
-import {EndpointMockingConfig}                                                 from "./MockingTypes";
-import {convertToRequestError, isRequestError, RequestError, RequestErrorCode} from "./RequestError";
-import {textDecode}                                                            from "./TextDecoding";
+import * as ApiUtils from "./ApiUtils";
+import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
+import RequestContext from "./RequestContext";
+import * as Api from "./Api";
+import { EventResultType, RequestEvent } from "./ApiConstants";
+import retry from "./util/retry";
+import { RetryFunction, RetryOptions } from "./util/retry/interfaces";
+import MockRequestBackend from "./backend/MockRequestBackend";
+import { EndpointMockingConfig } from "./MockingTypes";
+import { convertToRequestError, isRequestError, RequestError, RequestErrorCode } from "./RequestError";
+import { textDecode } from "./TextDecoding";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
@@ -25,7 +25,7 @@ export const submit = async <R,
   config: RequestConfig<P, Q, B>,
   mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
 ): Promise<ApiResponse<R>> => {
-  const computedConfig: RequestConfig<P, Q, B> = host.computeConfig(config);
+  const computedConfig: ComputedRequestConfig<P, Q, B> = host.computeConfig(config);
 
   const backend = mocking ? MOCK_REQUEST_BACKEND : Api.getRequestBackend();
   if (!backend) {
@@ -53,7 +53,7 @@ export const submit = async <R,
 
   const {lock} = context.computedConfig || {};
 
-  if (lock) {
+  if (typeof lock === "string") {
     const lockedContext = locks[lock];
     if (lockedContext && lockedContext.id !== context.id) {
       lockedContext.cancel();
@@ -80,7 +80,7 @@ export const submit = async <R,
     delete runningOperations[key];
     throw error;
   } finally {
-    if (lock) {
+    if (typeof lock === "string") {
       delete locks[lock];
     }
   }
@@ -114,7 +114,7 @@ const makeRequest = async <R>(
     // assume most users won't want to tune the delay between retries
     minTimeout: 1 * 1000,
     maxTimeout: 5 * 1000,
-    randomize : true,
+    randomize: true,
   };
   context.stats.attempt = 0;
 
@@ -129,10 +129,10 @@ const makeRequest = async <R>(
 
       if (!isAcceptableStatus(parsedResponse.status, context.computedConfig.acceptableStatus)) {
         throw convertToRequestError({
-          error   : new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
+          error: new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,
-          code    : RequestErrorCode.REQUEST_INVALID_STATUS,
-          context : context,
+          code: RequestErrorCode.REQUEST_INVALID_STATUS,
+          context: context,
         });
       }
 
@@ -189,7 +189,7 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
     const parsedResponse = await context.backend.convertResponse<R>(context, response);
 
     // lowercase all header names
-    parsedResponse.headers = parsedResponse.__lowercaseHeaders || Object.keys(parsedResponse.headers).reduce((headers, header) => {
+    (parsedResponse as any).headers = parsedResponse.__lowercaseHeaders || Object.keys(parsedResponse.headers).reduce((headers, header) => {
       headers[header.toLowerCase()] = parsedResponse.headers[header];
       return headers;
     }, {} as any);
@@ -202,10 +202,10 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
       // expand to array buffer once we support that in inferResponseType
       if (inferredResponseType === "text" && context.responseType === "json") {
         throw convertToRequestError({
-          error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
-          code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+          error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+          code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
           response: parsedResponse,
-          context : context,
+          context: context,
         });
       }
 
@@ -222,10 +222,10 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
               response.data = JSON.parse(decodedData);
             } catch (e) {
               throw convertToRequestError({
-                error   : new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
-                code    : RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+                error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+                code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
                 response: parsedResponse,
-                context : context,
+                context: context,
               });
             }
           }
@@ -258,10 +258,10 @@ const parseError = async (context: RequestContext, rawError: Error) => {
 
     const errorInfo = context.backend.getErrorInfo(rawError, errorResponse);
     error = convertToRequestError({
-      error   : rawError,
+      error: rawError,
       response: errorResponse,
-      code    : code,
-      context : context,
+      code: code,
+      context: context,
       ...errorInfo,
     });
   }

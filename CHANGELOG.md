@@ -1,3 +1,11 @@
+# 0.8.0
+
+## Changes
+
+- **Breaking:** if no response type given, use inferred
+- deprecate `queryParser` (it's actually a stringifier) and replace with `queryHandling.stringify`
+- allow `query` to be an arbitrary string
+
 # 0.7.3
 
 ## Changes
@@ -50,7 +58,7 @@
 
 ## Breaking Changes
 
-- Undocumented mocking API has been overhauled 
+- Undocumented mocking API has been overhauled
 
 ## Changes
 
@@ -60,7 +68,7 @@
 - Extend retry logic to use exponential back-off, rather than retrying immediately
 - Support for additional hot-request methods:
   - PUT, DELETE
-  
+
 # 0.4.1
 
 - fix fetch backend not working with unbound fetch
@@ -77,7 +85,7 @@
 ## Changes
 
 - Remove need for enum imports
-- Make `name` and `description` optional in endpoint definition 
+- Make `name` and `description` optional in endpoint definition
 
 # 0.3.11
 

@@ -1,7 +1,7 @@
-import RequestBackend, {ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation} from "./RequestBackend";
-import {ApiResponse}                                                                     from "../ApiTypes";
-import type {AxiosError, AxiosResponse, AxiosStatic}                                     from "axios";
-import RequestContext                                                                    from "../RequestContext";
+import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import { ApiResponse } from "../ApiTypes";
+import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
+import RequestContext from "../RequestContext";
 
 let axios: AxiosStatic;
 
@@ -29,9 +29,11 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
     return {
-      data              : response.data,
-      headers           : response.headers as any,
-      status            : response.status,
+      method: context.method,
+      url: response.request.res.responseUrl,
+      data: response.data,
+      headers: response.headers as any,
+      status: response.status,
       __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
     };
   }
@@ -39,22 +41,21 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
     const {computedConfig} = context;
 
+    const url = context.getRequestUrl();
+
     let canceler: (() => void) | null = null;
     const promise: Promise<AxiosResponse> = axios({
-      method          : context.method,
-      baseURL         : context.baseUrl,
-      url             : context.computedPath,
-      data            : context.getParsedBody(),
-      params          : computedConfig.query || {},
-      headers         : computedConfig.headers || {},
-      responseType    : context.responseType,
-      cancelToken     : new axios.CancelToken((cancellerFunc) => {
+      method: context.method,
+      url: url.href,
+      data: context.getParsedBody(),
+      headers: computedConfig.headers || {},
+      responseType: context.responseType,
+      cancelToken: new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),
-      paramsSerializer: context.computedConfig.queryParser as any,
     });
     return {
-      promise : promise,
+      promise: promise,
       canceler: () => canceler && canceler(),
     };
   }

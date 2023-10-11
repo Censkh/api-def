@@ -1,6 +1,8 @@
-import { RetryFunction,
-         RetryOptions }               from "./interfaces";
-import * as retrier                   from "./lib/retry";
+import {
+  RetryFunction,
+  RetryOptions,
+} from "./interfaces";
+import * as retrier from "./lib/retry";
 
 // Retry is just transplanted from here:
 // https://www.npmjs.com/package/retry (lib), and
@@ -10,7 +12,7 @@ import * as retrier                   from "./lib/retry";
 
 const retry = <A>(fn: RetryFunction<A>, opts: RetryOptions): Promise<A> => {
 
-  return new Promise( (resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
       const options = opts || {};
 
@@ -60,7 +62,7 @@ const retry = <A>(fn: RetryFunction<A>, opts: RetryOptions): Promise<A> => {
       };
 
       op.attempt(runAttempt);
-    }
+    },
   );
 };
 

@@ -1,5 +1,5 @@
 // polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-export const assign: typeof Object["assign"] = Object.assign || function(target: any, varArgs: any) {
+export const assign: typeof Object["assign"] = Object.assign || function (target: any, varArgs: any) {
   if (target === null || target === undefined) {
     throw new TypeError("Cannot convert undefined or null to object");
   }

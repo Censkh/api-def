@@ -1,5 +1,5 @@
-import test                      from "ava";
-import api, {fetchRequiresToken} from "./mock/MockApi";
+import test from "ava";
+import api, { fetchRequiresToken } from "./mock/MockApi";
 
 test("allow for retries in middleware", async (t) => {
   let thrownError;
@@ -12,7 +12,7 @@ test("allow for retries in middleware", async (t) => {
   t.is(thrownError.toJSON, undefined);
   t.like(thrownError, {
     response: {
-      data  : {
+      data: {
         code: "auth/invalid-token",
       },
       status: 400,
@@ -26,7 +26,7 @@ test("allow for retries in middleware", async (t) => {
     },
   }), {
     status: 200,
-    data  : {hello: true},
+    data: {hello: true},
   });
 
   api.middleware.push({
@@ -44,6 +44,6 @@ test("allow for retries in middleware", async (t) => {
 
   t.like(await fetchRequiresToken.submit({}), {
     status: 200,
-    data  : {hello: true},
+    data: {hello: true},
   });
 });

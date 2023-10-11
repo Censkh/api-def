@@ -1,24 +1,24 @@
-import Endpoint            from "./Endpoint";
-import * as Requester      from "./Requester";
+import Endpoint from "./Endpoint";
+import * as Requester from "./Requester";
 import {
   ApiResponse,
   BaseRequestConfig,
-  Body,
+  Body, ComputedRequestConfig,
   Params,
   Query,
   RequestConfig,
   RequestHost,
   RequestMiddleware,
-}                          from "./ApiTypes";
-import RequestBackend      from "./backend/RequestBackend";
-import EndpointBuilder     from "./EndpointBuilder";
-import * as Utils          from "./Utils";
+} from "./ApiTypes";
+import RequestBackend from "./backend/RequestBackend";
+import EndpointBuilder from "./EndpointBuilder";
+import * as Utils from "./Utils";
 import FetchRequestBackend from "./backend/FetchRequestBackend";
 import {
   RequestMethod,
-  ResponseType,
-}                          from "./ApiConstants";
-import {ApiMockingConfig}  from "./MockingTypes";
+} from "./ApiConstants";
+import { ApiMockingConfig } from "./MockingTypes";
+import { computeRequestConfig } from "./RequestConfig";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
@@ -49,7 +49,7 @@ class HotRequestHost implements RequestHost {
   readonly api: Api;
   readonly method: RequestMethod;
   readonly path: string;
-  readonly responseType = ResponseType.Json;
+  readonly responseType = undefined;
 
   constructor(api: Api, path: string, method: RequestMethod) {
     this.api = api;
@@ -63,14 +63,13 @@ class HotRequestHost implements RequestHost {
 
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,
-    B extends Body | undefined>(config: RequestConfig<P, Q, B>): RequestConfig<P, Q, B> {
+    B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
 
-    return Utils.assign(
-      {},
+    return computeRequestConfig([
       apiDefaults,
       config,
-    );
+    ]);
   }
 
   computePath(path: string, config: RequestConfig): string {

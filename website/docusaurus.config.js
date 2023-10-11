@@ -1,7 +1,7 @@
 module.exports = {
   title                : "ApiDef",
   tagline              : "The tagline of my site",
-  url                  : "https://censkh.github.io/style-composer/",
+  url                  : "https://censkh.github.io/",
   baseUrl              : "/api-def/",
   onBrokenLinks        : "throw",
   onBrokenMarkdownLinks: "warn",

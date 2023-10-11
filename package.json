@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -19,7 +19,7 @@
     "lint:strict": "npm run lint -- --max-warnings 0",
     "cleanup": "rimraf esm && rimraf cjs",
     "build": "npm run cleanup && npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --module es2015 --target es5 --outDir esm --preserveWatchOutput",
+    "build:esm": "tsc --module es2015 --target es2016 --outDir esm --preserveWatchOutput",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs --preserveWatchOutput",
     "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\" \"lint:watch\"",
     "website:dev": "cd website && npm run start",
@@ -63,6 +63,7 @@
     "@esbuild-kit/cjs-loader": "2.4.0",
     "@types/axios": "0.14.0",
     "@types/node": "16.4.6",
+    "@types/qs": "6.9.8",
     "@typescript-eslint/eslint-plugin": "4.28.5",
     "@typescript-eslint/parser": "4.28.5",
     "ava": "5.0.1",
@@ -71,6 +72,7 @@
     "eslint": "7.31.0",
     "eslint-watch": "7.0.0",
     "npm-run-all": "4.1.5",
+    "qs": "6.11.2",
     "typescript": "4.8.4"
   }
 }

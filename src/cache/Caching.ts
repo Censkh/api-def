@@ -1,4 +1,4 @@
-import {CacheBackend}           from "./CacheBackend";
+import { CacheBackend } from "./CacheBackend";
 import LocalStorageCacheBackend from "./LocalStorageCacheBackend";
 
 let cacheBackend: CacheBackend = new LocalStorageCacheBackend();
@@ -20,7 +20,7 @@ export interface CacheEntry {
 
 export const setCachedItem = async <T>(key: string, value: T, expiry?: number): Promise<T> => {
   const entry: CacheEntry = {
-    data  : value,
+    data: value,
     expiry: expiry === undefined || isNaN(expiry) ? null : expiry,
   };
   await cacheBackend.setItem(key, entry);
