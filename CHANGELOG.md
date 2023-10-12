@@ -1,3 +1,10 @@
+# 0.8.3
+
+## Changes
+
+- change default retry logic to always retry unless you pass `shouldRetry` predicate
+- add `minDelay` and `maxDelay` to retry logic
+
 # 0.8.2
 
 ## Changes

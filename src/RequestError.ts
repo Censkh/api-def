@@ -15,6 +15,7 @@ export interface RequestError extends Error {
   isRequestError: true;
   response: ApiResponse | undefined | null;
   code: string;
+  attempts: number,
 }
 
 export const isRequestError = (error: Error): error is RequestError => {
@@ -38,6 +39,7 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
     response: response,
     code: code,
     isRequestError: true as const,
+    attempts: context.stats.attempt,
     request: {
       url: context.getRequestUrl().href,
       query: context.computedConfig.queryObject,

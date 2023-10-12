@@ -1,11 +1,19 @@
-import { ApiResponse, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
+import {
+  ApiResponse,
+  Body,
+  ComputedRequestConfig,
+  Params,
+  Query,
+  RequestConfig,
+  RequestHost,
+  RetryOptions,
+} from "./ApiTypes";
 
-import * as ApiUtils from "./ApiUtils";
 import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
 import RequestContext from "./RequestContext";
 import { EventResultType, RequestEvent } from "./ApiConstants";
 import retry from "./util/retry";
-import { RetryFunction, RetryOptions } from "./util/retry/interfaces";
+import { RetryFunction, RetryOptions as InternalRetryOptions } from "./util/retry/interfaces";
 import MockRequestBackend from "./backend/MockRequestBackend";
 import { EndpointMockingConfig } from "./MockingTypes";
 import { convertToRequestError, isRequestError, RequestError, RequestErrorCode } from "./RequestError";
@@ -82,6 +90,17 @@ export const submit = async <R,
   }
 };
 
+const parseRetryOptions = (retryConfig: number | false | RetryOptions | undefined): RetryOptions => {
+  if (retryConfig && typeof retryConfig === "object") {
+    return retryConfig;
+  }
+
+  if (typeof retryConfig === "number") {
+    return {maxAttempts: retryConfig};
+  }
+  return {maxAttempts: 0};
+};
+
 const makeRequest = async <R>(
   context: RequestContext<R>,
 ): Promise<ApiResponse<R>> => {
@@ -93,13 +112,13 @@ const makeRequest = async <R>(
     return (context.response = beforeSendEventResult.response);
   }
 
-  const maxRetries = (context.computedConfig?.retry) || 0;
+  const retryOptions = parseRetryOptions(context.computedConfig?.retry);
 
-  const retryOpts: RetryOptions = {
-    retries: maxRetries,
+  const internalRetryOptions: InternalRetryOptions = {
+    retries: retryOptions.maxAttempts,
     // assume most users won't want to tune the delay between retries
-    minTimeout: 1 * 1000,
-    maxTimeout: 5 * 1000,
+    minTimeout: retryOptions.minDelay ?? 200,
+    maxTimeout: retryOptions.maxDelay ?? 1000,
     randomize: true,
   };
   context.stats.attempt = 0;
@@ -140,15 +159,20 @@ const makeRequest = async <R>(
       }
 
       // allow retry logic to handle network errors
-      const shouldNaturallyRetry = ApiUtils.isNetworkError(error);
-      if (shouldNaturallyRetry) {
-        throw error;
-      }
+      //const shouldNaturallyRetry = ApiUtils.isNetworkError(error);
+      //if (shouldNaturallyRetry) {
+      //  throw error;
+      //}
 
       // if we have an event that tells us to retry, we must do it
       const forceRetry = errorEventResult?.type === EventResultType.Retry;
       if (forceRetry) {
         return performRequest(fnBail, attemptCount);
+      }
+
+      // allow retry logic to handle
+      if (!retryOptions.shouldRetry || retryOptions.shouldRetry(error)) {
+        throw error;
       }
 
       // error is unrecoverable, bail
@@ -165,7 +189,7 @@ const makeRequest = async <R>(
     }
   };
 
-  const response = await retry(performRequest, retryOpts);
+  const response = await retry(performRequest, internalRetryOptions);
 
   return (response!);
 };

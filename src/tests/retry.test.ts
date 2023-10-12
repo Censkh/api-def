@@ -1,5 +1,6 @@
 import test from "ava";
 import api, { fetchRequiresToken } from "./mock/MockApi";
+import { Api } from "../Api";
 
 test("allow for retries in middleware", async (t) => {
   let thrownError;
@@ -46,4 +47,28 @@ test("allow for retries in middleware", async (t) => {
     status: 200,
     data: {hello: true},
   });
+});
+
+test("make sure retry only happens a max number of times", async (t) => {
+  const api = new Api({
+    baseUrl: "httpstat.us",
+    name: "Http Status API",
+  });
+
+  const endpoint = api.endpoint()
+    .build({
+      id: "404",
+      method: "get",
+      path: "/404",
+      config: {
+        retry: 3,
+      },
+    });
+
+  const error: any = await t.throwsAsync(async () => {
+    await endpoint.submit({});
+  });
+
+  t.is(error.response.status, 404);
+  t.is(error.attempts, 4);
 });

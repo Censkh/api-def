@@ -29,10 +29,17 @@ interface QueryHandling {
   stringify: QueryStringify;
 }
 
+export interface RetryOptions {
+  maxAttempts: number;
+  shouldRetry?: (error: Error) => boolean;
+  minDelay?: number;
+  maxDelay?: number;
+}
+
 export interface BaseRequestConfig {
   cache?: number | boolean;
   lock?: RequestLock;
-  retry?: number | false;
+  retry?: number | false | RetryOptions;
   headers?: Readonly<Headers>;
   acceptableStatus?: AcceptableStatus[];
   /**
