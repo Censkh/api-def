@@ -1,3 +1,7 @@
+# 0.8.5
+
+- upper case methods
+
 # 0.8.3
 
 ## Changes

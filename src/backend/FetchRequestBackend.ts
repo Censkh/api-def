@@ -107,7 +107,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const url = context.getRequestUrl();
 
     const promise: Promise<Response> = this.fetch(url.href, {
-      method: context.method,
+      method: context.method.toUpperCase(),
       body: bodyJsonify ? JSON.stringify(body) : body as any,
       headers: parsedHeaders,
       mode: "cors",
