@@ -2,6 +2,7 @@ import RequestContext from "./RequestContext";
 import { Api } from "./Api";
 import { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
 import RequestBackend from "./backend/RequestBackend";
+import { Validation } from "./Validation";
 
 export type AcceptableStatus = number | [ min: number, max: number ];
 
@@ -107,6 +108,7 @@ export interface RequestHost {
   readonly baseUrl: string;
   readonly path: string;
   readonly responseType: ResponseType | undefined;
+  readonly validation: Validation;
 
   computeConfig<P extends Params | undefined,
     Q extends Query | undefined,

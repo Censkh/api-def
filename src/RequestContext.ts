@@ -16,6 +16,7 @@ import { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
 import { EndpointMockingConfig } from "./MockingTypes";
 import { RequestError } from "./RequestError";
 import RequestBackend from "./backend/RequestBackend";
+import { Validation } from "./Validation";
 
 let contextIdCounter = 0;
 
@@ -44,6 +45,8 @@ export default class RequestContext<R = any,
 
   private parsedBody: any;
 
+  readonly validation: Validation<R, P, Q, B>;
+
   constructor(
     backend: RequestBackend,
     host: RequestHost,
@@ -65,6 +68,7 @@ export default class RequestContext<R = any,
     };
     this.eventHandlers = {};
     this.mocking = mocking;
+    this.validation = host.validation as any;
     this.initMiddleware();
     this.parseRequestBody();
   }

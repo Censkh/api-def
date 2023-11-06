@@ -112,6 +112,31 @@ const makeRequest = async <R>(
     return (context.response = beforeSendEventResult.response);
   }
 
+  // validation
+  if (context.validation.query) {
+    try {
+      context.computedConfig.queryObject = context.validation.query.parse(context.computedConfig.queryObject) as any;
+    } catch (error: any) {
+      throw convertToRequestError({
+        error: error,
+        code: RequestErrorCode.VALIDATION_QUERY_VALIDATE_ERROR,
+        context: context,
+      });
+      }
+    }
+
+  if (context.validation.body) {
+    try {
+      context.computedConfig.body = context.validation.body.parse(context.computedConfig.body) as any;
+    } catch (error: any) {
+      throw convertToRequestError({
+        error: error,
+        code: RequestErrorCode.VALIDATION_BODY_VALIDATE_ERROR,
+        context: context,
+      });
+    }
+  }
+
   const retryOptions = parseRetryOptions(context.computedConfig?.retry);
 
   const internalRetryOptions: InternalRetryOptions = {
@@ -190,6 +215,18 @@ const makeRequest = async <R>(
   };
 
   const response = await retry(performRequest, internalRetryOptions);
+
+  if (context.validation.response) {
+    try {
+      response.data = context.validation.response.parse(response.data) as any;
+    } catch (error: any) {
+      throw convertToRequestError({
+        error: error,
+        code: RequestErrorCode.VALIDATION_RESPONSE_VALIDATE_ERROR,
+        context: context,
+      });
+    }
+  }
 
   return (response!);
 };

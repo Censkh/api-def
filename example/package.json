@@ -4,15 +4,15 @@
     "start": "parcel index.html"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "2.0.0-beta.3.1",
-    "parcel-bundler": "^1.12.5",
-    "typescript": "4.3.5"
+    "@parcel/transformer-sass": "2.10.2",
+    "parcel": "2.10.2",
+    "typescript": "5.2.2"
   },
   "dependencies": {
     "api-def": "file://..",
-    "axios": "0.21.1",
-    "react": "18.0.0-alpha-419cc9c37-20210726",
-    "react-async-stateful": "0.8.2",
-    "react-dom": "18.0.0-alpha-419cc9c37-20210726"
+    "axios": "1.6.0",
+    "react": "18.2.0",
+    "react-async-stateful": "0.9.4",
+    "react-dom": "18.2.0"
   }
 }

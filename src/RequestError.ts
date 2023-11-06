@@ -8,6 +8,11 @@ export const RequestErrorCode = {
   REQUEST_INVALID_STATUS: "request/invalid-status",
   REQUEST_INVALID_CONFIG: "request/invalid-config",
   REQUEST_MISMATCH_RESPONSE_TYPE: "request/mismatch-response-type",
+
+  VALIDATION_QUERY_VALIDATE_ERROR: "validation/query-validate-error",
+  VALIDATION_PARAMS_VALIDATE_ERROR: "validation/params-validate-error",
+  VALIDATION_BODY_VALIDATE_ERROR: "validation/body-validate-error",
+  VALIDATION_RESPONSE_VALIDATE_ERROR: "validation/response-validate-error",
 } as const;
 export type RequestErrorCode = EnumOf<typeof RequestErrorCode>;
 

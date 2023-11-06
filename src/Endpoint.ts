@@ -15,14 +15,16 @@ import * as Mocking from "./MockingTypes";
 import { RequestMethod, ResponseType } from "./ApiConstants";
 import { computeRequestConfig } from "./RequestConfig";
 import RequestBackend from "./backend/RequestBackend";
+import { Validation } from "./Validation";
 
 export interface EndpointConfig<R,
   P extends Params | undefined,
   Q extends Query | undefined,
-  B extends Body | undefined> {
+  B extends Body | undefined,
+  Path extends string = string> {
   readonly id: string;
   readonly method: RequestMethod;
-  readonly path: string;
+  readonly path: Path;
 
   /**
    * Name your endpoint to help with debugging and documentation
@@ -47,6 +49,8 @@ export interface EndpointConfig<R,
    * Enable/disable mocked returns for all endpoints on your API object.
    */
   readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
+
+  readonly validation?: Validation<R, P, Q, B>;
 }
 
 export default class Endpoint<R = any,
@@ -63,6 +67,7 @@ export default class Endpoint<R = any,
   readonly config?: BaseRequestConfig;
   readonly responseType: ResponseType | undefined;
   readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
+  readonly validation: Validation<R, P, Q, B>;
 
   constructor(api: Api, info: EndpointConfig<R, P, Q, B>) {
     this.api = api;
@@ -74,6 +79,7 @@ export default class Endpoint<R = any,
     this.config = info.config;
     this.responseType = info.responseType;
     this.mocking = info.mocking;
+    this.validation = info.validation || {};
   }
 
   public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {

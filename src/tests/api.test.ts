@@ -1,5 +1,5 @@
 import test from "ava";
-import { postIdVerifStatus } from "./mock/MockApi";
+import mockApi, { postIdVerifStatus } from "./mock/MockApi";
 import { RequestMethod } from "../ApiConstants";
 import { Api } from "../Api";
 import * as qs from "qs";
@@ -34,7 +34,7 @@ const queryReturnEndpoint = api.endpoint()
     mocking: {
       handler: (req, res) => {
         return res.status(200).send([
-          {name: "Test", query: req.query},
+          { name: "Test", query: req.query },
         ]);
       },
     },
@@ -104,3 +104,18 @@ test("qs", async (t) => {
   ]);
 
 });
+
+/*test("infer params in typescript", async (t) => {
+  const endpoint = mockApi.endpoint()
+    .build({
+      method: "get",
+      id: "test",
+      path: "/test/:id",
+    });
+
+  endpoint.submit({
+    params: {
+      id: "test",
+    },
+  });
+});*/

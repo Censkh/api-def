@@ -1,5 +1,10 @@
 # 0.8.5
 
+- allow params to be inferred from the path
+- zod validation
+
+# 0.8.4
+
 - upper case methods
 
 # 0.8.3

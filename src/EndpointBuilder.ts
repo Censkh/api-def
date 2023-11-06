@@ -1,6 +1,13 @@
 import { Body, Params, Query } from "./ApiTypes";
 import Endpoint, { EndpointConfig } from "./Endpoint";
 import { Api } from "./Api";
+import { Validation } from "./Validation";
+import * as zod from "zod";
+
+/*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
+  ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>
+  : Path extends `:${infer Param}` ? Param : undefined;
+ */
 
 export default class EndpointBuilder<R = any,
   P extends Params | undefined = undefined,
@@ -8,12 +15,14 @@ export default class EndpointBuilder<R = any,
   B extends Body | undefined = undefined> {
 
   private api: Api;
+  private readonly validation: Validation<R, P, Q, B> = {};
 
   constructor(api: Api) {
     this.api = api;
   }
 
-  queryOf<Q extends Query>(): EndpointBuilder<R, P, Q, B> {
+  queryOf<Q extends Query>(schema?: zod.Schema<Q>): EndpointBuilder<R, P, Q, B> {
+    this.validation.query = schema as any;
     return this as any;
   }
 
@@ -21,18 +30,20 @@ export default class EndpointBuilder<R = any,
     return this as any;
   }
 
-  bodyOf<B extends Body>(): EndpointBuilder<R, P, Q, B> {
+  bodyOf<B extends Body>(schema?: zod.Schema<B>): EndpointBuilder<R, P, Q, B> {
+    this.validation.body = schema as any;
     return this as any;
   }
 
-  responseOf<R>(): EndpointBuilder<R, P, Q, B> {
+  responseOf<R>(schema?: zod.Schema<R>): EndpointBuilder<R, P, Q, B> {
+    this.validation.response = schema as any;
     return this as any;
   }
 
-  build(config: EndpointConfig<R, P, Q, B>): Endpoint<R, P, Q, B> {
-    const endpoint = new Endpoint(this.api, config);
+  build<Path extends string>(config: Omit<EndpointConfig<R, P, Q, B, Path>, "validation">): Endpoint<R, P, Q, B> {
+    const endpoint = new Endpoint(this.api, {...config, validation: this.validation});
     (this.api as any).endpoints[endpoint.id] = endpoint as Endpoint;
-    return endpoint;
+    return endpoint as any;
   }
 
 }

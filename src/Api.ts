@@ -19,6 +19,7 @@ import {
 } from "./ApiConstants";
 import { ApiMockingConfig } from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
+import { Validation } from "./Validation";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
@@ -51,6 +52,7 @@ class HotRequestHost implements RequestHost {
   readonly method: RequestMethod;
   readonly path: string;
   readonly responseType = undefined;
+  readonly validation: Validation = {};
 
   constructor(api: Api, path: string, method: RequestMethod) {
     this.api = api;
@@ -80,6 +82,7 @@ class HotRequestHost implements RequestHost {
   getRequestBackend(): RequestBackend {
     return this.api.getRequestBackend();
   }
+
 }
 
 let defaultBackendMessageShown = false;
