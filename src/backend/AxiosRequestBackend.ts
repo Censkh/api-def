@@ -41,7 +41,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
     const {computedConfig} = context;
 
-    const url = context.getRequestUrl();
+    const url = context.requestUrl;
 
     let canceler: (() => void) | null = null;
     const promise: Promise<AxiosResponse> = axios({

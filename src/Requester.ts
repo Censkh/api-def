@@ -122,8 +122,8 @@ const makeRequest = async <R>(
         code: RequestErrorCode.VALIDATION_QUERY_VALIDATE_ERROR,
         context: context,
       });
-      }
     }
+  }
 
   if (context.validation.body) {
     try {
@@ -300,6 +300,10 @@ const parseError = async (context: RequestContext, rawError: Error) => {
     if (errorResponse) {
       if (!isAcceptableStatus(errorResponse.status, context.computedConfig.acceptableStatus)) {
         code = RequestErrorCode.REQUEST_INVALID_STATUS;
+      }
+    } else {
+      if ((rawError as any).code === "ENOTFOUND" || (rawError as any).cause?.code === "ENOTFOUND") {
+        code = RequestErrorCode.REQUEST_HOST_NAME_NOT_FOUND;
       }
     }
 

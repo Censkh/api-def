@@ -1,6 +1,7 @@
 import {
   ApiResponse,
-  Body, ComputedRequestConfig,
+  Body,
+  ComputedRequestConfig,
   EventResult,
   Headers,
   Params,
@@ -26,7 +27,9 @@ export default class RequestContext<R = any,
   B extends Body | undefined = Body | undefined> {
   readonly id: number;
   readonly key: string;
-  readonly computedPath: string;
+  private computedPath: string;
+  private computedBaseUrl: string;
+  private computedMethod: RequestMethod;
   readonly stats: RequestContextStats;
   private readonly host: RequestHost;
   readonly eventHandlers: RequestEventHandlers<R>;
@@ -40,6 +43,7 @@ export default class RequestContext<R = any,
 
   cancelled = false;
   readonly computedConfig: ComputedRequestConfig<P, Q, B>;
+  private computedRequestUrl: URL;
 
   readonly mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined;
 
@@ -60,6 +64,8 @@ export default class RequestContext<R = any,
     this.computedConfig = config;
     Utils.assign({}, this.computedConfig.headers);
     this.computedPath = computedPath;
+    this.computedBaseUrl = host.baseUrl;
+    this.computedMethod = host.method;
 
     this.key = this.generateKey();
     this.stats = {
@@ -71,10 +77,11 @@ export default class RequestContext<R = any,
     this.validation = host.validation as any;
     this.initMiddleware();
     this.parseRequestBody();
+    this.computedRequestUrl = this.generateRequestUrl();
   }
 
   get method(): RequestMethod {
-    return this.host.method;
+    return this.computedMethod;
   }
 
   get api(): Api {
@@ -82,7 +89,7 @@ export default class RequestContext<R = any,
   }
 
   get baseUrl(): string {
-    return this.host.baseUrl;
+    return this.computedBaseUrl;
   }
 
   get responseType(): ResponseType | undefined {
@@ -186,7 +193,29 @@ export default class RequestContext<R = any,
     }
   }
 
-  getRequestUrl(): URL {
+  get requestUrl(): URL {
+    return this.computedRequestUrl;
+  }
+
+  get path(): string {
+    return this.computedPath;
+  }
+
+  updatePath(path: string): void {
+    this.computedPath = path;
+    this.computedRequestUrl = this.generateRequestUrl();
+  }
+
+  updateBaseUrl(baseUrl: string): void {
+    this.computedBaseUrl = baseUrl;
+    this.computedRequestUrl = this.generateRequestUrl();
+  }
+
+  updateMethod(method: RequestMethod): void {
+    this.computedMethod = method;
+  }
+
+  private generateRequestUrl(): URL {
     let path = !this.baseUrl.endsWith("/")
       ? this.baseUrl + "/"
       : this.baseUrl;

@@ -70,15 +70,13 @@ const log = (
     return;
   }
 
-  const {computedPath} = context;
-
   const color = COLOR_MAP[type];
 
   const timestamp = formatTime(new Date());
   const args: string[] = [
     `%cnetwork %c[${
       context.api.name
-    }] ${context.method.toUpperCase()} ${computedPath} %c${message} %c@ ${timestamp}`,
+    }] ${context.method.toUpperCase()} ${context.path} %c${message} %c@ ${timestamp}`,
     "color:gray",
     "color:auto",
     `color:${color}`,

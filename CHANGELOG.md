@@ -1,3 +1,9 @@
+# 0.9.0
+
+- update error messages to be more helpful
+- add `updateMethod`, `updatePath` & `updateBaseUrl` to `RequestContext` to enhance middleware capabilities
+- hide internal `computedPath` from `RequestContext`, replaced with `path`
+
 # 0.8.5
 
 - allow params to be inferred from the path

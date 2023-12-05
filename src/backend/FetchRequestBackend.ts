@@ -104,7 +104,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       return parsedHeaders;
     }, {} as any);
 
-    const url = context.getRequestUrl();
+    const url = context.requestUrl;
 
     const promise: Promise<Response> = this.fetch(url.href, {
       method: context.method.toUpperCase(),

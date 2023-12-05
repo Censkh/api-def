@@ -5,6 +5,7 @@ import RequestContext from "./RequestContext";
 export const RequestErrorCode = {
   MISC_UNKNOWN_ERROR: "misc/unknown-error",
   REQUEST_NETWORK_ERROR: "request/network-error",
+  REQUEST_HOST_NAME_NOT_FOUND: "request/host-name-not-found",
   REQUEST_INVALID_STATUS: "request/invalid-status",
   REQUEST_INVALID_CONFIG: "request/invalid-config",
   REQUEST_MISMATCH_RESPONSE_TYPE: "request/mismatch-response-type",
@@ -46,12 +47,18 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
     isRequestError: true as const,
     attempts: context.stats.attempt,
     request: {
-      url: context.getRequestUrl().href,
+      url: context.requestUrl.href,
       query: context.computedConfig.queryObject,
       headers: context.computedConfig.headers,
       body: body,
     },
   });
+
+  try {
+    Object.defineProperty(resultError, "message", {value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} (${code})`});
+  } catch (e) {
+    // ignore
+  }
 
   delete (resultError as any).config;
   delete (resultError as any).toJSON;
