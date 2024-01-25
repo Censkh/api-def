@@ -4,6 +4,7 @@ import RequestContext from "../RequestContext";
 import * as Utils from "../Utils";
 import { Fetch, getGlobal, getGlobalFetch } from "../Utils";
 import { inferResponseType } from "../ApiUtils";
+import { convertToRequestError, RequestErrorCode } from "../RequestError";
 
 class FetchError extends Error {
   response?: Response;
@@ -38,41 +39,48 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
   async convertResponse<T>(context: RequestContext, response: Response & {
     __text?: string
   }): Promise<ConvertedApiResponse<T>> {
-    const contentType = response.headers.get("Content-Type");
-    const responseType = inferResponseType(contentType);
-
-    if (!response.__text) {
-      response.__text = await response.clone().text();
-    }
-    let data: any = response.__text;
-
     const {status, headers} = response;
-
-    try {
-      if (responseType === "arraybuffer") {
-        data = await response.clone().arrayBuffer();
-      } else if (responseType === "json") {
-        data = JSON.parse(response.__text);
-      }
-    } catch (error) {
-      throw Object.assign(new Error(`[api-def] Invalid '${context.responseType}' response, got: '${response.__text}'`), {
-        response,
-      });
-    }
-
     const processedHeaders: Record<string, string> = {};
     headers.forEach((value, key) => {
       processedHeaders[key] = value;
     });
 
-    return {
+    const convertedResponse = {
       __lowercaseHeaders: processedHeaders,
       method: context.method,
       url: response.url,
-      data: data,
+      data: undefined as any,
       status: status,
       headers: processedHeaders,
     };
+    const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
+
+    let text;
+    let data;
+
+    try {
+      if (responseType === "arraybuffer") {
+        data = await response.arrayBuffer();
+      } else if (responseType === "json") {
+        text = await response.text();
+        data = JSON.parse(text);
+      } else {
+        data = response.text();
+      }
+    } catch (error) {
+      throw convertToRequestError({
+        error: Object.assign(new Error(`[api-def] Failed to parse response as '${responseType}'${text ? `, got: ${text}` : ""}`), {
+          cause: error,
+        }),
+        code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
+        context: context,
+        response: convertedResponse,
+      });
+    }
+
+    convertedResponse.data = data;
+
+    return convertedResponse;
   }
 
   makeRequest(context: RequestContext): RequestOperation<Response> {
