@@ -1,8 +1,6 @@
-import test from "ava";
 import { postFormUrlEncoded } from "./mock/MockApi";
 
-test("correctly parses body for form url encoded request", async (t) => {
-
+test("correctly parses body for form url encoded request", async () => {
   const res = await postFormUrlEncoded.submit({
     body: {
       test: 123,
@@ -10,8 +8,5 @@ test("correctly parses body for form url encoded request", async (t) => {
     },
   });
 
-  t.deepEqual(res.data, [
-    "test=123&b=test",
-  ]);
-
+  expect(res.data).toEqual(["test=123&b=test"]);
 });

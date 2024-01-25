@@ -16,7 +16,7 @@ ij_javascript_enforce_trailing_comma = whenmultiline
 ij_javascript_force_semicolon_style = true
 ij_javascript_spaces_within_imports = true
 ij_javascript_spaces_within_array_initializer_brackets = true
-
+ij_javascript_spaces_within_object_literal_braces = true
 
 ij_typescript_use_semicolon_after_statement = true
 ij_typescript_force_quote_style = true
@@ -25,3 +25,4 @@ ij_typescript_enforce_trailing_comma = whenmultiline
 ij_typescript_force_semicolon_style = true
 ij_typescript_spaces_within_imports = true
 ij_typescript_spaces_within_array_initializer_brackets = true
+ij_typescript_spaces_within_object_literal_braces = true

@@ -1,8 +1,7 @@
-import test from "ava";
-import mockApi, { postIdVerifStatus } from "./mock/MockApi";
-import { RequestMethod } from "../ApiConstants";
-import { Api } from "../Api";
 import * as qs from "qs";
+import { Api } from "../Api";
+import { RequestMethod } from "../ApiConstants";
+import mockApi, { postIdVerifStatus } from "./mock/MockApi";
 
 const api = new Api({
   baseUrl: "example.com",
@@ -23,7 +22,8 @@ const api = new Api({
   ],
 });
 
-const queryReturnEndpoint = api.endpoint()
+const queryReturnEndpoint = api
+  .endpoint()
   .queryOf<string>()
   .build({
     name: "Fetch Users",
@@ -33,16 +33,12 @@ const queryReturnEndpoint = api.endpoint()
 
     mocking: {
       handler: (req, res) => {
-        return res.status(200).send([
-          { name: "Test", query: req.query },
-        ]);
+        return res.status(200).send([{ name: "Test", query: req.query }]);
       },
     },
-
   });
 
-test("URL is properly constructed", async (t) => {
-
+test("URL is properly constructed", async () => {
   const res = await postIdVerifStatus.submit({
     body: {
       forceReset: true,
@@ -50,17 +46,15 @@ test("URL is properly constructed", async (t) => {
     },
   });
 
-  t.is((res.data as any).url, "https://example.com/id-verif/verif-status");
-
+  expect((res.data as any).url).toBe("https://example.com/id-verif/verif-status");
 });
 
-test("query as string", async (t) => {
+test("query as string", async () => {
   const res = await queryReturnEndpoint.submit({
     query: "test=1&id=3",
   });
 
-
-  t.deepEqual(res.data, [
+  expect(res.data).toEqual([
     {
       name: "Test",
       query: {
@@ -69,15 +63,14 @@ test("query as string", async (t) => {
       },
     },
   ]);
-
 });
 
-test("qs", async (t) => {
+test("qs", async () => {
   let res = await queryReturnEndpoint.submit({
     query: "id[0]=1&id[1]=2",
   });
 
-  t.deepEqual(res.data, [
+  expect(res.data).toEqual([
     {
       name: "Test",
       query: {
@@ -93,16 +86,15 @@ test("qs", async (t) => {
     queryHandling: qs,
   });
 
-  t.deepEqual(res.data, [
+  expect(res.data).toEqual([
     {
       name: "Test",
       query: {
         test: "abc",
-        id: [ "1", "2" ],
+        id: ["1", "2"],
       },
     },
   ]);
-
 });
 
 /*test("infer params in typescript", async (t) => {

@@ -1,27 +1,14 @@
 import { Api } from "./Api";
 import * as Requester from "./Requester";
 
-import {
-  ApiResponse,
-  BaseRequestConfig,
-  Body,
-  ComputedRequestConfig,
-  Params,
-  Query,
-  RequestConfig,
-  RequestHost,
-} from "./ApiTypes";
-import * as Mocking from "./MockingTypes";
 import { RequestMethod, ResponseType } from "./ApiConstants";
+import { ApiResponse, BaseRequestConfig, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost } from "./ApiTypes";
+import * as Mocking from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
-import RequestBackend from "./backend/RequestBackend";
 import { Validation } from "./Validation";
+import RequestBackend from "./backend/RequestBackend";
 
-export interface EndpointConfig<R,
-  P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined,
-  Path extends string = string> {
+export interface EndpointConfig<R, P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined, Path extends string = string> {
   readonly id: string;
   readonly method: RequestMethod;
   readonly path: Path;
@@ -53,10 +40,7 @@ export interface EndpointConfig<R,
   readonly validation?: Validation<R, P, Q, B>;
 }
 
-export default class Endpoint<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> implements EndpointConfig<R, P, Q, B>, RequestHost {
+export default class Endpoint<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> implements EndpointConfig<R, P, Q, B>, RequestHost {
   public readonly api: Api;
 
   readonly id: string;
@@ -106,16 +90,11 @@ export default class Endpoint<R = any,
       const keys = Object.keys(request.params);
       for (let i = 0; i < keys.length; i++) {
         const argName = keys[i];
-        computedPath = computedPath.replace(
-          `:${argName}`,
-          request.params[argName],
-        );
+        computedPath = computedPath.replace(`:${argName}`, request.params[argName]);
       }
     }
     if (computedPath.includes(":")) {
-      throw new Error(
-        `[api-def] Not all path params have been resolved: '${computedPath}'`,
-      );
+      throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
     }
     return computedPath;
   }
@@ -124,16 +103,10 @@ export default class Endpoint<R = any,
     return this.api.baseUrl;
   }
 
-  computeConfig<P extends Params | undefined,
-    Q extends Query | undefined,
-    B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
+  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
 
-    return computeRequestConfig([
-      apiDefaults,
-      this.config,
-      config,
-    ]);
+    return computeRequestConfig([apiDefaults, this.config, config]);
   }
 
   getRequestBackend(): RequestBackend {

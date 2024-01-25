@@ -1,5 +1,5 @@
-import RequestContext from "../RequestContext";
 import { ApiResponse } from "../ApiTypes";
+import RequestContext from "../RequestContext";
 
 export interface RequestOperation<R> {
   promise: Promise<R>;
@@ -19,12 +19,7 @@ export default interface RequestBackend<R = any> {
 
   convertResponse<T>(context: RequestContext, response: R): Promise<ConvertedApiResponse<T>>;
 
-  extractResponseFromError(
-    error: Error,
-  ): Promise<R | null | undefined>;
+  extractResponseFromError(error: Error): Promise<R | null | undefined>;
 
-  getErrorInfo(
-    error: Error,
-    response: ApiResponse | undefined | null,
-  ): RequestBackendErrorInfo | undefined;
+  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined;
 }

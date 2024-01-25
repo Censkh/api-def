@@ -1,13 +1,12 @@
-import RequestBackend, { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 import { ApiResponse } from "../ApiTypes";
+import { MockRequest, MockRequestError, MockResponse } from "../MockingTypes";
 import RequestContext from "../RequestContext";
+import { RequestErrorCode, convertToRequestError } from "../RequestError";
 import * as Utils from "../Utils";
 import { delayThenReturn, randInt } from "../Utils";
-import { MockRequest, MockRequestError, MockResponse } from "../MockingTypes";
-import { convertToRequestError, RequestErrorCode } from "../RequestError";
+import RequestBackend, { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
-
   readonly id = "mock";
 
   async convertResponse<T>(context: RequestContext, response: ApiResponse, error?: boolean): Promise<ApiResponse<T>> {
@@ -64,11 +63,11 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
     if (context.mocking?.delay) {
       const delay = context.mocking.delay;
-      let delayMs;
+      let delayMs: number;
       if (typeof delay === "number") {
         delayMs = delay;
       } else {
-        const [ min, max ] = delay;
+        const [min, max] = delay;
         if (min > max) {
           throw convertToRequestError({
             error: new Error("[api-def] Min delay cannot be greater than max delay"),
@@ -91,10 +90,13 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       });
     }
 
-    const parsedHeaders = Object.keys(res.headers).reduce((parsedHeaders, key) => {
-      parsedHeaders[key] = res.headers[key]!.toString();
-      return parsedHeaders;
-    }, {} as Record<string, string>);
+    const parsedHeaders = Object.keys(res.headers).reduce(
+      (parsedHeaders, key) => {
+        parsedHeaders[key] = res.headers[key]!.toString();
+        return parsedHeaders;
+      },
+      {} as Record<string, string>,
+    );
 
     return {
       url: context.requestUrl.href,
@@ -115,5 +117,4 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
-
 }

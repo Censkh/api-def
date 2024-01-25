@@ -1,7 +1,7 @@
-import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
-import { ApiResponse } from "../ApiTypes";
 import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
+import { ApiResponse } from "../ApiTypes";
 import RequestContext from "../RequestContext";
+import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 let axios: AxiosStatic;
 
@@ -10,7 +10,6 @@ export const isAxiosError = (error: Error): error is AxiosError => {
 };
 
 export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
-
   readonly id = "axios";
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -18,9 +17,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     axios = axiosLibrary;
   }
 
-  async extractResponseFromError(
-    error: Error,
-  ): Promise<AxiosResponse | null | undefined> {
+  async extractResponseFromError(error: Error): Promise<AxiosResponse | null | undefined> {
     if (isAxiosError(error)) {
       return error.response ? error.response : null;
     }
@@ -39,7 +36,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
-    const {computedConfig} = context;
+    const { computedConfig } = context;
 
     const url = context.requestUrl;
 
@@ -56,12 +53,11 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     });
     return {
       promise: promise,
-      canceler: () => canceler && canceler(),
+      canceler: () => canceler?.(),
     };
   }
 
   getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
-
 }

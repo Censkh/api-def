@@ -1,7 +1,6 @@
 import { CacheBackend } from "./CacheBackend";
 
 export default class LocalStorageCacheBackend implements CacheBackend {
-
   async clear(): Promise<void> {
     localStorage.clear();
   }
@@ -18,5 +17,4 @@ export default class LocalStorageCacheBackend implements CacheBackend {
   async setItem<T>(key: string, value: T): Promise<void> {
     localStorage.setItem(key, JSON.stringify(value));
   }
-
 }

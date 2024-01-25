@@ -1,19 +1,15 @@
+import * as zod from "zod";
+import { Api } from "./Api";
 import { Body, Params, Query } from "./ApiTypes";
 import Endpoint, { EndpointConfig } from "./Endpoint";
-import { Api } from "./Api";
 import { Validation } from "./Validation";
-import * as zod from "zod";
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
   ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>
   : Path extends `:${infer Param}` ? Param : undefined;
  */
 
-export default class EndpointBuilder<R = any,
-  P extends Params | undefined = undefined,
-  Q extends Query | undefined = undefined,
-  B extends Body | undefined = undefined> {
-
+export default class EndpointBuilder<R = any, P extends Params | undefined = undefined, Q extends Query | undefined = undefined, B extends Body | undefined = undefined> {
   private api: Api;
   private readonly validation: Validation<R, P, Q, B> = {};
 
@@ -41,9 +37,8 @@ export default class EndpointBuilder<R = any,
   }
 
   build<Path extends string>(config: Omit<EndpointConfig<R, P, Q, B, Path>, "validation">): Endpoint<R, P, Q, B> {
-    const endpoint = new Endpoint(this.api, {...config, validation: this.validation});
+    const endpoint = new Endpoint(this.api, { ...config, validation: this.validation });
     (this.api as any).endpoints[endpoint.id] = endpoint as Endpoint;
     return endpoint as any;
   }
-
 }

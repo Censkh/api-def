@@ -8,20 +8,16 @@
   "sideEffects": false,
   "scripts": {
     "prepublishOnly": "npm run test && npm run build",
-    "test": "npm run test:types && npm run test:lint && npm run test:unit",
-    "test:unit": "ava",
-    "test:lint": "npm run lint:strict",
+    "test": "npm run test:types && npm run check && npm run test:unit",
+    "test:unit": "bun test",
     "test:types": "tsc --noEmit -p .",
     "example:start": "cd example && npm run start",
-    "lint": "esw --ext .tsx,.ts src",
-    "lint:watch": "npm run lint -- --watch",
-    "lint:fix": "npm run lint -- --fix",
-    "lint:strict": "npm run lint -- --max-warnings 0",
+    "check:fix": "tsc --noEmit --project tsconfig.json && npx @biomejs/biome check --apply-unsafe .",
+    "check": "tsc --noEmit --project tsconfig.json && npx @biomejs/biome check .",
     "cleanup": "rimraf esm && rimraf cjs",
     "build": "npm run cleanup && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --module es2015 --target es2016 --outDir esm --preserveWatchOutput",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs --preserveWatchOutput",
-    "build:watch": "npm-run-all -p \"build:esm -- -w\" \"build:cjs -- -w\" \"lint:watch\"",
     "website:dev": "cd website && npm run start",
     "website:deploy": "cd website && npm run deploy"
   },
@@ -46,34 +42,17 @@
     "cjs/"
   ],
   "repository": "https://github.com/Censkh/api-def",
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "files": [
-      "src/tests/**/*.test.ts"
-    ],
-    "nodeArguments": [
-      "--require=@esbuild-kit/cjs-loader"
-    ]
-  },
   "devDependencies": {
-    "@babel/preset-env": "7.14.8",
-    "@babel/preset-typescript": "7.14.5",
-    "@esbuild-kit/cjs-loader": "2.4.0",
+    "@biomejs/biome": "^1.5.3",
     "@types/axios": "0.14.0",
-    "@types/node": "16.4.6",
-    "@types/qs": "6.9.8",
-    "@typescript-eslint/eslint-plugin": "4.28.5",
-    "@typescript-eslint/parser": "4.28.5",
-    "ava": "5.0.1",
-    "axios": "1.1.3",
+    "@types/node": "20.11.6",
+    "@types/qs": "6.9.11",
+    "axios": "1.6.6",
     "cross-env": "7.0.3",
-    "eslint": "7.31.0",
-    "eslint-watch": "7.0.0",
     "npm-run-all": "4.1.5",
     "qs": "6.11.2",
-    "typescript": "4.8.4",
+    "typescript": "5.3.3",
+    "@types/jest": "^29.5.11",
     "zod": "3.22.4"
   }
 }

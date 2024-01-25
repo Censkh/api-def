@@ -1,50 +1,28 @@
-import {
-  ApiResponse,
-  Body,
-  ComputedRequestConfig,
-  Params,
-  Query,
-  RequestConfig,
-  RequestHost,
-  RetryOptions,
-} from "./ApiTypes";
+import { ApiResponse, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost, RetryOptions } from "./ApiTypes";
 
-import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
-import RequestContext from "./RequestContext";
 import { EventResultType, RequestEvent } from "./ApiConstants";
+import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
+import { EndpointMockingConfig } from "./MockingTypes";
+import RequestContext from "./RequestContext";
+import { RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
+import { textDecode } from "./TextDecoding";
+import MockRequestBackend from "./backend/MockRequestBackend";
 import retry from "./util/retry";
 import { RetryFunction, RetryOptions as InternalRetryOptions } from "./util/retry/interfaces";
-import MockRequestBackend from "./backend/MockRequestBackend";
-import { EndpointMockingConfig } from "./MockingTypes";
-import { convertToRequestError, isRequestError, RequestError, RequestErrorCode } from "./RequestError";
-import { textDecode } from "./TextDecoding";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
 const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
-export const submit = async <R,
-  P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined>(
-  host: RequestHost,
-  config: RequestConfig<P, Q, B>,
-  mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
-): Promise<ApiResponse<R>> => {
+export const submit = async <R, P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(host: RequestHost, config: RequestConfig<P, Q, B>, mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined): Promise<ApiResponse<R>> => {
   const computedConfig: ComputedRequestConfig<P, Q, B> = host.computeConfig(config);
 
   const backend = mocking ? MOCK_REQUEST_BACKEND : host.getRequestBackend();
 
-  const context = new RequestContext<R, P, Q, B>(
-    backend,
-    host,
-    computedConfig,
-    host.computePath(host.path, config as RequestConfig),
-    mocking,
-  );
+  const context = new RequestContext<R, P, Q, B>(backend, host, computedConfig, host.computePath(host.path, config as RequestConfig), mocking);
 
-  const {key} = context;
+  const { key } = context;
 
   // don't do this -- should only be for GET requests anyway and should be opt-in
   /*
@@ -55,7 +33,7 @@ export const submit = async <R,
   }
   */
 
-  const {lock} = context.computedConfig || {};
+  const { lock } = context.computedConfig || {};
 
   if (typeof lock === "string") {
     const lockedContext = locks[lock];
@@ -66,15 +44,10 @@ export const submit = async <R,
   }
 
   try {
-    let response = await (runningOperations[key] = makeRequest(
-      context as RequestContext<R>,
-    ));
+    let response = await (runningOperations[key] = makeRequest(context as RequestContext<R>));
 
     const successEventResult = await context.triggerEvent(RequestEvent.Success);
-    if (
-      successEventResult &&
-      successEventResult.type === EventResultType.Respond
-    ) {
+    if (successEventResult && successEventResult.type === EventResultType.Respond) {
       context.response = response = successEventResult.response;
     }
 
@@ -96,19 +69,14 @@ const parseRetryOptions = (retryConfig: number | false | RetryOptions | undefine
   }
 
   if (typeof retryConfig === "number") {
-    return {maxAttempts: retryConfig};
+    return { maxAttempts: retryConfig };
   }
-  return {maxAttempts: 0};
+  return { maxAttempts: 0 };
 };
 
-const makeRequest = async <R>(
-  context: RequestContext<R>,
-): Promise<ApiResponse<R>> => {
+const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R>> => {
   const beforeSendEventResult = await context.triggerEvent(RequestEvent.BeforeSend);
-  if (
-    beforeSendEventResult &&
-    beforeSendEventResult.type === EventResultType.Respond
-  ) {
+  if (beforeSendEventResult && beforeSendEventResult.type === EventResultType.Respond) {
     return (context.response = beforeSendEventResult.response);
   }
 
@@ -152,7 +120,7 @@ const makeRequest = async <R>(
     context.stats.attempt++;
 
     try {
-      const {promise, canceler} = context.backend.makeRequest(context);
+      const { promise, canceler } = context.backend.makeRequest(context);
       context.addCanceller(canceler);
       const response = await promise;
       const parsedResponse = (await parseResponse<R>(context, response))!;
@@ -166,9 +134,8 @@ const makeRequest = async <R>(
         });
       }
 
-
       context.response = parsedResponse;
-      return (parsedResponse);
+      return parsedResponse;
     } catch (rawError: any) {
       if (context.cancelled) {
         rawError.isCancelledRequest = true;
@@ -201,9 +168,7 @@ const makeRequest = async <R>(
       }
 
       // error is unrecoverable, bail
-      const unrecoverableErrorEventResult = await context.triggerEvent(
-        RequestEvent.UnrecoverableError,
-      );
+      const unrecoverableErrorEventResult = await context.triggerEvent(RequestEvent.UnrecoverableError);
       if (unrecoverableErrorEventResult) {
         if (unrecoverableErrorEventResult.type === EventResultType.Respond) {
           return unrecoverableErrorEventResult.response;
@@ -228,7 +193,7 @@ const makeRequest = async <R>(
     }
   }
 
-  return (response!);
+  return response;
 };
 
 const parseResponse = async <R = any>(context: RequestContext, response: any, error?: boolean): Promise<ApiResponse<R> | null | undefined> => {
@@ -236,16 +201,17 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
     const parsedResponse = await context.backend.convertResponse<R>(context, response);
 
     // lowercase all header names
-    (parsedResponse as any).headers = parsedResponse.__lowercaseHeaders || Object.keys(parsedResponse.headers).reduce((headers, header) => {
-      headers[header.toLowerCase()] = parsedResponse.headers[header];
-      return headers;
-    }, {} as any);
+    (parsedResponse as any).headers =
+      parsedResponse.__lowercaseHeaders ||
+      Object.keys(parsedResponse.headers).reduce((headers, header) => {
+        headers[header.toLowerCase()] = parsedResponse.headers[header];
+        return headers;
+      }, {} as any);
 
     const contentType = parsedResponse.headers["content-type"];
     const inferredResponseType = inferResponseType(contentType);
 
     if (!error) {
-
       // expand to array buffer once we support that in inferResponseType
       if (inferredResponseType === "text" && context.responseType === "json") {
         throw convertToRequestError({
@@ -258,10 +224,7 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
 
       // transform arrayBuffer to json
       if (inferredResponseType === "arraybuffer" && context.responseType === "json") {
-        if (
-          parsedResponse.data &&
-          typeof parsedResponse.data === "object"
-        ) {
+        if (parsedResponse.data && typeof parsedResponse.data === "object") {
           const data = response.data;
           if (data.constructor?.name === "ArrayBuffer") {
             try {

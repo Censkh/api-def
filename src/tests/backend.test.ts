@@ -1,19 +1,17 @@
-import test from "ava";
-import { Api, setRequestBackend } from "../Api";
-import FetchRequestBackend from "../backend/FetchRequestBackend";
-import AxiosRequestBackend from "../backend/AxiosRequestBackend";
 import axios from "axios";
+import { Api, setRequestBackend } from "../Api";
+import AxiosRequestBackend from "../backend/AxiosRequestBackend";
+import FetchRequestBackend from "../backend/FetchRequestBackend";
 
 const cleanResponse = (response: any) => {
-  delete response.headers;
-  delete response.__lowercaseHeaders;
+  response.headers = undefined;
+  response.__lowercaseHeaders = undefined;
   return response;
 };
 
-test("request backends output", async (t) => {
-
+test("request backends output", async () => {
   const api = new Api({
-    baseUrl: "example.com",
+    baseUrl: "httpstat.us",
     name: "Example API",
 
     middleware: [
@@ -27,14 +25,12 @@ test("request backends output", async (t) => {
     ],
   });
 
-  const fetchPage = api.endpoint()
-    .queryOf<string | undefined>()
-    .build({
-      name: "Fetch Page",
-      id: "fetchPage",
-      method: "get",
-      path: "/",
-    });
+  const fetchPage = api.endpoint().queryOf<string | undefined>().build({
+    name: "Get 200",
+    id: "200",
+    method: "get",
+    path: "/200",
+  });
 
   setRequestBackend(new FetchRequestBackend());
 
@@ -48,7 +44,6 @@ test("request backends output", async (t) => {
     query: "test",
   });
 
-  t.deepEqual(cleanResponse(fetchResult), cleanResponse(axiosResult));
-  t.is(fetchResult.url, "https://example.com/?test=true&id=abc");
-
+  expect(cleanResponse(fetchResult)).toEqual(cleanResponse(axiosResult));
+  expect(fetchResult.url).toBe("https://httpstat.us/200?test=true&id=abc");
 });

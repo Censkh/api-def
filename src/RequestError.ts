@@ -1,6 +1,6 @@
 import { ApiResponse } from "./ApiTypes";
-import { EnumOf } from "./Utils";
 import RequestContext from "./RequestContext";
+import { EnumOf } from "./Utils";
 
 export const RequestErrorCode = {
   MISC_UNKNOWN_ERROR: "misc/unknown-error",
@@ -21,7 +21,7 @@ export interface RequestError extends Error {
   isRequestError: true;
   response: ApiResponse | undefined | null;
   code: string;
-  attempts: number,
+  attempts: number;
 }
 
 export const isRequestError = (error: Error): error is RequestError => {
@@ -31,12 +31,12 @@ export const isRequestError = (error: Error): error is RequestError => {
 export interface RequestErrorConfig {
   error: Error;
   code: string;
-  context: RequestContext,
+  context: RequestContext;
   response?: ApiResponse | null;
 }
 
 export const convertToRequestError = (config: RequestErrorConfig): RequestError => {
-  const {error, context, response, code} = config;
+  const { error, context, response, code } = config;
 
   const body = context.getParsedBody();
 
@@ -55,13 +55,13 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
   });
 
   try {
-    Object.defineProperty(resultError, "message", {value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} (${code})`});
+    Object.defineProperty(resultError, "message", { value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} (${code})` });
   } catch (e) {
     // ignore
   }
 
-  delete (resultError as any).config;
-  delete (resultError as any).toJSON;
+  (resultError as any).config = undefined;
+  (resultError as any).toJSON = undefined;
 
   Object.setPrototypeOf(error, Error);
 

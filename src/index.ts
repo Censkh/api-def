@@ -1,5 +1,4 @@
 /// <reference types="typescript" />
-"use strict";
 
 export * from "./Api";
 export * from "./ApiTypes";

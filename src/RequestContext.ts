@@ -1,30 +1,15 @@
-import {
-  ApiResponse,
-  Body,
-  ComputedRequestConfig,
-  EventResult,
-  Headers,
-  Params,
-  Query,
-  RequestCacheInfo,
-  RequestContextStats,
-  RequestEventHandlers,
-  RequestHost,
-} from "./ApiTypes";
 import { Api } from "./Api";
-import * as Utils from "./Utils";
 import { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import { ApiResponse, Body, ComputedRequestConfig, EventResult, Headers, Params, Query, RequestCacheInfo, RequestContextStats, RequestEventHandlers, RequestHost } from "./ApiTypes";
 import { EndpointMockingConfig } from "./MockingTypes";
 import { RequestError } from "./RequestError";
-import RequestBackend from "./backend/RequestBackend";
+import * as Utils from "./Utils";
 import { Validation } from "./Validation";
+import RequestBackend from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 
-export default class RequestContext<R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined> {
+export default class RequestContext<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> {
   readonly id: number;
   readonly key: string;
   private computedPath: string;
@@ -39,7 +24,7 @@ export default class RequestContext<R = any,
   private canceler: (() => void) | null = null;
   response: ApiResponse<R> | null | undefined = undefined;
   error: RequestError | null = null;
-  readonly cacheInfo: RequestCacheInfo = {cached: false, source: null};
+  readonly cacheInfo: RequestCacheInfo = { cached: false, source: null };
 
   cancelled = false;
   readonly computedConfig: ComputedRequestConfig<P, Q, B>;
@@ -51,13 +36,7 @@ export default class RequestContext<R = any,
 
   readonly validation: Validation<R, P, Q, B>;
 
-  constructor(
-    backend: RequestBackend,
-    host: RequestHost,
-    config: ComputedRequestConfig<P, Q, B>,
-    computedPath: string,
-    mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
-  ) {
+  constructor(backend: RequestBackend, host: RequestHost, config: ComputedRequestConfig<P, Q, B>, computedPath: string, mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined) {
     this.backend = backend;
     this.id = contextIdCounter++;
     this.host = host;
@@ -97,14 +76,13 @@ export default class RequestContext<R = any,
   }
 
   private initMiddleware(): void {
-    const {middleware} = this.api;
+    const { middleware } = this.api;
     for (let i = 0; i < middleware.length; i++) {
       const events = middleware[i];
       const eventTypes = Object.keys(events);
       for (let n = 0; n < eventTypes.length; n++) {
         const eventType = eventTypes[n] as RequestEvent;
-        const eventHandlersForType =
-          this.eventHandlers[eventType] || (this.eventHandlers[eventType] = []);
+        const eventHandlersForType = this.eventHandlers[eventType] || (this.eventHandlers[eventType] = []);
         const middlewareEventHandlers = events[eventType];
         if (middlewareEventHandlers) {
           eventHandlersForType.push(middlewareEventHandlers);
@@ -117,25 +95,21 @@ export default class RequestContext<R = any,
     let key = this.computedPath.trim();
 
     if (this.computedConfig.queryString) {
-      key += "?" + this.computedConfig.queryString;
+      key += `?${this.computedConfig.queryString}`;
     }
 
     return key;
   }
 
   updateHeaders(newHeaders: Headers): this {
-    this.computedConfig.headers = Utils.assign(
-      {},
-      this.computedConfig.headers,
-      newHeaders,
-    );
+    this.computedConfig.headers = Utils.assign({}, this.computedConfig.headers, newHeaders);
     this.parseRequestBody();
     return this;
   }
 
   private parseRequestBody() {
     if (this.computedConfig.body && this.computedConfig.headers) {
-      const contentTypeKey = Object.keys(this.computedConfig.headers).find(key => key.toLowerCase() === "content-type");
+      const contentTypeKey = Object.keys(this.computedConfig.headers).find((key) => key.toLowerCase() === "content-type");
       const contentType = contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
       if (contentType === "application/x-www-form-urlencoded") {
         const searchParams = new URLSearchParams();
@@ -157,17 +131,11 @@ export default class RequestContext<R = any,
   }
 
   updateQuery(newQuery: Partial<Q>): this {
-    this.computedConfig.queryObject = Utils.assign(
-      {},
-      this.computedConfig.queryObject,
-      newQuery,
-    );
+    this.computedConfig.queryObject = Utils.assign({}, this.computedConfig.queryObject, newQuery);
     return this;
   }
 
-  async triggerEvent(
-    eventType: RequestEvent,
-  ): Promise<EventResult<R> | undefined> {
+  async triggerEvent(eventType: RequestEvent): Promise<EventResult<R> | undefined> {
     const eventHandlers = this.eventHandlers[eventType];
     if (eventHandlers) {
       for (let i = 0; i < eventHandlers.length; i++) {
@@ -216,12 +184,8 @@ export default class RequestContext<R = any,
   }
 
   private generateRequestUrl(): URL {
-    let path = !this.baseUrl.endsWith("/")
-      ? this.baseUrl + "/"
-      : this.baseUrl;
-    path += this.computedPath.startsWith("/")
-      ? this.computedPath.substring(1)
-      : this.computedPath;
+    let path = !this.baseUrl.endsWith("/") ? `${this.baseUrl}/` : this.baseUrl;
+    path += this.computedPath.startsWith("/") ? this.computedPath.substring(1) : this.computedPath;
 
     let origin: string | undefined = undefined;
     if (typeof window !== "undefined") {

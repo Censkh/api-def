@@ -1,25 +1,14 @@
+import { RequestMethod } from "./ApiConstants";
+import { ApiResponse, BaseRequestConfig, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost, RequestMiddleware } from "./ApiTypes";
 import Endpoint from "./Endpoint";
-import * as Requester from "./Requester";
-import {
-  ApiResponse,
-  BaseRequestConfig,
-  Body, ComputedRequestConfig,
-  Params,
-  Query,
-  RequestConfig,
-  RequestHost,
-  RequestMiddleware,
-} from "./ApiTypes";
-import RequestBackend from "./backend/RequestBackend";
 import EndpointBuilder from "./EndpointBuilder";
-import * as Utils from "./Utils";
-import FetchRequestBackend from "./backend/FetchRequestBackend";
-import {
-  RequestMethod,
-} from "./ApiConstants";
 import { ApiMockingConfig } from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
+import * as Requester from "./Requester";
+import * as Utils from "./Utils";
 import { Validation } from "./Validation";
+import FetchRequestBackend from "./backend/FetchRequestBackend";
+import RequestBackend from "./backend/RequestBackend";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
@@ -64,15 +53,10 @@ class HotRequestHost implements RequestHost {
     return this.api.baseUrl;
   }
 
-  computeConfig<P extends Params | undefined,
-    Q extends Query | undefined,
-    B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
+  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
 
-    return computeRequestConfig([
-      apiDefaults,
-      config,
-    ]);
+    return computeRequestConfig([apiDefaults, config]);
   }
 
   computePath(path: string, config: RequestConfig): string {
@@ -82,7 +66,6 @@ class HotRequestHost implements RequestHost {
   getRequestBackend(): RequestBackend {
     return this.api.getRequestBackend();
   }
-
 }
 
 let defaultBackendMessageShown = false;
@@ -129,24 +112,17 @@ export class Api implements ApiInfo {
   }
 
   getConfig(): BaseRequestConfig {
-    return (
-      (typeof this.config === "function" ? this.config() : this.config) ||
-      {}
-    );
+    return (typeof this.config === "function" ? this.config() : this.config) || {};
   }
 
-  private hotRequest = (requestMethod: RequestMethod) => async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> => (
-    await Requester.submit(
-      new HotRequestHost(this, path, requestMethod),
-      config,
-      null,
-    )
-  );
+  private hotRequest =
+    (requestMethod: RequestMethod) =>
+    async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> =>
+      await Requester.submit(new HotRequestHost(this, path, requestMethod), config, null);
 
   public get = this.hotRequest(RequestMethod.GET);
   public post = this.hotRequest(RequestMethod.POST);
   public put = this.hotRequest(RequestMethod.PUT);
   public delete = this.hotRequest(RequestMethod.DELETE);
   public patch = this.hotRequest(RequestMethod.PATCH);
-
 }

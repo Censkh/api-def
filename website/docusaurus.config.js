@@ -1,14 +1,14 @@
 module.exports = {
-  title                : "ApiDef",
-  tagline              : "The tagline of my site",
-  url                  : "https://censkh.github.io/",
-  baseUrl              : "/api-def/",
-  onBrokenLinks        : "throw",
+  title: "ApiDef",
+  tagline: "The tagline of my site",
+  url: "https://censkh.github.io/",
+  baseUrl: "/api-def/",
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
-  favicon              : "img/favicon.ico",
-  organizationName     : "Censkh", // Usually your GitHub org/user name.
-  projectName          : "api-def", // Usually your repo name.
-  themeConfig          : {
+  favicon: "img/favicon.ico",
+  organizationName: "Censkh", // Usually your GitHub org/user name.
+  projectName: "api-def", // Usually your repo name.
+  themeConfig: {
     navbar: {
       title: "ApiDef",
       /*logo : {
@@ -17,28 +17,28 @@ module.exports = {
       },*/
       items: [
         {
-          to            : "/",
+          to: "/",
           activeBasePath: "/",
-          label         : "Docs",
-          position      : "left",
+          label: "Docs",
+          position: "left",
         },
         //{to: "blog", label: "Blog", position: "left"},
         {
-          href    : "https://github.com/censkh/api-def",
-          label   : "GitHub",
+          href: "https://github.com/censkh/api-def",
+          label: "GitHub",
           position: "right",
         },
       ],
     },
     footer: {
-      style    : "dark",
-      links    : [
+      style: "dark",
+      links: [
         {
           title: "Docs",
           items: [
             {
               label: "Usage",
-              to   : "/",
+              to: "/",
             },
           ],
         },
@@ -68,7 +68,7 @@ module.exports = {
              },*/
             {
               label: "GitHub",
-              href : "https://github.com/facebook/docusaurus",
+              href: "https://github.com/facebook/docusaurus",
             },
           ],
         },
@@ -76,23 +76,20 @@ module.exports = {
       //copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
   },
-  themes          : [
-    "@docusaurus/theme-live-codeblock",
-  ],
-  plugins         : ["docusaurus-plugin-sass"],
-  presets              : [
+  themes: ["@docusaurus/theme-live-codeblock"],
+  plugins: ["docusaurus-plugin-sass"],
+  presets: [
     [
       "@docusaurus/preset-classic",
       {
         pages: false,
-        docs : {
+        docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl:
-            "https://github.com/censkh/api-def/edit/master/website/",
+          editUrl: "https://github.com/censkh/api-def/edit/master/website/",
         },
-       /* blog : {
+        /* blog : {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:

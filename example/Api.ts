@@ -1,4 +1,4 @@
-import {Api} from "api-def";
+import { Api } from "api-def";
 
 let mockingEnabled = false;
 
@@ -13,7 +13,7 @@ export const isMockingEnabled = () => {
 };
 
 const api = new Api({
-  name   : "Test API",
+  name: "Test API",
   baseUrl: "https://jsonplaceholder.typicode.com/",
   mocking: {
     enabled: isMockingEnabled,
@@ -22,21 +22,22 @@ const api = new Api({
 
 export type User = { id: string; name: string; username: string; email: string };
 
-export const fetchUsers = api.endpoint()
+export const fetchUsers = api
+  .endpoint()
   .responseOf<Array<User>>()
   .build({
-    id    : "fetch_users",
-    path  : "/users",
+    id: "fetch_users",
+    path: "/users",
     method: "get",
 
     mocking: {
-      delay  : [250, 500],
+      delay: [250, 500],
       handler: async (req, res) => {
         return res.status(200).send([
           {
-            id      : "asdad",
-            name    : "Mock User",
-            email   : "mock@user.com",
+            id: "asdad",
+            name: "Mock User",
+            email: "mock@user.com",
             username: "mock_user",
           },
         ]);

@@ -1,24 +1,16 @@
-import {
-  BaseRequestConfig,
-  Body,
-  COMPUTED_CONFIG_SYMBOL,
-  ComputedRequestConfig,
-  Params,
-  Query,
-  RequestConfig,
-} from "./ApiTypes";
-import * as Utils from "./Utils";
+import { BaseRequestConfig, Body, COMPUTED_CONFIG_SYMBOL, ComputedRequestConfig, Params, Query, RequestConfig } from "./ApiTypes";
 import { DEFAULT_QUERY_PARSE, DEFAULT_QUERY_STRINGIFY } from "./QueryHandling";
+import * as Utils from "./Utils";
 
-const MERGED_CONFIG_KEYS = [ "headers" ];
+const MERGED_CONFIG_KEYS = ["headers"];
 
-export const computeRequestConfig = <P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined>(configs: (RequestConfig<P, Q, B> | BaseRequestConfig | undefined)[]): ComputedRequestConfig<P, Q, B> => {
-
-  const computedConfig: ComputedRequestConfig<P, Q, B> = Utils.assign({
-    [COMPUTED_CONFIG_SYMBOL]: true,
-  }, ...configs);
+export const computeRequestConfig = <P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(configs: (RequestConfig<P, Q, B> | BaseRequestConfig | undefined)[]): ComputedRequestConfig<P, Q, B> => {
+  const computedConfig: ComputedRequestConfig<P, Q, B> = Utils.assign(
+    {
+      [COMPUTED_CONFIG_SYMBOL]: true,
+    },
+    ...configs,
+  );
 
   // merge other values
   for (const key of MERGED_CONFIG_KEYS) {
@@ -37,7 +29,7 @@ export const computeRequestConfig = <P extends Params | undefined,
     parse: computedConfig.queryHandling?.parse || DEFAULT_QUERY_PARSE,
     stringify: computedConfig.queryHandling?.stringify || (computedConfig as any).queryParser || DEFAULT_QUERY_STRINGIFY,
   };
-  delete (computedConfig as any).queryParser;
+  (computedConfig as any).queryParser = undefined;
 
   const query: Q = (computedConfig as any).query;
 
@@ -52,10 +44,10 @@ export const computeRequestConfig = <P extends Params | undefined,
         }
 
         if (typeof query === "string") {
-          return queryString = query;
+          return (queryString = query);
         }
 
-        return queryString = computedConfig.queryHandling.stringify(query);
+        return (queryString = computedConfig.queryHandling.stringify(query));
       },
     });
 
@@ -66,10 +58,10 @@ export const computeRequestConfig = <P extends Params | undefined,
         }
 
         if (typeof query === "string") {
-          return queryObject = computedConfig.queryHandling.parse(query);
+          return (queryObject = computedConfig.queryHandling.parse(query));
         }
 
-        return queryObject = query;
+        return (queryObject = query);
       },
 
       set(value: any) {
@@ -80,5 +72,4 @@ export const computeRequestConfig = <P extends Params | undefined,
   }
 
   return computedConfig;
-
 };

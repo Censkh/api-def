@@ -1,9 +1,8 @@
-import test from "ava";
 import * as zod from "zod";
 import { Api } from "../Api";
 
 const api = new Api({
-  baseUrl: "example.com",
+  baseUrl: "httpstat.us",
   name: "Example API",
 
   mocking: {
@@ -11,34 +10,35 @@ const api = new Api({
   },
 });
 
-const queryReturnEndpoint = api.endpoint()
-  .queryOf(zod.object({
-    test: zod.string(),
-  }))
-  .responseOf(zod.object({
-    name: zod.string(),
-    query: zod.object({
-      test: zod.string().refine((v) => !isNaN(Number(v)) && Number(v) < 255, "below 255"),
+const queryReturnEndpoint = api
+  .endpoint()
+  .queryOf(
+    zod.object({
+      test: zod.string(),
     }),
-  }))
+  )
+  .responseOf(
+    zod.object({
+      name: zod.string(),
+      query: zod.object({
+        test: zod.string().refine((v) => !Number.isNaN(Number(v)) && Number(v) < 255, "below 255"),
+      }),
+    }),
+  )
   .build({
-    name: "Fetch Users",
-    id: "fetchUsers",
+    name: "Get 200",
+    id: "200",
     method: "get",
-    path: "/users",
+    path: "/200",
 
     mocking: {
       handler: (req, res) => {
-        return res.status(200).send(
-          { name: "Test", query: req.query },
-        );
+        return res.status(200).send({ name: "Test", query: req.query });
       },
     },
-
   });
 
-test("validation", async (t) => {
-
+test("validation", async () => {
   {
     const res = await queryReturnEndpoint.submit({
       query: {
@@ -46,28 +46,36 @@ test("validation", async (t) => {
       },
     });
 
-    t.is(res.data.query.test, "200");
+    expect(res.data.query.test).toBe("200");
   }
 
   {
-    const error: any =  await t.throwsAsync(async () => await queryReturnEndpoint.submit({
-      query: {
-        test: {} as any,
-      },
-    }));
-    t.is(error.code, "validation/query-validate-error");
-    t.is(error.issues?.[0].code, "invalid_type");
+    let error: any;
+    try {
+      await queryReturnEndpoint.submit({
+        query: {
+          test: {} as any,
+        },
+      });
+    } catch (e) {
+      error = e;
+    }
+    expect(error.code).toBe("validation/query-validate-error");
+    expect(error.issues?.[0].code).toBe("invalid_type");
   }
 
   {
-    const error: any =  await t.throwsAsync(async () => await queryReturnEndpoint.submit({
-      query: {
-        test: "300",
-      },
-    }));
-
-    t.is(error.code, "validation/response-validate-error");
-    t.is(error.issues?.[0].message, "below 255");
+    let error: any;
+    try {
+      await queryReturnEndpoint.submit({
+        query: {
+          test: "300",
+        },
+      });
+    } catch (e) {
+      error = e;
+    }
+    expect(error.code).toBe("validation/response-validate-error");
+    expect(error.issues?.[0].message).toBe("below 255");
   }
-
 });

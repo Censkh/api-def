@@ -14,7 +14,7 @@ export const DEFAULT_QUERY_PARSE = (queryString: string): Record<string, any> =>
   const query: Record<string, any> = {};
   const queryStrings = queryString.split("&");
   for (let i = 0; i < queryStrings.length; i++) {
-    const [ key, value ] = queryStrings[i].split("=");
+    const [key, value] = queryStrings[i].split("=");
     query[key] = !value?.length ? true : value;
   }
   return query;

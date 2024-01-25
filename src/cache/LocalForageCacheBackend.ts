@@ -1,7 +1,6 @@
 import { CacheBackend } from "./CacheBackend";
 
 export default class LocalForageCacheBackend implements CacheBackend {
-
   private readonly store: any;
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -26,5 +25,4 @@ export default class LocalForageCacheBackend implements CacheBackend {
   setItem<T>(key: string, value: T): Promise<void> {
     return this.store.setItem(key, value);
   }
-
 }

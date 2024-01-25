@@ -1,9 +1,9 @@
-import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 import { ApiResponse } from "../ApiTypes";
+import { inferResponseType } from "../ApiUtils";
 import RequestContext from "../RequestContext";
 import * as Utils from "../Utils";
 import { Fetch, getGlobal, getGlobalFetch } from "../Utils";
-import { inferResponseType } from "../ApiUtils";
+import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 class FetchError extends Error {
   response?: Response;
@@ -25,9 +25,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     }
   }
 
-  async extractResponseFromError(
-    error: Error,
-  ): Promise<Response | null | undefined> {
+  async extractResponseFromError(error: Error): Promise<Response | null | undefined> {
     if ("response" in error) {
       const fetchError = error as FetchError;
       return fetchError.response ? fetchError.response : null;
@@ -35,9 +33,12 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return undefined;
   }
 
-  async convertResponse<T>(context: RequestContext, response: Response & {
-    __text?: string
-  }): Promise<ConvertedApiResponse<T>> {
+  async convertResponse<T>(
+    context: RequestContext,
+    response: Response & {
+      __text?: string;
+    },
+  ): Promise<ConvertedApiResponse<T>> {
     const contentType = response.headers.get("Content-Type");
     const responseType = inferResponseType(contentType);
 
@@ -46,7 +47,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     }
     let data: any = response.__text;
 
-    const {status, headers} = response;
+    const { status, headers } = response;
 
     try {
       if (responseType === "arraybuffer") {
@@ -80,7 +81,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       throw new Error("[api-def] No fetch impl was provided to FetchRequestBackend");
     }
 
-    const {computedConfig} = context;
+    const { computedConfig } = context;
     // abort controller is a newer feature than fetch
     const abortController = AbortController && new AbortController();
     const abortSignal = abortController ? abortController.signal : undefined;
@@ -91,10 +92,13 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const bodyJsonify = body !== null && typeof body === "object";
 
-    const headers = Utils.assign({
-      // logic from axios
-      "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
-    }, computedConfig.headers);
+    const headers = Utils.assign(
+      {
+        // logic from axios
+        "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
+      },
+      computedConfig.headers,
+    );
 
     const parsedHeaders = Object.keys(headers).reduce((parsedHeaders, key) => {
       const value = headers[key];
@@ -108,7 +112,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const promise: Promise<Response> = this.fetch(url.href, {
       method: context.method.toUpperCase(),
-      body: bodyJsonify ? JSON.stringify(body) : body as any,
+      body: bodyJsonify ? JSON.stringify(body) : (body as any),
       headers: parsedHeaders,
       mode: "cors",
       signal: abortSignal,
@@ -129,8 +133,8 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       canceler: abortSignal
         ? () => !responded && abortController.abort()
         : () => {
-          softAbort = true;
-        },
+            softAbort = true;
+          },
     };
   }
 

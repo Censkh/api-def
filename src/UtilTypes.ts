@@ -7,4 +7,3 @@ export type ParamsOf<E extends Endpoint<any, any, any, any>> = E extends Endpoin
 export type QueryOf<E extends Endpoint<any, any, any, any>> = E extends Endpoint<any, any, infer Q, any> ? Q : never;
 
 export type BodyOf<E extends Endpoint<any, any, any, any>> = E extends Endpoint<any, any, any, infer B> ? B : never;
-

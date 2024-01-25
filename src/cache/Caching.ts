@@ -21,7 +21,7 @@ export interface CacheEntry {
 export const setCachedItem = async <T>(key: string, value: T, expiry?: number): Promise<T> => {
   const entry: CacheEntry = {
     data: value,
-    expiry: expiry === undefined || isNaN(expiry) ? null : expiry,
+    expiry: expiry === undefined || Number.isNaN(expiry) ? null : expiry,
   };
   await cacheBackend.setItem(key, entry);
   return value;

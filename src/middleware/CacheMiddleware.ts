@@ -1,31 +1,29 @@
+import { CacheSource, EventResultType, RequestEvent, RequestMethod } from "../ApiConstants";
 import { RequestMiddleware } from "../ApiTypes";
 import * as Caching from "../cache/Caching";
-import { CacheSource, EventResultType, RequestEvent, RequestMethod } from "../ApiConstants";
 
 export interface CacheMiddlewareOptions {
   defaultExpiry?: number;
   predicate?: () => boolean;
 }
 
-const CacheMiddleware = (
-  options: CacheMiddlewareOptions = {},
-): RequestMiddleware => {
+const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddleware => {
   return {
     [RequestEvent.Success]: async (context) => {
       if (context.method !== RequestMethod.Get) return;
 
-      const {cache} = context.computedConfig || {};
+      const { cache } = context.computedConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {
-        const expiry = typeof cache === "number" ? cache : (options.defaultExpiry || Caching.DEFAULT_CACHE_EXPIRY);
+        const expiry = typeof cache === "number" ? cache : options.defaultExpiry || Caching.DEFAULT_CACHE_EXPIRY;
         await Caching.setCachedItem(context.key, context.response, expiry);
       }
     },
     [RequestEvent.BeforeSend]: async (context) => {
       if (context.method !== RequestMethod.Get) return;
 
-      const {cache} = context.computedConfig || {};
+      const { cache } = context.computedConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {

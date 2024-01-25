@@ -1,31 +1,23 @@
-import {
-  RetryOptions,
-  RetryOptionsInt,
-} from "../interfaces";
+import { RetryOptions, RetryOptionsInt } from "../interfaces";
 import RetryOperation from "./retryOperation";
 
 export const operation = (options: RetryOptions): RetryOperation => {
   const timeouts = _timeouts(options);
-  return (
-    new RetryOperation(timeouts, {
-      forever: options && (options.forever || options.retries === Infinity),
-      unref: options && options.unref,
-      maxRetryTime: options && options.maxRetryTime,
-    })
-  );
+  return new RetryOperation(timeouts, {
+    forever: options && (options.forever || options.retries === Infinity),
+    unref: options?.unref,
+    maxRetryTime: options?.maxRetryTime,
+  });
 };
 
 const _timeouts = (options: RetryOptions): number[] => {
-
   const createTimeout = (attempt: number, opts: RetryOptionsInt) => {
-    const random = (opts.randomize)
-      ? (Math.random() + 1)
-      : 1;
+    const random = opts.randomize ? Math.random() + 1 : 1;
 
-    let timeout = Math.round(random * Math.max(opts.minTimeout, 1) * Math.pow(opts.factor, attempt));
+    let timeout = Math.round(random * Math.max(opts.minTimeout, 1) * opts.factor ** attempt);
     timeout = Math.min(timeout, opts.maxTimeout);
 
-    return (timeout);
+    return timeout;
   };
 
   const defaultRetries = 10;
@@ -49,14 +41,12 @@ const _timeouts = (options: RetryOptions): number[] => {
     timeouts.push(createTimeout(i, opts));
   }
 
-  if (options && options.forever && !timeouts.length) {
+  if (options?.forever && !timeouts.length) {
     timeouts.push(createTimeout(numRetries, opts));
   }
 
   // sort the array numerically ascending
-  timeouts.sort(function (a, b) {
-    return a - b;
-  });
+  timeouts.sort((a, b) => a - b);
 
-  return (timeouts);
+  return timeouts;
 };
