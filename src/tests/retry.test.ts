@@ -64,9 +64,12 @@ test("make sure retry only happens a max number of times", async () => {
     },
   });
 
-  const error: any = await expect(async () => {
+  let error: any;
+  try {
     await endpoint.submit({});
-  }).toThrow();
+  } catch (e: any) {
+    error = e;
+  }
 
   expect(error.response.status).toBe(404);
   expect(error.attempts).toBe(4);

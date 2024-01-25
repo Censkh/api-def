@@ -1,10 +1,10 @@
 import { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
 import RequestContext from "../RequestContext";
+import { RequestErrorCode, convertToRequestError } from "../RequestError";
 import * as Utils from "../Utils";
 import { Fetch, getGlobal, getGlobalFetch } from "../Utils";
 import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
-import { convertToRequestError, RequestErrorCode } from "../RequestError";
 
 class FetchError extends Error {
   response?: Response;
@@ -56,8 +56,8 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     };
     const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
 
-    let text;
-    let data;
+    let text: string | undefined;
+    let data: any;
 
     try {
       if (responseType === "arraybuffer") {

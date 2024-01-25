@@ -132,6 +132,7 @@ export default class RequestContext<R = any, P extends Params | undefined = Para
 
   updateQuery(newQuery: Partial<Q>): this {
     this.computedConfig.queryObject = Utils.assign({}, this.computedConfig.queryObject, newQuery);
+    this.computedRequestUrl = this.generateRequestUrl();
     return this;
   }
 
