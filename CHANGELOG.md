@@ -1,3 +1,7 @@
+# 0.9.3
+
+- fix non-array buffer and non-json responses having their data as `Promise`
+
 # 0.9.0
 
 - update error messages to be more helpful

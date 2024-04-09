@@ -1,4 +1,13 @@
-import { ApiResponse, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost, RetryOptions } from "./ApiTypes";
+import {
+  ApiResponse,
+  Body,
+  ComputedRequestConfig,
+  Params,
+  Query,
+  RequestConfig,
+  RequestHost,
+  RetryOptions,
+} from "./ApiTypes";
 
 import { EventResultType, RequestEvent } from "./ApiConstants";
 import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
@@ -15,12 +24,22 @@ const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
 const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
-export const submit = async <R, P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(host: RequestHost, config: RequestConfig<P, Q, B>, mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined): Promise<ApiResponse<R>> => {
+export const submit = async <R, P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
+  host: RequestHost,
+  config: RequestConfig<P, Q, B>,
+  mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
+): Promise<ApiResponse<R>> => {
   const computedConfig: ComputedRequestConfig<P, Q, B> = host.computeConfig(config);
 
   const backend = mocking ? MOCK_REQUEST_BACKEND : host.getRequestBackend();
 
-  const context = new RequestContext<R, P, Q, B>(backend, host, computedConfig, host.computePath(host.path, config as RequestConfig), mocking);
+  const context = new RequestContext<R, P, Q, B>(
+    backend,
+    host,
+    computedConfig,
+    host.computePath(host.path, config as RequestConfig),
+    mocking,
+  );
 
   const { key } = context;
 
@@ -196,7 +215,11 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
   return response;
 };
 
-const parseResponse = async <R = any>(context: RequestContext, response: any, error?: boolean): Promise<ApiResponse<R> | null | undefined> => {
+const parseResponse = async <R = any>(
+  context: RequestContext,
+  response: any,
+  error?: boolean,
+): Promise<ApiResponse<R> | null | undefined> => {
   if (response) {
     const parsedResponse = await context.backend.convertResponse<R>(context, response);
 
@@ -215,7 +238,9 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
       // expand to array buffer once we support that in inferResponseType
       if (inferredResponseType === "text" && context.responseType === "json") {
         throw convertToRequestError({
-          error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+          error: new Error(
+            `[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`,
+          ),
           code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
           response: parsedResponse,
           context: context,
@@ -232,7 +257,9 @@ const parseResponse = async <R = any>(context: RequestContext, response: any, er
               response.data = JSON.parse(decodedData);
             } catch (e) {
               throw convertToRequestError({
-                error: new Error(`[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`),
+                error: new Error(
+                  `[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`,
+                ),
                 code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
                 response: parsedResponse,
                 context: context,
@@ -259,7 +286,9 @@ const parseError = async (context: RequestContext, rawError: Error) => {
       errorResponse = await parseResponse(context, extractedResponse, true);
     }
 
-    let code: string = isNetworkError(rawError) ? RequestErrorCode.REQUEST_NETWORK_ERROR : RequestErrorCode.MISC_UNKNOWN_ERROR;
+    let code: string = isNetworkError(rawError)
+      ? RequestErrorCode.REQUEST_NETWORK_ERROR
+      : RequestErrorCode.MISC_UNKNOWN_ERROR;
     if (errorResponse) {
       if (!isAcceptableStatus(errorResponse.status, context.computedConfig.acceptableStatus)) {
         code = RequestErrorCode.REQUEST_INVALID_STATUS;

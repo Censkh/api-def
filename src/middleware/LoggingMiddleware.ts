@@ -50,10 +50,19 @@ const diagnoseError = (error: RequestError): DiagnosedError => {
 };
 
 const formatTime = (time: Date): string => {
-  return `${Utils.padNumber(time.getHours(), 2)}:${Utils.padNumber(time.getMinutes(), 2)}:${Utils.padNumber(time.getSeconds(), 2)}.${Utils.padNumber(time.getMilliseconds(), 3)}`;
+  return `${Utils.padNumber(time.getHours(), 2)}:${Utils.padNumber(time.getMinutes(), 2)}:${Utils.padNumber(
+    time.getSeconds(),
+    2,
+  )}.${Utils.padNumber(time.getMilliseconds(), 3)}`;
 };
 
-const log = (context: RequestContext, type: LogType, message: string, config: LoggingMiddlewareOptions, objects?: Object) => {
+const log = (
+  context: RequestContext,
+  type: LogType,
+  message: string,
+  config: LoggingMiddlewareOptions,
+  objects?: Object,
+) => {
   if (typeof config.predicate === "function" && !config.predicate()) {
     return;
   }
@@ -61,7 +70,13 @@ const log = (context: RequestContext, type: LogType, message: string, config: Lo
   const color = COLOR_MAP[type];
 
   const timestamp = formatTime(new Date());
-  const args: string[] = [`%cnetwork %c[${context.api.name}] ${context.method.toUpperCase()} ${context.path} %c${message} %c@ ${timestamp}`, "color:gray", "color:auto", `color:${color}`, "color:gray"];
+  const args: string[] = [
+    `%cnetwork %c[${context.api.name}] ${context.method.toUpperCase()} ${context.path} %c${message} %c@ ${timestamp}`,
+    "color:gray",
+    "color:auto",
+    `color:${color}`,
+    "color:gray",
+  ];
   /* eslint-disable-next-line no-console */
   console.groupCollapsed(...args);
   /* eslint-disable-next-line no-console */
@@ -78,7 +93,12 @@ const LoggingMiddleware = (config: LoggingMiddlewareOptions = {}): RequestMiddle
     [RequestEvent.Success]: (context) => {
       const cacheSource = context.cacheInfo.source;
 
-      log(context, LogType.Success, `responded with ${context.response?.status}${cacheSource ? ` (cached by ${cacheSource})` : ""}`, config);
+      log(
+        context,
+        LogType.Success,
+        `responded with ${context.response?.status}${cacheSource ? ` (cached by ${cacheSource})` : ""}`,
+        config,
+      );
     },
     [RequestEvent.Error]: (context) => {
       if (context.error) {

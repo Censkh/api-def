@@ -66,13 +66,16 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
         text = await response.text();
         data = JSON.parse(text);
       } else {
-        data = response.text();
+        data = await response.text();
       }
     } catch (error) {
       throw convertToRequestError({
-        error: Object.assign(new Error(`[api-def] Failed to parse response as '${responseType}'${text ? `, got: ${text}` : ""}`), {
-          cause: error,
-        }),
+        error: Object.assign(
+          new Error(`[api-def] Failed to parse response as '${responseType}'${text ? `, got: ${text}` : ""}`),
+          {
+            cause: error,
+          },
+        ),
         code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
         context: context,
         response: convertedResponse,

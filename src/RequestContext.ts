@@ -1,6 +1,18 @@
 import { Api } from "./Api";
 import { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
-import { ApiResponse, Body, ComputedRequestConfig, EventResult, Headers, Params, Query, RequestCacheInfo, RequestContextStats, RequestEventHandlers, RequestHost } from "./ApiTypes";
+import {
+  ApiResponse,
+  Body,
+  ComputedRequestConfig,
+  EventResult,
+  Headers,
+  Params,
+  Query,
+  RequestCacheInfo,
+  RequestContextStats,
+  RequestEventHandlers,
+  RequestHost,
+} from "./ApiTypes";
 import { EndpointMockingConfig } from "./MockingTypes";
 import { RequestError } from "./RequestError";
 import * as Utils from "./Utils";
@@ -9,7 +21,12 @@ import RequestBackend from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 
-export default class RequestContext<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> {
+export default class RequestContext<
+  R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> {
   readonly id: number;
   readonly key: string;
   private computedPath: string;
@@ -36,7 +53,13 @@ export default class RequestContext<R = any, P extends Params | undefined = Para
 
   readonly validation: Validation<R, P, Q, B>;
 
-  constructor(backend: RequestBackend, host: RequestHost, config: ComputedRequestConfig<P, Q, B>, computedPath: string, mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined) {
+  constructor(
+    backend: RequestBackend,
+    host: RequestHost,
+    config: ComputedRequestConfig<P, Q, B>,
+    computedPath: string,
+    mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
+  ) {
     this.backend = backend;
     this.id = contextIdCounter++;
     this.host = host;
@@ -109,8 +132,11 @@ export default class RequestContext<R = any, P extends Params | undefined = Para
 
   private parseRequestBody() {
     if (this.computedConfig.body && this.computedConfig.headers) {
-      const contentTypeKey = Object.keys(this.computedConfig.headers).find((key) => key.toLowerCase() === "content-type");
-      const contentType = contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
+      const contentTypeKey = Object.keys(this.computedConfig.headers).find(
+        (key) => key.toLowerCase() === "content-type",
+      );
+      const contentType =
+        contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
       if (contentType === "application/x-www-form-urlencoded") {
         const searchParams = new URLSearchParams();
         for (const key of Object.keys(this.computedConfig.body)) {

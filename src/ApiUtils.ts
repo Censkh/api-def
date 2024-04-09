@@ -6,7 +6,11 @@ export const isCancelledError = (error: Error): error is CancelledRequestError =
 };
 
 export const isNetworkError = (error: Error): boolean => {
-  return error.name === "NetworkError" || error.message === "Network Error" || (error as any).constructor?.name === "NetworkError";
+  return (
+    error.name === "NetworkError" ||
+    error.message === "Network Error" ||
+    (error as any).constructor?.name === "NetworkError"
+  );
 };
 
 const DEFAULT_ACCEPTABLE_STATUS = [[200, 299], 304];

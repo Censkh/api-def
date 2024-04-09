@@ -9,7 +9,12 @@ import { Validation } from "./Validation";
   : Path extends `:${infer Param}` ? Param : undefined;
  */
 
-export default class EndpointBuilder<R = any, P extends Params | undefined = undefined, Q extends Query | undefined = undefined, B extends Body | undefined = undefined> {
+export default class EndpointBuilder<
+  R = any,
+  P extends Params | undefined = undefined,
+  Q extends Query | undefined = undefined,
+  B extends Body | undefined = undefined,
+> {
   private api: Api;
   private readonly validation: Validation<R, P, Q, B> = {};
 

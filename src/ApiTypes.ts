@@ -50,14 +50,22 @@ export interface BaseRequestConfig {
   queryHandling?: Partial<QueryHandling>;
 }
 
-export type RequestConfig<P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> = (P extends undefined ? { params?: never } : { params: Record<P extends Params ? P : never, string> }) &
+export type RequestConfig<
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> = (P extends undefined ? { params?: never } : { params: Record<P extends Params ? P : never, string> }) &
   (Q extends undefined ? { query?: never } : { query: Q }) &
   (B extends undefined ? { body?: never } : { body: B }) &
   BaseRequestConfig;
 
 export const COMPUTED_CONFIG_SYMBOL = Symbol("computed");
 
-export type ComputedRequestConfig<P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> = Omit<RequestConfig<P, Q, B>, "queryParser" | "query" | "queryHandling"> & {
+export type ComputedRequestConfig<
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> = Omit<RequestConfig<P, Q, B>, "queryParser" | "query" | "queryHandling"> & {
   [COMPUTED_CONFIG_SYMBOL]: true;
 
   queryObject: Record<string, any> | undefined;
@@ -77,7 +85,9 @@ export type RetryEventResult<R> = BaseEventResult<"retry">;
 
 export type EventResult<R> = ResponseEventResult<R> | RetryEventResult<R>;
 
-export type RequestEventHandler<R> = (context: RequestContext<R>) => EventResult<R> | void | Promise<EventResult<R> | void>;
+export type RequestEventHandler<R> = (
+  context: RequestContext<R>,
+) => EventResult<R> | void | Promise<EventResult<R> | void>;
 
 export type RequestEventHandlers<R> = {
   [key in RequestEvent]?: Array<RequestEventHandler<R>>;
@@ -100,7 +110,9 @@ export interface RequestHost {
   readonly responseType: ResponseType | undefined;
   readonly validation: Validation;
 
-  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B>;
+  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
+    config: RequestConfig<P, Q, B>,
+  ): ComputedRequestConfig<P, Q, B>;
 
   computePath(path: string, config: RequestConfig): string;
 

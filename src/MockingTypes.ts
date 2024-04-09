@@ -4,7 +4,12 @@ export interface ApiMockingConfig {
   enabled: boolean | (() => boolean);
 }
 
-export interface MockRequest<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> {
+export interface MockRequest<
+  R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> {
   params: P extends Params ? Record<P, string> : {};
   body: B;
   query: Q;
@@ -12,7 +17,12 @@ export interface MockRequest<R = any, P extends Params | undefined = Params | un
   url: string;
 }
 
-export interface MockResponse<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> {
+export interface MockResponse<
+  R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> {
   statusCode: number;
 
   response: R | undefined;
@@ -26,9 +36,22 @@ export interface MockResponse<R = any, P extends Params | undefined = Params | u
 
 export type MockRequestError = Error & { response?: ApiResponse };
 
-export type EndpointMockingFunction<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> = (req: MockRequest<R, P, Q, B>, res: MockResponse<R, P, Q, B>) => Promise<MockResponse<R, P, Q, B>> | MockResponse<R, P, Q, B>;
+export type EndpointMockingFunction<
+  R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> = (
+  req: MockRequest<R, P, Q, B>,
+  res: MockResponse<R, P, Q, B>,
+) => Promise<MockResponse<R, P, Q, B>> | MockResponse<R, P, Q, B>;
 
-export interface EndpointMockingConfig<R = any, P extends Params | undefined = Params | undefined, Q extends Query | undefined = Query | undefined, B extends Body | undefined = Body | undefined> {
+export interface EndpointMockingConfig<
+  R = any,
+  P extends Params | undefined = Params | undefined,
+  Q extends Query | undefined = Query | undefined,
+  B extends Body | undefined = Body | undefined,
+> {
   /**-
    * The range supplied will be used to simulate the lag in obtaining a response
    * your endpoint. If no values are supplied, a response will be returned immediately

@@ -1,10 +1,24 @@
-import { BaseRequestConfig, Body, COMPUTED_CONFIG_SYMBOL, ComputedRequestConfig, Params, Query, RequestConfig } from "./ApiTypes";
+import {
+  BaseRequestConfig,
+  Body,
+  COMPUTED_CONFIG_SYMBOL,
+  ComputedRequestConfig,
+  Params,
+  Query,
+  RequestConfig,
+} from "./ApiTypes";
 import { DEFAULT_QUERY_PARSE, DEFAULT_QUERY_STRINGIFY } from "./QueryHandling";
 import * as Utils from "./Utils";
 
 const MERGED_CONFIG_KEYS = ["headers"];
 
-export const computeRequestConfig = <P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(configs: (RequestConfig<P, Q, B> | BaseRequestConfig | undefined)[]): ComputedRequestConfig<P, Q, B> => {
+export const computeRequestConfig = <
+  P extends Params | undefined,
+  Q extends Query | undefined,
+  B extends Body | undefined,
+>(
+  configs: (RequestConfig<P, Q, B> | BaseRequestConfig | undefined)[],
+): ComputedRequestConfig<P, Q, B> => {
   const computedConfig: ComputedRequestConfig<P, Q, B> = Utils.assign(
     {
       [COMPUTED_CONFIG_SYMBOL]: true,
@@ -27,7 +41,8 @@ export const computeRequestConfig = <P extends Params | undefined, Q extends Que
 
   computedConfig.queryHandling = {
     parse: computedConfig.queryHandling?.parse || DEFAULT_QUERY_PARSE,
-    stringify: computedConfig.queryHandling?.stringify || (computedConfig as any).queryParser || DEFAULT_QUERY_STRINGIFY,
+    stringify:
+      computedConfig.queryHandling?.stringify || (computedConfig as any).queryParser || DEFAULT_QUERY_STRINGIFY,
   };
   (computedConfig as any).queryParser = undefined;
 

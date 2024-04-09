@@ -22,7 +22,14 @@ export const textDecode = (inputArrayOrBuffer: any, options?: any): string => {
   let asObjectString: string;
   if (!arrayBuffer_isView(inputAs8)) {
     asObjectString = Object_prototype_toString.call(inputAs8);
-    if (asObjectString !== arrayBufferString && asObjectString !== sharedArrayBufferString && asObjectString !== undefinedObjectString) throw TypeError("Failed to execute 'decode' on 'TextDecoder': The provided value is not of type '(ArrayBuffer or ArrayBufferView)'");
+    if (
+      asObjectString !== arrayBufferString &&
+      asObjectString !== sharedArrayBufferString &&
+      asObjectString !== undefinedObjectString
+    )
+      throw TypeError(
+        "Failed to execute 'decode' on 'TextDecoder': The provided value is not of type '(ArrayBuffer or ArrayBufferView)'",
+      );
     inputAs8 = NativeUint8Array ? new patchedU8Array(inputAs8) : inputAs8 || [];
   }
 

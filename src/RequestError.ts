@@ -55,7 +55,11 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
   });
 
   try {
-    Object.defineProperty(resultError, "message", { value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${resultError.message}` });
+    Object.defineProperty(resultError, "message", {
+      value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${
+        resultError.message
+      }`,
+    });
   } catch (e) {
     // ignore
   }

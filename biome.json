@@ -29,7 +29,7 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "lineWidth": 320
+    "lineWidth": 120
   },
   "vcs": {
     "enabled": true,

@@ -1,5 +1,15 @@
 import { RequestMethod } from "./ApiConstants";
-import { ApiResponse, BaseRequestConfig, Body, ComputedRequestConfig, Params, Query, RequestConfig, RequestHost, RequestMiddleware } from "./ApiTypes";
+import {
+  ApiResponse,
+  BaseRequestConfig,
+  Body,
+  ComputedRequestConfig,
+  Params,
+  Query,
+  RequestConfig,
+  RequestHost,
+  RequestMiddleware,
+} from "./ApiTypes";
 import Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import { ApiMockingConfig } from "./MockingTypes";
@@ -53,7 +63,9 @@ class HotRequestHost implements RequestHost {
     return this.api.baseUrl;
   }
 
-  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(config: RequestConfig<P, Q, B>): ComputedRequestConfig<P, Q, B> {
+  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
+    config: RequestConfig<P, Q, B>,
+  ): ComputedRequestConfig<P, Q, B> {
     const apiDefaults = this.api.getConfig();
 
     return computeRequestConfig([apiDefaults, config]);
@@ -89,7 +101,9 @@ export class Api implements ApiInfo {
     this.mocking = info.mocking ?? undefined;
     const requestBackend = info.requestBackend ?? getRequestBackend();
     if (!requestBackend) {
-      throw new Error("[api-def] No request backend provided in either Api options or globally, use `setRequestBackend()` to set one or pass one via `requestBackend`");
+      throw new Error(
+        "[api-def] No request backend provided in either Api options or globally, use `setRequestBackend()` to set one or pass one via `requestBackend`",
+      );
     }
     this.requestBackend = requestBackend;
     if (!info.requestBackend) {
@@ -97,7 +111,9 @@ export class Api implements ApiInfo {
         if (isRequestBackendDefault() && !defaultBackendMessageShown) {
           defaultBackendMessageShown = true;
           // eslint-disable-next-line
-          console.warn("[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)");
+          console.warn(
+            "[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)",
+          );
         }
       }
     }
