@@ -1,4 +1,4 @@
-import { QueryStringify } from "./ApiTypes";
+import type { QueryStringify } from "./ApiTypes";
 
 export const DEFAULT_QUERY_STRINGIFY: QueryStringify = (query) => {
   const queryStrings = [];

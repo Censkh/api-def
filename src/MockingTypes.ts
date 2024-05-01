@@ -1,4 +1,4 @@
-import { ApiResponse, Body, Headers, Params, Query } from "./ApiTypes";
+import type { ApiResponse, Body, Headers, Params, Query } from "./ApiTypes";
 
 export interface ApiMockingConfig {
   enabled: boolean | (() => boolean);

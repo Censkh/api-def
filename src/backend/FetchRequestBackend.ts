@@ -1,10 +1,11 @@
-import { ApiResponse } from "../ApiTypes";
+import type { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
-import RequestContext from "../RequestContext";
+import type RequestContext from "../RequestContext";
 import { RequestErrorCode, convertToRequestError } from "../RequestError";
 import * as Utils from "../Utils";
-import { Fetch, getGlobal, getGlobalFetch } from "../Utils";
-import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import { type Fetch, getGlobal, getGlobalFetch } from "../Utils";
+import type RequestBackend from "./RequestBackend";
+import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 class FetchError extends Error {
   response?: Response;
@@ -121,13 +122,20 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const url = context.requestUrl;
 
-    const promise: Promise<Response> = this.fetch(url.href, {
+    const fetchOptions: RequestInit = {
       method: context.method.toUpperCase(),
       body: bodyJsonify ? JSON.stringify(body) : (body as any),
       headers: parsedHeaders,
-      mode: "cors",
+      credentials: context.computedConfig.includeCredentials ? "include" : undefined,
       signal: abortSignal,
-    }).then((response) => {
+    };
+
+    // edge doesn't support mode
+    if ("mode" in Request.prototype) {
+      fetchOptions.mode = "cors";
+    }
+
+    const promise: Promise<Response> = this.fetch(url.href, fetchOptions).then((response) => {
       responded = true;
       if (!response.ok) {
         const error = new FetchError("Fetch failed");

@@ -1,4 +1,4 @@
-import { CacheBackend } from "./CacheBackend";
+import type { CacheBackend } from "./CacheBackend";
 
 export default class LocalForageCacheBackend implements CacheBackend {
   private readonly store: any;

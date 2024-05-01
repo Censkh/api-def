@@ -1,5 +1,5 @@
-import * as zod from "zod";
-import { Body, Params, Query } from "./ApiTypes";
+import type * as zod from "zod";
+import type { Body, Params, Query } from "./ApiTypes";
 
 export interface Validation<
   R = any,

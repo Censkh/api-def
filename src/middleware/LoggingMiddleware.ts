@@ -1,8 +1,8 @@
 import { RequestEvent } from "../ApiConstants";
-import { ApiResponse, RequestMiddleware } from "../ApiTypes";
+import type { ApiResponse, RequestMiddleware } from "../ApiTypes";
 import * as ApiUtils from "../ApiUtils";
-import RequestContext from "../RequestContext";
-import { RequestError } from "../RequestError";
+import type RequestContext from "../RequestContext";
+import type { RequestError } from "../RequestError";
 import * as Utils from "../Utils";
 
 export interface LoggingMiddlewareOptions {

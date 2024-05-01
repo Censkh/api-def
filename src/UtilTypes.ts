@@ -1,4 +1,4 @@
-import Endpoint from "./Endpoint";
+import type Endpoint from "./Endpoint";
 
 export type ResponseOf<E extends Endpoint<any, any, any, any>> = E extends Endpoint<infer R, any, any, any> ? R : never;
 

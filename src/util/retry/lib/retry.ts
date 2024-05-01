@@ -1,10 +1,10 @@
-import { RetryOptions, RetryOptionsInt } from "../interfaces";
+import type { RetryOptions, RetryOptionsInt } from "../interfaces";
 import RetryOperation from "./retryOperation";
 
 export const operation = (options: RetryOptions): RetryOperation => {
   const timeouts = _timeouts(options);
   return new RetryOperation(timeouts, {
-    forever: options && (options.forever || options.retries === Infinity),
+    forever: options && (options.forever || options.retries === Number.POSITIVE_INFINITY),
     unref: options?.unref,
     maxRetryTime: options?.maxRetryTime,
   });
@@ -25,7 +25,7 @@ const _timeouts = (options: RetryOptions): number[] => {
     retries: defaultRetries,
     factor: 2,
     minTimeout: 1 * 1000,
-    maxTimeout: Infinity,
+    maxTimeout: Number.POSITIVE_INFINITY,
     randomize: false,
     ...options,
   };

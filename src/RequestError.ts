@@ -1,6 +1,6 @@
-import { ApiResponse } from "./ApiTypes";
-import RequestContext from "./RequestContext";
-import { EnumOf } from "./Utils";
+import type { ApiResponse } from "./ApiTypes";
+import type RequestContext from "./RequestContext";
+import type { EnumOf } from "./Utils";
 
 export const RequestErrorCode = {
   MISC_UNKNOWN_ERROR: "misc/unknown-error",

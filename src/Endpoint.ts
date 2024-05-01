@@ -1,8 +1,8 @@
-import { Api } from "./Api";
+import type { Api } from "./Api";
 import * as Requester from "./Requester";
 
-import { RequestMethod, ResponseType } from "./ApiConstants";
-import {
+import type { RequestMethod, ResponseType } from "./ApiConstants";
+import type {
   ApiResponse,
   BaseRequestConfig,
   Body,
@@ -12,10 +12,10 @@ import {
   RequestConfig,
   RequestHost,
 } from "./ApiTypes";
-import * as Mocking from "./MockingTypes";
+import type * as Mocking from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
-import { Validation } from "./Validation";
-import RequestBackend from "./backend/RequestBackend";
+import type { Validation } from "./Validation";
+import type RequestBackend from "./backend/RequestBackend";
 
 export interface EndpointConfig<
   R,

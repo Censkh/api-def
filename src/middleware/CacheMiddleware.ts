@@ -1,5 +1,5 @@
 import { CacheSource, EventResultType, RequestEvent, RequestMethod } from "../ApiConstants";
-import { RequestMiddleware } from "../ApiTypes";
+import type { RequestMiddleware } from "../ApiTypes";
 import * as Caching from "../cache/Caching";
 
 export interface CacheMiddlewareOptions {

@@ -1,4 +1,4 @@
-import { CacheBackend } from "./CacheBackend";
+import type { CacheBackend } from "./CacheBackend";
 import LocalStorageCacheBackend from "./LocalStorageCacheBackend";
 
 let cacheBackend: CacheBackend = new LocalStorageCacheBackend();

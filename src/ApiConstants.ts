@@ -1,4 +1,4 @@
-import { EnumOf } from "./Utils";
+import type { EnumOf } from "./Utils";
 
 export const RequestMethod = {
   /** @deprecated use 'POST' */

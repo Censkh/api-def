@@ -1,8 +1,8 @@
-import * as zod from "zod";
-import { Api } from "./Api";
-import { Body, Params, Query } from "./ApiTypes";
-import Endpoint, { EndpointConfig } from "./Endpoint";
-import { Validation } from "./Validation";
+import type * as zod from "zod";
+import type { Api } from "./Api";
+import type { Body, Params, Query } from "./ApiTypes";
+import Endpoint, { type EndpointConfig } from "./Endpoint";
+import type { Validation } from "./Validation";
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
   ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>

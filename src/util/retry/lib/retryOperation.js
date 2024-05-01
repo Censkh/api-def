@@ -2,7 +2,7 @@ function RetryOperation(timeouts, options) {
   this._originalTimeouts = JSON.parse(JSON.stringify(timeouts));
   this._timeouts = timeouts;
   this._options = options || {};
-  this._maxRetryTime = options?.maxRetryTime || Infinity;
+  this._maxRetryTime = options?.maxRetryTime || Number.POSITIVE_INFINITY;
   this._fn = null;
   this._errors = [];
   this._attempts = 1;

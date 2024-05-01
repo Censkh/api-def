@@ -1,5 +1,5 @@
 import { RequestMethod } from "./ApiConstants";
-import {
+import type {
   ApiResponse,
   BaseRequestConfig,
   Body,
@@ -10,15 +10,15 @@ import {
   RequestHost,
   RequestMiddleware,
 } from "./ApiTypes";
-import Endpoint from "./Endpoint";
+import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
-import { ApiMockingConfig } from "./MockingTypes";
+import type { ApiMockingConfig } from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
 import * as Requester from "./Requester";
 import * as Utils from "./Utils";
-import { Validation } from "./Validation";
+import type { Validation } from "./Validation";
 import FetchRequestBackend from "./backend/FetchRequestBackend";
-import RequestBackend from "./backend/RequestBackend";
+import type RequestBackend from "./backend/RequestBackend";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;

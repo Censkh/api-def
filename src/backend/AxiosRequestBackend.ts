@@ -1,7 +1,8 @@
 import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
-import { ApiResponse } from "../ApiTypes";
-import RequestContext from "../RequestContext";
-import RequestBackend, { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import type { ApiResponse } from "../ApiTypes";
+import type RequestContext from "../RequestContext";
+import type RequestBackend from "./RequestBackend";
+import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 let axios: AxiosStatic;
 
@@ -47,6 +48,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       data: context.getParsedBody(),
       headers: computedConfig.headers || {},
       responseType: context.responseType,
+      withCredentials: computedConfig.includeCredentials,
       cancelToken: new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),

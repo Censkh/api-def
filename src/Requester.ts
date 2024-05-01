@@ -1,4 +1,4 @@
-import {
+import type {
   ApiResponse,
   Body,
   ComputedRequestConfig,
@@ -11,13 +11,13 @@ import {
 
 import { EventResultType, RequestEvent } from "./ApiConstants";
 import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
-import { EndpointMockingConfig } from "./MockingTypes";
+import type { EndpointMockingConfig } from "./MockingTypes";
 import RequestContext from "./RequestContext";
-import { RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
+import { type RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
 import { textDecode } from "./TextDecoding";
 import MockRequestBackend from "./backend/MockRequestBackend";
 import retry from "./util/retry";
-import { RetryFunction, RetryOptions as InternalRetryOptions } from "./util/retry/interfaces";
+import type { RetryOptions as InternalRetryOptions, RetryFunction } from "./util/retry/interfaces";
 
 const locks: Record<string, RequestContext> = {};
 const runningOperations: Record<string, Promise<ApiResponse>> = {};

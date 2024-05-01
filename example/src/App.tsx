@@ -1,6 +1,12 @@
-import { AxiosRequestBackend, FetchRequestBackend, ResponseOf, getRequestBackend, setRequestBackend } from "api-def";
+import {
+  AxiosRequestBackend,
+  FetchRequestBackend,
+  type ResponseOf,
+  getRequestBackend,
+  setRequestBackend,
+} from "api-def";
 import axios from "axios";
-import React, { ChangeEvent, useCallback, useState } from "react";
+import React, { type ChangeEvent, useCallback, useState } from "react";
 import AsyncState, { useAsyncState } from "react-async-stateful";
 import { User, fetchUsers, isMockingEnabled, setMockingEnabled } from "../Api";
 import { fetchTest } from "../BaseUrlApi";

@@ -1,16 +1,16 @@
 {
   "name": "api-def",
-  "version": "0.9.3",
+  "version": "0.9.4-alpha.2",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",
   "sideEffects": false,
   "scripts": {
-    "prepublishOnly": "npm run check && npm run test && npm run build",
+    "prepublishOnly": "npm run check:fix && npm run test && npm run build",
     "test": "jest",
     "example:start": "cd example && npm run start",
-    "check:fix": "tsc --noEmit --project tsconfig.json && npx @biomejs/biome check --apply-unsafe .",
+    "check:fix": "tsc --noEmit --project tsconfig.json && npx @biomejs/biome check --apply .",
     "check": "tsc --noEmit --project tsconfig.json && npx @biomejs/biome check .",
     "cleanup": "rimraf esm && rimraf cjs",
     "build": "npm run cleanup && npm run build:esm && npm run build:cjs",
@@ -19,26 +19,10 @@
     "website:dev": "cd website && npm run start",
     "website:deploy": "cd website && npm run deploy"
   },
-  "keywords": [
-    "typescript",
-    "javascript",
-    "node",
-    "web",
-    "api",
-    "typed",
-    "cache",
-    "fetch",
-    "retry",
-    "middleware"
-  ],
+  "keywords": ["typescript", "javascript", "node", "web", "api", "typed", "cache", "fetch", "retry", "middleware"],
   "author": "James Waterhouse <09jwater@gmail.com>",
   "license": "MIT",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "esm/",
-    "cjs/"
-  ],
+  "files": ["LICENSE", "README.md", "esm/", "cjs/"],
   "jest": {
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
@@ -46,19 +30,20 @@
   },
   "repository": "https://github.com/Censkh/api-def",
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@swc/jest": "0.2.31",
+    "@biomejs/biome": "latest",
+    "@swc/core": "latest",
+    "@swc/jest": "latest",
     "@types/axios": "0.14.0",
-    "@types/jest": "^29.5.11",
-    "@types/node": "20.11.6",
-    "@types/qs": "6.9.11",
-    "axios": "1.6.6",
+    "@types/jest": "^29.5.12",
+    "@types/node": "20.12.7",
+    "@types/qs": "6.9.15",
+    "axios": "1.6.8",
     "cross-env": "7.0.3",
-    "jest": "29.7.0",
+    "jest": "latest",
     "npm-run-all": "4.1.5",
-    "qs": "6.11.2",
+    "qs": "6.12.1",
     "rimraf": "5.0.5",
-    "typescript": "5.3.3",
-    "zod": "3.22.4"
+    "typescript": "5.4.5",
+    "zod": "3.22.5"
   }
 }

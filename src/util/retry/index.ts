@@ -1,4 +1,4 @@
-import { RetryFunction, RetryOptions } from "./interfaces";
+import type { RetryFunction, RetryOptions } from "./interfaces";
 import * as retrier from "./lib/retry";
 
 // Retry is just transplanted from here:

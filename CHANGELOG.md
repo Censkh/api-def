@@ -1,3 +1,8 @@
+# 0.9.4
+
+- fix support for cloudflare workers
+- add `credentials` option
+
 # 0.9.3
 
 - fix non-array buffer and non-json responses having their data as `Promise`

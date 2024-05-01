@@ -1,5 +1,5 @@
-import { ResponseType } from "./ApiConstants";
-import { AcceptableStatus, CancelledRequestError } from "./ApiTypes";
+import type { ResponseType } from "./ApiConstants";
+import type { AcceptableStatus, CancelledRequestError } from "./ApiTypes";
 
 export const isCancelledError = (error: Error): error is CancelledRequestError => {
   return "isCancelledRequest" in error;

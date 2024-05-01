@@ -1,5 +1,5 @@
-import { ApiResponse } from "../ApiTypes";
-import RequestContext from "../RequestContext";
+import type { ApiResponse } from "../ApiTypes";
+import type RequestContext from "../RequestContext";
 
 export interface RequestOperation<R> {
   promise: Promise<R>;

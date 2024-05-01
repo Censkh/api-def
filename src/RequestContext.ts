@@ -1,6 +1,6 @@
-import { Api } from "./Api";
-import { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
-import {
+import type { Api } from "./Api";
+import type { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import type {
   ApiResponse,
   Body,
   ComputedRequestConfig,
@@ -13,11 +13,11 @@ import {
   RequestEventHandlers,
   RequestHost,
 } from "./ApiTypes";
-import { EndpointMockingConfig } from "./MockingTypes";
-import { RequestError } from "./RequestError";
+import type { EndpointMockingConfig } from "./MockingTypes";
+import type { RequestError } from "./RequestError";
 import * as Utils from "./Utils";
-import { Validation } from "./Validation";
-import RequestBackend from "./backend/RequestBackend";
+import type { Validation } from "./Validation";
+import type RequestBackend from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 

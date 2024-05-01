@@ -1,11 +1,11 @@
 import {
-  BaseRequestConfig,
-  Body,
+  type BaseRequestConfig,
+  type Body,
   COMPUTED_CONFIG_SYMBOL,
-  ComputedRequestConfig,
-  Params,
-  Query,
-  RequestConfig,
+  type ComputedRequestConfig,
+  type Params,
+  type Query,
+  type RequestConfig,
 } from "./ApiTypes";
 import { DEFAULT_QUERY_PARSE, DEFAULT_QUERY_STRINGIFY } from "./QueryHandling";
 import * as Utils from "./Utils";

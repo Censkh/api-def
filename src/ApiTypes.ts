@@ -1,8 +1,8 @@
-import { Api } from "./Api";
-import { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
-import RequestContext from "./RequestContext";
-import { Validation } from "./Validation";
-import RequestBackend from "./backend/RequestBackend";
+import type { Api } from "./Api";
+import type { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import type RequestContext from "./RequestContext";
+import type { Validation } from "./Validation";
+import type RequestBackend from "./backend/RequestBackend";
 
 export type AcceptableStatus = number | [min: number, max: number];
 
@@ -40,6 +40,7 @@ export interface RetryOptions {
 export interface BaseRequestConfig {
   cache?: number | boolean;
   lock?: RequestLock;
+  includeCredentials?: boolean;
   retry?: number | false | RetryOptions;
   headers?: Readonly<Headers>;
   acceptableStatus?: AcceptableStatus[];
