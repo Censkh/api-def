@@ -1,6 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 // polyfill from https://github.com/anonyco/FastestSmallestTextEncoderDecoder/blob/master/EncoderDecoderTogether.src.js
 export const textDecode = (inputArrayOrBuffer: any, options?: any): string => {
   if (typeof TextDecoder !== "undefined") {

@@ -77,11 +77,8 @@ const log = (
     `color:${color}`,
     "color:gray",
   ];
-  /* eslint-disable-next-line no-console */
   console.groupCollapsed(...args);
-  /* eslint-disable-next-line no-console */
   console.log(Utils.assign({ context: context }, objects || {}));
-  /* eslint-disable-next-line no-console */
   console.groupEnd();
 };
 

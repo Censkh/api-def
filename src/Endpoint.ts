@@ -11,6 +11,7 @@ import type {
   Query,
   RequestConfig,
   RequestHost,
+  State,
 } from "./ApiTypes";
 import type * as Mocking from "./MockingTypes";
 import { computeRequestConfig } from "./RequestConfig";
@@ -18,15 +19,16 @@ import type { Validation } from "./Validation";
 import type RequestBackend from "./backend/RequestBackend";
 
 export interface EndpointConfig<
-  R,
-  P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined,
-  Path extends string = string,
+  TResult,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State = State,
+  TPath extends string = string,
 > {
   readonly id: string;
   readonly method: RequestMethod;
-  readonly path: Path;
+  readonly path: TPath;
 
   /**
    * Name your endpoint to help with debugging and documentation
@@ -50,17 +52,18 @@ export interface EndpointConfig<
    * and testing.
    * Enable/disable mocked returns for all endpoints on your API object.
    */
-  readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
+  readonly mocking?: Mocking.EndpointMockingConfig<TResult, TParams, TQuery, TBody, TState>;
 
-  readonly validation?: Validation<R, P, Q, B>;
+  readonly validation?: Validation<TResult, TParams, TQuery, TBody, TState>;
 }
 
 export default class Endpoint<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
-> implements EndpointConfig<R, P, Q, B>, RequestHost
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
+> implements EndpointConfig<TResponse, TParams, TQuery, TBody, TState>, RequestHost
 {
   public readonly api: Api;
 
@@ -71,10 +74,10 @@ export default class Endpoint<
   readonly path: string;
   readonly config?: BaseRequestConfig;
   readonly responseType: ResponseType | undefined;
-  readonly mocking?: Mocking.EndpointMockingConfig<R, P, Q, B>;
-  readonly validation: Validation<R, P, Q, B>;
+  readonly mocking?: Mocking.EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState>;
+  readonly validation: Validation<TResponse, TParams, TQuery, TBody, TState>;
 
-  constructor(api: Api, info: EndpointConfig<R, P, Q, B>) {
+  constructor(api: Api, info: EndpointConfig<TResponse, TParams, TQuery, TBody, TState>) {
     this.api = api;
     this.id = info.id;
     this.method = info.method;
@@ -87,7 +90,7 @@ export default class Endpoint<
     this.validation = info.validation || {};
   }
 
-  public async submit(config: RequestConfig<P, Q, B>): Promise<ApiResponse<R>> {
+  public async submit(config: RequestConfig<TParams, TQuery, TBody, TState>): Promise<ApiResponse<TResponse>> {
     let mock = false;
 
     const apiMocking = this.api.mocking;
@@ -125,9 +128,12 @@ export default class Endpoint<
     return this.api.baseUrl;
   }
 
-  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
-    config: RequestConfig<P, Q, B>,
-  ): ComputedRequestConfig<P, Q, B> {
+  computeConfig<
+    TParams extends Params | undefined,
+    TQuery extends Query | undefined,
+    TBody extends Body | undefined,
+    TState extends State,
+  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
     const apiDefaults = this.api.getConfig();
 
     return computeRequestConfig([apiDefaults, this.config, config]);

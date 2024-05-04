@@ -12,6 +12,7 @@ import type {
   RequestContextStats,
   RequestEventHandlers,
   RequestHost,
+  State,
 } from "./ApiTypes";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import type { RequestError } from "./RequestError";
@@ -22,10 +23,11 @@ import type RequestBackend from "./backend/RequestBackend";
 let contextIdCounter = 0;
 
 export default class RequestContext<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > {
   readonly id: number;
   readonly key: string;
@@ -34,31 +36,35 @@ export default class RequestContext<
   private computedMethod: RequestMethod;
   readonly stats: RequestContextStats;
   private readonly host: RequestHost;
-  readonly eventHandlers: RequestEventHandlers<R>;
+  readonly eventHandlers: RequestEventHandlers<TResponse>;
 
   readonly backend: RequestBackend;
 
   private canceler: (() => void) | null = null;
-  response: ApiResponse<R> | null | undefined = undefined;
+  response: ApiResponse<TResponse> | null | undefined = undefined;
   error: RequestError | null = null;
   readonly cacheInfo: RequestCacheInfo = { cached: false, source: null };
 
   cancelled = false;
-  readonly computedConfig: ComputedRequestConfig<P, Q, B>;
+
+  /**
+   * @deprecated Use `requestConfig` instead
+   */
+  readonly computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState>;
   private computedRequestUrl: URL;
 
-  readonly mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined;
+  readonly mocking: EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | null | undefined;
 
   private parsedBody: any;
 
-  readonly validation: Validation<R, P, Q, B>;
+  readonly validation: Validation<TResponse, TParams, TQuery, TBody, TState>;
 
   constructor(
     backend: RequestBackend,
     host: RequestHost,
-    config: ComputedRequestConfig<P, Q, B>,
+    config: ComputedRequestConfig<TParams, TQuery, TBody, TState>,
     computedPath: string,
-    mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
+    mocking: EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | null | undefined,
   ) {
     this.backend = backend;
     this.id = contextIdCounter++;
@@ -80,6 +86,10 @@ export default class RequestContext<
     this.initMiddleware();
     this.parseRequestBody();
     this.computedRequestUrl = this.generateRequestUrl();
+  }
+
+  get requestConfig(): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
+    return this.computedConfig;
   }
 
   get method(): RequestMethod {
@@ -156,18 +166,17 @@ export default class RequestContext<
     return this.parsedBody;
   }
 
-  updateQuery(newQuery: Partial<Q>): this {
+  updateQuery(newQuery: Partial<TQuery>): this {
     this.computedConfig.queryObject = Utils.assign({}, this.computedConfig.queryObject, newQuery);
     this.computedRequestUrl = this.generateRequestUrl();
     return this;
   }
 
-  async triggerEvent(eventType: RequestEvent): Promise<EventResult<R> | undefined> {
+  async triggerEvent(eventType: RequestEvent): Promise<EventResult<TResponse> | undefined> {
     const eventHandlers = this.eventHandlers[eventType];
     if (eventHandlers) {
       for (let i = 0; i < eventHandlers.length; i++) {
         const eventHandler = eventHandlers[i];
-        // eslint-disable-next-line no-await-in-loop
         const eventResult = await eventHandler(this as RequestContext);
         if (eventResult) {
           return eventResult;

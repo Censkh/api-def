@@ -1,14 +1,16 @@
 import type * as zod from "zod";
-import type { Body, Params, Query } from "./ApiTypes";
+import type { Body, Params, Query, State } from "./ApiTypes";
 
 export interface Validation<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > {
-  query?: zod.Schema<Q>;
-  params?: zod.Schema<P>;
-  body?: zod.Schema<B>;
-  response?: zod.Schema<R>;
+  query?: zod.Schema<TQuery>;
+  params?: zod.Schema<TParams>;
+  body?: zod.Schema<TBody>;
+  response?: zod.Schema<TResponse>;
+  state?: zod.Schema<TState>;
 }

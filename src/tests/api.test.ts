@@ -38,7 +38,7 @@ const queryReturnEndpoint = api
     },
   });
 
-test("URL is properly constructed", async () => {
+it("URL is properly constructed", async () => {
   const res = await postIdVerifStatus.submit({
     body: {
       forceReset: true,
@@ -49,7 +49,7 @@ test("URL is properly constructed", async () => {
   expect((res.data as any).url).toBe("https://example.com/id-verif/verif-status");
 });
 
-test("query as string", async () => {
+it("query as string", async () => {
   const res = await queryReturnEndpoint.submit({
     query: "test=1&id=3",
   });
@@ -65,7 +65,7 @@ test("query as string", async () => {
   ]);
 });
 
-test("qs", async () => {
+it("qs", async () => {
   let res = await queryReturnEndpoint.submit({
     query: "id[0]=1&id[1]=2",
   });
@@ -97,7 +97,7 @@ test("qs", async () => {
   ]);
 });
 
-/*test("infer params in typescript", async (t) => {
+/*it("infer params in typescript", async (t) => {
   const endpoint = mockApi.endpoint()
     .build({
       method: "get",

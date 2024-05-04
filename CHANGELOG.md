@@ -1,7 +1,15 @@
-# 0.9.4
+# 0.10.0
+
+## Features
+
+- add `state` to `RequestConfig` to allow for custom state to be passed through the request middleware
+- add `EndpointBuilder.stateOf`
+
+## Changes
 
 - fix support for cloudflare workers
 - add `credentials` option
+- deprecated `RequestContext.computedConfig` in favor of `RequestContext.requestConfig`
 
 # 0.9.3
 

@@ -1,63 +1,68 @@
-import type { ApiResponse, Body, Headers, Params, Query } from "./ApiTypes";
+import type { ApiResponse, Body, Headers, Params, Query, State } from "./ApiTypes";
 
 export interface ApiMockingConfig {
   enabled: boolean | (() => boolean);
 }
 
 export interface MockRequest<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > {
-  params: P extends Params ? Record<P, string> : {};
-  body: B;
-  query: Q;
+  params: TParams extends Params ? Record<TParams, string> : {};
+  body: TBody;
+  query: TQuery;
   headers: Readonly<Headers>;
   url: string;
+  state: TState;
 }
 
 export interface MockResponse<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > {
   statusCode: number;
 
-  response: R | undefined;
+  response: TResponse | undefined;
 
   headers: Headers;
 
   status(statusCode: number): this;
 
-  send(response: R): this;
+  send(response: TResponse): this;
 }
 
 export type MockRequestError = Error & { response?: ApiResponse };
 
 export type EndpointMockingFunction<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > = (
-  req: MockRequest<R, P, Q, B>,
-  res: MockResponse<R, P, Q, B>,
-) => Promise<MockResponse<R, P, Q, B>> | MockResponse<R, P, Q, B>;
+  req: MockRequest<TResponse, TParams, TQuery, TBody, TState>,
+  res: MockResponse<TResponse, TParams, TQuery, TBody, TState>,
+) => Promise<MockResponse<TResponse, TParams, TQuery, TBody>> | MockResponse<TResponse, TParams, TQuery, TBody, TState>;
 
 export interface EndpointMockingConfig<
-  R = any,
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
 > {
   /**-
    * The range supplied will be used to simulate the lag in obtaining a response
    * your endpoint. If no values are supplied, a response will be returned immediately
    */
   delay?: number | [minMs: number, maxMs: number];
-  handler: EndpointMockingFunction<R, P, Q, B>;
+  handler: EndpointMockingFunction<TResponse, TParams, TQuery, TBody, TState>;
 
   // TODO expand for random erroneous returns...or perhaps an error mode
 }

@@ -9,6 +9,7 @@ import type {
   RequestConfig,
   RequestHost,
   RequestMiddleware,
+  State,
 } from "./ApiTypes";
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
@@ -63,9 +64,12 @@ class HotRequestHost implements RequestHost {
     return this.api.baseUrl;
   }
 
-  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
-    config: RequestConfig<P, Q, B>,
-  ): ComputedRequestConfig<P, Q, B> {
+  computeConfig<
+    TParams extends Params | undefined,
+    TQuery extends Query | undefined,
+    TBody extends Body | undefined,
+    TState extends State,
+  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
     const apiDefaults = this.api.getConfig();
 
     return computeRequestConfig([apiDefaults, config]);
@@ -110,7 +114,6 @@ export class Api implements ApiInfo {
       if (process.env.NODE_ENV === "development") {
         if (isRequestBackendDefault() && !defaultBackendMessageShown) {
           defaultBackendMessageShown = true;
-          // eslint-disable-next-line
           console.warn(
             "[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)",
           );

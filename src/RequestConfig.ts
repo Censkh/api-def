@@ -6,6 +6,7 @@ import {
   type Params,
   type Query,
   type RequestConfig,
+  type State,
 } from "./ApiTypes";
 import { DEFAULT_QUERY_PARSE, DEFAULT_QUERY_STRINGIFY } from "./QueryHandling";
 import * as Utils from "./Utils";
@@ -13,13 +14,14 @@ import * as Utils from "./Utils";
 const MERGED_CONFIG_KEYS = ["headers"];
 
 export const computeRequestConfig = <
-  P extends Params | undefined,
-  Q extends Query | undefined,
-  B extends Body | undefined,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State,
 >(
-  configs: (RequestConfig<P, Q, B> | BaseRequestConfig | undefined)[],
-): ComputedRequestConfig<P, Q, B> => {
-  const computedConfig: ComputedRequestConfig<P, Q, B> = Utils.assign(
+  configs: (RequestConfig<TParams, TQuery, TBody, TState> | BaseRequestConfig | undefined)[],
+): ComputedRequestConfig<TParams, TQuery, TBody, TState> => {
+  const computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState> = Utils.assign(
     {
       [COMPUTED_CONFIG_SYMBOL]: true,
     },
@@ -46,10 +48,10 @@ export const computeRequestConfig = <
   };
   (computedConfig as any).queryParser = undefined;
 
-  const query: Q = (computedConfig as any).query;
+  const query: TQuery = (computedConfig as any).query;
 
   let queryString: string | undefined;
-  let queryObject: Q | undefined;
+  let queryObject: TQuery | undefined;
 
   if (query) {
     Object.defineProperty(computedConfig, "queryString", {
@@ -84,6 +86,10 @@ export const computeRequestConfig = <
         queryString = computedConfig.queryHandling.stringify(value);
       },
     });
+  }
+
+  if (!computedConfig.state) {
+    computedConfig.state = {} as TState;
   }
 
   return computedConfig;

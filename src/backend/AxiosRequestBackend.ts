@@ -13,7 +13,6 @@ export const isAxiosError = (error: Error): error is AxiosError => {
 export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
   readonly id = "axios";
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(axiosLibrary: any) {
     axios = axiosLibrary;
   }
@@ -32,12 +31,13 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       data: response.data,
       headers: response.headers as any,
       status: response.status,
+      state: context.requestConfig.state,
       __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
     };
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
-    const { computedConfig } = context;
+    const { requestConfig } = context;
 
     const url = context.requestUrl;
 
@@ -46,9 +46,9 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       method: context.method,
       url: url.href,
       data: context.getParsedBody(),
-      headers: computedConfig.headers || {},
+      headers: requestConfig.headers || {},
       responseType: context.responseType,
-      withCredentials: computedConfig.includeCredentials,
+      withCredentials: requestConfig.includeCredentials,
       cancelToken: new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),

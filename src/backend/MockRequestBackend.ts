@@ -35,10 +35,11 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
     const req: MockRequest = {
       body: context.getParsedBody(),
-      params: context.computedConfig.params ?? {},
-      query: context.computedConfig.queryObject,
-      headers: context.computedConfig.headers ?? {},
+      params: context.requestConfig.params ?? {},
+      query: context.requestConfig.queryObject,
+      headers: context.requestConfig.headers ?? {},
       url: context.requestUrl.toString(),
+      state: context.requestConfig.state,
     };
 
     const res: MockResponse = {
@@ -105,6 +106,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       headers: parsedHeaders,
       data: res.response,
       status: res.statusCode,
+      state: context.requestConfig.state,
     };
   }
 

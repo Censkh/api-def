@@ -1,7 +1,7 @@
 import { Api } from "../Api";
 import api, { fetchRequiresToken } from "./mock/MockApi";
 
-test("allow for retries in middleware", async () => {
+it("allow for retries in middleware", async () => {
   let thrownError: any;
   try {
     await fetchRequiresToken.submit({});
@@ -49,7 +49,7 @@ test("allow for retries in middleware", async () => {
   });
 });
 
-test("make sure retry only happens a max number of times", async () => {
+it("make sure retry only happens a max number of times", async () => {
   const api = new Api({
     baseUrl: "httpstat.us",
     name: "Http Status API",

@@ -7,6 +7,7 @@ import type {
   RequestConfig,
   RequestHost,
   RetryOptions,
+  State,
 } from "./ApiTypes";
 
 import { EventResultType, RequestEvent } from "./ApiConstants";
@@ -24,16 +25,22 @@ const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
 const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
-export const submit = async <R, P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
+export const submit = async <
+  TResponse,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State,
+>(
   host: RequestHost,
-  config: RequestConfig<P, Q, B>,
-  mocking: EndpointMockingConfig<R, P, Q, B> | null | undefined,
-): Promise<ApiResponse<R>> => {
-  const computedConfig: ComputedRequestConfig<P, Q, B> = host.computeConfig(config);
+  config: RequestConfig<TParams, TQuery, TBody, TState>,
+  mocking: EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | null | undefined,
+): Promise<ApiResponse<TResponse>> => {
+  const computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState> = host.computeConfig(config);
 
   const backend = mocking ? MOCK_REQUEST_BACKEND : host.getRequestBackend();
 
-  const context = new RequestContext<R, P, Q, B>(
+  const context = new RequestContext<TResponse, TParams, TQuery, TBody, TState>(
     backend,
     host,
     computedConfig,
@@ -63,7 +70,7 @@ export const submit = async <R, P extends Params | undefined, Q extends Query | 
   }
 
   try {
-    let response = await (runningOperations[key] = makeRequest(context as RequestContext<R>));
+    let response = await (runningOperations[key] = makeRequest(context as RequestContext<TResponse>));
 
     const successEventResult = await context.triggerEvent(RequestEvent.Success);
     if (successEventResult && successEventResult.type === EventResultType.Respond) {

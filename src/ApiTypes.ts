@@ -11,6 +11,7 @@ export type Headers = Record<string, string | number | boolean | null | undefine
 export type Params = string;
 export type Query = string | undefined | Record<string, any>;
 export type Body = string | number | Record<string, any>;
+export type State = Record<string, any>;
 
 export interface ApiResponse<T = any> {
   readonly method: RequestMethod;
@@ -18,6 +19,7 @@ export interface ApiResponse<T = any> {
   readonly status: number;
   readonly data: T;
   readonly headers: Record<string, string>;
+  readonly state: State;
 }
 
 export type RequestLock = string | false;
@@ -52,22 +54,29 @@ export interface BaseRequestConfig {
 }
 
 export type RequestConfig<
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
-> = (P extends undefined ? { params?: never } : { params: Record<P extends Params ? P : never, string> }) &
-  (Q extends undefined ? { query?: never } : { query: Q }) &
-  (B extends undefined ? { body?: never } : { body: B }) &
-  BaseRequestConfig;
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
+> = (TParams extends undefined
+  ? { params?: never }
+  : { params: Record<TParams extends Params ? TParams : never, string> }) &
+  (TQuery extends undefined ? { query?: never } : { query: TQuery }) &
+  (TBody extends undefined ? { body?: never } : { body: TBody }) &
+  ({  } extends TState  ? { state?: TState } : { state: TState })
+  & BaseRequestConfig;
 
 export const COMPUTED_CONFIG_SYMBOL = Symbol("computed");
 
 export type ComputedRequestConfig<
-  P extends Params | undefined = Params | undefined,
-  Q extends Query | undefined = Query | undefined,
-  B extends Body | undefined = Body | undefined,
-> = Omit<RequestConfig<P, Q, B>, "queryParser" | "query" | "queryHandling"> & {
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
+> = Omit<RequestConfig<TParams, TQuery, TBody, TState>, "queryParser" | "query" | "queryHandling" | "state"> & {
   [COMPUTED_CONFIG_SYMBOL]: true;
+
+  state: TState;
 
   queryObject: Record<string, any> | undefined;
   queryString: string | undefined;
@@ -111,9 +120,12 @@ export interface RequestHost {
   readonly responseType: ResponseType | undefined;
   readonly validation: Validation;
 
-  computeConfig<P extends Params | undefined, Q extends Query | undefined, B extends Body | undefined>(
-    config: RequestConfig<P, Q, B>,
-  ): ComputedRequestConfig<P, Q, B>;
+  computeConfig<
+    TParams extends Params | undefined,
+    TQuery extends Query | undefined,
+    TBody extends Body | undefined,
+    TState extends State,
+  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState>;
 
   computePath(path: string, config: RequestConfig): string;
 

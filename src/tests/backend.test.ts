@@ -9,7 +9,7 @@ const cleanResponse = (response: any) => {
   return response;
 };
 
-test("request backends output", async () => {
+it("request backends output", async () => {
   const api = new Api({
     baseUrl: "httpstat.us",
     name: "Example API",

@@ -9,7 +9,6 @@ export const assign: (typeof Object)["assign"] =
     const to = Object(target);
 
     for (let index = 0; index < varArgs.length; index++) {
-      // eslint-disable-next-line prefer-rest-params
       const nextSource = varArgs[index];
 
       if (nextSource !== null && nextSource !== undefined) {
@@ -51,7 +50,6 @@ export const getGlobalFetch = (): Fetch | undefined => {
   return undefined;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = (): void => {};
 
 /**

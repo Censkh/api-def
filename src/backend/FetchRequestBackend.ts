@@ -54,6 +54,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       data: undefined as any,
       status: status,
       headers: processedHeaders,
+      state: context.requestConfig.state,
     };
     const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
 

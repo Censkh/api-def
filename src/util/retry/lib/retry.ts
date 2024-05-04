@@ -30,7 +30,6 @@ const _timeouts = (options: RetryOptions): number[] => {
     ...options,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (opts.minTimeout! > opts.maxTimeout!) {
     throw new Error("minTimeout is greater than maxTimeout");
   }

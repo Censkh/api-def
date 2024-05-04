@@ -38,7 +38,7 @@ const queryReturnEndpoint = api
     },
   });
 
-test("validation", async () => {
+it("validation", async () => {
   {
     const res = await queryReturnEndpoint.submit({
       query: {

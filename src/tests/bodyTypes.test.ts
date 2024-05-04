@@ -1,6 +1,6 @@
 import { postFormUrlEncoded } from "./mock/MockApi";
 
-test("correctly parses body for form url encoded request", async () => {
+it("correctly parses body for form url encoded request", async () => {
   const res = await postFormUrlEncoded.submit({
     body: {
       test: 123,
