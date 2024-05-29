@@ -84,8 +84,6 @@ class HotRequestHost implements RequestHost {
   }
 }
 
-let defaultBackendMessageShown = false;
-
 export class Api implements ApiInfo {
   readonly baseUrl: string;
   readonly name: string;
@@ -110,16 +108,6 @@ export class Api implements ApiInfo {
       );
     }
     this.requestBackend = requestBackend;
-    if (!info.requestBackend) {
-      if (process.env.NODE_ENV === "development") {
-        if (isRequestBackendDefault() && !defaultBackendMessageShown) {
-          defaultBackendMessageShown = true;
-          console.warn(
-            "[api-def] Using default fetch backend, you can use a different one with 'setRequestBackend()' (dev only message)",
-          );
-        }
-      }
-    }
   }
 
   endpoint(): EndpointBuilder {
