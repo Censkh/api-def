@@ -48,7 +48,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       data: context.getParsedBody(),
       headers: requestConfig.headers || {},
       responseType: context.responseType,
-      withCredentials: requestConfig.includeCredentials,
+      withCredentials: requestConfig.credentials === "include" || requestConfig.credentials === "same-origin",
       cancelToken: new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),

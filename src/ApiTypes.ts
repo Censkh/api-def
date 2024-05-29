@@ -42,7 +42,7 @@ export interface RetryOptions {
 export interface BaseRequestConfig {
   cache?: number | boolean;
   lock?: RequestLock;
-  includeCredentials?: boolean;
+  credentials?: "omit" | "same-origin" | "include";
   retry?: number | false | RetryOptions;
   headers?: Readonly<Headers>;
   acceptableStatus?: AcceptableStatus[];
@@ -63,8 +63,8 @@ export type RequestConfig<
   : { params: Record<TParams extends Params ? TParams : never, string> }) &
   (TQuery extends undefined ? { query?: never } : { query: TQuery }) &
   (TBody extends undefined ? { body?: never } : { body: TBody }) &
-  ({  } extends TState  ? { state?: TState } : { state: TState })
-  & BaseRequestConfig;
+  ({} extends TState ? { state?: TState } : { state: TState }) &
+  BaseRequestConfig;
 
 export const COMPUTED_CONFIG_SYMBOL = Symbol("computed");
 

@@ -127,13 +127,15 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       method: context.method.toUpperCase(),
       body: bodyJsonify ? JSON.stringify(body) : (body as any),
       headers: parsedHeaders,
-      credentials: context.computedConfig.includeCredentials ? "include" : undefined,
       signal: abortSignal,
     };
 
-    // edge doesn't support mode
     if ("mode" in Request.prototype) {
       fetchOptions.mode = "cors";
+    }
+
+    if ("credentials" in Request.prototype) {
+      fetchOptions.credentials = context.requestConfig.credentials ? "include" : undefined;
     }
 
     const promise: Promise<Response> = this.fetch(url.href, fetchOptions).then((response) => {
