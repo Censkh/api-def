@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -30,19 +30,19 @@
   },
   "repository": "https://github.com/Censkh/api-def",
   "devDependencies": {
-    "@biomejs/biome": "1.7.3",
+    "@biomejs/biome": "1.8.1",
     "@swc/core": "latest",
     "@swc/jest": "latest",
     "@types/axios": "0.14.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.12.11",
+    "@types/node": "20.14.2",
     "@types/qs": "6.9.15",
-    "axios": "1.6.8",
+    "axios": "1.7.2",
     "cross-env": "7.0.3",
     "jest": "latest",
     "npm-run-all": "4.1.5",
     "qs": "6.12.1",
-    "rimraf": "5.0.6",
+    "rimraf": "5.0.7",
     "typescript": "5.4.5",
     "zod": "3.23.8"
   }

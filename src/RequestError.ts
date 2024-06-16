@@ -17,15 +17,23 @@ export const RequestErrorCode = {
 } as const;
 export type RequestErrorCode = EnumOf<typeof RequestErrorCode>;
 
+const REQUEST_ERROR_SYMBOL = Symbol("isRequestError");
+
 export interface RequestError extends Error {
-  isRequestError: true;
+  [REQUEST_ERROR_SYMBOL]: true;
   response: ApiResponse | undefined | null;
   code: string;
   attempts: number;
 }
 
-export const isRequestError = (error: Error): error is RequestError => {
-  return "isRequestError" in error;
+export const isRequestError = (error: any): error is RequestError => {
+  if (!error) {
+    return false;
+  }
+  if (typeof error !== "object") {
+    return false;
+  }
+  return error[REQUEST_ERROR_SYMBOL] === true;
 };
 
 export interface RequestErrorConfig {
@@ -44,7 +52,7 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
     name: "RequestError",
     response: response,
     code: code,
-    isRequestError: true as const,
+    [REQUEST_ERROR_SYMBOL]: true as const,
     attempts: context.stats.attempt,
     request: {
       url: context.requestUrl.href,

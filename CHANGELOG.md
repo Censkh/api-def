@@ -1,3 +1,7 @@
+# 0.10.2
+
+- export `RequestError` type
+
 # 0.10.0
 
 ## Features

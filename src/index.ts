@@ -5,9 +5,9 @@ export * from "./ApiTypes";
 export * from "./UtilTypes";
 export * from "./ApiConstants";
 
-export { isRequestError } from "./RequestError";
+export { isRequestError, type RequestError } from "./RequestError";
 
-export { default as Endpoint, EndpointConfig } from "./Endpoint";
+export { default as Endpoint, type EndpointConfig } from "./Endpoint";
 
 export { clearCache, setCacheBackend } from "./cache/Caching";
 export { default as LocalStorageCacheBackend } from "./cache/LocalStorageCacheBackend";
