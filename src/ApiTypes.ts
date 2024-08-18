@@ -6,7 +6,7 @@ import type RequestBackend from "./backend/RequestBackend";
 
 export type AcceptableStatus = number | [min: number, max: number];
 
-export type Headers = Record<string, string | number | boolean | null | undefined>;
+export type RawHeaders = Record<string, string | number | boolean | null | undefined>;
 
 export type Params = string;
 export type Query = string | undefined | Record<string, any>;
@@ -18,7 +18,7 @@ export interface ApiResponse<T = any> {
   readonly url: string;
   readonly status: number;
   readonly data: T;
-  readonly headers: Record<string, string>;
+  readonly headers: Headers;
   readonly state: State;
 }
 
@@ -44,7 +44,7 @@ export interface BaseRequestConfig {
   lock?: RequestLock;
   credentials?: "omit" | "same-origin" | "include";
   retry?: number | false | RetryOptions;
-  headers?: Readonly<Headers>;
+  headers?: Readonly<RawHeaders>;
   acceptableStatus?: AcceptableStatus[];
   /**
    * @deprecated use `queryHandling.stringify` instead

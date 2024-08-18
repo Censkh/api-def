@@ -5,9 +5,9 @@ import type {
   Body,
   ComputedRequestConfig,
   EventResult,
-  Headers,
   Params,
   Query,
+  RawHeaders,
   RequestCacheInfo,
   RequestContextStats,
   RequestEventHandlers,
@@ -134,7 +134,7 @@ export default class RequestContext<
     return key;
   }
 
-  updateHeaders(newHeaders: Headers): this {
+  updateHeaders(newHeaders: RawHeaders): this {
     this.computedConfig.headers = Utils.assign({}, this.computedConfig.headers, newHeaders);
     this.parseRequestBody();
     return this;

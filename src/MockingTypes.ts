@@ -1,4 +1,4 @@
-import type { ApiResponse, Body, Headers, Params, Query, State } from "./ApiTypes";
+import type { ApiResponse, Body, Params, Query, RawHeaders, State } from "./ApiTypes";
 
 export interface ApiMockingConfig {
   enabled: boolean | (() => boolean);
@@ -14,7 +14,7 @@ export interface MockRequest<
   params: TParams extends Params ? Record<TParams, string> : {};
   body: TBody;
   query: TQuery;
-  headers: Readonly<Headers>;
+  headers: Readonly<RawHeaders>;
   url: string;
   state: TState;
 }
@@ -30,7 +30,7 @@ export interface MockResponse<
 
   response: TResponse | undefined;
 
-  headers: Headers;
+  headers: RawHeaders;
 
   status(statusCode: number): this;
 

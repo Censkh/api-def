@@ -1,3 +1,8 @@
+# 0.11.0
+
+- change `headers` to be a native `Headers` object
+- fix `FormData` default header
+
 # 0.10.2
 
 - export `RequestError` type

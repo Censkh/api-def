@@ -230,15 +230,7 @@ const parseResponse = async <R = any>(
   if (response) {
     const parsedResponse = await context.backend.convertResponse<R>(context, response);
 
-    // lowercase all header names
-    (parsedResponse as any).headers =
-      parsedResponse.__lowercaseHeaders ||
-      Object.keys(parsedResponse.headers).reduce((headers, header) => {
-        headers[header.toLowerCase()] = parsedResponse.headers[header];
-        return headers;
-      }, {} as any);
-
-    const contentType = parsedResponse.headers["content-type"];
+    const contentType = parsedResponse.headers.get("content-type");
     const inferredResponseType = inferResponseType(contentType);
 
     if (!error) {

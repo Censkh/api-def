@@ -92,13 +92,10 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       });
     }
 
-    const parsedHeaders = Object.keys(res.headers).reduce(
-      (parsedHeaders, key) => {
-        parsedHeaders[key] = res.headers[key]!.toString();
-        return parsedHeaders;
-      },
-      {} as Record<string, string>,
-    );
+    const parsedHeaders = Object.keys(res.headers).reduce((parsedHeaders, key) => {
+      parsedHeaders.set(key, res.headers[key]!.toString());
+      return parsedHeaders;
+    }, new Headers());
 
     return {
       url: context.requestUrl.href,

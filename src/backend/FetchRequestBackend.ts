@@ -42,18 +42,13 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     },
   ): Promise<ConvertedApiResponse<T>> {
     const { status, headers } = response;
-    const processedHeaders: Record<string, string> = {};
-    headers.forEach((value, key) => {
-      processedHeaders[key] = value;
-    });
 
     const convertedResponse = {
-      __lowercaseHeaders: processedHeaders,
       method: context.method,
       url: response.url,
       data: undefined as any,
       status: status,
-      headers: processedHeaders,
+      headers: headers,
       state: context.requestConfig.state,
     };
     const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
@@ -94,7 +89,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       throw new Error("[api-def] No fetch impl was provided to FetchRequestBackend");
     }
 
-    const { computedConfig } = context;
+    const { requestConfig } = context;
     // abort controller is a newer feature than fetch
     const abortController = AbortController && new AbortController();
     const abortSignal = abortController ? abortController.signal : undefined;
@@ -103,14 +98,14 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const body = context.getParsedBody();
 
-    const bodyJsonify = body !== null && typeof body === "object";
+    const bodyJsonify = body !== null && typeof body === "object" && !Utils.isFormData(body);
 
     const headers = Utils.assign(
       {
         // logic from axios
         "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
       },
-      computedConfig.headers,
+      requestConfig.headers,
     );
 
     const parsedHeaders = Object.keys(headers).reduce((parsedHeaders, key) => {

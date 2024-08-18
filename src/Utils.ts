@@ -76,3 +76,7 @@ export const randInt = (min: number, max: number): number => {
 
   return Math.floor(Math.random() * (maxI - minI + 1)) + minI;
 };
+
+export const isFormData = (value: any): value is FormData => {
+  return value instanceof FormData;
+};
