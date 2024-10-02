@@ -103,7 +103,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const headers = Utils.assign(
       {
         // logic from axios
-        "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : "application/x-www-form-urlencoded",
+        "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : undefined,
       },
       requestConfig.headers,
     );
