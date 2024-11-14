@@ -1,3 +1,7 @@
+# 0.11.1
+
+- expose `retry` util
+
 # 0.11.0
 
 - change `headers` to be a native `Headers` object

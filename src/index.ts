@@ -5,6 +5,9 @@ export * from "./ApiTypes";
 export * from "./UtilTypes";
 export * from "./ApiConstants";
 
+export { default as retry } from "./util/retry";
+export { type RetryOptions } from "./util/retry/interfaces";
+
 export { isRequestError, type RequestError } from "./RequestError";
 
 export { default as Endpoint, type EndpointConfig } from "./Endpoint";
