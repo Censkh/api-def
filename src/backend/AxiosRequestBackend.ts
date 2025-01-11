@@ -27,7 +27,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
     return {
       method: context.method,
-      url: response.request.res.responseUrl,
+      url: response.request.res?.responseUrl ?? response.request?._redirectable?._currentUrl,
       data: response.data,
       headers: response.headers as any,
       status: response.status,

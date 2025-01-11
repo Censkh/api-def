@@ -24,3 +24,10 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
+      # test bun
+      - run: npm i -g bun
+      - run: bun --version
+      - run: bun test
+      # test deno
+      # - run: deno --version
+      # - run: deno test
