@@ -1,6 +1,6 @@
 {
   "name": "api-def",
-  "version": "0.12.0-alpha.1",
+  "version": "0.12.0-alpha.4",
   "description": "Typed API definitions with middleware support",
   "main": "cjs/index.js",
   "types": "esm/index.d.ts",
@@ -19,14 +19,14 @@
     "build": "npm run cleanup && npm run build:esm && npm run build:cjs && npm run build:cli",
     "build:esm": "tsc --module es2015 --target es2016 --outDir esm --preserveWatchOutput",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs --preserveWatchOutput",
-    "build:cli": "tsc cli/index.ts --module commonjs --target es5 --outDir bin --preserveWatchOutput --esModuleInterop --skipLibCheck",
+    "build:cli": "esbuild cli/index.ts --bundle --platform=node --outfile=bin/index.js",
     "website:dev": "cd website && npm run start",
     "website:deploy": "cd website && npm run deploy"
   },
   "keywords": ["typescript", "javascript", "node", "web", "api", "typed", "cache", "fetch", "retry", "middleware"],
   "author": "James Waterhouse <09jwater@gmail.com>",
   "license": "MIT",
-  "files": ["LICENSE", "README.md", "esm/", "cjs/"],
+  "files": ["LICENSE", "README.md", "esm/", "cjs/", "bin/"],
   "jest": {
     "transform": {
       "^.+\\.(t|j)sx?$": [
@@ -52,6 +52,7 @@
     "chalk": "^4.1.2",
     "commander": "^13.0.0",
     "cross-env": "7.0.3",
+    "esbuild": "^0.24.2",
     "jest": "latest",
     "lodash": "^4.17.21",
     "npm-run-all": "4.1.5",

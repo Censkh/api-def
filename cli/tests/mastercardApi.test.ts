@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
-import { openApiToSourceCode } from "../OpenApiToSourceCode";
 import * as path from "node:path";
+import { openApiToSourceCode } from "../OpenApiToSourceCode";
 
 it("1. generated types match", async () => {
   const output = await openApiToSourceCode({

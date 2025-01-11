@@ -1,4 +1,7 @@
+#!/usr/bin/env node
+
 import * as fs from "node:fs";
+import * as path from "node:path";
 import { program } from "commander";
 import { openApiToSourceCode } from "./OpenApiToSourceCode";
 
@@ -14,9 +17,9 @@ program
   .description("Generate an api-def from an OpenAPI spec")
   .action(async (inPath, outPath) => {
     const output = await openApiToSourceCode({
-      openApiPath: inPath,
+      openApiPath: path.resolve(inPath),
     });
-    fs.writeFileSync(outPath, output);
+    fs.writeFileSync(path.resolve(outPath), output);
   });
 
 program.parse(process.argv);

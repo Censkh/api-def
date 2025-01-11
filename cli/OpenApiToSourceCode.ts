@@ -22,7 +22,6 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
   const inContents = fs.readFileSync(openApiPath, "utf-8");
   const ast = await openapiTS(inContents, {
     rootTypes: true,
-
   });
 
   const bundleResults = await bundle({
