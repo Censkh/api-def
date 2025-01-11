@@ -14,7 +14,7 @@ import type {
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import type { ApiMockingConfig } from "./MockingTypes";
-import { computeRequestConfig } from "./RequestConfig";
+import { processRequestConfigs } from "./RequestConfig";
 import * as Requester from "./Requester";
 import * as Utils from "./Utils";
 import type { Validation } from "./Validation";
@@ -38,14 +38,18 @@ export const setRequestBackend = (backend: RequestBackend): void => {
   requestBackend = backend;
 };
 
-export interface ApiInfo {
+export interface ApiOptions {
   readonly name: string;
   readonly baseUrl: string;
   readonly middleware?: RequestMiddleware[];
+  /** @deprecated use `requestConfig` instead */
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
+  readonly requestConfig?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
   readonly requestBackend?: RequestBackend;
 }
+
+export type ApiInfo = ApiOptions & Required<Pick<ApiOptions, "middleware" | "requestBackend">>;
 
 class HotRequestHost implements RequestHost {
   readonly api: Api;
@@ -72,7 +76,7 @@ class HotRequestHost implements RequestHost {
   >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
     const apiDefaults = this.api.getConfig();
 
-    return computeRequestConfig([apiDefaults, config]);
+    return processRequestConfigs([apiDefaults, config]);
   }
 
   computePath(path: string, config: RequestConfig): string {
@@ -85,44 +89,84 @@ class HotRequestHost implements RequestHost {
 }
 
 export class Api implements ApiInfo {
-  readonly baseUrl: string;
-  readonly name: string;
-  readonly middleware: RequestMiddleware[];
-  readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
-  readonly mocking?: ApiMockingConfig;
-  readonly requestBackend: RequestBackend;
+  private readonly info: ApiInfo;
 
   protected readonly endpoints: Record<string, Endpoint> = {};
 
-  constructor(info: ApiInfo) {
-    this.name = info.name;
-    this.baseUrl = info.baseUrl;
-    this.middleware = info.middleware || [];
-    this.endpoints = {};
-    this.config = info.config;
-    this.mocking = info.mocking ?? undefined;
-    const requestBackend = info.requestBackend ?? getRequestBackend();
+  constructor(options: ApiOptions) {
+    const requestBackend = options.requestBackend ?? getRequestBackend();
     if (!requestBackend) {
       throw new Error(
         "[api-def] No request backend provided in either Api options or globally, use `setRequestBackend()` to set one or pass one via `requestBackend`",
       );
     }
-    this.requestBackend = requestBackend;
+
+    this.info = {
+      name: options.name,
+      baseUrl: options.baseUrl,
+      middleware: options.middleware || [],
+      config: options.config,
+      requestConfig: options.requestConfig,
+      mocking: options.mocking ?? undefined,
+      requestBackend: requestBackend,
+    };
+    this.endpoints = {};
+  }
+
+  get requestBackend(): RequestBackend {
+    return this.info.requestBackend;
+  }
+
+  get baseUrl(): string {
+    return this.info.baseUrl;
+  }
+
+  /**
+   * @deprecated use `requestConfig` instead
+   */
+  get config(): BaseRequestConfig | (() => BaseRequestConfig) | undefined {
+    return this.info.config;
+  }
+
+  get requestConfig(): BaseRequestConfig | (() => BaseRequestConfig) | undefined {
+    return this.info.requestConfig;
+  }
+
+  get middleware(): RequestMiddleware[] {
+    return this.info.middleware;
+  }
+
+  get mocking(): ApiMockingConfig | undefined {
+    return this.info.mocking;
+  }
+
+  get name(): string {
+    return this.info.name;
   }
 
   endpoint(): EndpointBuilder {
     return new EndpointBuilder(this);
   }
 
+  /**
+   * @deprecated use `requestBackend` instead
+   */
   getRequestBackend(): RequestBackend {
     return this.requestBackend;
   }
 
+  /**
+   * @deprecated use `computeRequestConfig()` instead
+   */
   getConfig(): BaseRequestConfig {
-    return (typeof this.config === "function" ? this.config() : this.config) || {};
+    return this.computeRequestConfig();
   }
 
-  reconfigure(info: Partial<ApiInfo>): void {
+  computeRequestConfig(): BaseRequestConfig {
+    return (typeof this.requestConfig === "function" ? this.requestConfig() : this.requestConfig) || {};
+  }
+
+  /*reconfigure(info: Partial<ApiInfo>): void {
     if (info.requestBackend) {
       (this as any).requestBackend = info.requestBackend;
     }
@@ -138,7 +182,7 @@ export class Api implements ApiInfo {
     if (info.baseUrl) {
       (this as any).baseUrl = info.baseUrl;
     }
-  }
+  }*/
 
   private hotRequest =
     (requestMethod: RequestMethod) =>

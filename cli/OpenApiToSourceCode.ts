@@ -89,18 +89,25 @@ ${Object.entries(routes)
 
       console.log(`Generating ${methodColor(method.toUpperCase())} '${id}'`);
 
+      const endpointParts = [
+        responseTypes.length > 0 ? `.response<${responseTypes.join("|")}>()` : "",
+        bodyTypes.length > 0 ? `.body<${bodyTypes.join("|")}>()` : "",
+        queryTypes.length > 0 ? `.query<${queryTypes.join("|")}>()` : "",
+      ];
+
       return `export const ${id} = API.endpoint()
-        ${responseTypes.length > 0 ? `.response<${responseTypes.join("|")}>()` : ""}
-        ${bodyTypes.length > 0 ? `.body<${bodyTypes.join("|")}>()` : ""}
-        ${queryTypes.length > 0 ? `.query<${queryTypes.join("|")}>()` : ""}
-        .build({
-  method: "${method}",
-  path: "${path}",
-  id: "${id}",
-});`;
+${endpointParts
+  .filter(Boolean)
+  .map((part) => `  ${part}`)
+  .join("\n")}
+  .build({
+    method: "${method}",
+    path: "${path}",
+    id: "${id}",
+  });`;
     });
   })
-  .join("\n\n")};
+  .join("\n\n")}
 
 export default API;
     `;

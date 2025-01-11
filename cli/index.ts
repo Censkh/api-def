@@ -8,7 +8,7 @@ const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
 program.version(packageJson.version);
 
 program
-  .command("generate-defs")
+  .command("generate")
   .argument("<inPath>", "Path to the OpenAPI spec")
   .argument("<outPath>", "Path to the output file")
   .description("Generate an api-def from an OpenAPI spec")

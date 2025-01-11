@@ -14,11 +14,11 @@ import type {
   State,
 } from "./ApiTypes";
 import type * as Mocking from "./MockingTypes";
-import { computeRequestConfig } from "./RequestConfig";
+import { processRequestConfigs } from "./RequestConfig";
 import type { Validation } from "./Validation";
 import type RequestBackend from "./backend/RequestBackend";
 
-export interface EndpointConfig<
+export interface EndpointOptions<
   TResult,
   TParams extends Params | undefined,
   TQuery extends Query | undefined,
@@ -57,37 +57,84 @@ export interface EndpointConfig<
   readonly validation?: Validation<TResult, TParams, TQuery, TBody, TState>;
 }
 
+export type EndpointInfo<
+  TResult,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State = State,
+  TPath extends string = string,
+> = EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath> &
+  Required<Pick<EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath>, "name" | "validation">>;
+
+/**
+ * @deprecated Use `EndpointInfo` instead
+ */
+export type EndpointConfig<
+  TResult,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State = State,
+  TPath extends string = string,
+> = EndpointInfo<TResult, TParams, TQuery, TBody, TState, TPath>;
+
 export default class Endpoint<
   TResponse = any,
   TParams extends Params | undefined = Params | undefined,
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
-> implements EndpointConfig<TResponse, TParams, TQuery, TBody, TState>, RequestHost
+> implements EndpointInfo<TResponse, TParams, TQuery, TBody, TState>, RequestHost
 {
   public readonly api: Api;
 
-  readonly id: string;
-  readonly method: RequestMethod;
-  readonly name: string;
-  readonly description?: string;
-  readonly path: string;
-  readonly config?: BaseRequestConfig;
-  readonly responseType: ResponseType | undefined;
-  readonly mocking?: Mocking.EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState>;
-  readonly validation: Validation<TResponse, TParams, TQuery, TBody, TState>;
+  private readonly info: EndpointInfo<TResponse, TParams, TQuery, TBody, TState>;
 
-  constructor(api: Api, info: EndpointConfig<TResponse, TParams, TQuery, TBody, TState>) {
+  constructor(api: Api, options: EndpointOptions<TResponse, TParams, TQuery, TBody, TState>) {
     this.api = api;
-    this.id = info.id;
-    this.method = info.method;
-    this.name = info.name || info.id;
-    this.description = info.description;
-    this.path = info.path;
-    this.config = info.config;
-    this.responseType = info.responseType;
-    this.mocking = info.mocking;
-    this.validation = info.validation || {};
+
+    this.info = {
+      ...options,
+      name: options.name || options.id,
+      validation: options.validation || {},
+    };
+  }
+
+  get id(): string {
+    return this.info.id;
+  }
+
+  get method(): RequestMethod {
+    return this.info.method;
+  }
+
+  get path(): string {
+    return this.info.path;
+  }
+
+  get name(): string {
+    return this.info.name;
+  }
+
+  get description(): string | undefined {
+    return this.info.description;
+  }
+
+  get config(): BaseRequestConfig {
+    return this.info.config || {};
+  }
+
+  get responseType(): ResponseType | undefined {
+    return this.info.responseType;
+  }
+
+  get mocking(): Mocking.EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | undefined {
+    return this.info.mocking;
+  }
+
+  get validation(): Validation<TResponse, TParams, TQuery, TBody, TState> {
+    return this.info.validation;
   }
 
   public async submit(config: RequestConfig<TParams, TQuery, TBody, TState>): Promise<ApiResponse<TResponse>> {
@@ -128,18 +175,30 @@ export default class Endpoint<
     return this.api.baseUrl;
   }
 
+  /**
+   * @deprecated Use `computeRequestConfig` instead
+   */
   computeConfig<
     TParams extends Params | undefined,
     TQuery extends Query | undefined,
     TBody extends Body | undefined,
     TState extends State,
   >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
-    const apiDefaults = this.api.getConfig();
+    return this.computeRequestConfig(config);
+  }
 
-    return computeRequestConfig([apiDefaults, this.config, config]);
+  computeRequestConfig<
+    TParams extends Params | undefined,
+    TQuery extends Query | undefined,
+    TBody extends Body | undefined,
+    TState extends State,
+  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
+    const apiDefaults = this.api.computeRequestConfig();
+
+    return processRequestConfigs([apiDefaults, this.config, config]);
   }
 
   getRequestBackend(): RequestBackend {
-    return this.api.getRequestBackend();
+    return this.api.requestBackend;
   }
 }

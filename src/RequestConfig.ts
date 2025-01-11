@@ -13,7 +13,7 @@ import * as Utils from "./Utils";
 
 const MERGED_CONFIG_KEYS = ["headers"];
 
-export const computeRequestConfig = <
+export const processRequestConfigs = <
   TParams extends Params | undefined,
   TQuery extends Query | undefined,
   TBody extends Body | undefined,
