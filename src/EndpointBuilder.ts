@@ -94,7 +94,7 @@ export default class EndpointBuilder<
       EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
       "validation"
     >,
-  ): Endpoint<TResponse, TParams, TQuery, TBody, TState> {
+  ): Endpoint<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> {
     const endpoint = new Endpoint(this.api, { ...options, validation: this.validation });
     (this.api as any).endpoints[endpoint.id] = endpoint as Endpoint;
     return endpoint as any;
