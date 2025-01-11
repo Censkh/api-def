@@ -53,7 +53,7 @@ const withBrackets = api
   });
 
 it("should throw error if missing param", async () => {
-  await expect(async () => {
+  await expect((async () => {
     const res = await withColons.submit({
       params: {
         id: "123",
@@ -61,9 +61,9 @@ it("should throw error if missing param", async () => {
     });
 
     return res;
-  }).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/:sub_id'");
+  })()).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/:sub_id'");
 
-  await expect(async () => {
+  await expect((async () => {
     const res = await withBrackets.submit({
       params: {
         id: "123",
@@ -71,7 +71,7 @@ it("should throw error if missing param", async () => {
     });
 
     return res;
-  }).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/{sub_id}'");
+  })()).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/{sub_id}'");
 
   // This should not throw an error
 

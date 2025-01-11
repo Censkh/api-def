@@ -120,7 +120,7 @@ ${Object.entries(routes)
         });
 
         if (anyHeaderParams) {
-          extraTypes[`Headers${upperFirst(id)}`] = `operations["${id}"]["parameters"]["header"]`;
+          extraTypes[`Headers${upperFirst(id)}`] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
           requestHeaderTypes.push(`Headers${upperFirst(id)}`);
         }
       }
