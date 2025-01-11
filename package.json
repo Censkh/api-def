@@ -29,9 +29,12 @@
   "files": ["LICENSE", "README.md", "esm/", "cjs/"],
   "jest": {
     "transform": {
-      "^.+\\.(t|j)sx?$": ["@swc/jest", {
-        "env": {}
-      }]
+      "^.+\\.(t|j)sx?$": [
+        "@swc/jest",
+        {
+          "env": {}
+        }
+      ]
     }
   },
   "repository": "https://github.com/Censkh/api-def",
@@ -46,7 +49,7 @@
     "@types/node": "22.10.5",
     "@types/qs": "6.9.17",
     "axios": "1.7.9",
-    "chalk": "^5.4.1",
+    "chalk": "^4.1.2",
     "commander": "^13.0.0",
     "cross-env": "7.0.3",
     "jest": "latest",

@@ -122,6 +122,24 @@ export class Api implements ApiInfo {
     return (typeof this.config === "function" ? this.config() : this.config) || {};
   }
 
+  reconfigure(info: Partial<ApiInfo>): void {
+    if (info.requestBackend) {
+      (this as any).requestBackend = info.requestBackend;
+    }
+    if (info.config) {
+      (this as any).config = info.config;
+    }
+    if (info.middleware) {
+      (this as any).middleware = info.middleware;
+    }
+    if (info.mocking) {
+      (this as any).mocking = info.mocking;
+    }
+    if (info.baseUrl) {
+      (this as any).baseUrl = info.baseUrl;
+    }
+  }
+
   private hotRequest =
     (requestMethod: RequestMethod) =>
     async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> =>

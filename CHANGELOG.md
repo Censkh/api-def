@@ -1,3 +1,8 @@
+# 0.12.0
+
+- add CLI to generate api-def from openapi spec
+- add `reconfigure` method to `Api` & `Endpoint` to allow for changing options after creation
+
 # 0.11.1
 
 - expose `retry` util
