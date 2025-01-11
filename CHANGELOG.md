@@ -2,6 +2,7 @@
 
 - add CLI to generate api-def from openapi spec
 - add `reconfigure` method to `Api` & `Endpoint` to allow for changing options after creation
+- support for path params surrounded by curly braces, e.g. `/users/{id}`
 
 # 0.11.1
 

@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
+import { program } from "commander";
 import { upperFirst } from "lodash";
 import openapiTS, { astToString } from "openapi-typescript";
 
@@ -20,9 +21,7 @@ const METHOD_COLORS = {
 export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) => {
   const { openApiPath } = options;
   const inContents = fs.readFileSync(openApiPath, "utf-8");
-  const ast = await openapiTS(inContents, {
-    rootTypes: true,
-  });
+  const ast = await openapiTS(inContents, {});
 
   const bundleResults = await bundle({
     ref: openApiPath,
@@ -34,7 +33,7 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
 
   const server = bundleResults.bundle.parsed.servers[0];
 
-  let extraTypes = "";
+  const extraTypes: Record<string, string> = {};
 
   const source = `import { Api } from "api-def";
 
@@ -51,17 +50,35 @@ ${Object.entries(routes)
       const responseStatuses = Object.keys(methodDef.responses);
       const successfulResponse = responseStatuses.filter((status) => status.startsWith("2") || status.startsWith("3"));
 
+      let responseType = undefined;
+
       const responseTypes = [];
       for (const status of successfulResponse) {
         const response = methodDef.responses[status];
         if (response.$ref) {
-          responseTypes.push(`Response${response.$ref.split("/").pop()}`);
+          const responseDef = bundleResults.bundle.parsed.components.responses[response.$ref.split("/").pop()];
+
+          for (const mediaType in responseDef.content) {
+            const schema = responseDef.content[mediaType].schema;
+
+            if (!responseType) {
+              responseType = mediaType.split(";")[0];
+            }
+
+            if (schema?.$ref) {
+              const name = schema.$ref.split("/").pop();
+              extraTypes[`Response${name}`] = `components["schemas"]["${name}"]`;
+              responseTypes.push(`Response${name}`);
+            }
+          }
         }
       }
 
       const bodyTypes = [];
       if (methodDef.requestBody?.$ref) {
-        bodyTypes.push(`RequestBody${methodDef.requestBody.$ref.split("/").pop()}`);
+        const name = methodDef.requestBody.$ref.split("/").pop();
+        extraTypes[`Body${name}`] = `components["schemas"]["${name}"]`;
+        bodyTypes.push(`Body${name}`);
       }
 
       const queryTypes = [];
@@ -81,9 +98,50 @@ ${Object.entries(routes)
         });
 
         if (anyQueryParams) {
-          extraTypes += `export type Query${upperFirst(id)} = operations["${id}"]["parameters"]["query"];\n`;
+          extraTypes[`Query${upperFirst(id)}`] = `operations["${id}"]["parameters"]["query"]`;
           queryTypes.push(`Query${upperFirst(id)}`);
         }
+      }
+
+      const requestHeaderTypes = [];
+      if (methodDef.parameters?.length) {
+        const anyHeaderParams = methodDef.parameters.some((param: any) => {
+          if (param.in === "header") {
+            return true;
+          }
+
+          if (param.$ref) {
+            const ref = param.$ref;
+
+            const paramDef = bundleResults.bundle.parsed.components.parameters[ref.split("/").pop()];
+            return paramDef.in === "header";
+          }
+          return false;
+        });
+
+        if (anyHeaderParams) {
+          extraTypes[`Headers${upperFirst(id)}`] = `operations["${id}"]["parameters"]["header"]`;
+          requestHeaderTypes.push(`Headers${upperFirst(id)}`);
+        }
+      }
+
+      const responseHeaderTypes = [];
+
+      let pathParams = [];
+      if (methodDef.parameters?.length) {
+        pathParams = methodDef.parameters.reduce((pathParams, param: any) => {
+          if (param.in === "path") {
+            pathParams.push(param.name);
+          } else if (param.$ref) {
+            const ref = param.$ref;
+
+            const paramDef = bundleResults.bundle.parsed.components.parameters[ref.split("/").pop()];
+            if (paramDef.in === "path") {
+              pathParams.push(paramDef.name);
+            }
+          }
+          return pathParams;
+        }, []);
       }
 
       /*
@@ -92,9 +150,12 @@ ${Object.entries(routes)
        */
 
       const endpointParts = [
-        responseTypes.length > 0 ? `.response<${responseTypes.join("|")}>()` : "",
-        bodyTypes.length > 0 ? `.body<${bodyTypes.join("|")}>()` : "",
-        queryTypes.length > 0 ? `.query<${queryTypes.join("|")}>()` : "",
+        pathParams.length > 0 ? `.paramsOf<"${pathParams.join("|")}">()` : "",
+        responseTypes.length > 0 ? `.responseOf<${responseTypes.join("|")}>()` : "",
+        bodyTypes.length > 0 ? `.bodyOf<${bodyTypes.join("|")}>()` : "",
+        queryTypes.length > 0 ? `.queryOf<${queryTypes.join("|")}>()` : "",
+        requestHeaderTypes.length > 0 ? `.requestHeadersOf<${requestHeaderTypes.join("|")}>()` : "",
+        responseHeaderTypes.length > 0 ? `.responseHeadersOf<${responseHeaderTypes.join("|")}>()` : "",
       ];
 
       return `export const ${id} = API.endpoint()
@@ -111,10 +172,14 @@ ${endpointParts
   })
   .join("\n\n")}
 
-export default API;
-    `;
+export default API;`;
 
   const types = astToString(ast);
 
-  return `// Type Defs\n\n${types}\n${extraTypes}\n\n//API Def\n\n${source}`;
+  const extraTypesSource = Object.keys(extraTypes)
+    .sort()
+    .map((key) => `export type ${key} = ${extraTypes[key]};`)
+    .join("\n");
+
+  return `// Type Defs\n\n${types}\n${extraTypesSource}\n\n//API Def\n\n${source}`;
 };

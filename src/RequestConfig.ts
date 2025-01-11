@@ -5,6 +5,7 @@ import {
   type ComputedRequestConfig,
   type Params,
   type Query,
+  type RawHeaders,
   type RequestConfig,
   type State,
 } from "./ApiTypes";
@@ -18,10 +19,11 @@ export const processRequestConfigs = <
   TQuery extends Query | undefined,
   TBody extends Body | undefined,
   TState extends State,
+  TRequestHeaders extends RawHeaders | undefined,
 >(
-  configs: (RequestConfig<TParams, TQuery, TBody, TState> | BaseRequestConfig | undefined)[],
-): ComputedRequestConfig<TParams, TQuery, TBody, TState> => {
-  const computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState> = Utils.assign(
+  configs: (RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> | BaseRequestConfig | undefined)[],
+): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> => {
+  const computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> = Utils.assign(
     {
       [COMPUTED_CONFIG_SYMBOL]: true,
     },

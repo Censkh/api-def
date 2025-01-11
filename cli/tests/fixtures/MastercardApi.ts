@@ -9186,429 +9186,6 @@ export interface components {
     headers: never;
     pathItems: never;
 }
-export type SchemaTransactionTypeCode = components['schemas']['transactionTypeCode'];
-export type SchemaTransactionType = components['schemas']['transactionType'];
-export type SchemaServiceClassCode = components['schemas']['serviceClassCode'];
-export type SchemaTargetContractNumber = components['schemas']['targetContractNumber'];
-export type SchemaSourceContractNumber = components['schemas']['sourceContractNumber'];
-export type SchemaAuthenticationParameterName = components['schemas']['authenticationParameterName'];
-export type SchemaAuthenticationParameterValue = components['schemas']['authenticationParameterValue'];
-export type SchemaAuthenticationTypeCode = components['schemas']['authenticationTypeCode'];
-export type SchemaBlockedFundsReleaseResult = components['schemas']['BlockedFundsReleaseResult'];
-export type SchemaAuthenticationParameterValue_2 = components['schemas']['AuthenticationParameterValue'];
-export type SchemaReverseTransactionReason = components['schemas']['ReverseTransactionReason'];
-export type SchemaBlockedFundsRelease = components['schemas']['BlockedFundsRelease'];
-export type SchemaProductionCode = components['schemas']['productionCode'];
-export type SchemaCardContractProductionCode = components['schemas']['cardContractProductionCode'];
-export type SchemaClientId = components['schemas']['clientId'];
-export type SchemaClientNumber = components['schemas']['clientNumber'];
-export type SchemaClientType = components['schemas']['clientType'];
-export type SchemaClientExpiryDate = components['schemas']['clientExpiryDate'];
-export type SchemaContractId = components['schemas']['contractId'];
-export type SchemaContractName = components['schemas']['contractName'];
-export type SchemaContractLevel = components['schemas']['contractLevel'];
-export type SchemaParentAccountContractId = components['schemas']['parentAccountContractId'];
-export type SchemaAccountContractId = components['schemas']['accountContractId'];
-export type SchemaAccountContractNumber = components['schemas']['accountContractNumber'];
-export type SchemaAccountContractName = components['schemas']['accountContractName'];
-export type SchemaCardContractId = components['schemas']['cardContractId'];
-export type SchemaCardContractNumberForReissue = components['schemas']['cardContractNumberForReissue'];
-export type SchemaCardContractNumberForCreation = components['schemas']['cardContractNumberForCreation'];
-export type SchemaCardContractNumber = components['schemas']['cardContractNumber'];
-export type SchemaCardContractName = components['schemas']['cardContractName'];
-export type SchemaCardExpiryDate = components['schemas']['cardExpiryDate'];
-export type SchemaNewCardExpiryDate = components['schemas']['newCardExpiryDate'];
-export type SchemaCardExpiryDateForCreation = components['schemas']['cardExpiryDateForCreation'];
-export type SchemaPlasticId = components['schemas']['plasticId'];
-export type SchemaPlasticSequenceNumber = components['schemas']['plasticSequenceNumber'];
-export type SchemaPostingDate = components['schemas']['postingDate'];
-export type SchemaResponseCode = components['schemas']['responseCode'];
-export type SchemaResponseCodeDescription = components['schemas']['responseCodeDescription'];
-export type SchemaSourceContractId = components['schemas']['sourceContractId'];
-export type SchemaTargetContractId = components['schemas']['targetContractId'];
-export type SchemaTransactionId = components['schemas']['transactionId'];
-export type SchemaMcc = components['schemas']['mcc'];
-export type SchemaMccDescription = components['schemas']['mccDescription'];
-export type SchemaMerchantCountry = components['schemas']['merchantCountry'];
-export type SchemaMerchantLocation = components['schemas']['merchantLocation'];
-export type SchemaMerchantName = components['schemas']['merchantName'];
-export type SchemaCardContractStatusCode = components['schemas']['cardContractStatusCode'];
-export type SchemaAccountContractStatusCode = components['schemas']['accountContractStatusCode'];
-export type SchemaCardContractStatusName = components['schemas']['cardContractStatusName'];
-export type SchemaAccountContractStatusName = components['schemas']['accountContractStatusName'];
-export type SchemaExternalStatusCode = components['schemas']['externalStatusCode'];
-export type SchemaCardContractExternalStatusName = components['schemas']['cardContractExternalStatusName'];
-export type SchemaAccountContractExternalStatusName = components['schemas']['accountContractExternalStatusName'];
-export type SchemaMainProductCode = components['schemas']['mainProductCode'];
-export type SchemaParentProductCode = components['schemas']['parentProductCode'];
-export type SchemaBlockedAmount = components['schemas']['blockedAmount'];
-export type SchemaCreditLimit = components['schemas']['creditLimit'];
-export type SchemaLiabilityCategory = components['schemas']['liabilityCategory'];
-export type SchemaPinAttemptsCounter = components['schemas']['pinAttemptsCounter'];
-export type SchemaMaxPinAttempts = components['schemas']['maxPinAttempts'];
-export type SchemaBranchCode = components['schemas']['branchCode'];
-export type SchemaBranchName = components['schemas']['branchName'];
-export type SchemaCbsNumber = components['schemas']['cbsNumber'];
-export type SchemaSubtypeCode = components['schemas']['subtypeCode'];
-export type SchemaAccountProductCode = components['schemas']['accountProductCode'];
-export type SchemaCardProductCode = components['schemas']['cardProductCode'];
-export type SchemaTagContainer = components['schemas']['tagContainer'];
-export type SchemaTagName = components['schemas']['tagName'];
-export type SchemaTagValue = components['schemas']['tagValue'];
-export type SchemaRemoveTag = components['schemas']['removeTag'];
-export type SchemaAmendmentDate = components['schemas']['amendmentDate'];
-export type SchemaAmendmentOfficerId = components['schemas']['amendmentOfficerId'];
-export type SchemaAmendmentOfficerName = components['schemas']['amendmentOfficerName'];
-export type SchemaDateOpen = components['schemas']['dateOpen'];
-export type SchemaAccountProductName = components['schemas']['accountProductName'];
-export type SchemaCardProductName = components['schemas']['cardProductName'];
-export type SchemaCardholderId = components['schemas']['cardholderId'];
-export type SchemaCardholderShortName = components['schemas']['cardholderShortName'];
-export type SchemaStatusChangeReason = components['schemas']['statusChangeReason'];
-export type SchemaOrderDepartment = components['schemas']['orderDepartment'];
-export type SchemaServiceGroupCode = components['schemas']['serviceGroupCode'];
-export type SchemaAddressType = components['schemas']['addressType'];
-export type SchemaAddressLine1 = components['schemas']['addressLine1'];
-export type SchemaAddressLine2 = components['schemas']['addressLine2'];
-export type SchemaAddressLine3 = components['schemas']['addressLine3'];
-export type SchemaAddressLine4 = components['schemas']['addressLine4'];
-export type SchemaCity = components['schemas']['city'];
-export type SchemaPostalCode = components['schemas']['postalCode'];
-export type SchemaState = components['schemas']['state'];
-export type SchemaCountry = components['schemas']['country'];
-export type SchemaEmail = components['schemas']['email'];
-export type SchemaFirstName = components['schemas']['firstName'];
-export type SchemaLastName = components['schemas']['lastName'];
-export type SchemaCustomerPublicRsaKey = components['schemas']['customerPublicRsaKey'];
-export type SchemaInstallmentChainId = components['schemas']['installmentChainId'];
-export type SchemaInstallmentPlanStatus = components['schemas']['installmentPlanStatus'];
-export type SchemaBillingCycleNumber = components['schemas']['billingCycleNumber'];
-export type SchemaClassifierCode = components['schemas']['classifierCode'];
-export type SchemaClassifierValue = components['schemas']['classifierValue'];
-export type SchemaParameterCode = components['schemas']['parameterCode'];
-export type SchemaParameterValue = components['schemas']['parameterValue'];
-export type SchemaLeaf = components['schemas']['leaf'];
-export type SchemaContractBalanceCode = components['schemas']['contractBalanceCode'];
-export type SchemaBillingStartBalance = components['schemas']['billingStartBalance'];
-export type SchemaKeyIndex = components['schemas']['keyIndex'];
-export type SchemaIfMatch = components['schemas']['ifMatch'];
-export type SchemaAuthorizationCode = components['schemas']['authorizationCode'];
-export type SchemaRrn = components['schemas']['rrn'];
-export type SchemaSrn = components['schemas']['srn'];
-export type SchemaPaginationCount = components['schemas']['paginationCount'];
-export type SchemaPaginationLimit = components['schemas']['paginationLimit'];
-export type SchemaPaginationOffset = components['schemas']['paginationOffset'];
-export type SchemaPaginationTotal = components['schemas']['paginationTotal'];
-export type SchemaDate = components['schemas']['date'];
-export type SchemaUsageLimitCode = components['schemas']['usageLimitCode'];
-export type SchemaCardContractCreation = components['schemas']['CardContractCreation'];
-export type SchemaCardContractData = components['schemas']['CardContractData'];
-export type SchemaCardContractIdentifier = components['schemas']['CardContractIdentifier'];
-export type SchemaEmbossedData = components['schemas']['EmbossedData'];
-export type SchemaCustomDataTags = components['schemas']['CustomDataTags'];
-export type SchemaCustomDataTag = components['schemas']['CustomDataTag'];
-export type SchemaTransactionCustomData = components['schemas']['TransactionCustomData'];
-export type SchemaCustomDataTagValue = components['schemas']['CustomDataTagValue'];
-export type SchemaErrorWrapper = components['schemas']['ErrorWrapper'];
-export type SchemaErrors = components['schemas']['Errors'];
-export type SchemaErrorList = components['schemas']['ErrorList'];
-export type SchemaError = components['schemas']['Error'];
-export type SchemaCardContractModification = components['schemas']['CardContractModification'];
-export type SchemaAccountContractCardContracts = components['schemas']['AccountContractCardContracts'];
-export type SchemaCardContractSummary = components['schemas']['CardContractSummary'];
-export type SchemaCardContractWithEncryptedCardContractNumber = components['schemas']['CardContractWithEncryptedCardContractNumber'];
-export type SchemaCardContract = components['schemas']['CardContract'];
-export type SchemaPreviousCardContractId = components['schemas']['previousCardContractId'];
-export type SchemaPreviousCardContractNumber = components['schemas']['previousCardContractNumber'];
-export type SchemaBaseCardContractStatusData = components['schemas']['BaseCardContractStatusData'];
-export type SchemaCardContractStatusData = components['schemas']['CardContractStatusData'];
-export type SchemaCardContractStatusWithReason = components['schemas']['CardContractStatusWithReason'];
-export type SchemaCardContractActivation = components['schemas']['CardContractActivation'];
-export type SchemaClientCardContracts = components['schemas']['ClientCardContracts'];
-export type SchemaPlastic = components['schemas']['Plastic'];
-export type SchemaCardContractPlastics = components['schemas']['CardContractPlastics'];
-export type SchemaCardContractReissue = components['schemas']['CardContractReissue'];
-export type SchemaReissuedCardContract = components['schemas']['ReissuedCardContract'];
-export type SchemaReverseTransactionId = components['schemas']['ReverseTransactionId'];
-export type SchemaTransactionId_2 = components['schemas']['TransactionId'];
-export type SchemaAccountContractStatus = components['schemas']['AccountContractStatus'];
-export type SchemaCardContractStatus = components['schemas']['CardContractStatus'];
-export type SchemaContractTariffs = components['schemas']['ContractTariffs'];
-export type SchemaBaseClient = components['schemas']['BaseClient'];
-export type SchemaClient = components['schemas']['Client'];
-export type SchemaClientCreation = components['schemas']['ClientCreation'];
-export type SchemaClientIdentifier = components['schemas']['ClientIdentifier'];
-export type SchemaAdditionalDate01 = components['schemas']['additionalDate01'];
-export type SchemaAdditionalDate02 = components['schemas']['additionalDate02'];
-export type SchemaClientBaseAddressData = components['schemas']['ClientBaseAddressData'];
-export type SchemaClientCompanyData = components['schemas']['ClientCompanyData'];
-export type SchemaClientContactData = components['schemas']['ClientContactData'];
-export type SchemaClientIdentificationData = components['schemas']['ClientIdentificationData'];
-export type SchemaClientPersonalData = components['schemas']['ClientPersonalData'];
-export type SchemaClientModification = components['schemas']['ClientModification'];
-export type SchemaPinSearchCriteria = components['schemas']['PinSearchCriteria'];
-export type SchemaEncryptedPin = components['schemas']['EncryptedPin'];
-export type SchemaClientAddresses = components['schemas']['ClientAddresses'];
-export type SchemaContractAddresses = components['schemas']['ContractAddresses'];
-export type SchemaBaseAddress = components['schemas']['BaseAddress'];
-export type SchemaAddressCreation = components['schemas']['AddressCreation'];
-export type SchemaAddress = components['schemas']['Address'];
-export type SchemaAddressModification = components['schemas']['AddressModification'];
-export type SchemaAccountContractCreation = components['schemas']['AccountContractCreation'];
-export type SchemaLiabilityContract = components['schemas']['LiabilityContract'];
-export type SchemaAccountContractData = components['schemas']['AccountContractData'];
-export type SchemaCreditData = components['schemas']['CreditData'];
-export type SchemaAccountContractClassifier = components['schemas']['AccountContractClassifier'];
-export type SchemaAccountContractParameter = components['schemas']['AccountContractParameter'];
-export type SchemaAccountContractModification = components['schemas']['AccountContractModification'];
-export type SchemaAccountContractStatusWithReason = components['schemas']['AccountContractStatusWithReason'];
-export type SchemaSubAccountContracts = components['schemas']['SubAccountContracts'];
-export type SchemaContractSummaryTree = components['schemas']['ContractSummaryTree'];
-export type SchemaContractSummary = components['schemas']['ContractSummary'];
-export type SchemaContractBalances = components['schemas']['ContractBalances'];
-export type SchemaContractBalance = components['schemas']['ContractBalance'];
-export type SchemaEvent = components['schemas']['Event'];
-export type SchemaClientAccountContracts = components['schemas']['ClientAccountContracts'];
-export type SchemaAccountContract = components['schemas']['AccountContract'];
-export type SchemaAccountContractOwner = components['schemas']['AccountContractOwner'];
-export type SchemaAccountContractBalances = components['schemas']['AccountContractBalances'];
-export type SchemaAccountContractStatusData = components['schemas']['AccountContractStatusData'];
-export type SchemaContractTariff = components['schemas']['ContractTariff'];
-export type SchemaContractFinancial = components['schemas']['ContractFinancial'];
-export type SchemaAccountContractIdentifierWithClientIdentifier = components['schemas']['AccountContractIdentifierWithClientIdentifier'];
-export type SchemaAccountContractIdentifier = components['schemas']['AccountContractIdentifier'];
-export type SchemaClientIdentifierWithRelinkType = components['schemas']['ClientIdentifierWithRelinkType'];
-export type SchemaTechnicalAccounts = components['schemas']['TechnicalAccounts'];
-export type SchemaTechnicalAccount = components['schemas']['TechnicalAccount'];
-export type SchemaClassifierCreation = components['schemas']['ClassifierCreation'];
-export type SchemaClientClassifiers = components['schemas']['ClientClassifiers'];
-export type SchemaContractClassifiers = components['schemas']['ContractClassifiers'];
-export type SchemaClassifier = components['schemas']['Classifier'];
-export type SchemaCvcVerificationResult = components['schemas']['CvcVerificationResult'];
-export type SchemaCvcVerification = components['schemas']['CvcVerification'];
-export type SchemaPinVerification = components['schemas']['PinVerification'];
-export type SchemaPinVerificationResult = components['schemas']['PinVerificationResult'];
-export type SchemaPinCreation = components['schemas']['PinCreation'];
-export type SchemaParameterModification = components['schemas']['ParameterModification'];
-export type SchemaContractParameters = components['schemas']['ContractParameters'];
-export type SchemaContractParameter = components['schemas']['ContractParameter'];
-export type SchemaChargeFee = components['schemas']['ChargeFee'];
-export type SchemaTransactions = components['schemas']['Transactions'];
-export type SchemaTransaction = components['schemas']['Transaction'];
-export type SchemaCvcSearchCriteria = components['schemas']['CvcSearchCriteria'];
-export type SchemaCvc = components['schemas']['Cvc'];
-export type SchemaTransactionFees = components['schemas']['TransactionFees'];
-export type SchemaTransactionFee = components['schemas']['TransactionFee'];
-export type SchemaOnlinePinAttemptsClearance = components['schemas']['OnlinePinAttemptsClearance'];
-export type SchemaOnlinePinAttemptsClearanceForClient = components['schemas']['OnlinePinAttemptsClearanceForClient'];
-export type SchemaTransactionDocuments = components['schemas']['TransactionDocuments'];
-export type SchemaTransactionDocument = components['schemas']['TransactionDocument'];
-export type SchemaTransactionAddInfo = components['schemas']['TransactionAddInfo'];
-export type SchemaTransactionBaseInfo = components['schemas']['TransactionBaseInfo'];
-export type SchemaTransactionIdentifiers = components['schemas']['TransactionIdentifiers'];
-export type SchemaTransactionMerchantInfo = components['schemas']['TransactionMerchantInfo'];
-export type SchemaTransactionTypeInfo = components['schemas']['TransactionTypeInfo'];
-export type SchemaTransactionValues = components['schemas']['TransactionValues'];
-export type SchemaTransactionContractDebit = components['schemas']['TransactionContractDebit'];
-export type SchemaUsageLimitModification = components['schemas']['UsageLimitModification'];
-export type SchemaUsageLimitOriginalValue = components['schemas']['UsageLimitOriginalValue'];
-export type SchemaUsageLimitResetting = components['schemas']['UsageLimitResetting'];
-export type SchemaUsageLimits = components['schemas']['UsageLimits'];
-export type SchemaUsageLimit = components['schemas']['UsageLimit'];
-export type SchemaCurrentUsage = components['schemas']['CurrentUsage'];
-export type SchemaUsageLimitStatus = components['schemas']['UsageLimitStatus'];
-export type SchemaPublicRsaKeyData = components['schemas']['PublicRsaKeyData'];
-export type SchemaServiceLimitTariff = components['schemas']['ServiceLimitTariff'];
-export type SchemaAccountContractIdentifierSearch = components['schemas']['AccountContractIdentifierSearch'];
-export type SchemaCardContractIdentifierSearch = components['schemas']['CardContractIdentifierSearch'];
-export type SchemaClientIdentifierSearch = components['schemas']['ClientIdentifierSearch'];
-export type SchemaFieldSelection = components['schemas']['fieldSelection'];
-export type SchemaAuthenticationMethod = components['schemas']['AuthenticationMethod'];
-export type SchemaAuthenticationParameter = components['schemas']['AuthenticationParameter'];
-export type SchemaTransactionContractCredit = components['schemas']['TransactionContractCredit'];
-export type SchemaCardContractDetailsVerification = components['schemas']['CardContractDetailsVerification'];
-export type SchemaCardContractDetailsVerificationResult = components['schemas']['CardContractDetailsVerificationResult'];
-export type SchemaClientCustomDataTagValues = components['schemas']['ClientCustomDataTagValues'];
-export type SchemaContractCustomDataTagValues = components['schemas']['ContractCustomDataTagValues'];
-export type ResponseAuthenticationParameterValue = components['responses']['AuthenticationParameterValue'];
-export type ResponseBlockedFundsReleaseResult = components['responses']['BlockedFundsReleaseResult'];
-export type ResponseClientUpdated = components['responses']['ClientUpdated'];
-export type ResponseAccountRelinked = components['responses']['AccountRelinked'];
-export type ResponseSubAccountRelinked = components['responses']['SubAccountRelinked'];
-export type ResponseAccountUpdated = components['responses']['AccountUpdated'];
-export type ResponseAccountStatusChanged = components['responses']['AccountStatusChanged'];
-export type ResponseCardRelinkedToAnotherClient = components['responses']['CardRelinkedToAnotherClient'];
-export type ResponseCardRelinkedToAnotherAccount = components['responses']['CardRelinkedToAnotherAccount'];
-export type ResponseCardUpdated = components['responses']['CardUpdated'];
-export type ResponseCardStatusChanged = components['responses']['CardStatusChanged'];
-export type ResponseOnlinePinTryCounterReset = components['responses']['OnlinePinTryCounterReset'];
-export type ResponseCardPlasticUnlocked = components['responses']['CardPlasticUnlocked'];
-export type ResponseClientAddressUpdated = components['responses']['ClientAddressUpdated'];
-export type ResponseContractAddressUpdated = components['responses']['ContractAddressUpdated'];
-export type ResponseContractParameterSetOrChanged = components['responses']['ContractParameterSetOrChanged'];
-export type ResponseContractUsageLimitAddedOrUpdated = components['responses']['ContractUsageLimitAddedOrUpdated'];
-export type ResponseContractUsageLimitRestored = components['responses']['ContractUsageLimitRestored'];
-export type ResponseContractUsageLimitCounterReset = components['responses']['ContractUsageLimitCounterReset'];
-export type ResponseContractUsageLimitStatusChanged = components['responses']['ContractUsageLimitStatusChanged'];
-export type ResponseServiceLimitTariffSetUp = components['responses']['ServiceLimitTariffSetUp'];
-export type ResponseContractCustomDataSetUp = components['responses']['ContractCustomDataSetUp'];
-export type ResponseClientCustomDataSetUp = components['responses']['ClientCustomDataSetUp'];
-export type ResponseContractClassifierSetUp = components['responses']['ContractClassifierSetUp'];
-export type ResponseClientClassifierSetUp = components['responses']['ClientClassifierSetUp'];
-export type ResponseContractAddressCreated = components['responses']['ContractAddressCreated'];
-export type ResponseClientAddressCreated = components['responses']['ClientAddressCreated'];
-export type ResponseCardPlasticNewPinSetUp = components['responses']['CardPlasticNewPinSetUp'];
-export type ResponseContractEventCreated = components['responses']['ContractEventCreated'];
-export type ResponseBadRequestInvalidContractTypeError = components['responses']['BadRequestInvalidContractTypeError'];
-export type ResponseBadRequestInvalidTransactionTypeError = components['responses']['BadRequestInvalidTransactionTypeError'];
-export type ResponseBadRequestInvalidClientTypeError = components['responses']['BadRequestInvalidClientTypeError'];
-export type ResponseBadRequestInvalidCardContractTypeError = components['responses']['BadRequestInvalidCardContractTypeError'];
-export type ResponseBadRequestInvalidAccountContractTypeError = components['responses']['BadRequestInvalidAccountContractTypeError'];
-export type ResponseBadRequestNullCardContractIdentifierError = components['responses']['BadRequestNullCardContractIdentifierError'];
-export type ResponseBadRequestNullAccountContractIdentifierError = components['responses']['BadRequestNullAccountContractIdentifierError'];
-export type ResponseBadRequestNullClientIdentifierError = components['responses']['BadRequestNullClientIdentifierError'];
-export type ResponseBadRequestNullClientNumberError = components['responses']['BadRequestNullClientNumberError'];
-export type ResponseBadRequestNullClassifierCodeError = components['responses']['BadRequestNullClassifierCodeError'];
-export type ResponseBadRequestNullCardContractError = components['responses']['BadRequestNullCardContractError'];
-export type ResponseBadRequestNullCardContractNumberError = components['responses']['BadRequestNullCardContractNumberError'];
-export type ResponseBadRequestMissingDataTypeToSecureError = components['responses']['BadRequestMissingDataTypeToSecureError'];
-export type ResponseBadRequestMissingTransactionSelectorTypeError = components['responses']['BadRequestMissingTransactionSelectorTypeError'];
-export type ResponseContractNotFoundError = components['responses']['ContractNotFoundError'];
-export type ResponseTransactionNotFoundError = components['responses']['TransactionNotFoundError'];
-export type ResponseCardContractNotFoundError = components['responses']['CardContractNotFoundError'];
-export type ResponseAccountContractNotFoundError = components['responses']['AccountContractNotFoundError'];
-export type ResponseClientNotFoundError = components['responses']['ClientNotFoundError'];
-export type ResponseOperationDeniedError = components['responses']['OperationDeniedError'];
-export type ResponsePreconditionError = components['responses']['PreconditionError'];
-export type ResponseClientIdentifier = components['responses']['ClientIdentifier'];
-export type ResponseClientIdentifierCreated = components['responses']['ClientIdentifierCreated'];
-export type ResponseClient = components['responses']['Client'];
-export type ResponseClientAccountContracts = components['responses']['ClientAccountContracts'];
-export type ResponseClientCardContracts = components['responses']['ClientCardContracts'];
-export type ResponseContractFinancial = components['responses']['ContractFinancial'];
-export type ResponseContractBalances = components['responses']['ContractBalances'];
-export type ResponseTechnicalAccounts = components['responses']['TechnicalAccounts'];
-export type ResponseAccountContractIdentifierCreated = components['responses']['AccountContractIdentifierCreated'];
-export type ResponseAccountContractIdentifier = components['responses']['AccountContractIdentifier'];
-export type ResponseAccountContract = components['responses']['AccountContract'];
-export type ResponseSubAccountContracts = components['responses']['SubAccountContracts'];
-export type ResponseAccountContractCardContracts = components['responses']['AccountContractCardContracts'];
-export type ResponseContractSummaryTree = components['responses']['ContractSummaryTree'];
-export type ResponseCardContractIdentifierCreated = components['responses']['CardContractIdentifierCreated'];
-export type ResponseCvc = components['responses']['Cvc'];
-export type ResponseCvcVerificationResult = components['responses']['CvcVerificationResult'];
-export type ResponsePinVerificationResult = components['responses']['PinVerificationResult'];
-export type ResponseEncryptedPin = components['responses']['EncryptedPin'];
-export type ResponseCardContractPlastics = components['responses']['CardContractPlastics'];
-export type ResponseContractParameters = components['responses']['ContractParameters'];
-export type ResponseClientAddresses = components['responses']['ClientAddresses'];
-export type ResponseContractAddresses = components['responses']['ContractAddresses'];
-export type ResponseClientCustomDataTagValues = components['responses']['ClientCustomDataTagValues'];
-export type ResponseContractCustomDataTagValues = components['responses']['ContractCustomDataTagValues'];
-export type ResponseTransactions = components['responses']['Transactions'];
-export type ResponseTransactionDocuments = components['responses']['TransactionDocuments'];
-export type ResponseTransactionFees = components['responses']['TransactionFees'];
-export type ResponseUsageLimits = components['responses']['UsageLimits'];
-export type ResponseClientClassifiers = components['responses']['ClientClassifiers'];
-export type ResponseContractClassifiers = components['responses']['ContractClassifiers'];
-export type ResponseCardContractIdentifier = components['responses']['CardContractIdentifier'];
-export type ResponsePublicRsaKeyData = components['responses']['PublicRsaKeyData'];
-export type ResponseCardContract = components['responses']['CardContract'];
-export type ResponseReissuedCardContract = components['responses']['ReissuedCardContract'];
-export type ResponseAuthenticationMethodSetUp = components['responses']['AuthenticationMethodSetUp'];
-export type ResponseDebitTransactionId = components['responses']['DebitTransactionId'];
-export type ResponseCreditTransactionId = components['responses']['CreditTransactionId'];
-export type ResponseChargeTransactionId = components['responses']['ChargeTransactionId'];
-export type ResponseReverseTransactionId = components['responses']['ReverseTransactionId'];
-export type ResponseContractTariffs = components['responses']['ContractTariffs'];
-export type ResponseAccountContractStatus = components['responses']['AccountContractStatus'];
-export type ResponseCardContractStatus = components['responses']['CardContractStatus'];
-export type ResponseCardContractDetailsVerificationResult = components['responses']['CardContractDetailsVerificationResult'];
-export type ParameterAuthenticationTypeCode = components['parameters']['authenticationTypeCode'];
-export type ParameterAuthenticationParameterName = components['parameters']['authenticationParameterName'];
-export type ParameterMandatoryCustomerPublicRsaKey = components['parameters']['mandatoryCustomerPublicRsaKey'];
-export type ParameterOptionalCustomerPublicRsaKey = components['parameters']['optionalCustomerPublicRsaKey'];
-export type ParameterClientId = components['parameters']['clientId'];
-export type ParameterAccountContractId = components['parameters']['accountContractId'];
-export type ParameterCardContractId = components['parameters']['cardContractId'];
-export type ParameterContractId = components['parameters']['contractId'];
-export type ParameterDirection = components['parameters']['direction'];
-export type ParameterContractHierarchy = components['parameters']['contractHierarchy'];
-export type ParameterLimit = components['parameters']['limit'];
-export type ParameterOffset = components['parameters']['offset'];
-export type ParameterFieldsSelection = components['parameters']['fieldsSelection'];
-export type ParameterContractBalanceCodes = components['parameters']['contractBalanceCodes'];
-export type ParameterKeyIndex = components['parameters']['keyIndex'];
-export type ParameterIfMatch = components['parameters']['ifMatch'];
-export type ParameterTransactionDateFrom = components['parameters']['transactionDateFrom'];
-export type ParameterTransactionDateTo = components['parameters']['transactionDateTo'];
-export type ParameterTransactionTypeCodes = components['parameters']['transactionTypeCodes'];
-export type ParameterTransactionSelectorType = components['parameters']['transactionSelectorType'];
-export type ParameterTransactionSelectorValue = components['parameters']['transactionSelectorValue'];
-export type ParameterTransactionCollectAuthorizations = components['parameters']['transactionCollectAuthorizations'];
-export type ParameterAddressType = components['parameters']['addressType'];
-export type ParameterParameterCode = components['parameters']['parameterCode'];
-export type ParameterParameterCodes = components['parameters']['parameterCodes'];
-export type ParameterClassifierCode = components['parameters']['classifierCode'];
-export type ParameterClassifierCodes = components['parameters']['classifierCodes'];
-export type ParameterTagName = components['parameters']['tagName'];
-export type ParameterTransactionId = components['parameters']['transactionId'];
-export type ParameterTechnicalAccountCode = components['parameters']['technicalAccountCode'];
-export type ParameterTransactionAuthorizationFilterMode = components['parameters']['transactionAuthorizationFilterMode'];
-export type ParameterTransactionAuthorized = components['parameters']['transactionAuthorized'];
-export type ParameterUsageLimitCodes = components['parameters']['usageLimitCodes'];
-export type ParameterUsageLimitCode = components['parameters']['usageLimitCode'];
-export type ParameterDateTypeToSecure = components['parameters']['dateTypeToSecure'];
-export type ParameterStatuses = components['parameters']['statuses'];
-export type ParameterCreationDateFrom = components['parameters']['creationDateFrom'];
-export type ParameterTariffCode = components['parameters']['tariffCode'];
-export type ParameterTariffTypeCode = components['parameters']['tariffTypeCode'];
-export type ParameterPersonalisationType = components['parameters']['personalisationType'];
-export type ParameterTariffDomainCode = components['parameters']['tariffDomainCode'];
-export type ParameterTariffRole = components['parameters']['tariffRole'];
-export type ParameterIdempotencyKey = components['parameters']['idempotencyKey'];
-export type RequestBodyBlockedFundsRelease = components['requestBodies']['BlockedFundsRelease'];
-export type RequestBodyReverseTransactionReason = components['requestBodies']['ReverseTransactionReason'];
-export type RequestBodyClientCreation = components['requestBodies']['ClientCreation'];
-export type RequestBodyClientIdentifierWithRelinkType = components['requestBodies']['ClientIdentifierWithRelinkType'];
-export type RequestBodyClientIdentifier = components['requestBodies']['ClientIdentifier'];
-export type RequestBodyAccountContractIdentifierWithClientIdentifier = components['requestBodies']['AccountContractIdentifierWithClientIdentifier'];
-export type RequestBodyAccountContractIdentifier = components['requestBodies']['AccountContractIdentifier'];
-export type RequestBodyEvent = components['requestBodies']['Event'];
-export type RequestBodyAccountContractCreation = components['requestBodies']['AccountContractCreation'];
-export type RequestBodyAccountContractStatusWithReason = components['requestBodies']['AccountContractStatusWithReason'];
-export type RequestBodyCardContractCreation = components['requestBodies']['CardContractCreation'];
-export type RequestBodyCardContractModification = components['requestBodies']['CardContractModification'];
-export type RequestBodyCvcSearchCriteria = components['requestBodies']['CvcSearchCriteria'];
-export type RequestBodyCvcVerification = components['requestBodies']['CvcVerification'];
-export type RequestBodyPinVerification = components['requestBodies']['PinVerification'];
-export type RequestBodyPinCreation = components['requestBodies']['PinCreation'];
-export type RequestBodyPinSearchCriteria = components['requestBodies']['PinSearchCriteria'];
-export type RequestBodyCardContractActivation = components['requestBodies']['CardContractActivation'];
-export type RequestBodyCardContractStatusWithReason = components['requestBodies']['CardContractStatusWithReason'];
-export type RequestBodyOnlinePinAttemptsClearance = components['requestBodies']['OnlinePinAttemptsClearance'];
-export type RequestBodyOnlinePinAttemptsClearanceForClient = components['requestBodies']['OnlinePinAttemptsClearanceForClient'];
-export type RequestBodyAddressCreation = components['requestBodies']['AddressCreation'];
-export type RequestBodyAddressModification = components['requestBodies']['AddressModification'];
-export type RequestBodyClassifierCreation = components['requestBodies']['ClassifierCreation'];
-export type RequestBodyCustomDataTags = components['requestBodies']['CustomDataTags'];
-export type RequestBodyParameterModification = components['requestBodies']['ParameterModification'];
-export type RequestBodyTransactionContractDebit = components['requestBodies']['TransactionContractDebit'];
-export type RequestBodyChargeFee = components['requestBodies']['ChargeFee'];
-export type RequestBodyServiceLimitTariff = components['requestBodies']['ServiceLimitTariff'];
-export type RequestBodyUsageLimitModification = components['requestBodies']['UsageLimitModification'];
-export type RequestBodyUsageLimitOriginalValue = components['requestBodies']['UsageLimitOriginalValue'];
-export type RequestBodyUsageLimitResetting = components['requestBodies']['UsageLimitResetting'];
-export type RequestBodyUsageLimitStatus = components['requestBodies']['UsageLimitStatus'];
-export type RequestBodyAccountContractIdentifierSearch = components['requestBodies']['AccountContractIdentifierSearch'];
-export type RequestBodyCardContractIdentifierSearch = components['requestBodies']['CardContractIdentifierSearch'];
-export type RequestBodyClientIdentifierSearch = components['requestBodies']['ClientIdentifierSearch'];
-export type RequestBodyClientModification = components['requestBodies']['ClientModification'];
-export type RequestBodyAccountContractModification = components['requestBodies']['AccountContractModification'];
-export type RequestBodyCardContractReissue = components['requestBodies']['CardContractReissue'];
-export type RequestBodyAuthenticationMethod = components['requestBodies']['AuthenticationMethod'];
-export type RequestBodyTransactionContractCredit = components['requestBodies']['TransactionContractCredit'];
-export type RequestBodyCardContractDetailsVerification = components['requestBodies']['CardContractDetailsVerification'];
 export type $defs = Record<string, never>;
 export interface operations {
     createClient: {
@@ -12137,25 +11714,133 @@ export interface operations {
     };
 }
 
+export type BodyAccountContractCreation = components["schemas"]["AccountContractCreation"];
+export type BodyAccountContractIdentifier = components["schemas"]["AccountContractIdentifier"];
+export type BodyAccountContractIdentifierSearch = components["schemas"]["AccountContractIdentifierSearch"];
+export type BodyAccountContractIdentifierWithClientIdentifier = components["schemas"]["AccountContractIdentifierWithClientIdentifier"];
+export type BodyAccountContractModification = components["schemas"]["AccountContractModification"];
+export type BodyAccountContractStatusWithReason = components["schemas"]["AccountContractStatusWithReason"];
+export type BodyAddressCreation = components["schemas"]["AddressCreation"];
+export type BodyAddressModification = components["schemas"]["AddressModification"];
+export type BodyAuthenticationMethod = components["schemas"]["AuthenticationMethod"];
+export type BodyBlockedFundsRelease = components["schemas"]["BlockedFundsRelease"];
+export type BodyCardContractActivation = components["schemas"]["CardContractActivation"];
+export type BodyCardContractCreation = components["schemas"]["CardContractCreation"];
+export type BodyCardContractDetailsVerification = components["schemas"]["CardContractDetailsVerification"];
+export type BodyCardContractIdentifierSearch = components["schemas"]["CardContractIdentifierSearch"];
+export type BodyCardContractModification = components["schemas"]["CardContractModification"];
+export type BodyCardContractReissue = components["schemas"]["CardContractReissue"];
+export type BodyCardContractStatusWithReason = components["schemas"]["CardContractStatusWithReason"];
+export type BodyChargeFee = components["schemas"]["ChargeFee"];
+export type BodyClassifierCreation = components["schemas"]["ClassifierCreation"];
+export type BodyClientCreation = components["schemas"]["ClientCreation"];
+export type BodyClientIdentifier = components["schemas"]["ClientIdentifier"];
+export type BodyClientIdentifierSearch = components["schemas"]["ClientIdentifierSearch"];
+export type BodyClientIdentifierWithRelinkType = components["schemas"]["ClientIdentifierWithRelinkType"];
+export type BodyClientModification = components["schemas"]["ClientModification"];
+export type BodyCustomDataTags = components["schemas"]["CustomDataTags"];
+export type BodyCvcSearchCriteria = components["schemas"]["CvcSearchCriteria"];
+export type BodyCvcVerification = components["schemas"]["CvcVerification"];
+export type BodyEvent = components["schemas"]["Event"];
+export type BodyOnlinePinAttemptsClearance = components["schemas"]["OnlinePinAttemptsClearance"];
+export type BodyOnlinePinAttemptsClearanceForClient = components["schemas"]["OnlinePinAttemptsClearanceForClient"];
+export type BodyParameterModification = components["schemas"]["ParameterModification"];
+export type BodyPinCreation = components["schemas"]["PinCreation"];
+export type BodyPinSearchCriteria = components["schemas"]["PinSearchCriteria"];
+export type BodyPinVerification = components["schemas"]["PinVerification"];
+export type BodyReverseTransactionReason = components["schemas"]["ReverseTransactionReason"];
+export type BodyServiceLimitTariff = components["schemas"]["ServiceLimitTariff"];
+export type BodyTransactionContractCredit = components["schemas"]["TransactionContractCredit"];
+export type BodyTransactionContractDebit = components["schemas"]["TransactionContractDebit"];
+export type BodyUsageLimitModification = components["schemas"]["UsageLimitModification"];
+export type BodyUsageLimitOriginalValue = components["schemas"]["UsageLimitOriginalValue"];
+export type BodyUsageLimitResetting = components["schemas"]["UsageLimitResetting"];
+export type BodyUsageLimitStatus = components["schemas"]["UsageLimitStatus"];
+export type HeadersAddClientAddress = operations["addClientAddress"]["parameters"]["header"];
+export type HeadersAddContractAddress = operations["addContractAddress"]["parameters"]["header"];
+export type HeadersChargeFee = operations["chargeFee"]["parameters"]["header"];
+export type HeadersCreateAccountContract = operations["createAccountContract"]["parameters"]["header"];
+export type HeadersCreateCardContract = operations["createCardContract"]["parameters"]["header"];
+export type HeadersCreateClient = operations["createClient"]["parameters"]["header"];
+export type HeadersCreditContract = operations["creditContract"]["parameters"]["header"];
+export type HeadersDebitContract = operations["debitContract"]["parameters"]["header"];
+export type HeadersGetAccountContractId = operations["getAccountContractId"]["parameters"]["header"];
+export type HeadersGetCardContract = operations["getCardContract"]["parameters"]["header"];
+export type HeadersGetCardContractId = operations["getCardContractId"]["parameters"]["header"];
+export type HeadersGetClientId = operations["getClientId"]["parameters"]["header"];
+export type HeadersGetCvc = operations["getCvc"]["parameters"]["header"];
+export type HeadersGetPin = operations["getPin"]["parameters"]["header"];
+export type HeadersOpenEvent = operations["openEvent"]["parameters"]["header"];
+export type HeadersReissueCard = operations["reissueCard"]["parameters"]["header"];
+export type HeadersReverseTransaction = operations["reverseTransaction"]["parameters"]["header"];
+export type HeadersSetClientCustomData = operations["setClientCustomData"]["parameters"]["header"];
+export type HeadersSetContractCustomData = operations["setContractCustomData"]["parameters"]["header"];
+export type HeadersSetPin = operations["setPin"]["parameters"]["header"];
+export type HeadersSetServiceLimitTariff = operations["setServiceLimitTariff"]["parameters"]["header"];
+export type HeadersUpdateAccountContract = operations["updateAccountContract"]["parameters"]["header"];
+export type HeadersUpdateCardContract = operations["updateCardContract"]["parameters"]["header"];
+export type HeadersUpdateClient = operations["updateClient"]["parameters"]["header"];
+export type HeadersVerifyCardDetails = operations["verifyCardDetails"]["parameters"]["header"];
+export type HeadersVerifyCvc = operations["verifyCvc"]["parameters"]["header"];
+export type HeadersVerifyPin = operations["verifyPin"]["parameters"]["header"];
 export type QueryGetAccountContractsByClient = operations["getAccountContractsByClient"]["parameters"]["query"];
-export type QueryGetCardContractsByClient = operations["getCardContractsByClient"]["parameters"]["query"];
-export type QueryGetContractBalances = operations["getContractBalances"]["parameters"]["query"];
-export type QueryGetTechnicalAccounts = operations["getTechnicalAccounts"]["parameters"]["query"];
-export type QueryGetContractTreeSummary = operations["getContractTreeSummary"]["parameters"]["query"];
-export type QueryGetSubAccountContracts = operations["getSubAccountContracts"]["parameters"]["query"];
-export type QueryGetCardContractsByAccount = operations["getCardContractsByAccount"]["parameters"]["query"];
+export type QueryGetAuthenticationParameterValue = operations["getAuthenticationParameterValue"]["parameters"]["query"];
 export type QueryGetCardContract = operations["getCardContract"]["parameters"]["query"];
+export type QueryGetCardContractsByAccount = operations["getCardContractsByAccount"]["parameters"]["query"];
+export type QueryGetCardContractsByClient = operations["getCardContractsByClient"]["parameters"]["query"];
 export type QueryGetClientClassifiers = operations["getClientClassifiers"]["parameters"]["query"];
+export type QueryGetContractBalances = operations["getContractBalances"]["parameters"]["query"];
 export type QueryGetContractClassifiers = operations["getContractClassifiers"]["parameters"]["query"];
 export type QueryGetContractParameters = operations["getContractParameters"]["parameters"]["query"];
-export type QueryGetTransactions = operations["getTransactions"]["parameters"]["query"];
-export type QueryGetContractTransactionDocuments = operations["getContractTransactionDocuments"]["parameters"]["query"];
-export type QueryGetTransactionDocuments = operations["getTransactionDocuments"]["parameters"]["query"];
-export type QueryGetUsageLimits = operations["getUsageLimits"]["parameters"]["query"];
 export type QueryGetContractTariffData = operations["getContractTariffData"]["parameters"]["query"];
+export type QueryGetContractTransactionDocuments = operations["getContractTransactionDocuments"]["parameters"]["query"];
+export type QueryGetContractTreeSummary = operations["getContractTreeSummary"]["parameters"]["query"];
 export type QueryGetPublicRsaKey = operations["getPublicRsaKey"]["parameters"]["query"];
-export type QueryGetAuthenticationParameterValue = operations["getAuthenticationParameterValue"]["parameters"]["query"];
-
+export type QueryGetSubAccountContracts = operations["getSubAccountContracts"]["parameters"]["query"];
+export type QueryGetTechnicalAccounts = operations["getTechnicalAccounts"]["parameters"]["query"];
+export type QueryGetTransactionDocuments = operations["getTransactionDocuments"]["parameters"]["query"];
+export type QueryGetTransactions = operations["getTransactions"]["parameters"]["query"];
+export type QueryGetUsageLimits = operations["getUsageLimits"]["parameters"]["query"];
+export type ResponseAccountContract = components["schemas"]["AccountContract"];
+export type ResponseAccountContractCardContracts = components["schemas"]["AccountContractCardContracts"];
+export type ResponseAccountContractIdentifier = components["schemas"]["AccountContractIdentifier"];
+export type ResponseAccountContractStatus = components["schemas"]["AccountContractStatus"];
+export type ResponseAuthenticationParameterValue = components["schemas"]["AuthenticationParameterValue"];
+export type ResponseBlockedFundsReleaseResult = components["schemas"]["BlockedFundsReleaseResult"];
+export type ResponseCardContractDetailsVerificationResult = components["schemas"]["CardContractDetailsVerificationResult"];
+export type ResponseCardContractIdentifier = components["schemas"]["CardContractIdentifier"];
+export type ResponseCardContractPlastics = components["schemas"]["CardContractPlastics"];
+export type ResponseCardContractStatus = components["schemas"]["CardContractStatus"];
+export type ResponseCardContractWithEncryptedCardContractNumber = components["schemas"]["CardContractWithEncryptedCardContractNumber"];
+export type ResponseClient = components["schemas"]["Client"];
+export type ResponseClientAccountContracts = components["schemas"]["ClientAccountContracts"];
+export type ResponseClientAddresses = components["schemas"]["ClientAddresses"];
+export type ResponseClientCardContracts = components["schemas"]["ClientCardContracts"];
+export type ResponseClientClassifiers = components["schemas"]["ClientClassifiers"];
+export type ResponseClientCustomDataTagValues = components["schemas"]["ClientCustomDataTagValues"];
+export type ResponseClientIdentifier = components["schemas"]["ClientIdentifier"];
+export type ResponseContractAddresses = components["schemas"]["ContractAddresses"];
+export type ResponseContractBalances = components["schemas"]["ContractBalances"];
+export type ResponseContractClassifiers = components["schemas"]["ContractClassifiers"];
+export type ResponseContractCustomDataTagValues = components["schemas"]["ContractCustomDataTagValues"];
+export type ResponseContractFinancial = components["schemas"]["ContractFinancial"];
+export type ResponseContractParameters = components["schemas"]["ContractParameters"];
+export type ResponseContractSummaryTree = components["schemas"]["ContractSummaryTree"];
+export type ResponseContractTariffs = components["schemas"]["ContractTariffs"];
+export type ResponseCvc = components["schemas"]["Cvc"];
+export type ResponseCvcVerificationResult = components["schemas"]["CvcVerificationResult"];
+export type ResponseEncryptedPin = components["schemas"]["EncryptedPin"];
+export type ResponsePinVerificationResult = components["schemas"]["PinVerificationResult"];
+export type ResponsePublicRsaKeyData = components["schemas"]["PublicRsaKeyData"];
+export type ResponseReissuedCardContract = components["schemas"]["ReissuedCardContract"];
+export type ResponseReverseTransactionId = components["schemas"]["ReverseTransactionId"];
+export type ResponseSubAccountContracts = components["schemas"]["SubAccountContracts"];
+export type ResponseTechnicalAccounts = components["schemas"]["TechnicalAccounts"];
+export type ResponseTransactionDocuments = components["schemas"]["TransactionDocuments"];
+export type ResponseTransactionFees = components["schemas"]["TransactionFees"];
+export type ResponseTransactionId = components["schemas"]["TransactionId"];
+export type ResponseTransactions = components["schemas"]["Transactions"];
+export type ResponseUsageLimits = components["schemas"]["UsageLimits"];
 
 //API Def
 
@@ -12167,8 +11852,9 @@ const API = new Api({
 });
 
 export const createClient = API.endpoint()
-  .response<ResponseClientIdentifierCreated>()
-  .body<RequestBodyClientCreation>()
+  .responseOf<ResponseClientIdentifier>()
+  .bodyOf<BodyClientCreation>()
+  .requestHeadersOf<HeadersCreateClient>()
   .build({
     method: "post",
     path: "/clients",
@@ -12176,7 +11862,8 @@ export const createClient = API.endpoint()
   });
 
 export const getClient = API.endpoint()
-  .response<ResponseClient>()
+  .paramsOf<"client_id">()
+  .responseOf<ResponseClient>()
   .build({
     method: "get",
     path: "/clients/{client_id}",
@@ -12184,8 +11871,9 @@ export const getClient = API.endpoint()
   });
 
 export const updateClient = API.endpoint()
-  .response<ResponseClientUpdated>()
-  .body<RequestBodyClientModification>()
+  .paramsOf<"client_id">()
+  .bodyOf<BodyClientModification>()
+  .requestHeadersOf<HeadersUpdateClient>()
   .build({
     method: "patch",
     path: "/clients/{client_id}",
@@ -12193,8 +11881,9 @@ export const updateClient = API.endpoint()
   });
 
 export const getAccountContractsByClient = API.endpoint()
-  .response<ResponseClientAccountContracts>()
-  .query<QueryGetAccountContractsByClient>()
+  .paramsOf<"client_id">()
+  .responseOf<ResponseClientAccountContracts>()
+  .queryOf<QueryGetAccountContractsByClient>()
   .build({
     method: "get",
     path: "/clients/{client_id}/account-contracts",
@@ -12202,8 +11891,9 @@ export const getAccountContractsByClient = API.endpoint()
   });
 
 export const getCardContractsByClient = API.endpoint()
-  .response<ResponseClientCardContracts>()
-  .query<QueryGetCardContractsByClient>()
+  .paramsOf<"client_id">()
+  .responseOf<ResponseClientCardContracts>()
+  .queryOf<QueryGetCardContractsByClient>()
   .build({
     method: "get",
     path: "/clients/{client_id}/card-contracts",
@@ -12211,8 +11901,9 @@ export const getCardContractsByClient = API.endpoint()
   });
 
 export const openEvent = API.endpoint()
-  .response<ResponseContractEventCreated>()
-  .body<RequestBodyEvent>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyEvent>()
+  .requestHeadersOf<HeadersOpenEvent>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/events",
@@ -12220,7 +11911,8 @@ export const openEvent = API.endpoint()
   });
 
 export const getContractFinancials = API.endpoint()
-  .response<ResponseContractFinancial>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractFinancial>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/financials",
@@ -12228,8 +11920,9 @@ export const getContractFinancials = API.endpoint()
   });
 
 export const getContractBalances = API.endpoint()
-  .response<ResponseContractBalances>()
-  .query<QueryGetContractBalances>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractBalances>()
+  .queryOf<QueryGetContractBalances>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/balances",
@@ -12237,8 +11930,9 @@ export const getContractBalances = API.endpoint()
   });
 
 export const getTechnicalAccounts = API.endpoint()
-  .response<ResponseTechnicalAccounts>()
-  .query<QueryGetTechnicalAccounts>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTechnicalAccounts>()
+  .queryOf<QueryGetTechnicalAccounts>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/technical-accounts",
@@ -12246,8 +11940,9 @@ export const getTechnicalAccounts = API.endpoint()
   });
 
 export const getContractTreeSummary = API.endpoint()
-  .response<ResponseContractSummaryTree>()
-  .query<QueryGetContractTreeSummary>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractSummaryTree>()
+  .queryOf<QueryGetContractTreeSummary>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/tree-summaries",
@@ -12255,8 +11950,9 @@ export const getContractTreeSummary = API.endpoint()
   });
 
 export const createAccountContract = API.endpoint()
-  .response<ResponseAccountContractIdentifierCreated>()
-  .body<RequestBodyAccountContractCreation>()
+  .responseOf<ResponseAccountContractIdentifier>()
+  .bodyOf<BodyAccountContractCreation>()
+  .requestHeadersOf<HeadersCreateAccountContract>()
   .build({
     method: "post",
     path: "/accounts",
@@ -12264,7 +11960,8 @@ export const createAccountContract = API.endpoint()
   });
 
 export const getAccountContract = API.endpoint()
-  .response<ResponseAccountContract>()
+  .paramsOf<"account_contract_id">()
+  .responseOf<ResponseAccountContract>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}",
@@ -12272,8 +11969,9 @@ export const getAccountContract = API.endpoint()
   });
 
 export const updateAccountContract = API.endpoint()
-  .response<ResponseAccountUpdated>()
-  .body<RequestBodyAccountContractModification>()
+  .paramsOf<"account_contract_id">()
+  .bodyOf<BodyAccountContractModification>()
+  .requestHeadersOf<HeadersUpdateAccountContract>()
   .build({
     method: "patch",
     path: "/accounts/{account_contract_id}",
@@ -12281,8 +11979,8 @@ export const updateAccountContract = API.endpoint()
   });
 
 export const changeAccountContractStatus = API.endpoint()
-  .response<ResponseAccountStatusChanged>()
-  .body<RequestBodyAccountContractStatusWithReason>()
+  .paramsOf<"account_contract_id">()
+  .bodyOf<BodyAccountContractStatusWithReason>()
   .build({
     method: "put",
     path: "/accounts/{account_contract_id}/status",
@@ -12290,7 +11988,8 @@ export const changeAccountContractStatus = API.endpoint()
   });
 
 export const getAccountContractStatus = API.endpoint()
-  .response<ResponseAccountContractStatus>()
+  .paramsOf<"account_contract_id">()
+  .responseOf<ResponseAccountContractStatus>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/statuses",
@@ -12298,8 +11997,8 @@ export const getAccountContractStatus = API.endpoint()
   });
 
 export const changeAccountContractClient = API.endpoint()
-  .response<ResponseAccountRelinked>()
-  .body<RequestBodyClientIdentifierWithRelinkType>()
+  .paramsOf<"account_contract_id">()
+  .bodyOf<BodyClientIdentifierWithRelinkType>()
   .build({
     method: "put",
     path: "/accounts/{account_contract_id}/client-identifier",
@@ -12307,8 +12006,8 @@ export const changeAccountContractClient = API.endpoint()
   });
 
 export const changeContractMainContract = API.endpoint()
-  .response<ResponseSubAccountRelinked>()
-  .body<RequestBodyAccountContractIdentifierWithClientIdentifier>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyAccountContractIdentifierWithClientIdentifier>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/main-contract",
@@ -12316,8 +12015,9 @@ export const changeContractMainContract = API.endpoint()
   });
 
 export const getSubAccountContracts = API.endpoint()
-  .response<ResponseSubAccountContracts>()
-  .query<QueryGetSubAccountContracts>()
+  .paramsOf<"account_contract_id">()
+  .responseOf<ResponseSubAccountContracts>()
+  .queryOf<QueryGetSubAccountContracts>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/sub-accounts",
@@ -12325,8 +12025,9 @@ export const getSubAccountContracts = API.endpoint()
   });
 
 export const getCardContractsByAccount = API.endpoint()
-  .response<ResponseAccountContractCardContracts>()
-  .query<QueryGetCardContractsByAccount>()
+  .paramsOf<"account_contract_id">()
+  .responseOf<ResponseAccountContractCardContracts>()
+  .queryOf<QueryGetCardContractsByAccount>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/card-contracts",
@@ -12334,8 +12035,9 @@ export const getCardContractsByAccount = API.endpoint()
   });
 
 export const createCardContract = API.endpoint()
-  .response<ResponseCardContractIdentifierCreated>()
-  .body<RequestBodyCardContractCreation>()
+  .responseOf<ResponseCardContractIdentifier>()
+  .bodyOf<BodyCardContractCreation>()
+  .requestHeadersOf<HeadersCreateCardContract>()
   .build({
     method: "post",
     path: "/cards",
@@ -12343,8 +12045,10 @@ export const createCardContract = API.endpoint()
   });
 
 export const getCardContract = API.endpoint()
-  .response<ResponseCardContract>()
-  .query<QueryGetCardContract>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseCardContractWithEncryptedCardContractNumber>()
+  .queryOf<QueryGetCardContract>()
+  .requestHeadersOf<HeadersGetCardContract>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}",
@@ -12352,8 +12056,9 @@ export const getCardContract = API.endpoint()
   });
 
 export const updateCardContract = API.endpoint()
-  .response<ResponseCardUpdated>()
-  .body<RequestBodyCardContractModification>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyCardContractModification>()
+  .requestHeadersOf<HeadersUpdateCardContract>()
   .build({
     method: "patch",
     path: "/cards/{card_contract_id}",
@@ -12361,8 +12066,9 @@ export const updateCardContract = API.endpoint()
   });
 
 export const verifyCardDetails = API.endpoint()
-  .response<ResponseCardContractDetailsVerificationResult>()
-  .body<RequestBodyCardContractDetailsVerification>()
+  .responseOf<ResponseCardContractDetailsVerificationResult>()
+  .bodyOf<BodyCardContractDetailsVerification>()
+  .requestHeadersOf<HeadersVerifyCardDetails>()
   .build({
     method: "post",
     path: "/cards/details-verifications",
@@ -12370,8 +12076,8 @@ export const verifyCardDetails = API.endpoint()
   });
 
 export const changeCardContractStatus = API.endpoint()
-  .response<ResponseCardStatusChanged>()
-  .body<RequestBodyCardContractStatusWithReason>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyCardContractStatusWithReason>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/status",
@@ -12379,7 +12085,8 @@ export const changeCardContractStatus = API.endpoint()
   });
 
 export const getCardContractStatus = API.endpoint()
-  .response<ResponseCardContractStatus>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseCardContractStatus>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}/statuses",
@@ -12387,8 +12094,8 @@ export const getCardContractStatus = API.endpoint()
   });
 
 export const changeCardContractClient = API.endpoint()
-  .response<ResponseCardRelinkedToAnotherClient>()
-  .body<RequestBodyClientIdentifier>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyClientIdentifier>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/client-identifier",
@@ -12396,8 +12103,8 @@ export const changeCardContractClient = API.endpoint()
   });
 
 export const changeCardContractMainContract = API.endpoint()
-  .response<ResponseCardRelinkedToAnotherAccount>()
-  .body<RequestBodyAccountContractIdentifier>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyAccountContractIdentifier>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/main-contract",
@@ -12405,8 +12112,8 @@ export const changeCardContractMainContract = API.endpoint()
   });
 
 export const clearOnlinePinAttempts = API.endpoint()
-  .response<ResponseOnlinePinTryCounterReset>()
-  .body<RequestBodyOnlinePinAttemptsClearance>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyOnlinePinAttemptsClearance>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/online-pin-attempts-counter",
@@ -12414,8 +12121,8 @@ export const clearOnlinePinAttempts = API.endpoint()
   });
 
 export const clearOnlinePinAttemptsForClient = API.endpoint()
-  .response<ResponseOnlinePinTryCounterReset>()
-  .body<RequestBodyOnlinePinAttemptsClearanceForClient>()
+  .paramsOf<"client_id">()
+  .bodyOf<BodyOnlinePinAttemptsClearanceForClient>()
   .build({
     method: "put",
     path: "/clients/{client_id}/online-pin-attempts-counter",
@@ -12423,8 +12130,8 @@ export const clearOnlinePinAttemptsForClient = API.endpoint()
   });
 
 export const activateCard = API.endpoint()
-  .response<ResponseCardPlasticUnlocked>()
-  .body<RequestBodyCardContractActivation>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyCardContractActivation>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/active",
@@ -12432,8 +12139,9 @@ export const activateCard = API.endpoint()
   });
 
 export const setPin = API.endpoint()
-  .response<ResponseCardPlasticNewPinSetUp>()
-  .body<RequestBodyPinCreation>()
+  .paramsOf<"card_contract_id">()
+  .bodyOf<BodyPinCreation>()
+  .requestHeadersOf<HeadersSetPin>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/pin",
@@ -12441,8 +12149,10 @@ export const setPin = API.endpoint()
   });
 
 export const getPin = API.endpoint()
-  .response<ResponseEncryptedPin>()
-  .body<RequestBodyPinSearchCriteria>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseEncryptedPin>()
+  .bodyOf<BodyPinSearchCriteria>()
+  .requestHeadersOf<HeadersGetPin>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/pins/searches",
@@ -12450,8 +12160,10 @@ export const getPin = API.endpoint()
   });
 
 export const verifyPin = API.endpoint()
-  .response<ResponsePinVerificationResult>()
-  .body<RequestBodyPinVerification>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponsePinVerificationResult>()
+  .bodyOf<BodyPinVerification>()
+  .requestHeadersOf<HeadersVerifyPin>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/pins/verifications",
@@ -12459,8 +12171,10 @@ export const verifyPin = API.endpoint()
   });
 
 export const getCvc = API.endpoint()
-  .response<ResponseCvc>()
-  .body<RequestBodyCvcSearchCriteria>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseCvc>()
+  .bodyOf<BodyCvcSearchCriteria>()
+  .requestHeadersOf<HeadersGetCvc>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/card-verification-codes/searches",
@@ -12468,8 +12182,10 @@ export const getCvc = API.endpoint()
   });
 
 export const verifyCvc = API.endpoint()
-  .response<ResponseCvcVerificationResult>()
-  .body<RequestBodyCvcVerification>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseCvcVerificationResult>()
+  .bodyOf<BodyCvcVerification>()
+  .requestHeadersOf<HeadersVerifyCvc>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/card-verification-codes/verifications",
@@ -12477,8 +12193,10 @@ export const verifyCvc = API.endpoint()
   });
 
 export const reissueCard = API.endpoint()
-  .response<ResponseReissuedCardContract>()
-  .body<RequestBodyCardContractReissue>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseReissuedCardContract>()
+  .bodyOf<BodyCardContractReissue>()
+  .requestHeadersOf<HeadersReissueCard>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/plastics",
@@ -12486,7 +12204,8 @@ export const reissueCard = API.endpoint()
   });
 
 export const getCardPlastics = API.endpoint()
-  .response<ResponseCardContractPlastics>()
+  .paramsOf<"card_contract_id">()
+  .responseOf<ResponseCardContractPlastics>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}/plastics",
@@ -12494,8 +12213,9 @@ export const getCardPlastics = API.endpoint()
   });
 
 export const addClientAddress = API.endpoint()
-  .response<ResponseClientAddressCreated>()
-  .body<RequestBodyAddressCreation>()
+  .paramsOf<"client_id">()
+  .bodyOf<BodyAddressCreation>()
+  .requestHeadersOf<HeadersAddClientAddress>()
   .build({
     method: "post",
     path: "/clients/{client_id}/addresses",
@@ -12503,7 +12223,8 @@ export const addClientAddress = API.endpoint()
   });
 
 export const getClientAddresses = API.endpoint()
-  .response<ResponseClientAddresses>()
+  .paramsOf<"client_id">()
+  .responseOf<ResponseClientAddresses>()
   .build({
     method: "get",
     path: "/clients/{client_id}/addresses",
@@ -12511,8 +12232,8 @@ export const getClientAddresses = API.endpoint()
   });
 
 export const updateClientAddress = API.endpoint()
-  .response<ResponseClientAddressUpdated>()
-  .body<RequestBodyAddressModification>()
+  .paramsOf<"client_id|address_type">()
+  .bodyOf<BodyAddressModification>()
   .build({
     method: "put",
     path: "/clients/{client_id}/addresses/{address_type}",
@@ -12520,8 +12241,9 @@ export const updateClientAddress = API.endpoint()
   });
 
 export const addContractAddress = API.endpoint()
-  .response<ResponseContractAddressCreated>()
-  .body<RequestBodyAddressCreation>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyAddressCreation>()
+  .requestHeadersOf<HeadersAddContractAddress>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/addresses",
@@ -12529,7 +12251,8 @@ export const addContractAddress = API.endpoint()
   });
 
 export const getContractAddresses = API.endpoint()
-  .response<ResponseContractAddresses>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractAddresses>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/addresses",
@@ -12537,8 +12260,8 @@ export const getContractAddresses = API.endpoint()
   });
 
 export const updateContractAddress = API.endpoint()
-  .response<ResponseContractAddressUpdated>()
-  .body<RequestBodyAddressModification>()
+  .paramsOf<"contract_id|address_type">()
+  .bodyOf<BodyAddressModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/addresses/{address_type}",
@@ -12546,8 +12269,8 @@ export const updateContractAddress = API.endpoint()
   });
 
 export const setClientClassifier = API.endpoint()
-  .response<ResponseClientClassifierSetUp>()
-  .body<RequestBodyClassifierCreation>()
+  .paramsOf<"client_id|classifier_code">()
+  .bodyOf<BodyClassifierCreation>()
   .build({
     method: "put",
     path: "/clients/{client_id}/classifiers/{classifier_code}",
@@ -12555,8 +12278,9 @@ export const setClientClassifier = API.endpoint()
   });
 
 export const getClientClassifiers = API.endpoint()
-  .response<ResponseClientClassifiers>()
-  .query<QueryGetClientClassifiers>()
+  .paramsOf<"client_id">()
+  .responseOf<ResponseClientClassifiers>()
+  .queryOf<QueryGetClientClassifiers>()
   .build({
     method: "get",
     path: "/clients/{client_id}/classifiers",
@@ -12564,8 +12288,8 @@ export const getClientClassifiers = API.endpoint()
   });
 
 export const setContractClassifier = API.endpoint()
-  .response<ResponseContractClassifierSetUp>()
-  .body<RequestBodyClassifierCreation>()
+  .paramsOf<"contract_id|classifier_code">()
+  .bodyOf<BodyClassifierCreation>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/classifiers/{classifier_code}",
@@ -12573,8 +12297,9 @@ export const setContractClassifier = API.endpoint()
   });
 
 export const getContractClassifiers = API.endpoint()
-  .response<ResponseContractClassifiers>()
-  .query<QueryGetContractClassifiers>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractClassifiers>()
+  .queryOf<QueryGetContractClassifiers>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/classifiers",
@@ -12582,8 +12307,9 @@ export const getContractClassifiers = API.endpoint()
   });
 
 export const setClientCustomData = API.endpoint()
-  .response<ResponseClientCustomDataSetUp>()
-  .body<RequestBodyCustomDataTags>()
+  .paramsOf<"client_id">()
+  .bodyOf<BodyCustomDataTags>()
+  .requestHeadersOf<HeadersSetClientCustomData>()
   .build({
     method: "post",
     path: "/clients/{client_id}/custom-data",
@@ -12591,7 +12317,8 @@ export const setClientCustomData = API.endpoint()
   });
 
 export const getClientCustomData = API.endpoint()
-  .response<ResponseClientCustomDataTagValues>()
+  .paramsOf<"client_id|tag_name">()
+  .responseOf<ResponseClientCustomDataTagValues>()
   .build({
     method: "get",
     path: "/clients/{client_id}/custom-data/{tag_name}",
@@ -12599,8 +12326,9 @@ export const getClientCustomData = API.endpoint()
   });
 
 export const setContractCustomData = API.endpoint()
-  .response<ResponseContractCustomDataSetUp>()
-  .body<RequestBodyCustomDataTags>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyCustomDataTags>()
+  .requestHeadersOf<HeadersSetContractCustomData>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/custom-data",
@@ -12608,7 +12336,8 @@ export const setContractCustomData = API.endpoint()
   });
 
 export const getContractCustomData = API.endpoint()
-  .response<ResponseContractCustomDataTagValues>()
+  .paramsOf<"contract_id|tag_name">()
+  .responseOf<ResponseContractCustomDataTagValues>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/custom-data/{tag_name}",
@@ -12616,8 +12345,8 @@ export const getContractCustomData = API.endpoint()
   });
 
 export const setContractParameter = API.endpoint()
-  .response<ResponseContractParameterSetOrChanged>()
-  .body<RequestBodyParameterModification>()
+  .paramsOf<"contract_id|parameter_code">()
+  .bodyOf<BodyParameterModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/parameters/{parameter_code}",
@@ -12625,8 +12354,9 @@ export const setContractParameter = API.endpoint()
   });
 
 export const getContractParameters = API.endpoint()
-  .response<ResponseContractParameters>()
-  .query<QueryGetContractParameters>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractParameters>()
+  .queryOf<QueryGetContractParameters>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/parameters",
@@ -12634,8 +12364,10 @@ export const getContractParameters = API.endpoint()
   });
 
 export const debitContract = API.endpoint()
-  .response<ResponseDebitTransactionId>()
-  .body<RequestBodyTransactionContractDebit>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTransactionId>()
+  .bodyOf<BodyTransactionContractDebit>()
+  .requestHeadersOf<HeadersDebitContract>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/debits",
@@ -12643,8 +12375,10 @@ export const debitContract = API.endpoint()
   });
 
 export const creditContract = API.endpoint()
-  .response<ResponseCreditTransactionId>()
-  .body<RequestBodyTransactionContractCredit>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTransactionId>()
+  .bodyOf<BodyTransactionContractCredit>()
+  .requestHeadersOf<HeadersCreditContract>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/credits",
@@ -12652,8 +12386,10 @@ export const creditContract = API.endpoint()
   });
 
 export const chargeFee = API.endpoint()
-  .response<ResponseChargeTransactionId>()
-  .body<RequestBodyChargeFee>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTransactionId>()
+  .bodyOf<BodyChargeFee>()
+  .requestHeadersOf<HeadersChargeFee>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/charge-fees",
@@ -12661,8 +12397,9 @@ export const chargeFee = API.endpoint()
   });
 
 export const getTransactions = API.endpoint()
-  .response<ResponseTransactions>()
-  .query<QueryGetTransactions>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTransactions>()
+  .queryOf<QueryGetTransactions>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/transactions",
@@ -12670,8 +12407,9 @@ export const getTransactions = API.endpoint()
   });
 
 export const getContractTransactionDocuments = API.endpoint()
-  .response<ResponseTransactionDocuments>()
-  .query<QueryGetContractTransactionDocuments>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseTransactionDocuments>()
+  .queryOf<QueryGetContractTransactionDocuments>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/transaction-documents",
@@ -12679,8 +12417,8 @@ export const getContractTransactionDocuments = API.endpoint()
   });
 
 export const getTransactionDocuments = API.endpoint()
-  .response<ResponseTransactionDocuments>()
-  .query<QueryGetTransactionDocuments>()
+  .responseOf<ResponseTransactionDocuments>()
+  .queryOf<QueryGetTransactionDocuments>()
   .build({
     method: "get",
     path: "/transaction-documents",
@@ -12688,7 +12426,8 @@ export const getTransactionDocuments = API.endpoint()
   });
 
 export const getTransactionFees = API.endpoint()
-  .response<ResponseTransactionFees>()
+  .paramsOf<"transaction_id">()
+  .responseOf<ResponseTransactionFees>()
   .build({
     method: "get",
     path: "/transactions/{transaction_id}/fees",
@@ -12696,8 +12435,8 @@ export const getTransactionFees = API.endpoint()
   });
 
 export const setUsageLimit = API.endpoint()
-  .response<ResponseContractUsageLimitAddedOrUpdated>()
-  .body<RequestBodyUsageLimitModification>()
+  .paramsOf<"contract_id|usage_limit_code">()
+  .bodyOf<BodyUsageLimitModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}",
@@ -12705,8 +12444,9 @@ export const setUsageLimit = API.endpoint()
   });
 
 export const getUsageLimits = API.endpoint()
-  .response<ResponseUsageLimits>()
-  .query<QueryGetUsageLimits>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseUsageLimits>()
+  .queryOf<QueryGetUsageLimits>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/usage-limits",
@@ -12714,8 +12454,8 @@ export const getUsageLimits = API.endpoint()
   });
 
 export const restoreUsageLimitOriginalValues = API.endpoint()
-  .response<ResponseContractUsageLimitRestored>()
-  .body<RequestBodyUsageLimitOriginalValue>()
+  .paramsOf<"contract_id|usage_limit_code">()
+  .bodyOf<BodyUsageLimitOriginalValue>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/original-values",
@@ -12723,8 +12463,8 @@ export const restoreUsageLimitOriginalValues = API.endpoint()
   });
 
 export const resetUsageLimitCounters = API.endpoint()
-  .response<ResponseContractUsageLimitCounterReset>()
-  .body<RequestBodyUsageLimitResetting>()
+  .paramsOf<"contract_id|usage_limit_code">()
+  .bodyOf<BodyUsageLimitResetting>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/resetting-counters",
@@ -12732,8 +12472,8 @@ export const resetUsageLimitCounters = API.endpoint()
   });
 
 export const changeUsageLimitStatus = API.endpoint()
-  .response<ResponseContractUsageLimitStatusChanged>()
-  .body<RequestBodyUsageLimitStatus>()
+  .paramsOf<"contract_id|usage_limit_code">()
+  .bodyOf<BodyUsageLimitStatus>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/status",
@@ -12741,8 +12481,9 @@ export const changeUsageLimitStatus = API.endpoint()
   });
 
 export const setServiceLimitTariff = API.endpoint()
-  .response<ResponseServiceLimitTariffSetUp>()
-  .body<RequestBodyServiceLimitTariff>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyServiceLimitTariff>()
+  .requestHeadersOf<HeadersSetServiceLimitTariff>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/service-limit-tariffs",
@@ -12750,8 +12491,9 @@ export const setServiceLimitTariff = API.endpoint()
   });
 
 export const getContractTariffData = API.endpoint()
-  .response<ResponseContractTariffs>()
-  .query<QueryGetContractTariffData>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseContractTariffs>()
+  .queryOf<QueryGetContractTariffData>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/tariff-data",
@@ -12759,8 +12501,9 @@ export const getContractTariffData = API.endpoint()
   });
 
 export const getClientId = API.endpoint()
-  .response<ResponseClientIdentifier>()
-  .body<RequestBodyClientIdentifierSearch>()
+  .responseOf<ResponseClientIdentifier>()
+  .bodyOf<BodyClientIdentifierSearch>()
+  .requestHeadersOf<HeadersGetClientId>()
   .build({
     method: "post",
     path: "/clients/searches",
@@ -12768,8 +12511,9 @@ export const getClientId = API.endpoint()
   });
 
 export const getAccountContractId = API.endpoint()
-  .response<ResponseAccountContractIdentifier>()
-  .body<RequestBodyAccountContractIdentifierSearch>()
+  .responseOf<ResponseAccountContractIdentifier>()
+  .bodyOf<BodyAccountContractIdentifierSearch>()
+  .requestHeadersOf<HeadersGetAccountContractId>()
   .build({
     method: "post",
     path: "/accounts/searches",
@@ -12777,8 +12521,9 @@ export const getAccountContractId = API.endpoint()
   });
 
 export const getCardContractId = API.endpoint()
-  .response<ResponseCardContractIdentifier>()
-  .body<RequestBodyCardContractIdentifierSearch>()
+  .responseOf<ResponseCardContractIdentifier>()
+  .bodyOf<BodyCardContractIdentifierSearch>()
+  .requestHeadersOf<HeadersGetCardContractId>()
   .build({
     method: "post",
     path: "/cards/searches",
@@ -12786,8 +12531,8 @@ export const getCardContractId = API.endpoint()
   });
 
 export const getPublicRsaKey = API.endpoint()
-  .response<ResponsePublicRsaKeyData>()
-  .query<QueryGetPublicRsaKey>()
+  .responseOf<ResponsePublicRsaKeyData>()
+  .queryOf<QueryGetPublicRsaKey>()
   .build({
     method: "get",
     path: "/public-keys",
@@ -12795,8 +12540,8 @@ export const getPublicRsaKey = API.endpoint()
   });
 
 export const setAuthenticationMethod = API.endpoint()
-  .response<ResponseAuthenticationMethodSetUp>()
-  .body<RequestBodyAuthenticationMethod>()
+  .paramsOf<"contract_id">()
+  .bodyOf<BodyAuthenticationMethod>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/authentication-method",
@@ -12804,8 +12549,9 @@ export const setAuthenticationMethod = API.endpoint()
   });
 
 export const releaseBlockedFunds = API.endpoint()
-  .response<ResponseBlockedFundsReleaseResult>()
-  .body<RequestBodyBlockedFundsRelease>()
+  .paramsOf<"contract_id|transaction_id">()
+  .responseOf<ResponseBlockedFundsReleaseResult>()
+  .bodyOf<BodyBlockedFundsRelease>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/transactions/{transaction_id}/releasing-blocked-funds",
@@ -12813,8 +12559,10 @@ export const releaseBlockedFunds = API.endpoint()
   });
 
 export const reverseTransaction = API.endpoint()
-  .response<ResponseReverseTransactionId>()
-  .body<RequestBodyReverseTransactionReason>()
+  .paramsOf<"transaction_id">()
+  .responseOf<ResponseReverseTransactionId>()
+  .bodyOf<BodyReverseTransactionReason>()
+  .requestHeadersOf<HeadersReverseTransaction>()
   .build({
     method: "post",
     path: "/transactions/{transaction_id}/reversal",
@@ -12822,8 +12570,9 @@ export const reverseTransaction = API.endpoint()
   });
 
 export const getAuthenticationParameterValue = API.endpoint()
-  .response<ResponseAuthenticationParameterValue>()
-  .query<QueryGetAuthenticationParameterValue>()
+  .paramsOf<"contract_id">()
+  .responseOf<ResponseAuthenticationParameterValue>()
+  .queryOf<QueryGetAuthenticationParameterValue>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/authentication-parameter-values",
@@ -12831,4 +12580,3 @@ export const getAuthenticationParameterValue = API.endpoint()
   });
 
 export default API;
-    

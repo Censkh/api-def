@@ -58,13 +58,16 @@ export type RequestConfig<
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > = (TParams extends undefined
   ? { params?: never }
   : { params: Record<TParams extends Params ? TParams : never, string> }) &
   (TQuery extends undefined ? { query?: never } : { query: TQuery }) &
   (TBody extends undefined ? { body?: never } : { body: TBody }) &
   ({} extends TState ? { state?: TState } : { state: TState }) &
-  BaseRequestConfig;
+  (Omit<BaseRequestConfig, "headers"> & {
+    headers?: TRequestHeaders & RawHeaders;
+  });
 
 export const COMPUTED_CONFIG_SYMBOL = Symbol("computed");
 
@@ -73,7 +76,11 @@ export type ComputedRequestConfig<
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
-> = Omit<RequestConfig<TParams, TQuery, TBody, TState>, "queryParser" | "query" | "queryHandling" | "state"> & {
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+> = Omit<
+  RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  "queryParser" | "query" | "queryHandling" | "state"
+> & {
   [COMPUTED_CONFIG_SYMBOL]: true;
 
   state: TState;
@@ -125,7 +132,10 @@ export interface RequestHost {
     TQuery extends Query | undefined,
     TBody extends Body | undefined,
     TState extends State,
-  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState>;
+    TRequestHeaders extends RawHeaders | undefined,
+  >(
+    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>;
 
   computePath(path: string, config: RequestConfig): string;
 

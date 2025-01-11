@@ -9,6 +9,7 @@ import type {
   ComputedRequestConfig,
   Params,
   Query,
+  RawHeaders,
   RequestConfig,
   RequestHost,
   State,
@@ -25,6 +26,8 @@ export interface EndpointOptions<
   TBody extends Body | undefined,
   TState extends State = State,
   TPath extends string = string,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > {
   readonly id: string;
   readonly method: RequestMethod;
@@ -64,8 +67,15 @@ export type EndpointInfo<
   TBody extends Body | undefined,
   TState extends State = State,
   TPath extends string = string,
-> = EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath> &
-  Required<Pick<EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath>, "name" | "validation">>;
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+> = EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> &
+  Required<
+    Pick<
+      EndpointOptions<TResult, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+      "name" | "validation"
+    >
+  >;
 
 /**
  * @deprecated Use `EndpointInfo` instead
@@ -77,6 +87,8 @@ export type EndpointConfig<
   TBody extends Body | undefined,
   TState extends State = State,
   TPath extends string = string,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > = EndpointInfo<TResult, TParams, TQuery, TBody, TState, TPath>;
 
 export default class Endpoint<
@@ -85,13 +97,30 @@ export default class Endpoint<
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
-> implements EndpointInfo<TResponse, TParams, TQuery, TBody, TState>, RequestHost
+  TPath extends string = string,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+> implements
+    EndpointInfo<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+    RequestHost
 {
   public readonly api: Api;
 
-  private readonly info: EndpointInfo<TResponse, TParams, TQuery, TBody, TState>;
+  private readonly info: EndpointInfo<
+    TResponse,
+    TParams,
+    TQuery,
+    TBody,
+    TState,
+    TPath,
+    TRequestHeaders,
+    TResponseHeaders
+  >;
 
-  constructor(api: Api, options: EndpointOptions<TResponse, TParams, TQuery, TBody, TState>) {
+  constructor(
+    api: Api,
+    options: EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+  ) {
     this.api = api;
 
     this.info = {
@@ -109,7 +138,7 @@ export default class Endpoint<
     return this.info.method;
   }
 
-  get path(): string {
+  get path(): TPath {
     return this.info.path;
   }
 
@@ -162,10 +191,12 @@ export default class Endpoint<
       const keys = Object.keys(request.params);
       for (let i = 0; i < keys.length; i++) {
         const argName = keys[i];
-        computedPath = computedPath.replace(`:${argName}`, request.params[argName]);
+        const argValue = request.params[argName];
+
+        computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
       }
     }
-    if (computedPath.includes(":")) {
+    if (computedPath.includes(":") || computedPath.includes("{")) {
       throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
     }
     return computedPath;
@@ -183,7 +214,10 @@ export default class Endpoint<
     TQuery extends Query | undefined,
     TBody extends Body | undefined,
     TState extends State,
-  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
+    TRequestHeaders extends RawHeaders | undefined,
+  >(
+    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
     return this.computeRequestConfig(config);
   }
 
@@ -192,7 +226,10 @@ export default class Endpoint<
     TQuery extends Query | undefined,
     TBody extends Body | undefined,
     TState extends State,
-  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
+    TRequestHeaders extends RawHeaders | undefined,
+  >(
+    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
     const apiDefaults = this.api.computeRequestConfig();
 
     return processRequestConfigs([apiDefaults, this.config, config]);

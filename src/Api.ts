@@ -6,6 +6,7 @@ import type {
   ComputedRequestConfig,
   Params,
   Query,
+  RawHeaders,
   RequestConfig,
   RequestHost,
   RequestMiddleware,
@@ -73,8 +74,11 @@ class HotRequestHost implements RequestHost {
     TQuery extends Query | undefined,
     TBody extends Body | undefined,
     TState extends State,
-  >(config: RequestConfig<TParams, TQuery, TBody, TState>): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
-    const apiDefaults = this.api.getConfig();
+    TRequestHeaders extends RawHeaders | undefined,
+  >(
+    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
+    const apiDefaults = this.api.computeRequestConfig();
 
     return processRequestConfigs([apiDefaults, config]);
   }
@@ -84,7 +88,7 @@ class HotRequestHost implements RequestHost {
   }
 
   getRequestBackend(): RequestBackend {
-    return this.api.getRequestBackend();
+    return this.api.requestBackend;
   }
 }
 
