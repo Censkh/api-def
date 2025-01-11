@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
-import chalk from "chalk/source";
+import * as  chalk from "chalk";
 import { upperFirst } from "lodash";
 import openapiTS, { astToString } from "openapi-typescript";
 
@@ -21,6 +21,7 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
   const inContents = fs.readFileSync(openApiPath, "utf-8");
   const ast = await openapiTS(inContents, {
     rootTypes: true,
+
   });
 
   const bundleResults = await bundle({

@@ -19,7 +19,7 @@
     "build": "npm run cleanup && npm run build:esm && npm run build:cjs && npm run build:cli",
     "build:esm": "tsc --module es2015 --target es2016 --outDir esm --preserveWatchOutput",
     "build:cjs": "tsc --module commonjs --target es5 --outDir cjs --preserveWatchOutput",
-    "build:cli": "tsc cli/index.ts --module commonjs --target es5 --outDir bin --preserveWatchOutput",
+    "build:cli": "tsc cli/index.ts --module commonjs --target es5 --outDir bin --preserveWatchOutput --esModuleInterop --skipLibCheck",
     "website:dev": "cd website && npm run start",
     "website:deploy": "cd website && npm run deploy"
   },
@@ -40,7 +40,6 @@
   "repository": "https://github.com/Censkh/api-def",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@biomejs/wasm-nodejs": "^1.9.4",
     "@redocly/openapi-core": "^1.27.1",
     "@swc/core": "^1.10.7",
     "@swc/jest": "^0.2.37",
@@ -61,8 +60,5 @@
     "rimraf": "6.0.1",
     "typescript": "^5.7.3",
     "zod": "3.24.1"
-  },
-  "dependencies": {
-    "@biomejs/js-api": "^0.7.1"
   }
 }
