@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
-import * as  chalk from "chalk";
+// @ts-ignore
+import chalk from "chalk";
 import { upperFirst } from "lodash";
 import openapiTS, { astToString } from "openapi-typescript";
 
@@ -86,9 +87,10 @@ ${Object.entries(routes)
         }
       }
 
+      /*
       const methodColor = METHOD_COLORS[method] || chalk.gray;
-
       console.log(`Generating ${methodColor(method.toUpperCase())} '${id}'`);
+       */
 
       const endpointParts = [
         responseTypes.length > 0 ? `.response<${responseTypes.join("|")}>()` : "",
