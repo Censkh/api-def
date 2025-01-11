@@ -166,7 +166,9 @@ export default class Endpoint<
     return this.info.validation;
   }
 
-  public async submit(config: RequestConfig<TParams, TQuery, TBody, TState>): Promise<ApiResponse<TResponse>> {
+  public async submit(
+    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+  ): Promise<ApiResponse<TResponse>> {
     let mock = false;
 
     const apiMocking = this.api.mocking;
