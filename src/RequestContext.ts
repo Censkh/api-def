@@ -219,6 +219,12 @@ export default class RequestContext<
     this.computedMethod = method;
   }
 
+  updateBody(body: TBody): void {
+    // @ts-ignore
+    this.computedConfig.body = body;
+    this.parseRequestBody();
+  }
+
   private generateRequestUrl(): URL {
     let path = !this.baseUrl.endsWith("/") ? `${this.baseUrl}/` : this.baseUrl;
     path += this.computedPath.startsWith("/") ? this.computedPath.substring(1) : this.computedPath;

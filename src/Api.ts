@@ -97,7 +97,14 @@ export class Api implements ApiInfo {
 
   protected readonly endpoints: Record<string, Endpoint> = {};
 
-  constructor(options: ApiOptions) {
+  private mutable = false;
+  private wasMutable = false;
+
+  constructor(
+    options: ApiOptions & {
+      readonly mutable?: boolean;
+    },
+  ) {
     const requestBackend = options.requestBackend ?? getRequestBackend();
     if (!requestBackend) {
       throw new Error(
@@ -114,6 +121,8 @@ export class Api implements ApiInfo {
       mocking: options.mocking ?? undefined,
       requestBackend: requestBackend,
     };
+    this.mutable = options.mutable ?? false;
+    this.wasMutable = this.mutable;
     this.endpoints = {};
   }
 
@@ -170,23 +179,16 @@ export class Api implements ApiInfo {
     return (typeof this.requestConfig === "function" ? this.requestConfig() : this.requestConfig) || {};
   }
 
-  /*reconfigure(info: Partial<ApiInfo>): void {
-    if (info.requestBackend) {
-      (this as any).requestBackend = info.requestBackend;
+  configure(info: Partial<ApiInfo>): void {
+    if (!this.mutable) {
+      throw new Error(
+        `[api-def] ${this.wasMutable ? "Cannot configure a mutable API twice" : "Cannot configure an immutable API"}`,
+      );
     }
-    if (info.config) {
-      (this as any).config = info.config;
-    }
-    if (info.middleware) {
-      (this as any).middleware = info.middleware;
-    }
-    if (info.mocking) {
-      (this as any).mocking = info.mocking;
-    }
-    if (info.baseUrl) {
-      (this as any).baseUrl = info.baseUrl;
-    }
-  }*/
+
+    Object.assign(this.info, info);
+    this.mutable = false;
+  }
 
   private hotRequest =
     (requestMethod: RequestMethod) =>

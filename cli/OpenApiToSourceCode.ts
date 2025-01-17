@@ -40,6 +40,7 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
 const API = new Api({
   name: "${bundleResults.bundle.parsed.info.title || "Generate Api"}",
   baseUrl: "${server.url}",
+  mutable: true,
 });
 
 ${Object.entries(routes)

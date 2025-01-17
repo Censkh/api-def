@@ -11849,6 +11849,7 @@ import { Api } from "api-def";
 const API = new Api({
   name: "Mastercard Processing Core API",
   baseUrl: "https://api.mastercard.com/global-processing/core",
+  mutable: true,
 });
 
 export const createClient = API.endpoint()
