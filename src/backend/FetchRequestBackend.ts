@@ -133,6 +133,10 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       fetchOptions.credentials = context.requestConfig.credentials ? "include" : undefined;
     }
 
+    if (requestConfig.debug) {
+      console.log(`[api-def] Fetching '${url.href}' with options`, JSON.stringify(fetchOptions, null, 2));
+    }
+
     const promise: Promise<Response> = this.fetch(url.href, fetchOptions).then((response) => {
       responded = true;
       if (!response.ok) {

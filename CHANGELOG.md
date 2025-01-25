@@ -1,5 +1,7 @@
 # 0.12.0
 
+- **Breaking:** `Endpoint` is no longer a class
+- You can now call an `Endpoint` directly to make a request, same as calling it's `submit` method
 - add CLI to generate api-def from openapi spec
 - add `reconfigure` method to `Api` & `Endpoint` to allow for changing options after creation
 - support for path params surrounded by curly braces, e.g. `/users/{id}`

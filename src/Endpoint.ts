@@ -91,7 +91,7 @@ export type EndpointConfig<
   TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > = EndpointInfo<TResult, TParams, TQuery, TBody, TState, TPath>;
 
-export default class Endpoint<
+export type Endpoint<
   TResponse = any,
   TParams extends Params | undefined = Params | undefined,
   TQuery extends Query | undefined = Query | undefined,
@@ -100,144 +100,149 @@ export default class Endpoint<
   TPath extends string = string,
   TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
   TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
-> implements
-    EndpointInfo<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
-    RequestHost
-{
-  public readonly api: Api;
+> = EndpointInfo<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> &
+  RequestHost & {
+    (config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>): Promise<ApiResponse<TResponse>>;
+    submit: (config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>) => Promise<ApiResponse<TResponse>>;
 
-  private readonly info: EndpointInfo<
-    TResponse,
-    TParams,
-    TQuery,
-    TBody,
-    TState,
-    TPath,
-    TRequestHeaders,
-    TResponseHeaders
-  >;
+    /**
+     * @deprecated Use `computeRequestConfig` instead
+     */
+    computeConfig: <
+      TParams extends Params | undefined,
+      TQuery extends Query | undefined,
+      TBody extends Body | undefined,
+      TState extends State,
+      TRequestHeaders extends RawHeaders | undefined,
+    >(
+      config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+    ) => ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>;
 
-  constructor(
-    api: Api,
-    options: EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
-  ) {
-    this.api = api;
+    computeRequestConfig: <
+      TParams extends Params | undefined,
+      TQuery extends Query | undefined,
+      TBody extends Body | undefined,
+      TState extends State,
+      TRequestHeaders extends RawHeaders | undefined,
+    >(
+      config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
+    ) => ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>;
 
-    this.info = {
-      ...options,
-      name: options.name || options.id,
-      validation: options.validation || {},
-    };
-  }
+    computePath: (path: string, config: RequestConfig) => string;
+    getRequestBackend: () => RequestBackend;
+  };
 
-  get id(): string {
-    return this.info.id;
-  }
+export default Endpoint;
 
-  get method(): RequestMethod {
-    return this.info.method;
-  }
+export const createEndpoint = <
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
+  TPath extends string = string,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+>(
+  api: Api,
+  options: EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+): Endpoint<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> => {
+  const info: EndpointInfo<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> = {
+    ...options,
+    name: options.name || options.id,
+    validation: options.validation || {},
+  };
 
-  get path(): TPath {
-    return this.info.path;
-  }
+  const instance = {
+    get api() {
+      return api;
+    },
 
-  get name(): string {
-    return this.info.name;
-  }
+    get id() {
+      return info.id;
+    },
+    get method() {
+      return info.method;
+    },
+    get path() {
+      return info.path;
+    },
 
-  get description(): string | undefined {
-    return this.info.description;
-  }
+    get description() {
+      return info.description;
+    },
+    get config() {
+      return info.config || {};
+    },
+    get responseType() {
+      return info.responseType;
+    },
+    get mocking() {
+      return info.mocking;
+    },
+    get validation() {
+      return info.validation;
+    },
+    get baseUrl() {
+      return api.baseUrl;
+    },
+    getRequestBackend() {
+      return api.requestBackend;
+    },
 
-  get config(): BaseRequestConfig {
-    return this.info.config || {};
-  }
+    async submit(config) {
+      let mock = false;
 
-  get responseType(): ResponseType | undefined {
-    return this.info.responseType;
-  }
+      const apiMocking = api.mocking;
+      if (apiMocking) {
+        const mockingEnabled =
+          (typeof apiMocking.enabled === "function" ? apiMocking.enabled() : apiMocking.enabled) ?? false;
+        if (mockingEnabled) {
+          if (!options.mocking?.handler) {
+            throw new Error(`[api-def] Endpoint for '${options.path}' has no mocking`);
+          }
 
-  get mocking(): Mocking.EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | undefined {
-    return this.info.mocking;
-  }
-
-  get validation(): Validation<TResponse, TParams, TQuery, TBody, TState> {
-    return this.info.validation;
-  }
-
-  public async submit(
-    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
-  ): Promise<ApiResponse<TResponse>> {
-    let mock = false;
-
-    const apiMocking = this.api.mocking;
-    if (apiMocking) {
-      const mockingEnabled =
-        (typeof apiMocking.enabled === "function" ? apiMocking.enabled() : apiMocking.enabled) ?? false;
-      if (mockingEnabled) {
-        if (!this.mocking?.handler) {
-          throw new Error(`[api-def] Endpoint for '${this.path}' has no mocking`);
+          mock = true;
         }
-
-        mock = true;
       }
-    }
 
-    return Requester.submit(this, config, mock ? this.mocking : null);
-  }
+      return Requester.submit(this, config, mock ? options.mocking : null);
+    },
 
-  computePath(path: string, request: RequestConfig): string {
-    let computedPath = path.startsWith("/") ? path : `/${path}`;
-    if (request.params) {
-      const keys = Object.keys(request.params);
-      for (let i = 0; i < keys.length; i++) {
-        const argName = keys[i];
-        const argValue = request.params[argName];
+    computeConfig(config) {
+      return this.computeRequestConfig(config);
+    },
+    computeRequestConfig(config) {
+      const apiDefaults = api.computeRequestConfig();
 
-        computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
+      return processRequestConfigs([apiDefaults, options.config, config]);
+    },
+    computePath(path, request) {
+      let computedPath = path.startsWith("/") ? path : `/${path}`;
+      if (request.params) {
+        const keys = Object.keys(request.params);
+        for (let i = 0; i < keys.length; i++) {
+          const argName = keys[i];
+          const argValue = request.params[argName];
+
+          computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
+        }
       }
-    }
-    if (computedPath.includes(":") || computedPath.includes("{")) {
-      throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
-    }
-    return computedPath;
-  }
+      if (computedPath.includes(":") || computedPath.includes("{")) {
+        throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
+      }
+      return computedPath;
+    },
+  } as Endpoint<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>;
 
-  get baseUrl(): string {
-    return this.api.baseUrl;
-  }
+  const result = Object.assign((config: any) => {
+    return instance.submit(config);
+  }, instance);
 
-  /**
-   * @deprecated Use `computeRequestConfig` instead
-   */
-  computeConfig<
-    TParams extends Params | undefined,
-    TQuery extends Query | undefined,
-    TBody extends Body | undefined,
-    TState extends State,
-    TRequestHeaders extends RawHeaders | undefined,
-  >(
-    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
-  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
-    return this.computeRequestConfig(config);
-  }
+  Object.defineProperty(result, "name", {
+    value: info.name,
+    writable: false,
+  });
 
-  computeRequestConfig<
-    TParams extends Params | undefined,
-    TQuery extends Query | undefined,
-    TBody extends Body | undefined,
-    TState extends State,
-    TRequestHeaders extends RawHeaders | undefined,
-  >(
-    config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
-  ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
-    const apiDefaults = this.api.computeRequestConfig();
-
-    return processRequestConfigs([apiDefaults, this.config, config]);
-  }
-
-  getRequestBackend(): RequestBackend {
-    return this.api.requestBackend;
-  }
-}
+  return result;
+};

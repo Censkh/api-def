@@ -33,6 +33,8 @@ it("request backends output", async () => {
     path: "/200",
   });
 
+  expect(fetchPage.name).toBe("Get 200");
+
   setRequestBackend(new FetchRequestBackend());
 
   const fetchResult = await fetchPage.submit({
@@ -41,7 +43,7 @@ it("request backends output", async () => {
 
   setRequestBackend(new AxiosRequestBackend(axios));
 
-  const axiosResult = await fetchPage.submit({
+  const axiosResult = await fetchPage({
     query: "test",
   });
 

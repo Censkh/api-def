@@ -1,7 +1,7 @@
 import type * as zod from "zod";
 import type { Api } from "./Api";
 import type { Body, Params, Query, RawHeaders, State } from "./ApiTypes";
-import Endpoint, { type EndpointOptions } from "./Endpoint";
+import { type Endpoint, type EndpointOptions, createEndpoint } from "./Endpoint";
 import type { Validation } from "./Validation";
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
@@ -95,8 +95,8 @@ export default class EndpointBuilder<
       "validation"
     >,
   ): Endpoint<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> {
-    const endpoint = new Endpoint(this.api, { ...options, validation: this.validation });
-    (this.api as any).endpoints[endpoint.id] = endpoint as Endpoint;
+    const endpoint = createEndpoint(this.api, { ...options, validation: this.validation });
+    (this.api as any).endpoints[endpoint.id] = endpoint as any;
     return endpoint as any;
   }
 }

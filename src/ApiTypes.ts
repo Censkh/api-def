@@ -40,6 +40,7 @@ export interface RetryOptions {
 }
 
 export interface BaseRequestConfig {
+  debug?: boolean;
   cache?: number | boolean;
   lock?: RequestLock;
   credentials?: "omit" | "same-origin" | "include";
