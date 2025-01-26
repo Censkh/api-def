@@ -35,6 +35,7 @@ export const postFormUrlEncoded = api
     test: number;
     b: string;
   }>()
+  .responseOf<string[]>()
   .build({
     id: "sendFormUrlEncoded",
     method: "post",

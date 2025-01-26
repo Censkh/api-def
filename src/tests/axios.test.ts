@@ -43,7 +43,7 @@ it("request backends output", async () => {
 
   setRequestBackend(new AxiosRequestBackend(axios));
 
-  const axiosResult = await fetchPage({
+  const axiosResult = await fetchPage.submit({
     query: "test",
   });
 

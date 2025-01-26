@@ -1,7 +1,7 @@
 import * as qs from "qs";
 import { Api } from "../Api";
 import { RequestMethod } from "../ApiConstants";
-import mockApi, { postIdVerifStatus } from "./mock/MockApi";
+import { postIdVerifStatus } from "./mock/MockApi";
 
 const api = new Api({
   baseUrl: "example.com",
