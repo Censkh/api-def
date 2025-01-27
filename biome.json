@@ -33,6 +33,9 @@
 
     "ignore": ["fixtures"]
   },
+  "files": {
+    "include": ["src/**/*.ts", "cli/**/*.ts"]
+  },
   "vcs": {
     "enabled": true,
     "clientKind": "git",

@@ -2,7 +2,6 @@ import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
-import { program } from "commander";
 import { upperFirst } from "lodash";
 import openapiTS, { astToString } from "openapi-typescript";
 
@@ -10,6 +9,7 @@ export interface OpenApiToSourceCodeOptions {
   openApiPath: string;
 }
 
+// @ts-ignore
 const METHOD_COLORS = {
   get: chalk.green,
   post: chalk.blue,
@@ -68,7 +68,8 @@ ${Object.entries(routes)
 
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
-              extraTypes[`Response${name}`] = `components["schemas"]["${name}"]`;
+              extraTypes[`Response${name}`] = name;
+              extraTypes[name] = `components["schemas"]["${name}"]`;
               responseTypes.push(`Response${name}`);
             }
           }
@@ -78,7 +79,8 @@ ${Object.entries(routes)
       const bodyTypes = [];
       if (methodDef.requestBody?.$ref) {
         const name = methodDef.requestBody.$ref.split("/").pop();
-        extraTypes[`Body${name}`] = `components["schemas"]["${name}"]`;
+        extraTypes[`Body${name}`] = name;
+        extraTypes[name] = `components["schemas"]["${name}"]`;
         bodyTypes.push(`Body${name}`);
       }
 
@@ -99,7 +101,8 @@ ${Object.entries(routes)
         });
 
         if (anyQueryParams) {
-          extraTypes[`Query${upperFirst(id)}`] = `operations["${id}"]["parameters"]["query"]`;
+          extraTypes[`Query${upperFirst(id)}`] = upperFirst(id);
+          extraTypes[upperFirst(id)] = `operations["${id}"]["parameters"]["query"]`;
           queryTypes.push(`Query${upperFirst(id)}`);
         }
       }
@@ -121,16 +124,17 @@ ${Object.entries(routes)
         });
 
         if (anyHeaderParams) {
-          extraTypes[`Headers${upperFirst(id)}`] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
+          extraTypes[`Headers${upperFirst(id)}`] = upperFirst(id);
+          extraTypes[upperFirst(id)] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
           requestHeaderTypes.push(`Headers${upperFirst(id)}`);
         }
       }
 
-      const responseHeaderTypes = [];
+      const responseHeaderTypes: string[] = [];
 
       let pathParams = [];
       if (methodDef.parameters?.length) {
-        pathParams = methodDef.parameters.reduce((pathParams, param: any) => {
+        pathParams = methodDef.parameters.reduce((pathParams: string[], param: any) => {
           if (param.in === "path") {
             pathParams.push(param.name);
           } else if (param.$ref) {
