@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "lib": ["es6", "dom"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "allowJs": true,
     "moduleResolution": "node",
     "module": "esnext",
@@ -11,5 +14,14 @@
     "jsx": "react",
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "bin",
+    "esm",
+    "cjs",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

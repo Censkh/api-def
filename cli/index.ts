@@ -7,7 +7,7 @@ import { openApiToSourceCode } from "./OpenApiToSourceCode";
 
 program.name("api-def");
 
-const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf-8"));
 program.version(packageJson.version);
 
 program
