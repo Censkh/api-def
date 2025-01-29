@@ -78,10 +78,21 @@ ${Object.entries(routes)
 
       const bodyTypes = [];
       if (methodDef.requestBody?.$ref) {
-        const name = methodDef.requestBody.$ref.split("/").pop();
-        extraTypes[`Body${name}`] = name;
-        extraTypes[name] = `components["schemas"]["${name}"]`;
-        bodyTypes.push(`Body${name}`);
+        const ref = methodDef.requestBody.$ref;
+        // find the schema
+        const requestBodyDef = bundleResults.bundle.parsed.components.requestBodies[ref.split("/").pop()];
+        if (requestBodyDef?.content) {
+          for (const mediaType in requestBodyDef.content) {
+            const schema = requestBodyDef.content[mediaType].schema;
+
+            if (schema?.$ref) {
+              const name = schema.$ref.split("/").pop();
+              extraTypes[`Body${name}`] = name;
+              extraTypes[name] = `components["schemas"]["${name}"]`;
+              bodyTypes.push(`Body${name}`);
+            }
+          }
+        }
       }
 
       const queryTypes = [];
