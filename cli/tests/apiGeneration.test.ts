@@ -19,3 +19,12 @@ it("2. generated types match - id verification", async () => {
   const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/MastercardIdVerificationApi.ts"), "utf-8");
   expect(output).toEqual(expected);
 });
+
+it("3. generated types match - json file", async () => {
+  const output = await openApiToSourceCode({
+    openApiPath: path.resolve(__dirname, "./fixtures/oneSignal-api.json"),
+  });
+
+  const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/OneSignalApi.ts"), "utf-8");
+  expect(output).toEqual(expected);
+});

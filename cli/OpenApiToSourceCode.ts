@@ -2,12 +2,22 @@ import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
-import { upperFirst } from "lodash";
+import { camelCase, startCase, upperFirst } from "lodash";
 import openapiTS, { astToString } from "openapi-typescript";
 
 export interface OpenApiToSourceCodeOptions {
   openApiPath: string;
 }
+
+const createTypeName = (...parts: string[]) => {
+  return startCase(
+    parts
+      .map((string) => {
+        return upperFirst(string).trim();
+      })
+      .join(""),
+  ).replace(/\s/g, "");
+};
 
 // @ts-ignore
 const METHOD_COLORS = {
@@ -68,9 +78,9 @@ ${Object.entries(routes)
 
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
-              extraTypes[`Response${name}`] = name;
+              extraTypes[createTypeName("Response", name)] = name;
               extraTypes[name] = `components["schemas"]["${name}"]`;
-              responseTypes.push(`Response${name}`);
+              responseTypes.push(createTypeName("Response", name));
             }
           }
         }
@@ -87,9 +97,9 @@ ${Object.entries(routes)
 
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
-              extraTypes[`Body${name}`] = name;
+              extraTypes[createTypeName("Body", name)] = name;
               extraTypes[name] = `components["schemas"]["${name}"]`;
-              bodyTypes.push(`Body${name}`);
+              bodyTypes.push(createTypeName("Body", name));
             }
           }
         }
@@ -112,9 +122,9 @@ ${Object.entries(routes)
         });
 
         if (anyQueryParams) {
-          extraTypes[`Query${upperFirst(id)}`] = upperFirst(id);
-          extraTypes[upperFirst(id)] = `operations["${id}"]["parameters"]["query"]`;
-          queryTypes.push(`Query${upperFirst(id)}`);
+          extraTypes[createTypeName("Query", id)] = createTypeName(id);
+          extraTypes[createTypeName(id)] = `operations["${id}"]["parameters"]["query"]`;
+          queryTypes.push(createTypeName("Query", id));
         }
       }
 
@@ -135,9 +145,9 @@ ${Object.entries(routes)
         });
 
         if (anyHeaderParams) {
-          extraTypes[`Headers${upperFirst(id)}`] = upperFirst(id);
-          extraTypes[upperFirst(id)] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
-          requestHeaderTypes.push(`Headers${upperFirst(id)}`);
+          extraTypes[createTypeName("Headers", id)] = createTypeName(id);
+          extraTypes[createTypeName(id)] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
+          requestHeaderTypes.push(createTypeName("Headers", id));
         }
       }
 
@@ -174,7 +184,7 @@ ${Object.entries(routes)
         responseHeaderTypes.length > 0 ? `.responseHeadersOf<${responseHeaderTypes.join("|")}>()` : "",
       ];
 
-      return `export const ${id} = API.endpoint()
+      return `export const ${camelCase(id)} = API.endpoint()
 ${endpointParts
   .filter(Boolean)
   .map((part) => `  ${part}`)
