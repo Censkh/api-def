@@ -7,6 +7,7 @@ import openapiTS, { astToString, resolveRef } from "openapi-typescript";
 
 export interface OpenApiToSourceCodeOptions {
   openApiPath: string;
+  configFileLocation?: string;
 }
 
 const createTypeName = (...parts: string[]) => {
@@ -41,7 +42,7 @@ const resolveComponent = (schema: any, object: any) => {
 };
 
 export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) => {
-  const { openApiPath } = options;
+  const { openApiPath, configFileLocation } = options;
   const inContents = fs.readFileSync(openApiPath, "utf-8");
   const ast = await openapiTS(inContents, {});
 
@@ -62,10 +63,25 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
 
   const source = `import { Api } from "api-def";
 
+${
+  configFileLocation
+    ? `let hasConfig = false;
+try {
+  hasConfig = Boolean(require.resolve("${configFileLocation}"));
+} catch {}
+const config = hasConfig ? require("${configFileLocation}") : {};
+`
+    : ""
+}
+
 const API = new Api({
   name: "${schema.info.title || "Generate Api"}",
-  baseUrl: "${server.url}",
-  mutable: true,
+  baseUrl: "${server.url}",${
+    configFileLocation
+      ? `
+  ...(config.default ?? config),`
+      : ""
+  }
 });
 
 ${Object.entries(routes)
@@ -220,5 +236,5 @@ export default API;`;
     .map((key) => `export type ${key} = ${extraTypes[key]};`)
     .join("\n");
 
-  return `// Type Defs\n\n${types}\n${extraTypesSource}\n\n//API Def\n\n${source}`;
+  return `// Type Defs\n\n${types}\n${extraTypesSource}\n\n// API Def\n\n${source}`;
 };

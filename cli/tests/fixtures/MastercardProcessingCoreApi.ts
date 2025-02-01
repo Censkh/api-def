@@ -11965,14 +11965,15 @@ export type VerifyCardDetails = NonNullable<operations["verifyCardDetails"]["par
 export type VerifyCvc = NonNullable<operations["verifyCvc"]["parameters"]["header"]>;
 export type VerifyPin = NonNullable<operations["verifyPin"]["parameters"]["header"]>;
 
-//API Def
+// API Def
 
 import { Api } from "api-def";
+
+
 
 const API = new Api({
   name: "Mastercard Processing Core API",
   baseUrl: "https://api.mastercard.com/global-processing/core",
-  mutable: true,
 });
 
 export const createClient = API.endpoint()

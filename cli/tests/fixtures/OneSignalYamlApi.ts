@@ -4313,14 +4313,21 @@ export type inline_response_201 = components["schemas"]["inline_response_201"];
 export type inline_response_202 = components["schemas"]["inline_response_202"];
 export type update_player_tags_request_body = components["schemas"]["update_player_tags_request_body"];
 
-//API Def
+// API Def
 
 import { Api } from "api-def";
+
+let hasConfig = false;
+try {
+  hasConfig = Boolean(require.resolve("./OneSignalYamlApi.config"));
+} catch {}
+const config = hasConfig ? require("./OneSignalYamlApi.config") : {};
+
 
 const API = new Api({
   name: "OneSignal",
   baseUrl: "https://api.onesignal.com",
-  mutable: true,
+  ...(config.default ?? config),
 });
 
 export const getNotifications = API.endpoint()

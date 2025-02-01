@@ -97,8 +97,8 @@ export class Api implements ApiInfo {
 
   protected readonly endpoints: Record<string, Endpoint> = {};
 
-  private mutable = false;
-  private wasMutable = false;
+  //private mutable = false;
+  //private wasMutable = false;
 
   constructor(
     options: ApiOptions & {
@@ -121,8 +121,8 @@ export class Api implements ApiInfo {
       mocking: options.mocking ?? undefined,
       requestBackend: requestBackend,
     };
-    this.mutable = options.mutable ?? false;
-    this.wasMutable = this.mutable;
+    //this.mutable = options.mutable ?? false;
+    //this.wasMutable = this.mutable;
     this.endpoints = {};
   }
 
@@ -179,7 +179,7 @@ export class Api implements ApiInfo {
     return (typeof this.requestConfig === "function" ? this.requestConfig() : this.requestConfig) || {};
   }
 
-  configure(info: Partial<ApiInfo>): void {
+  /*configure(info: Partial<ApiInfo>): void {
     if (!this.mutable) {
       throw new Error(
         `[api-def] ${this.wasMutable ? "Cannot configure a mutable API twice" : "Cannot configure an immutable API"}`,
@@ -188,7 +188,7 @@ export class Api implements ApiInfo {
 
     Object.assign(this.info, info);
     this.mutable = false;
-  }
+  }*/
 
   private hotRequest =
     (requestMethod: RequestMethod) =>
