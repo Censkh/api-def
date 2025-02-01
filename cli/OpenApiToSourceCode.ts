@@ -3,7 +3,7 @@ import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
 import { camelCase, startCase, upperFirst } from "lodash";
-import openapiTS, { astToString } from "openapi-typescript";
+import openapiTS, { astToString, resolveRef } from "openapi-typescript";
 
 export interface OpenApiToSourceCodeOptions {
   openApiPath: string;
@@ -28,6 +28,18 @@ const METHOD_COLORS = {
   patch: chalk.magenta,
 } satisfies Record<string, any>;
 
+const resolveComponent = (schema: any, object: any) => {
+  if (object.$ref) {
+    const ref = object.$ref;
+    const resolved = resolveRef(schema, ref, { silent: false, visited: [] });
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  return object;
+};
+
 export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) => {
   const { openApiPath } = options;
   const inContents = fs.readFileSync(openApiPath, "utf-8");
@@ -37,18 +49,21 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
     ref: openApiPath,
     config: await createConfig({}),
   });
-  const routes = bundleResults.bundle.parsed.paths;
+
+  const schema = bundleResults.bundle.parsed;
+
+  const routes = schema.paths;
 
   // now generate the api-def API
 
-  const server = bundleResults.bundle.parsed.servers[0];
+  const server = schema.servers[0];
 
   const extraTypes: Record<string, string> = {};
 
   const source = `import { Api } from "api-def";
 
 const API = new Api({
-  name: "${bundleResults.bundle.parsed.info.title || "Generate Api"}",
+  name: "${schema.info.title || "Generate Api"}",
   baseUrl: "${server.url}",
   mutable: true,
 });
@@ -63,11 +78,11 @@ ${Object.entries(routes)
 
       let responseType = undefined;
 
-      const responseTypes = [];
+      const responseTypes: string[] = [];
       for (const status of successfulResponse) {
         const response = methodDef.responses[status];
-        if (response.$ref) {
-          const responseDef = bundleResults.bundle.parsed.components.responses[response.$ref.split("/").pop()];
+        if (response) {
+          const responseDef = resolveComponent(schema, response);
 
           for (const mediaType in responseDef.content) {
             const schema = responseDef.content[mediaType].schema;
@@ -86,15 +101,13 @@ ${Object.entries(routes)
         }
       }
 
-      const bodyTypes = [];
-      if (methodDef.requestBody?.$ref) {
-        const ref = methodDef.requestBody.$ref;
+      const bodyTypes: string[] = [];
+      if (methodDef.requestBody) {
         // find the schema
-        const requestBodyDef = bundleResults.bundle.parsed.components.requestBodies[ref.split("/").pop()];
+        const requestBodyDef = resolveComponent(schema, methodDef.requestBody);
         if (requestBodyDef?.content) {
           for (const mediaType in requestBodyDef.content) {
             const schema = requestBodyDef.content[mediaType].schema;
-
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
               extraTypes[createTypeName("Body", name)] = name;
@@ -105,7 +118,7 @@ ${Object.entries(routes)
         }
       }
 
-      const queryTypes = [];
+      const queryTypes: string[] = [];
       if (methodDef.parameters?.length) {
         const anyQueryParams = methodDef.parameters.some((param: any) => {
           if (param.in === "query") {
@@ -115,7 +128,7 @@ ${Object.entries(routes)
           if (param.$ref) {
             const ref = param.$ref;
 
-            const paramDef = bundleResults.bundle.parsed.components.parameters[ref.split("/").pop()];
+            const paramDef = schema.components.parameters[ref.split("/").pop()];
             return paramDef.in === "query";
           }
           return false;
@@ -128,7 +141,7 @@ ${Object.entries(routes)
         }
       }
 
-      const requestHeaderTypes = [];
+      const requestHeaderTypes: string[] = [];
       if (methodDef.parameters?.length) {
         const anyHeaderParams = methodDef.parameters.some((param: any) => {
           if (param.in === "header") {
@@ -138,7 +151,7 @@ ${Object.entries(routes)
           if (param.$ref) {
             const ref = param.$ref;
 
-            const paramDef = bundleResults.bundle.parsed.components.parameters[ref.split("/").pop()];
+            const paramDef = schema.components.parameters[ref.split("/").pop()];
             return paramDef.in === "header";
           }
           return false;
@@ -153,7 +166,7 @@ ${Object.entries(routes)
 
       const responseHeaderTypes: string[] = [];
 
-      let pathParams = [];
+      let pathParams: string[] = [];
       if (methodDef.parameters?.length) {
         pathParams = methodDef.parameters.reduce((pathParams: string[], param: any) => {
           if (param.in === "path") {
@@ -161,7 +174,7 @@ ${Object.entries(routes)
           } else if (param.$ref) {
             const ref = param.$ref;
 
-            const paramDef = bundleResults.bundle.parsed.components.parameters[ref.split("/").pop()];
+            const paramDef = schema.components.parameters[ref.split("/").pop()];
             if (paramDef.in === "path") {
               pathParams.push(paramDef.name);
             }
@@ -171,17 +184,17 @@ ${Object.entries(routes)
       }
 
       /*
-      const methodColor = METHOD_COLORS[method] || chalk.gray;
-      console.log(`Generating ${methodColor(method.toUpperCase())} '${id}'`);
-       */
+        const methodColor = METHOD_COLORS[method] || chalk.gray;
+        console.log(`Generating ${methodColor(method.toUpperCase())} '${id}'`);
+         */
 
       const endpointParts = [
-        pathParams.length > 0 ? `.paramsOf<"${pathParams.join("|")}">()` : "",
-        responseTypes.length > 0 ? `.responseOf<${responseTypes.join("|")}>()` : "",
-        bodyTypes.length > 0 ? `.bodyOf<${bodyTypes.join("|")}>()` : "",
-        queryTypes.length > 0 ? `.queryOf<${queryTypes.join("|")}>()` : "",
-        requestHeaderTypes.length > 0 ? `.requestHeadersOf<${requestHeaderTypes.join("|")}>()` : "",
-        responseHeaderTypes.length > 0 ? `.responseHeadersOf<${responseHeaderTypes.join("|")}>()` : "",
+        pathParams.length > 0 ? `.paramsOf<${pathParams.map((string) => `"${string}"`).join(" | ")}>()` : "",
+        responseTypes.length > 0 ? `.responseOf<${responseTypes.join(" | ")}>()` : "",
+        bodyTypes.length > 0 ? `.bodyOf<${bodyTypes.join(" | ")}>()` : "",
+        queryTypes.length > 0 ? `.queryOf<${queryTypes.join(" | ")}>()` : "",
+        requestHeaderTypes.length > 0 ? `.requestHeadersOf<${requestHeaderTypes.join(" | ")}>()` : "",
+        responseHeaderTypes.length > 0 ? `.responseHeadersOf<${responseHeaderTypes.join(" | ")}>()` : "",
       ];
 
       return `export const ${camelCase(id)} = API.endpoint()

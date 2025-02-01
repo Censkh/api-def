@@ -12356,7 +12356,7 @@ export const getClientAddresses = API.endpoint()
   });
 
 export const updateClientAddress = API.endpoint()
-  .paramsOf<"client_id|address_type">()
+  .paramsOf<"client_id" | "address_type">()
   .bodyOf<BodyAddressModification>()
   .build({
     method: "put",
@@ -12384,7 +12384,7 @@ export const getContractAddresses = API.endpoint()
   });
 
 export const updateContractAddress = API.endpoint()
-  .paramsOf<"contract_id|address_type">()
+  .paramsOf<"contract_id" | "address_type">()
   .bodyOf<BodyAddressModification>()
   .build({
     method: "put",
@@ -12393,7 +12393,7 @@ export const updateContractAddress = API.endpoint()
   });
 
 export const setClientClassifier = API.endpoint()
-  .paramsOf<"client_id|classifier_code">()
+  .paramsOf<"client_id" | "classifier_code">()
   .bodyOf<BodyClassifierCreation>()
   .build({
     method: "put",
@@ -12412,7 +12412,7 @@ export const getClientClassifiers = API.endpoint()
   });
 
 export const setContractClassifier = API.endpoint()
-  .paramsOf<"contract_id|classifier_code">()
+  .paramsOf<"contract_id" | "classifier_code">()
   .bodyOf<BodyClassifierCreation>()
   .build({
     method: "put",
@@ -12441,7 +12441,7 @@ export const setClientCustomData = API.endpoint()
   });
 
 export const getClientCustomData = API.endpoint()
-  .paramsOf<"client_id|tag_name">()
+  .paramsOf<"client_id" | "tag_name">()
   .responseOf<ResponseClientCustomDataTagValues>()
   .build({
     method: "get",
@@ -12460,7 +12460,7 @@ export const setContractCustomData = API.endpoint()
   });
 
 export const getContractCustomData = API.endpoint()
-  .paramsOf<"contract_id|tag_name">()
+  .paramsOf<"contract_id" | "tag_name">()
   .responseOf<ResponseContractCustomDataTagValues>()
   .build({
     method: "get",
@@ -12469,7 +12469,7 @@ export const getContractCustomData = API.endpoint()
   });
 
 export const setContractParameter = API.endpoint()
-  .paramsOf<"contract_id|parameter_code">()
+  .paramsOf<"contract_id" | "parameter_code">()
   .bodyOf<BodyParameterModification>()
   .build({
     method: "put",
@@ -12559,7 +12559,7 @@ export const getTransactionFees = API.endpoint()
   });
 
 export const setUsageLimit = API.endpoint()
-  .paramsOf<"contract_id|usage_limit_code">()
+  .paramsOf<"contract_id" | "usage_limit_code">()
   .bodyOf<BodyUsageLimitModification>()
   .build({
     method: "put",
@@ -12578,7 +12578,7 @@ export const getUsageLimits = API.endpoint()
   });
 
 export const restoreUsageLimitOriginalValues = API.endpoint()
-  .paramsOf<"contract_id|usage_limit_code">()
+  .paramsOf<"contract_id" | "usage_limit_code">()
   .bodyOf<BodyUsageLimitOriginalValue>()
   .build({
     method: "put",
@@ -12587,7 +12587,7 @@ export const restoreUsageLimitOriginalValues = API.endpoint()
   });
 
 export const resetUsageLimitCounters = API.endpoint()
-  .paramsOf<"contract_id|usage_limit_code">()
+  .paramsOf<"contract_id" | "usage_limit_code">()
   .bodyOf<BodyUsageLimitResetting>()
   .build({
     method: "put",
@@ -12596,7 +12596,7 @@ export const resetUsageLimitCounters = API.endpoint()
   });
 
 export const changeUsageLimitStatus = API.endpoint()
-  .paramsOf<"contract_id|usage_limit_code">()
+  .paramsOf<"contract_id" | "usage_limit_code">()
   .bodyOf<BodyUsageLimitStatus>()
   .build({
     method: "put",
@@ -12673,7 +12673,7 @@ export const setAuthenticationMethod = API.endpoint()
   });
 
 export const releaseBlockedFunds = API.endpoint()
-  .paramsOf<"contract_id|transaction_id">()
+  .paramsOf<"contract_id" | "transaction_id">()
   .responseOf<ResponseBlockedFundsReleaseResult>()
   .bodyOf<BodyBlockedFundsRelease>()
   .build({

@@ -20,11 +20,20 @@ it("2. generated types match - id verification", async () => {
   expect(output).toEqual(expected);
 });
 
-it("3. generated types match - json file", async () => {
+it("3. generated types match - opensignal json file", async () => {
   const output = await openApiToSourceCode({
-    openApiPath: path.resolve(__dirname, "./fixtures/oneSignal-api.json"),
+    openApiPath: path.resolve(__dirname, "./fixtures/onesignal-openapi.json"),
   });
 
-  const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/OneSignalApi.ts"), "utf-8");
+  const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/OneSignalJsonApi.ts"), "utf-8");
+  expect(output).toEqual(expected);
+});
+
+it("4. generated types match - opensignal yaml file", async () => {
+  const output = await openApiToSourceCode({
+    openApiPath: path.resolve(__dirname, "./fixtures/onesignal-openapi.yaml"),
+  });
+
+  const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/OneSignalYamlApi.ts"), "utf-8");
   expect(output).toEqual(expected);
 });

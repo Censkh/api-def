@@ -609,6 +609,42 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @example {
+         *       "apns_key_id": "apns_key_id",
+         *       "apns_team_id": "apns_team_id",
+         *       "apns_p12": "apns_p12",
+         *       "safari_site_origin": "safari_site_origin",
+         *       "apns_p12_password": "apns_p12_password",
+         *       "created_at": "2000-01-23T04:56:07.000+00:00",
+         *       "safari_icon_64_64": "safari_icon_64_64",
+         *       "chrome_web_sub_domain": "chrome_web_sub_domain",
+         *       "gcm_key": "gcm_key",
+         *       "apns_bundle_id": "apns_bundle_id",
+         *       "chrome_key": "chrome_key",
+         *       "safari_push_id": "safari_push_id",
+         *       "updated_at": "2000-01-23T04:56:07.000+00:00",
+         *       "apns_certificates": "apns_certificates",
+         *       "safari_apns_p12": "safari_apns_p12",
+         *       "safari_icon_128_128": "safari_icon_128_128",
+         *       "id": "id",
+         *       "android_gcm_sender_id": "android_gcm_sender_id",
+         *       "safari_icon_32_32": "safari_icon_32_32",
+         *       "additional_data_is_root_payload": true,
+         *       "apns_env": "sandbox",
+         *       "players": 0,
+         *       "messageable_players": 6,
+         *       "apns_p8": "apns_p8",
+         *       "chrome_web_origin": "chrome_web_origin",
+         *       "basic_auth_key": "basic_auth_key",
+         *       "site_name": "site_name",
+         *       "safari_icon_16_16": "safari_icon_16_16",
+         *       "chrome_web_default_notification_icon": "chrome_web_default_notification_icon",
+         *       "organization_id": "organization_id",
+         *       "name": "name",
+         *       "safari_apns_certificates": "safari_apns_certificates",
+         *       "safari_apns_p12_password": "safari_apns_p12_password",
+         *       "safari_icon_256_256": "safari_icon_256_256"
+         *     } */
         App: {
             readonly id?: string;
             /** @description The name of your app, as displayed on your apps list on the dashboard.  This can be renamed. */
@@ -752,14 +788,1028 @@ export interface components {
              *     Limit of 2,000 entries per REST API call
              *      */
             include_android_reg_ids?: string[];
-            include_aliases?: {
-                alias_label?: string[];
-            } | null;
+            include_aliases?: components["schemas"]["PlayerNotificationTarget_include_aliases"];
             /** @enum {string} */
             target_channel?: "push" | "email" | "sms";
         };
         NotificationTarget: components["schemas"]["SegmentNotificationTarget"] | components["schemas"]["PlayerNotificationTarget"];
-        BasicNotification: components["schemas"]["NotificationTarget"] & {
+        BasicNotification: components["schemas"]["NotificationTarget"] & components["schemas"]["BasicNotification_allOf"] & unknown;
+        Notification: components["schemas"]["BasicNotification"] & components["schemas"]["Notification_allOf"];
+        NotificationWithMeta: components["schemas"]["BasicNotification"] & components["schemas"]["DeliveryData"] & components["schemas"]["OutcomesData"] & components["schemas"]["NotificationWithMeta_allOf"];
+        Button: {
+            id: string;
+            text?: string;
+            icon?: string;
+        };
+        Buttons: components["schemas"]["Button"][];
+        StringMap: {
+            /** @description Text in English.  Will be used as a fallback */
+            en?: string;
+            /** @description Text in Arabic. */
+            ar?: string;
+            /** @description Text in Bosnian. */
+            bs?: string;
+            /** @description Text in Bulgarian. */
+            bg?: string;
+            /** @description Text in Catalan. */
+            ca?: string;
+            /** @description Text in Chinese (Simplified). */
+            "zh-Hans"?: string;
+            /** @description Text in Chinese (Traditional). */
+            "zh-Hant"?: string;
+            /** @description Alias for zh-Hans. */
+            zh?: string;
+            /** @description Text in Croatian. */
+            hr?: string;
+            /** @description Text in Czech. */
+            cs?: string;
+            /** @description Text in Danish. */
+            da?: string;
+            /** @description Text in Dutch. */
+            nl?: string;
+            /** @description Text in Estonian. */
+            et?: string;
+            /** @description Text in Finnish. */
+            fi?: string;
+            /** @description Text in French. */
+            fr?: string;
+            /** @description Text in Georgian. */
+            ka?: string;
+            /** @description Text in German. */
+            de?: string;
+            /** @description Text in Greek. */
+            el?: string;
+            /** @description Text in Hindi. */
+            hi?: string;
+            /** @description Text in Hebrew. */
+            he?: string;
+            /** @description Text in Hungarian. */
+            hu?: string;
+            /** @description Text in Indonesian. */
+            id?: string;
+            /** @description Text in Italian. */
+            it?: string;
+            /** @description Text in Japanese. */
+            ja?: string;
+            /** @description Text in Korean. */
+            ko?: string;
+            /** @description Text in Latvian. */
+            lv?: string;
+            /** @description Text in Lithuanian. */
+            lt?: string;
+            /** @description Text in Malay. */
+            ms?: string;
+            /** @description Text in Norwegian. */
+            nb?: string;
+            /** @description Text in Polish. */
+            pl?: string;
+            /** @description Text in Persian. */
+            fa?: string;
+            /** @description Text in Portugese. */
+            pt?: string;
+            /** @description Text in Punjabi. */
+            pa?: string;
+            /** @description Text in Romanian. */
+            ro?: string;
+            /** @description Text in Russian. */
+            ru?: string;
+            /** @description Text in Serbian. */
+            sr?: string;
+            /** @description Text in Slovak. */
+            sk?: string;
+            /** @description Text in Spanish. */
+            es?: string;
+            /** @description Text in Swedish. */
+            sv?: string;
+            /** @description Text in Thai. */
+            th?: string;
+            /** @description Text in Turkish. */
+            tr?: string;
+            /** @description Text in Ukrainian. */
+            uk?: string;
+            /** @description Text in Vietnamese. */
+            vi?: string;
+        };
+        /** @example {
+         *       "offset": 6,
+         *       "total_count": 0,
+         *       "limit": 1,
+         *       "notifications": [
+         *         null,
+         *         null
+         *       ]
+         *     } */
+        NotificationSlice: {
+            total_count?: number;
+            offset?: number;
+            limit?: number;
+            notifications?: components["schemas"]["NotificationWithMeta"][];
+        };
+        /** @description Hash of delivery statistics broken out by target device platform. */
+        PlatformDeliveryData: {
+            edge_web_push?: components["schemas"]["DeliveryData"];
+            chrome_web_push?: components["schemas"]["DeliveryData"];
+            firefox_web_push?: components["schemas"]["DeliveryData"];
+            safari_web_push?: components["schemas"]["DeliveryData"];
+            android?: components["schemas"]["DeliveryData"];
+            ios?: components["schemas"]["DeliveryData"];
+            sms?: components["schemas"]["DeliveryData"] & components["schemas"]["PlatformDeliveryData_sms_allOf"];
+            email?: components["schemas"]["DeliveryData"] & components["schemas"]["PlatformDeliveryData_email_allOf"];
+        };
+        DeliveryData: {
+            /** @description Number of messages delivered to push servers, mobile carriers, or email service providers. */
+            successful?: number | null;
+            /** @description Number of messages sent to unsubscribed devices. */
+            failed?: number | null;
+            /** @description Number of errors reported. */
+            errored?: number | null;
+            /** @description Number of messages that were clicked. */
+            converted?: number | null;
+            /** @description Number of devices that received the message. */
+            received?: number | null;
+        };
+        /** @example {
+         *       "amount": "amount",
+         *       "iso": "iso",
+         *       "count": 2.3021358869347655,
+         *       "sku": "sku"
+         *     } */
+        Purchase: {
+            /** @description The unique identifier of the purchased item. */
+            sku: string;
+            /** @description The amount, in USD, spent purchasing the item. */
+            amount: string;
+            /** @description The 3-letter ISO 4217 currency code. Required for correct storage and conversion of amount. */
+            iso: string;
+            count?: number;
+        };
+        /** @example {
+         *       "aggregation": "sum",
+         *       "id": "id",
+         *       "value": 0
+         *     } */
+        OutcomeData: {
+            id: string;
+            value: number;
+            /** @enum {string} */
+            aggregation: "sum" | "count";
+        };
+        /** @example {
+         *       "outcomes": [
+         *         {
+         *           "aggregation": "sum",
+         *           "id": "id",
+         *           "value": 0
+         *         },
+         *         {
+         *           "aggregation": "sum",
+         *           "id": "id",
+         *           "value": 0
+         *         }
+         *       ]
+         *     } */
+        OutcomesData: {
+            outcomes?: components["schemas"]["OutcomeData"][];
+        };
+        Filter: {
+            /** @description Name of the field to use as the first operand in the filter expression. */
+            field: string;
+            /** @description If `field` is `tag`, this field is *required* to specify `key` inside the tags. */
+            key?: string;
+            /** @description Constant value to use as the second operand in the filter expression. This value is *required* when the relation operator is a binary operator. */
+            value?: string;
+            /**
+             * @description Operator of a filter expression.
+             * @enum {string}
+             */
+            relation: ">" | "<" | "=" | "!=" | "exists" | "not_exists" | "time_elapsed_gt" | "time_elapsed_lt";
+        };
+        Operator: {
+            /**
+             * @description Strictly, this must be either `"OR"`, or `"AND"`.  It can be used to compose Filters as part of a Filters object.
+             * @enum {string}
+             */
+            operator?: "OR" | "AND";
+        };
+        FilterExpressions: components["schemas"]["Filter"] | components["schemas"]["Operator"];
+        /** @example {
+         *       "name": "name",
+         *       "id": "id",
+         *       "filters": [
+         *         null,
+         *         null
+         *       ]
+         *     } */
+        Segment: {
+            /** @description UUID of the segment.  If left empty, it will be assigned automaticaly. */
+            id?: string;
+            /** @description Name of the segment.  You'll see this name on the Web UI. */
+            name: string;
+            /** @description Filter or operators the segment will have.  For a list of available filters with details, please see Send to Users Based on Filters. */
+            filters: components["schemas"]["FilterExpressions"][];
+        };
+        /** @example {
+         *       "country": "country",
+         *       "external_user_id_auth_hash": "external_user_id_auth_hash",
+         *       "device_model": "device_model",
+         *       "timezone": 5,
+         *       "created_at": 9,
+         *       "device_type": 5,
+         *       "language": "language",
+         *       "playtime": 3,
+         *       "long": 1.0246457001441578,
+         *       "amount_spent": 7.061401241503109,
+         *       "id": "id",
+         *       "app_id": "app_id",
+         *       "lat": 1.4894159098541704,
+         *       "identifier": "identifier",
+         *       "game_version": "game_version",
+         *       "notification_types": 7,
+         *       "device_os": "device_os",
+         *       "email_auth_hash": "email_auth_hash",
+         *       "test_type": 1,
+         *       "external_user_id": "external_user_id",
+         *       "tags": "{}",
+         *       "ad_id": "ad_id",
+         *       "session_count": 2,
+         *       "sdk": "sdk",
+         *       "last_active": 4,
+         *       "invalid_identifier": true,
+         *       "badge_count": 2
+         *     } */
+        Player: {
+            /** @description The device's OneSignal ID */
+            readonly id?: string;
+            /** @description If true, this is the equivalent of a user being Unsubscribed */
+            readonly invalid_identifier?: boolean;
+            app_id?: string;
+            /** @description Required
+             *     The device's platform:
+             *       0 = iOS
+             *       1 = Android
+             *       2 = Amazon
+             *       3 = WindowsPhone (MPNS)
+             *       4 = Chrome Apps / Extensions
+             *       5 = Chrome Web Push
+             *       6 = Windows (WNS)
+             *       7 = Safari
+             *       8 = Firefox
+             *       9 = MacOS
+             *       10 = Alexa
+             *       11 = Email
+             *       13 = For Huawei App Gallery Builds SDK Setup. Not for Huawei Devices using FCM
+             *       14 = SMS
+             *      */
+            device_type: number;
+            /** @description a custom user ID */
+            external_user_id?: string | null;
+            /** @description Only required if you have enabled Identity Verification and device_type is NOT 11 email. */
+            external_user_id_auth_hash?: string;
+            /** @description Email - Only required if you have enabled Identity Verification and device_type is email (11). */
+            email_auth_hash?: string;
+            /** @description Recommended: For Push Notifications, this is the Push Token Identifier from Google or Apple. For Apple Push identifiers, you must strip all non alphanumeric characters.
+             *     Examples:
+             *     iOS: 7abcd558f29d0b1f048083e2834ad8ea4b3d87d8ad9c088b33c132706ff445f0
+             *     Android: APA91bHbYHk7aq-Uam_2pyJ2qbZvqllyyh2wjfPRaw5gLEX2SUlQBRvOc6sck1sa7H7nGeLNlDco8lXj83HWWwzV...
+             *     For Email Addresses, set the full email address email@email.com and make sure to set device_type to 11.
+             *      */
+            identifier?: string | null;
+            /** @description Language code. Typically lower case two letters, except for Chinese where it must be one of zh-Hans or zh-Hant. Example: en
+             *      */
+            language?: string;
+            /** @description Number of seconds away from UTC. Example: -28800
+             *      */
+            timezone?: number | null;
+            /** @description Version of your app. Example: 1.1
+             *      */
+            game_version?: string | null;
+            /** @description Device make and model. Example: iPhone5,1
+             *      */
+            device_model?: string | null;
+            /** @description Device operating system version. Example: 7.0.4
+             *      */
+            device_os?: string | null;
+            /** @description The ad id for the device's platform:
+             *     Android = Advertising Id
+             *     iOS = identifierForVendor
+             *     WP8.0 = DeviceUniqueId
+             *     WP8.1 = AdvertisingId
+             *      */
+            ad_id?: string | null;
+            /** @description Name and version of the sdk/plugin that's calling this API method (if any) */
+            sdk?: string | null;
+            /** @description Number of times the user has played the game, defaults to 1 */
+            session_count?: number;
+            /** @description Custom tags for the player. Only support string and integer key value pairs. Does not support arrays or other nested objects. Setting a tag value to null or an empty string will remove the tag. Example: {"foo":"bar","this":"that"}
+             *     Limitations:
+             *     - 100 tags per call
+             *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
+             *     Recommended to only tag devices with 1 kilobyte of data
+             *     Please consider using your own Database to save more than 1 kilobyte of data. See: Internal Database & CRM
+             *      */
+            tags?: Record<string, never> | null;
+            /** @description Amount the user has spent in USD, up to two decimal places */
+            amount_spent?: number;
+            /**
+             * Format: int64
+             * @description Unixtime when the player joined the game
+             */
+            created_at?: number;
+            /**
+             * Format: int64
+             * @description Seconds player was running your app.
+             */
+            playtime?: number;
+            /** @description Current iOS badge count displayed on the app icon
+             *     NOTE: Not supported for apps created after June 2018, since badge count for apps created after this date are handled on the client.
+             *      */
+            badge_count?: number;
+            /** @description Unixtime when the player was last active */
+            last_active?: number;
+            /** @description 1 = subscribed
+             *     -2 = unsubscribed
+             *     iOS - These values are set each time the user opens the app from the SDK. Use the SDK function set Subscription instead.
+             *     Android - You may set this but you can no longer use the SDK method setSubscription later in your app as it will create synchronization issues.
+             *      */
+            notification_types?: number;
+            /** @description This is used in deciding whether to use your iOS Sandbox or Production push certificate when sending a push when both have been uploaded. Set to the iOS provisioning profile that was used to build your app.
+             *     1 = Development
+             *     2 = Ad-Hoc
+             *     Omit this field for App Store builds.
+             *      */
+            test_type?: number | null;
+            /** @description Longitude of the device, used for geotagging to segment on. */
+            long?: number;
+            /** @description Latitude of the device, used for geotagging to segment on. */
+            lat?: number;
+            /** @description Country code in the ISO 3166-1 Alpha 2 format */
+            country?: string;
+        };
+        Players: components["schemas"]["Player"][];
+        /** @example {
+         *       "offset": 6,
+         *       "total_count": 0,
+         *       "players": [
+         *         {
+         *           "country": "country",
+         *           "external_user_id_auth_hash": "external_user_id_auth_hash",
+         *           "device_model": "device_model",
+         *           "timezone": 5,
+         *           "created_at": 9,
+         *           "device_type": 5,
+         *           "language": "language",
+         *           "playtime": 3,
+         *           "long": 1.0246457001441578,
+         *           "amount_spent": 7.061401241503109,
+         *           "id": "id",
+         *           "app_id": "app_id",
+         *           "lat": 1.4894159098541704,
+         *           "identifier": "identifier",
+         *           "game_version": "game_version",
+         *           "notification_types": 7,
+         *           "device_os": "device_os",
+         *           "email_auth_hash": "email_auth_hash",
+         *           "test_type": 1,
+         *           "external_user_id": "external_user_id",
+         *           "tags": "{}",
+         *           "ad_id": "ad_id",
+         *           "session_count": 2,
+         *           "sdk": "sdk",
+         *           "last_active": 4,
+         *           "invalid_identifier": true,
+         *           "badge_count": 2
+         *         },
+         *         {
+         *           "country": "country",
+         *           "external_user_id_auth_hash": "external_user_id_auth_hash",
+         *           "device_model": "device_model",
+         *           "timezone": 5,
+         *           "created_at": 9,
+         *           "device_type": 5,
+         *           "language": "language",
+         *           "playtime": 3,
+         *           "long": 1.0246457001441578,
+         *           "amount_spent": 7.061401241503109,
+         *           "id": "id",
+         *           "app_id": "app_id",
+         *           "lat": 1.4894159098541704,
+         *           "identifier": "identifier",
+         *           "game_version": "game_version",
+         *           "notification_types": 7,
+         *           "device_os": "device_os",
+         *           "email_auth_hash": "email_auth_hash",
+         *           "test_type": 1,
+         *           "external_user_id": "external_user_id",
+         *           "tags": "{}",
+         *           "ad_id": "ad_id",
+         *           "session_count": 2,
+         *           "sdk": "sdk",
+         *           "last_active": 4,
+         *           "invalid_identifier": true,
+         *           "badge_count": 2
+         *         }
+         *       ],
+         *       "limit": 1
+         *     } */
+        PlayerSlice: {
+            total_count?: number;
+            offset?: number;
+            limit?: number;
+            players?: components["schemas"]["Player"][];
+        };
+        InvalidIdentifierError: {
+            /** @description Returned if using include_external_user_ids */
+            invalid_external_user_ids?: string[];
+            /** @description Returned if using include_player_ids and some were valid and others were not. */
+            invalid_player_ids?: string[];
+        };
+        /** @description Returned if no subscribed players.
+         *      */
+        NoSubscribersError: string[];
+        Notification200Errors: components["schemas"]["InvalidIdentifierError"] | components["schemas"]["NoSubscribersError"];
+        /** @example {
+         *       "event_updates": "{}",
+         *       "name": "headings",
+         *       "event": "update",
+         *       "dismiss_at": 0.8008281904610115
+         *     } */
+        UpdateLiveActivityRequest: {
+            /**
+             * @description Type of live activity
+             * @enum {string}
+             */
+            name: "headings" | "contents" | "ios_sound" | "priority_level";
+            /** @enum {string} */
+            event: "update" | "end";
+            event_updates: Record<string, never>;
+            /** @description Timestamp; only allowed if event is "end" */
+            dismiss_at?: number;
+        };
+        /** @example {
+         *       "subscription_id": "subscription_id",
+         *       "push_token": "push_token"
+         *     } */
+        BeginLiveActivityRequest: {
+            push_token: string;
+            subscription_id: string;
+        };
+        IdentityObject: {
+            [key: string]: unknown;
+        };
+        /** @example {
+         *       "country": "country",
+         *       "purchases": [
+         *         {
+         *           "amount": "amount",
+         *           "iso": "iso",
+         *           "count": 2.3021358869347655,
+         *           "sku": "sku"
+         *         },
+         *         {
+         *           "amount": "amount",
+         *           "iso": "iso",
+         *           "count": 2.3021358869347655,
+         *           "sku": "sku"
+         *         }
+         *       ],
+         *       "ip": "ip",
+         *       "timezone_id": "timezone_id",
+         *       "language": "language",
+         *       "first_active": 1.4658129805029452,
+         *       "last_active": 5.962133916683182,
+         *       "lat": 0.8008281904610115,
+         *       "long": 6.027456183070403,
+         *       "tags": {
+         *         "key": ""
+         *       },
+         *       "amount_spent": 5.637376656633329
+         *     } */
+        PropertiesObject: {
+            tags?: {
+                [key: string]: unknown;
+            };
+            language?: string;
+            timezone_id?: string;
+            lat?: number;
+            long?: number;
+            country?: string;
+            first_active?: number;
+            last_active?: number;
+            amount_spent?: number;
+            purchases?: components["schemas"]["Purchase"][];
+            ip?: string;
+        };
+        /** @example {
+         *       "purchases": [
+         *         {
+         *           "amount": "amount",
+         *           "iso": "iso",
+         *           "count": 2.3021358869347655,
+         *           "sku": "sku"
+         *         },
+         *         {
+         *           "amount": "amount",
+         *           "iso": "iso",
+         *           "count": 2.3021358869347655,
+         *           "sku": "sku"
+         *         }
+         *       ],
+         *       "session_count": 6.027456183070403,
+         *       "session_time": 0.8008281904610115
+         *     } */
+        PropertiesDeltas: {
+            session_time?: number;
+            session_count?: number;
+            purchases?: components["schemas"]["Purchase"][];
+        };
+        /** @example {
+         *       "notification_types": 7.061401241503109,
+         *       "device_model": "device_model",
+         *       "app_version": "app_version",
+         *       "web_p256": "web_p256",
+         *       "net_type": 4.145608029883936,
+         *       "type": "iOSPush",
+         *       "device_os": "device_os",
+         *       "enabled": true,
+         *       "session_time": 9.301444243932576,
+         *       "test_type": 2.027123023002322,
+         *       "token": "token",
+         *       "carrier": "carrier",
+         *       "session_count": 3.616076749251911,
+         *       "web_auth": "web_auth",
+         *       "rooted": true,
+         *       "id": "id",
+         *       "sdk": "sdk"
+         *     } */
+        SubscriptionObject: {
+            id?: string;
+            /** @enum {string} */
+            type?: "iOSPush" | "AndroidPush" | "FireOSPush" | "ChromeExtensionPush" | "ChromePush" | "WindowsPush" | "SafariLegacyPush" | "FirefoxPush" | "macOSPush" | "HuaweiPush" | "SafariPush" | "Email" | "SMS";
+            token?: string;
+            enabled?: boolean;
+            notification_types?: number;
+            session_time?: number;
+            session_count?: number;
+            sdk?: string;
+            device_model?: string;
+            device_os?: string;
+            rooted?: boolean;
+            test_type?: number;
+            app_version?: string;
+            net_type?: number;
+            carrier?: string;
+            web_auth?: string;
+            web_p256?: string;
+        };
+        /** @example {
+         *       "subscriptions": [
+         *         {
+         *           "notification_types": 7.061401241503109,
+         *           "device_model": "device_model",
+         *           "app_version": "app_version",
+         *           "web_p256": "web_p256",
+         *           "net_type": 4.145608029883936,
+         *           "type": "iOSPush",
+         *           "device_os": "device_os",
+         *           "enabled": true,
+         *           "session_time": 9.301444243932576,
+         *           "test_type": 2.027123023002322,
+         *           "token": "token",
+         *           "carrier": "carrier",
+         *           "session_count": 3.616076749251911,
+         *           "web_auth": "web_auth",
+         *           "rooted": true,
+         *           "id": "id",
+         *           "sdk": "sdk"
+         *         },
+         *         {
+         *           "notification_types": 7.061401241503109,
+         *           "device_model": "device_model",
+         *           "app_version": "app_version",
+         *           "web_p256": "web_p256",
+         *           "net_type": 4.145608029883936,
+         *           "type": "iOSPush",
+         *           "device_os": "device_os",
+         *           "enabled": true,
+         *           "session_time": 9.301444243932576,
+         *           "test_type": 2.027123023002322,
+         *           "token": "token",
+         *           "carrier": "carrier",
+         *           "session_count": 3.616076749251911,
+         *           "web_auth": "web_auth",
+         *           "rooted": true,
+         *           "id": "id",
+         *           "sdk": "sdk"
+         *         }
+         *       ],
+         *       "identity": {
+         *         "key": ""
+         *       },
+         *       "subscription_options": {
+         *         "retain_previous_owner": true
+         *       },
+         *       "properties": {
+         *         "country": "country",
+         *         "purchases": [
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           },
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           }
+         *         ],
+         *         "ip": "ip",
+         *         "timezone_id": "timezone_id",
+         *         "language": "language",
+         *         "first_active": 1.4658129805029452,
+         *         "last_active": 5.962133916683182,
+         *         "lat": 0.8008281904610115,
+         *         "long": 6.027456183070403,
+         *         "tags": {
+         *           "key": ""
+         *         },
+         *         "amount_spent": 5.637376656633329
+         *       }
+         *     } */
+        User: {
+            properties?: components["schemas"]["PropertiesObject"];
+            identity?: {
+                [key: string]: unknown;
+            };
+            subscriptions?: components["schemas"]["SubscriptionObject"][];
+            subscription_options?: components["schemas"]["User_subscription_options"];
+        };
+        /** @example {
+         *       "refresh_device_metadata": false,
+         *       "deltas": {
+         *         "purchases": [
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           },
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           }
+         *         ],
+         *         "session_count": 6.027456183070403,
+         *         "session_time": 0.8008281904610115
+         *       },
+         *       "properties": {
+         *         "country": "country",
+         *         "purchases": [
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           },
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           }
+         *         ],
+         *         "ip": "ip",
+         *         "timezone_id": "timezone_id",
+         *         "language": "language",
+         *         "first_active": 1.4658129805029452,
+         *         "last_active": 5.962133916683182,
+         *         "lat": 0.8008281904610115,
+         *         "long": 6.027456183070403,
+         *         "tags": {
+         *           "key": ""
+         *         },
+         *         "amount_spent": 5.637376656633329
+         *       }
+         *     } */
+        UpdateUserRequest: {
+            properties?: components["schemas"]["PropertiesObject"];
+            /** @default false */
+            refresh_device_metadata: boolean;
+            deltas?: components["schemas"]["PropertiesDeltas"];
+        };
+        /** @example {
+         *       "recipients": 0,
+         *       "external_id": "external_id",
+         *       "id": "id",
+         *       "errors": null
+         *     } */
+        CreateNotificationSuccessResponse: {
+            id?: string;
+            /** @description Estimated number of subscribers targetted by notification. */
+            recipients?: number;
+            external_id?: string | null;
+            errors?: components["schemas"]["Notification200Errors"];
+        };
+        /** @example {
+         *       "success": true
+         *     } */
+        CancelNotificationSuccessResponse: {
+            success?: boolean;
+        };
+        /** @example {
+         *       "success": true,
+         *       "destination_url": "destination_url"
+         *     } */
+        NotificationHistorySuccessResponse: {
+            success?: boolean;
+            destination_url?: string;
+        };
+        /** @example {
+         *       "success": true
+         *     } */
+        UpdatePlayerTagsSuccessResponse: {
+            success?: boolean;
+        };
+        /** @example {
+         *       "success": true,
+         *       "id": "id"
+         *     } */
+        CreateSegmentSuccessResponse: {
+            success?: boolean;
+            /** @description UUID of created segment */
+            id?: string;
+        };
+        CreateSegmentConflictResponse: {
+            success?: boolean;
+            errors?: string[];
+        };
+        /** @example {
+         *       "success": true
+         *     } */
+        DeleteSegmentSuccessResponse: {
+            success?: boolean;
+        };
+        DeleteSegmentNotFoundResponse: {
+            success?: boolean;
+        };
+        /** @example {
+         *       "success": true,
+         *       "id": "id"
+         *     } */
+        CreatePlayerSuccessResponse: {
+            success?: boolean;
+            id?: string;
+        };
+        /** @example {
+         *       "success": true
+         *     } */
+        DeletePlayerSuccessResponse: {
+            success?: boolean;
+        };
+        DeletePlayerNotFoundResponse: {
+            success?: boolean;
+        };
+        /** @example {
+         *       "success": true
+         *     } */
+        UpdatePlayerSuccessResponse: {
+            success?: boolean;
+        };
+        /** @example {
+         *       "csv_file_url": "csv_file_url"
+         *     } */
+        ExportPlayersSuccessResponse: {
+            csv_file_url?: string;
+        };
+        /** @example {
+         *       "notification_id": "notification_id",
+         *       "errors": null
+         *     } */
+        UpdateLiveActivitySuccessResponse: {
+            notification_id?: string;
+            errors?: components["schemas"]["Notification200Errors"];
+        };
+        CreateUserConflictResponse: {
+            errors?: components["schemas"]["CreateUserConflictResponse_errors_inner"][];
+        };
+        GenericError: {
+            errors?: components["schemas"]["GenericError_errors_inner"][];
+        };
+        RateLimiterError: {
+            errors?: components["schemas"]["GenericError_errors_inner"][];
+        };
+        /** @example {
+         *       "subscription": {
+         *         "notification_types": 7.061401241503109,
+         *         "device_model": "device_model",
+         *         "app_version": "app_version",
+         *         "web_p256": "web_p256",
+         *         "net_type": 4.145608029883936,
+         *         "type": "iOSPush",
+         *         "device_os": "device_os",
+         *         "enabled": true,
+         *         "session_time": 9.301444243932576,
+         *         "test_type": 2.027123023002322,
+         *         "token": "token",
+         *         "carrier": "carrier",
+         *         "session_count": 3.616076749251911,
+         *         "web_auth": "web_auth",
+         *         "rooted": true,
+         *         "id": "id",
+         *         "sdk": "sdk"
+         *       },
+         *       "retain_previous_owner": true
+         *     } */
+        CreateSubscriptionRequestBody: {
+            subscription?: components["schemas"]["SubscriptionObject"];
+            retain_previous_owner?: boolean;
+        };
+        /** @example {
+         *       "subscription": {
+         *         "notification_types": 7.061401241503109,
+         *         "device_model": "device_model",
+         *         "app_version": "app_version",
+         *         "web_p256": "web_p256",
+         *         "net_type": 4.145608029883936,
+         *         "type": "iOSPush",
+         *         "device_os": "device_os",
+         *         "enabled": true,
+         *         "session_time": 9.301444243932576,
+         *         "test_type": 2.027123023002322,
+         *         "token": "token",
+         *         "carrier": "carrier",
+         *         "session_count": 3.616076749251911,
+         *         "web_auth": "web_auth",
+         *         "rooted": true,
+         *         "id": "id",
+         *         "sdk": "sdk"
+         *       }
+         *     } */
+        UpdateSubscriptionRequestBody: {
+            subscription?: components["schemas"]["SubscriptionObject"];
+        };
+        /** @example {
+         *       "identity": {
+         *         "key": ""
+         *       }
+         *     } */
+        TransferSubscriptionRequestBody: {
+            identity?: {
+                [key: string]: unknown;
+            };
+        };
+        /** @example {
+         *       "identity": {
+         *         "key": ""
+         *       }
+         *     } */
+        UserIdentityRequestBody: {
+            identity?: {
+                [key: string]: unknown;
+            };
+        };
+        /** @example {
+         *       "identity": {
+         *         "key": ""
+         *       }
+         *     } */
+        UserIdentityResponse: {
+            identity?: {
+                [key: string]: unknown;
+            };
+        };
+        /** @example {
+         *       "csv_file_url": "csv_file_url"
+         *     } */
+        ExportEventsSuccessResponse: {
+            csv_file_url?: string;
+        };
+        /** get_notification_request_body */
+        get_notification_request_body: {
+            /**
+             * @description -> "sent" - All the devices by player_id that were sent the specified notification_id.  Notifications targeting under 1000 recipients will not have "sent" events recorded, but will show "clicked" events. "clicked" - All the devices by `player_id` that clicked the specified notification_id.
+             * @enum {string}
+             */
+            events?: "sent" | "clicked";
+            /** @description The email address you would like the report sent. */
+            email?: string;
+            app_id?: string;
+        };
+        /** update_player_tags_request_body */
+        update_player_tags_request_body: {
+            /** @description Custom tags for the device record.  Only support string key value pairs.  Does not support arrays or other nested objects.  Example `{"foo":"bar","this":"that"}`.
+             *     Limitations:
+             *     - 100 tags per call
+             *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
+             *     Recommended to only tag devices with 1 kilobyte of ata
+             *     Please consider using your own Database to save more than 1 kilobyte of data.  See: Internal Database & CRM
+             *      */
+            tags?: Record<string, never>;
+        };
+        /** @example {
+         *       "properties": {
+         *         "country": "country",
+         *         "purchases": [
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           },
+         *           {
+         *             "amount": "amount",
+         *             "iso": "iso",
+         *             "count": 2.3021358869347655,
+         *             "sku": "sku"
+         *           }
+         *         ],
+         *         "ip": "ip",
+         *         "timezone_id": "timezone_id",
+         *         "language": "language",
+         *         "first_active": 1.4658129805029452,
+         *         "last_active": 5.962133916683182,
+         *         "lat": 0.8008281904610115,
+         *         "long": 6.027456183070403,
+         *         "tags": {
+         *           "key": ""
+         *         },
+         *         "amount_spent": 5.637376656633329
+         *       }
+         *     } */
+        inline_response_202: {
+            properties?: components["schemas"]["PropertiesObject"];
+        };
+        /** @example {
+         *       "identity": {
+         *         "key": ""
+         *       }
+         *     } */
+        inline_response_200: {
+            identity?: {
+                [key: string]: unknown;
+            };
+        };
+        /** @example {
+         *       "subscription": {
+         *         "notification_types": 7.061401241503109,
+         *         "device_model": "device_model",
+         *         "app_version": "app_version",
+         *         "web_p256": "web_p256",
+         *         "net_type": 4.145608029883936,
+         *         "type": "iOSPush",
+         *         "device_os": "device_os",
+         *         "enabled": true,
+         *         "session_time": 9.301444243932576,
+         *         "test_type": 2.027123023002322,
+         *         "token": "token",
+         *         "carrier": "carrier",
+         *         "session_count": 3.616076749251911,
+         *         "web_auth": "web_auth",
+         *         "rooted": true,
+         *         "id": "id",
+         *         "sdk": "sdk"
+         *       }
+         *     } */
+        inline_response_201: {
+            subscription?: components["schemas"]["SubscriptionObject"];
+        };
+        /** @example {
+         *       "in_app_messages": [
+         *         "{}",
+         *         "{}"
+         *       ]
+         *     } */
+        inline_response_200_3: {
+            in_app_messages?: Record<string, never>[];
+        };
+        /** export_players_request_body */
+        export_players_request_body: {
+            /** @description Additional fields that you wish to include. Currently supports location, country, rooted, notification_types, ip, external_user_id, web_auth, and web_p256. */
+            extra_fields?: string[];
+            /** @description Export all devices with a last_active timestamp greater than this time.  Unixtime in seconds. */
+            last_active_since?: string;
+            /** @description Export all devices belonging to the segment. */
+            segment_name?: string;
+        };
+        PlayerNotificationTarget_include_aliases: {
+            alias_label?: string[];
+        } | null;
+        /** @description Channel: Push Notifications
+         *     Platform: Android
+         *     Allowing setting a background image for the notification. This is a JSON object containing the following keys. See our Background Image documentation for image sizes.
+         *      */
+        BasicNotification_allOf_android_background_layout: {
+            /** @description Asset file, android resource name, or URL to remote image. */
+            image?: string;
+            /** @description Title text color ARGB Hex format. Example(Blue) "FF0000FF". */
+            headings_color?: string;
+            /** @description Body text color ARGB Hex format. Example(Red) "FFFF0000". */
+            contents_color?: string;
+        };
+        BasicNotification_allOf: {
             id?: string;
             readonly value?: number;
             /** @description Required for SMS Messages.
@@ -936,18 +1986,7 @@ export interface components {
              *     Use this if you have client side Android Oreo Channels you have already defined in your app with code.
              *      */
             huawei_existing_channel_id?: string | null;
-            /** @description Channel: Push Notifications
-             *     Platform: Android
-             *     Allowing setting a background image for the notification. This is a JSON object containing the following keys. See our Background Image documentation for image sizes.
-             *      */
-            android_background_layout?: {
-                /** @description Asset file, android resource name, or URL to remote image. */
-                image?: string;
-                /** @description Title text color ARGB Hex format. Example(Blue) "FF0000FF". */
-                headings_color?: string;
-                /** @description Body text color ARGB Hex format. Example(Red) "FFFF0000". */
-                contents_color?: string;
-            };
+            android_background_layout?: components["schemas"]["BasicNotification_allOf_android_background_layout"];
             /** @description Channel: Push Notifications
              *     Platform: Android
              *     Icon shown in the status bar and on the top left of the notification.
@@ -1251,8 +2290,8 @@ export interface components {
              *     Example: {"order_id": 123, "currency": "USD", "amount": 25}
              *      */
             custom_data?: Record<string, never> | null;
-        } & unknown;
-        Notification: components["schemas"]["BasicNotification"] & {
+        };
+        Notification_allOf: {
             /**
              * Format: date-time
              * @description Channel: All
@@ -1268,7 +2307,7 @@ export interface components {
              */
             send_after?: string | null;
         };
-        NotificationWithMeta: components["schemas"]["BasicNotification"] & components["schemas"]["DeliveryData"] & components["schemas"]["OutcomesData"] & {
+        NotificationWithMeta_allOf: {
             /** @description Number of notifications that have not been sent out yet. This can mean either our system is still processing the notification or you have delayed options set. */
             remaining?: number;
             /** @description Number of notifications that were successfully delivered. */
@@ -1300,492 +2339,68 @@ export interface components {
             /** @description number of push notifications sent per minute. Paid Feature Only. If throttling is not enabled for the app or the notification, and for free accounts, null is returned. Refer to Throttling for more details. */
             throttle_rate_per_minute?: number | null;
         };
-        Button: {
-            id: string;
-            text?: string;
-            icon?: string;
+        PlatformDeliveryData_sms_allOf: {
+            /** @description Number of messages reported as delivered successfully by the SMS service provider. */
+            provider_successful?: number | null;
+            /** @description Number of recipients who didn't receive your message as reported by the SMS service provider. */
+            provider_failed?: number | null;
+            /** @description Number of errors reported by the SMS service provider. */
+            provider_errored?: number | null;
         };
-        Buttons: components["schemas"]["Button"][];
-        StringMap: {
-            /** @description Text in English.  Will be used as a fallback */
-            en?: string;
-            /** @description Text in Arabic. */
-            ar?: string;
-            /** @description Text in Bosnian. */
-            bs?: string;
-            /** @description Text in Bulgarian. */
-            bg?: string;
-            /** @description Text in Catalan. */
-            ca?: string;
-            /** @description Text in Chinese (Simplified). */
-            "zh-Hans"?: string;
-            /** @description Text in Chinese (Traditional). */
-            "zh-Hant"?: string;
-            /** @description Alias for zh-Hans. */
-            zh?: string;
-            /** @description Text in Croatian. */
-            hr?: string;
-            /** @description Text in Czech. */
-            cs?: string;
-            /** @description Text in Danish. */
-            da?: string;
-            /** @description Text in Dutch. */
-            nl?: string;
-            /** @description Text in Estonian. */
-            et?: string;
-            /** @description Text in Finnish. */
-            fi?: string;
-            /** @description Text in French. */
-            fr?: string;
-            /** @description Text in Georgian. */
-            ka?: string;
-            /** @description Text in German. */
-            de?: string;
-            /** @description Text in Greek. */
-            el?: string;
-            /** @description Text in Hindi. */
-            hi?: string;
-            /** @description Text in Hebrew. */
-            he?: string;
-            /** @description Text in Hungarian. */
-            hu?: string;
-            /** @description Text in Indonesian. */
-            id?: string;
-            /** @description Text in Italian. */
-            it?: string;
-            /** @description Text in Japanese. */
-            ja?: string;
-            /** @description Text in Korean. */
-            ko?: string;
-            /** @description Text in Latvian. */
-            lv?: string;
-            /** @description Text in Lithuanian. */
-            lt?: string;
-            /** @description Text in Malay. */
-            ms?: string;
-            /** @description Text in Norwegian. */
-            nb?: string;
-            /** @description Text in Polish. */
-            pl?: string;
-            /** @description Text in Persian. */
-            fa?: string;
-            /** @description Text in Portugese. */
-            pt?: string;
-            /** @description Text in Punjabi. */
-            pa?: string;
-            /** @description Text in Romanian. */
-            ro?: string;
-            /** @description Text in Russian. */
-            ru?: string;
-            /** @description Text in Serbian. */
-            sr?: string;
-            /** @description Text in Slovak. */
-            sk?: string;
-            /** @description Text in Spanish. */
-            es?: string;
-            /** @description Text in Swedish. */
-            sv?: string;
-            /** @description Text in Thai. */
-            th?: string;
-            /** @description Text in Turkish. */
-            tr?: string;
-            /** @description Text in Ukrainian. */
-            uk?: string;
-            /** @description Text in Vietnamese. */
-            vi?: string;
+        PlatformDeliveryData_email_allOf: {
+            /** @description Number of times an email has been opened. */
+            opened?: number | null;
+            /** @description Number of unique recipients who have opened your email. */
+            unique_opens?: number | null;
+            /** @description Number of clicked links from your email. This can include the recipient clicking email links multiple times. */
+            clicks?: number | null;
+            /** @description Number of unique clicks that your recipients have made on links from your email. */
+            unique_clicks?: number | null;
+            /** @description Number of recipients who registered as a hard or soft bounce and didn't receive your email. */
+            bounced?: number | null;
+            /** @description Number of recipients who reported this email as spam. */
+            reported_spam?: number | null;
+            /** @description Number of recipients who opted out of your emails using the unsubscribe link in this email. */
+            unsubscribed?: number | null;
         };
-        NotificationSlice: {
-            total_count?: number;
-            offset?: number;
-            limit?: number;
-            notifications?: components["schemas"]["NotificationWithMeta"][];
-        };
-        /** @description Hash of delivery statistics broken out by target device platform. */
-        PlatformDeliveryData: {
-            edge_web_push?: components["schemas"]["DeliveryData"];
-            chrome_web_push?: components["schemas"]["DeliveryData"];
-            firefox_web_push?: components["schemas"]["DeliveryData"];
-            safari_web_push?: components["schemas"]["DeliveryData"];
-            android?: components["schemas"]["DeliveryData"];
-            ios?: components["schemas"]["DeliveryData"];
-            sms?: components["schemas"]["DeliveryData"] & {
-                /** @description Number of messages reported as delivered successfully by the SMS service provider. */
-                provider_successful?: number | null;
-                /** @description Number of recipients who didn't receive your message as reported by the SMS service provider. */
-                provider_failed?: number | null;
-                /** @description Number of errors reported by the SMS service provider. */
-                provider_errored?: number | null;
-            };
-            email?: components["schemas"]["DeliveryData"] & {
-                /** @description Number of times an email has been opened. */
-                opened?: number | null;
-                /** @description Number of unique recipients who have opened your email. */
-                unique_opens?: number | null;
-                /** @description Number of clicked links from your email. This can include the recipient clicking email links multiple times. */
-                clicks?: number | null;
-                /** @description Number of unique clicks that your recipients have made on links from your email. */
-                unique_clicks?: number | null;
-                /** @description Number of recipients who registered as a hard or soft bounce and didn't receive your email. */
-                bounced?: number | null;
-                /** @description Number of recipients who reported this email as spam. */
-                reported_spam?: number | null;
-                /** @description Number of recipients who opted out of your emails using the unsubscribe link in this email. */
-                unsubscribed?: number | null;
-            };
-        };
-        DeliveryData: {
-            /** @description Number of messages delivered to push servers, mobile carriers, or email service providers. */
-            successful?: number | null;
-            /** @description Number of messages sent to unsubscribed devices. */
-            failed?: number | null;
-            /** @description Number of errors reported. */
-            errored?: number | null;
-            /** @description Number of messages that were clicked. */
-            converted?: number | null;
-            /** @description Number of devices that received the message. */
-            received?: number | null;
-        };
-        Purchase: {
-            /** @description The unique identifier of the purchased item. */
-            sku: string;
-            /** @description The amount, in USD, spent purchasing the item. */
-            amount: string;
-            /** @description The 3-letter ISO 4217 currency code. Required for correct storage and conversion of amount. */
-            iso: string;
-            count?: number;
-        };
-        OutcomeData: {
-            id: string;
-            value: number;
-            /** @enum {string} */
-            aggregation: "sum" | "count";
-        };
-        OutcomesData: {
-            outcomes?: components["schemas"]["OutcomeData"][];
-        };
-        Filter: {
-            /** @description Name of the field to use as the first operand in the filter expression. */
-            field: string;
-            /** @description If `field` is `tag`, this field is *required* to specify `key` inside the tags. */
-            key?: string;
-            /** @description Constant value to use as the second operand in the filter expression. This value is *required* when the relation operator is a binary operator. */
-            value?: string;
-            /**
-             * @description Operator of a filter expression.
-             * @enum {string}
-             */
-            relation: ">" | "<" | "=" | "!=" | "exists" | "not_exists" | "time_elapsed_gt" | "time_elapsed_lt";
-        };
-        Operator: {
-            /**
-             * @description Strictly, this must be either `"OR"`, or `"AND"`.  It can be used to compose Filters as part of a Filters object.
-             * @enum {string}
-             */
-            operator?: "OR" | "AND";
-        };
-        FilterExpressions: components["schemas"]["Filter"] | components["schemas"]["Operator"];
-        Segment: {
-            /** @description UUID of the segment.  If left empty, it will be assigned automaticaly. */
-            id?: string;
-            /** @description Name of the segment.  You'll see this name on the Web UI. */
-            name: string;
-            /** @description Filter or operators the segment will have.  For a list of available filters with details, please see Send to Users Based on Filters. */
-            filters: components["schemas"]["FilterExpressions"][];
-        };
-        Player: {
-            /** @description The device's OneSignal ID */
-            readonly id?: string;
-            /** @description If true, this is the equivalent of a user being Unsubscribed */
-            readonly invalid_identifier?: boolean;
-            app_id?: string;
-            /** @description Required
-             *     The device's platform:
-             *       0 = iOS
-             *       1 = Android
-             *       2 = Amazon
-             *       3 = WindowsPhone (MPNS)
-             *       4 = Chrome Apps / Extensions
-             *       5 = Chrome Web Push
-             *       6 = Windows (WNS)
-             *       7 = Safari
-             *       8 = Firefox
-             *       9 = MacOS
-             *       10 = Alexa
-             *       11 = Email
-             *       13 = For Huawei App Gallery Builds SDK Setup. Not for Huawei Devices using FCM
-             *       14 = SMS
-             *      */
-            device_type: number;
-            /** @description a custom user ID */
-            external_user_id?: string | null;
-            /** @description Only required if you have enabled Identity Verification and device_type is NOT 11 email. */
-            external_user_id_auth_hash?: string;
-            /** @description Email - Only required if you have enabled Identity Verification and device_type is email (11). */
-            email_auth_hash?: string;
-            /** @description Recommended: For Push Notifications, this is the Push Token Identifier from Google or Apple. For Apple Push identifiers, you must strip all non alphanumeric characters.
-             *     Examples:
-             *     iOS: 7abcd558f29d0b1f048083e2834ad8ea4b3d87d8ad9c088b33c132706ff445f0
-             *     Android: APA91bHbYHk7aq-Uam_2pyJ2qbZvqllyyh2wjfPRaw5gLEX2SUlQBRvOc6sck1sa7H7nGeLNlDco8lXj83HWWwzV...
-             *     For Email Addresses, set the full email address email@email.com and make sure to set device_type to 11.
-             *      */
-            identifier?: string | null;
-            /** @description Language code. Typically lower case two letters, except for Chinese where it must be one of zh-Hans or zh-Hant. Example: en
-             *      */
-            language?: string;
-            /** @description Number of seconds away from UTC. Example: -28800
-             *      */
-            timezone?: number | null;
-            /** @description Version of your app. Example: 1.1
-             *      */
-            game_version?: string | null;
-            /** @description Device make and model. Example: iPhone5,1
-             *      */
-            device_model?: string | null;
-            /** @description Device operating system version. Example: 7.0.4
-             *      */
-            device_os?: string | null;
-            /** @description The ad id for the device's platform:
-             *     Android = Advertising Id
-             *     iOS = identifierForVendor
-             *     WP8.0 = DeviceUniqueId
-             *     WP8.1 = AdvertisingId
-             *      */
-            ad_id?: string | null;
-            /** @description Name and version of the sdk/plugin that's calling this API method (if any) */
-            sdk?: string | null;
-            /** @description Number of times the user has played the game, defaults to 1 */
-            session_count?: number;
-            /** @description Custom tags for the player. Only support string and integer key value pairs. Does not support arrays or other nested objects. Setting a tag value to null or an empty string will remove the tag. Example: {"foo":"bar","this":"that"}
-             *     Limitations:
-             *     - 100 tags per call
-             *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
-             *     Recommended to only tag devices with 1 kilobyte of data
-             *     Please consider using your own Database to save more than 1 kilobyte of data. See: Internal Database & CRM
-             *      */
-            tags?: Record<string, never> | null;
-            /** @description Amount the user has spent in USD, up to two decimal places */
-            amount_spent?: number;
-            /**
-             * Format: int64
-             * @description Unixtime when the player joined the game
-             */
-            created_at?: number;
-            /**
-             * Format: int64
-             * @description Seconds player was running your app.
-             */
-            playtime?: number;
-            /** @description Current iOS badge count displayed on the app icon
-             *     NOTE: Not supported for apps created after June 2018, since badge count for apps created after this date are handled on the client.
-             *      */
-            badge_count?: number;
-            /** @description Unixtime when the player was last active */
-            last_active?: number;
-            /** @description 1 = subscribed
-             *     -2 = unsubscribed
-             *     iOS - These values are set each time the user opens the app from the SDK. Use the SDK function set Subscription instead.
-             *     Android - You may set this but you can no longer use the SDK method setSubscription later in your app as it will create synchronization issues.
-             *      */
-            notification_types?: number;
-            /** @description This is used in deciding whether to use your iOS Sandbox or Production push certificate when sending a push when both have been uploaded. Set to the iOS provisioning profile that was used to build your app.
-             *     1 = Development
-             *     2 = Ad-Hoc
-             *     Omit this field for App Store builds.
-             *      */
-            test_type?: number | null;
-            /** @description Longitude of the device, used for geotagging to segment on. */
-            long?: number;
-            /** @description Latitude of the device, used for geotagging to segment on. */
-            lat?: number;
-            /** @description Country code in the ISO 3166-1 Alpha 2 format */
-            country?: string;
-        };
-        Players: components["schemas"]["Player"][];
-        PlayerSlice: {
-            total_count?: number;
-            offset?: number;
-            limit?: number;
-            players?: components["schemas"]["Player"][];
-        };
-        InvalidIdentifierError: {
-            /** @description Returned if using include_external_user_ids */
-            invalid_external_user_ids?: string[];
-            /** @description Returned if using include_player_ids and some were valid and others were not. */
-            invalid_player_ids?: string[];
-        };
-        /** @description Returned if no subscribed players.
-         *      */
-        NoSubscribersError: string[];
-        Notification200Errors: components["schemas"]["InvalidIdentifierError"] | components["schemas"]["NoSubscribersError"];
-        UpdateLiveActivityRequest: {
-            /**
-             * @description Type of live activity
-             * @enum {string}
-             */
-            name: "headings" | "contents" | "ios_sound" | "priority_level";
-            /** @enum {string} */
-            event: "update" | "end";
-            event_updates: Record<string, never>;
-            /** @description Timestamp; only allowed if event is "end" */
-            dismiss_at?: number;
-        };
-        BeginLiveActivityRequest: {
-            push_token: string;
-            subscription_id: string;
-        };
-        IdentityObject: {
-            [key: string]: unknown;
-        };
-        PropertiesObject: {
-            tags?: {
-                [key: string]: unknown;
-            };
-            language?: string;
-            timezone_id?: string;
-            lat?: number;
-            long?: number;
-            country?: string;
-            first_active?: number;
-            last_active?: number;
-            amount_spent?: number;
-            purchases?: components["schemas"]["Purchase"][];
-            ip?: string;
-        };
-        PropertiesDeltas: {
-            session_time?: number;
-            session_count?: number;
-            purchases?: components["schemas"]["Purchase"][];
-        };
-        SubscriptionObject: {
-            id?: string;
-            /** @enum {string} */
-            type?: "iOSPush" | "AndroidPush" | "FireOSPush" | "ChromeExtensionPush" | "ChromePush" | "WindowsPush" | "SafariLegacyPush" | "FirefoxPush" | "macOSPush" | "HuaweiPush" | "SafariPush" | "Email" | "SMS";
-            token?: string;
-            enabled?: boolean;
-            notification_types?: number;
-            session_time?: number;
-            session_count?: number;
-            sdk?: string;
-            device_model?: string;
-            device_os?: string;
-            rooted?: boolean;
-            test_type?: number;
-            app_version?: string;
-            net_type?: number;
-            carrier?: string;
-            web_auth?: string;
-            web_p256?: string;
-        };
-        User: {
-            properties?: components["schemas"]["PropertiesObject"];
-            identity?: components["schemas"]["IdentityObject"];
-            subscriptions?: components["schemas"]["SubscriptionObject"][];
-            subscription_options?: {
-                retain_previous_owner?: boolean;
-            };
-        };
-        UpdateUserRequest: {
-            properties?: components["schemas"]["PropertiesObject"];
-            /** @default false */
-            refresh_device_metadata: boolean;
-            deltas?: components["schemas"]["PropertiesDeltas"];
-        };
-        CreateNotificationSuccessResponse: {
-            id?: string;
-            /** @description Estimated number of subscribers targetted by notification. */
-            recipients?: number;
-            external_id?: string | null;
-            errors?: components["schemas"]["Notification200Errors"];
-        };
-        CancelNotificationSuccessResponse: {
-            success?: boolean;
-        };
-        NotificationHistorySuccessResponse: {
-            success?: boolean;
-            destination_url?: string;
-        };
-        UpdatePlayerTagsSuccessResponse: {
-            success?: boolean;
-        };
-        CreateSegmentSuccessResponse: {
-            success?: boolean;
-            /** @description UUID of created segment */
-            id?: string;
-        };
-        CreateSegmentConflictResponse: {
-            success?: boolean;
-            errors?: string[];
-        };
-        DeleteSegmentSuccessResponse: {
-            success?: boolean;
-        };
-        DeleteSegmentNotFoundResponse: {
-            success?: boolean;
-        };
-        CreatePlayerSuccessResponse: {
-            success?: boolean;
-            id?: string;
-        };
-        DeletePlayerSuccessResponse: {
-            success?: boolean;
-        };
-        DeletePlayerNotFoundResponse: {
-            success?: boolean;
-        };
-        UpdatePlayerSuccessResponse: {
-            success?: boolean;
-        };
-        ExportPlayersSuccessResponse: {
-            csv_file_url?: string;
-        };
-        UpdateLiveActivitySuccessResponse: {
-            notification_id?: string;
-            errors?: components["schemas"]["Notification200Errors"];
-        };
-        CreateUserConflictResponse: {
-            errors?: {
-                code?: string;
-                title?: string;
-                meta?: {
-                    conflicting_aliases?: Record<string, never>;
-                };
-            }[];
-        };
-        GenericError: {
-            errors?: {
-                code?: string;
-                title?: string;
-            }[];
-        };
-        RateLimiterError: {
-            errors?: {
-                code?: string;
-                title?: string;
-            }[];
-        };
-        CreateSubscriptionRequestBody: {
-            subscription?: components["schemas"]["SubscriptionObject"];
+        /** @example {
+         *       "retain_previous_owner": true
+         *     } */
+        User_subscription_options: {
             retain_previous_owner?: boolean;
         };
-        UpdateSubscriptionRequestBody: {
-            subscription?: components["schemas"]["SubscriptionObject"];
+        CreateUserConflictResponse_errorsItems_meta: {
+            conflicting_aliases?: Record<string, never>;
         };
-        TransferSubscriptionRequestBody: {
-            identity?: components["schemas"]["IdentityObject"];
+        CreateUserConflictResponse_errors_inner: {
+            code?: string;
+            title?: string;
+            meta?: components["schemas"]["CreateUserConflictResponse_errorsItems_meta"];
         };
-        UserIdentityRequestBody: {
-            identity?: components["schemas"]["IdentityObject"];
-        };
-        UserIdentityResponse: {
-            identity?: components["schemas"]["IdentityObject"];
-        };
-        ExportEventsSuccessResponse: {
-            csv_file_url?: string;
+        GenericError_errors_inner: {
+            code?: string;
+            title?: string;
         };
     };
     responses: never;
     parameters: never;
-    requestBodies: never;
+    requestBodies: {
+        get_notification_request_body: {
+            content: {
+                "application/json": components["schemas"]["get_notification_request_body"];
+            };
+        };
+        update_player_tags_request_body: {
+            content: {
+                "application/json": components["schemas"]["update_player_tags_request_body"];
+            };
+        };
+        export_players_request_body: {
+            content: {
+                "application/json": components["schemas"]["export_players_request_body"];
+            };
+        };
+    };
     headers: never;
     pathItems: never;
 }
@@ -1984,20 +2599,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description -> "sent" - All the devices by player_id that were sent the specified notification_id.  Notifications targeting under 1000 recipients will not have "sent" events recorded, but will show "clicked" events. "clicked" - All the devices by `player_id` that clicked the specified notification_id.
-                     * @enum {string}
-                     */
-                    events?: "sent" | "clicked";
-                    /** @description The email address you would like the report sent. */
-                    email?: string;
-                    app_id?: string;
-                };
-            };
-        };
+        requestBody: components["requestBodies"]["get_notification_request_body"];
         responses: {
             /** @description OK */
             200: {
@@ -2592,20 +3194,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description Custom tags for the device record.  Only support string key value pairs.  Does not support arrays or other nested objects.  Example `{"foo":"bar","this":"that"}`.
-                     *     Limitations:
-                     *     - 100 tags per call
-                     *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
-                     *     Recommended to only tag devices with 1 kilobyte of ata
-                     *     Please consider using your own Database to save more than 1 kilobyte of data.  See: Internal Database & CRM
-                     *      */
-                    tags?: Record<string, never>;
-                };
-            };
-        };
+        requestBody?: components["requestBodies"]["update_player_tags_request_body"];
         responses: {
             /** @description OK */
             200: {
@@ -2759,9 +3348,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        properties?: components["schemas"]["PropertiesObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_202"];
                 };
             };
             /** @description Bad Request */
@@ -2812,9 +3399,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        identity?: components["schemas"]["IdentityObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_200"];
                 };
             };
             /** @description Bad Request */
@@ -2860,9 +3445,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        identity?: components["schemas"]["IdentityObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_200"];
                 };
             };
             /** @description Bad Request */
@@ -2914,9 +3497,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        identity?: components["schemas"]["IdentityObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_200"];
                 };
             };
             /** @description Bad Request */
@@ -2971,9 +3552,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        subscription?: components["schemas"]["SubscriptionObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_201"];
                 };
             };
             /** @description ACCEPTED */
@@ -2982,9 +3561,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        subscription?: components["schemas"]["SubscriptionObject"];
-                    };
+                    "application/json": components["schemas"]["inline_response_201"];
                 };
             };
             /** @description Bad Request */
@@ -3274,9 +3851,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        in_app_messages?: Record<string, never>[];
-                    };
+                    "application/json": components["schemas"]["inline_response_200_3"];
                 };
             };
             /** @description Bad Request */
@@ -3558,18 +4133,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description Additional fields that you wish to include. Currently supports location, country, rooted, notification_types, ip, external_user_id, web_auth, and web_p256. */
-                    extra_fields?: string[];
-                    /** @description Export all devices with a last_active timestamp greater than this time.  Unixtime in seconds. */
-                    last_active_since?: string;
-                    /** @description Export all devices belonging to the segment. */
-                    segment_name?: string;
-                };
-            };
-        };
+        requestBody?: components["requestBodies"]["export_players_request_body"];
         responses: {
             /** @description OK */
             200: {
@@ -3655,14 +4219,48 @@ export interface operations {
     };
 }
 
+export type App = components["schemas"]["App"];
+export type Apps = components["schemas"]["Apps"];
+export type BeginLiveActivityRequest = components["schemas"]["BeginLiveActivityRequest"];
+export type BodyApp = App;
+export type BodyBeginLiveActivityRequest = BeginLiveActivityRequest;
+export type BodyCreateSubscriptionRequestBody = CreateSubscriptionRequestBody;
+export type BodyExportPlayersRequestBody = export_players_request_body;
+export type BodyGetNotificationRequestBody = get_notification_request_body;
+export type BodyNotification = Notification;
+export type BodyPlayer = Player;
+export type BodySegment = Segment;
+export type BodyTransferSubscriptionRequestBody = TransferSubscriptionRequestBody;
+export type BodyUpdateLiveActivityRequest = UpdateLiveActivityRequest;
+export type BodyUpdatePlayerTagsRequestBody = update_player_tags_request_body;
+export type BodyUpdateSubscriptionRequestBody = UpdateSubscriptionRequestBody;
+export type BodyUpdateUserRequest = UpdateUserRequest;
+export type BodyUser = User;
+export type BodyUserIdentityRequestBody = UserIdentityRequestBody;
 export type CancelNotification = operations["cancel_notification"]["parameters"]["query"];
+export type CancelNotificationSuccessResponse = components["schemas"]["CancelNotificationSuccessResponse"];
+export type CreateNotificationSuccessResponse = components["schemas"]["CreateNotificationSuccessResponse"];
+export type CreatePlayerSuccessResponse = components["schemas"]["CreatePlayerSuccessResponse"];
+export type CreateSegmentSuccessResponse = components["schemas"]["CreateSegmentSuccessResponse"];
+export type CreateSubscriptionRequestBody = components["schemas"]["CreateSubscriptionRequestBody"];
 export type DeletePlayer = operations["delete_player"]["parameters"]["query"];
+export type DeletePlayerSuccessResponse = components["schemas"]["DeletePlayerSuccessResponse"];
+export type DeleteSegmentSuccessResponse = components["schemas"]["DeleteSegmentSuccessResponse"];
 export type ExportEvents = operations["export_events"]["parameters"]["query"];
+export type ExportEventsSuccessResponse = components["schemas"]["ExportEventsSuccessResponse"];
+export type ExportPlayersSuccessResponse = components["schemas"]["ExportPlayersSuccessResponse"];
 export type GetNotification = operations["get_notification"]["parameters"]["query"];
 export type GetNotifications = operations["get_notifications"]["parameters"]["query"];
 export type GetOutcomes = operations["get_outcomes"]["parameters"]["query"];
 export type GetPlayer = operations["get_player"]["parameters"]["query"];
 export type GetPlayers = operations["get_players"]["parameters"]["query"];
+export type Notification = components["schemas"]["Notification"];
+export type NotificationHistorySuccessResponse = components["schemas"]["NotificationHistorySuccessResponse"];
+export type NotificationSlice = components["schemas"]["NotificationSlice"];
+export type NotificationWithMeta = components["schemas"]["NotificationWithMeta"];
+export type OutcomesData = components["schemas"]["OutcomesData"];
+export type Player = components["schemas"]["Player"];
+export type PlayerSlice = components["schemas"]["PlayerSlice"];
 export type QueryCancelNotification = CancelNotification;
 export type QueryDeletePlayer = DeletePlayer;
 export type QueryExportEvents = ExportEvents;
@@ -3671,6 +4269,49 @@ export type QueryGetNotifications = GetNotifications;
 export type QueryGetOutcomes = GetOutcomes;
 export type QueryGetPlayer = GetPlayer;
 export type QueryGetPlayers = GetPlayers;
+export type ResponseApp = App;
+export type ResponseApps = Apps;
+export type ResponseCancelNotificationSuccessResponse = CancelNotificationSuccessResponse;
+export type ResponseCreateNotificationSuccessResponse = CreateNotificationSuccessResponse;
+export type ResponseCreatePlayerSuccessResponse = CreatePlayerSuccessResponse;
+export type ResponseCreateSegmentSuccessResponse = CreateSegmentSuccessResponse;
+export type ResponseDeletePlayerSuccessResponse = DeletePlayerSuccessResponse;
+export type ResponseDeleteSegmentSuccessResponse = DeleteSegmentSuccessResponse;
+export type ResponseExportEventsSuccessResponse = ExportEventsSuccessResponse;
+export type ResponseExportPlayersSuccessResponse = ExportPlayersSuccessResponse;
+export type ResponseInlineResponse200 = inline_response_200;
+export type ResponseInlineResponse2003 = inline_response_200_3;
+export type ResponseInlineResponse201 = inline_response_201;
+export type ResponseInlineResponse202 = inline_response_202;
+export type ResponseNotificationHistorySuccessResponse = NotificationHistorySuccessResponse;
+export type ResponseNotificationSlice = NotificationSlice;
+export type ResponseNotificationWithMeta = NotificationWithMeta;
+export type ResponseOutcomesData = OutcomesData;
+export type ResponsePlayer = Player;
+export type ResponsePlayerSlice = PlayerSlice;
+export type ResponseUpdateLiveActivitySuccessResponse = UpdateLiveActivitySuccessResponse;
+export type ResponseUpdatePlayerSuccessResponse = UpdatePlayerSuccessResponse;
+export type ResponseUpdatePlayerTagsSuccessResponse = UpdatePlayerTagsSuccessResponse;
+export type ResponseUser = User;
+export type ResponseUserIdentityResponse = UserIdentityResponse;
+export type Segment = components["schemas"]["Segment"];
+export type TransferSubscriptionRequestBody = components["schemas"]["TransferSubscriptionRequestBody"];
+export type UpdateLiveActivityRequest = components["schemas"]["UpdateLiveActivityRequest"];
+export type UpdateLiveActivitySuccessResponse = components["schemas"]["UpdateLiveActivitySuccessResponse"];
+export type UpdatePlayerSuccessResponse = components["schemas"]["UpdatePlayerSuccessResponse"];
+export type UpdatePlayerTagsSuccessResponse = components["schemas"]["UpdatePlayerTagsSuccessResponse"];
+export type UpdateSubscriptionRequestBody = components["schemas"]["UpdateSubscriptionRequestBody"];
+export type UpdateUserRequest = components["schemas"]["UpdateUserRequest"];
+export type User = components["schemas"]["User"];
+export type UserIdentityRequestBody = components["schemas"]["UserIdentityRequestBody"];
+export type UserIdentityResponse = components["schemas"]["UserIdentityResponse"];
+export type export_players_request_body = components["schemas"]["export_players_request_body"];
+export type get_notification_request_body = components["schemas"]["get_notification_request_body"];
+export type inline_response_200 = components["schemas"]["inline_response_200"];
+export type inline_response_200_3 = components["schemas"]["inline_response_200_3"];
+export type inline_response_201 = components["schemas"]["inline_response_201"];
+export type inline_response_202 = components["schemas"]["inline_response_202"];
+export type update_player_tags_request_body = components["schemas"]["update_player_tags_request_body"];
 
 //API Def
 
@@ -3678,11 +4319,12 @@ import { Api } from "api-def";
 
 const API = new Api({
   name: "OneSignal",
-  baseUrl: "https://onesignal.com/api/v1",
+  baseUrl: "https://api.onesignal.com",
   mutable: true,
 });
 
 export const getNotifications = API.endpoint()
+  .responseOf<ResponseNotificationSlice>()
   .queryOf<QueryGetNotifications>()
   .build({
     method: "get",
@@ -3691,24 +4333,17 @@ export const getNotifications = API.endpoint()
   });
 
 export const createNotification = API.endpoint()
-
+  .responseOf<ResponseCreateNotificationSuccessResponse>()
+  .bodyOf<BodyNotification>()
   .build({
     method: "post",
     path: "/notifications",
     id: "create_notification",
   });
 
-export const getNotification = API.endpoint()
-  .paramsOf<"notification_id">()
-  .queryOf<QueryGetNotification>()
-  .build({
-    method: "get",
-    path: "/notifications/{notification_id}",
-    id: "get_notification",
-  });
-
 export const cancelNotification = API.endpoint()
   .paramsOf<"notification_id">()
+  .responseOf<ResponseCancelNotificationSuccessResponse>()
   .queryOf<QueryCancelNotification>()
   .build({
     method: "delete",
@@ -3716,8 +4351,20 @@ export const cancelNotification = API.endpoint()
     id: "cancel_notification",
   });
 
+export const getNotification = API.endpoint()
+  .paramsOf<"notification_id">()
+  .responseOf<ResponseNotificationWithMeta>()
+  .queryOf<QueryGetNotification>()
+  .build({
+    method: "get",
+    path: "/notifications/{notification_id}",
+    id: "get_notification",
+  });
+
 export const getNotificationHistory = API.endpoint()
   .paramsOf<"notification_id">()
+  .responseOf<ResponseNotificationHistorySuccessResponse>()
+  .bodyOf<BodyGetNotificationRequestBody>()
   .build({
     method: "post",
     path: "/notifications/{notification_id}/history",
@@ -3725,7 +4372,7 @@ export const getNotificationHistory = API.endpoint()
   });
 
 export const getApps = API.endpoint()
-
+  .responseOf<ResponseApps>()
   .build({
     method: "get",
     path: "/apps",
@@ -3733,7 +4380,8 @@ export const getApps = API.endpoint()
   });
 
 export const createApp = API.endpoint()
-
+  .responseOf<ResponseApp>()
+  .bodyOf<BodyApp>()
   .build({
     method: "post",
     path: "/apps",
@@ -3742,6 +4390,7 @@ export const createApp = API.endpoint()
 
 export const getApp = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseApp>()
   .build({
     method: "get",
     path: "/apps/{app_id}",
@@ -3750,6 +4399,8 @@ export const getApp = API.endpoint()
 
 export const updateApp = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseApp>()
+  .bodyOf<BodyApp>()
   .build({
     method: "put",
     path: "/apps/{app_id}",
@@ -3758,6 +4409,8 @@ export const updateApp = API.endpoint()
 
 export const createSegments = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseCreateSegmentSuccessResponse>()
+  .bodyOf<BodySegment>()
   .build({
     method: "post",
     path: "/apps/{app_id}/segments",
@@ -3765,7 +4418,8 @@ export const createSegments = API.endpoint()
   });
 
 export const deleteSegments = API.endpoint()
-  .paramsOf<"app_id|segment_id">()
+  .paramsOf<"app_id" | "segment_id">()
+  .responseOf<ResponseDeleteSegmentSuccessResponse>()
   .build({
     method: "delete",
     path: "/apps/{app_id}/segments/{segment_id}",
@@ -3774,6 +4428,7 @@ export const deleteSegments = API.endpoint()
 
 export const getOutcomes = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseOutcomesData>()
   .queryOf<QueryGetOutcomes>()
   .build({
     method: "get",
@@ -3782,7 +4437,9 @@ export const getOutcomes = API.endpoint()
   });
 
 export const updateLiveActivity = API.endpoint()
-  .paramsOf<"app_id|activity_id">()
+  .paramsOf<"app_id" | "activity_id">()
+  .responseOf<ResponseUpdateLiveActivitySuccessResponse>()
+  .bodyOf<BodyUpdateLiveActivityRequest>()
   .build({
     method: "post",
     path: "/apps/{app_id}/live_activities/{activity_id}/notifications",
@@ -3790,7 +4447,8 @@ export const updateLiveActivity = API.endpoint()
   });
 
 export const beginLiveActivity = API.endpoint()
-  .paramsOf<"app_id|activity_id">()
+  .paramsOf<"app_id" | "activity_id">()
+  .bodyOf<BodyBeginLiveActivityRequest>()
   .build({
     method: "post",
     path: "/apps/{app_id}/live_activities/{activity_id}/token",
@@ -3798,7 +4456,7 @@ export const beginLiveActivity = API.endpoint()
   });
 
 export const endLiveActivity = API.endpoint()
-  .paramsOf<"app_id|activity_id|subscription_id">()
+  .paramsOf<"app_id" | "activity_id" | "subscription_id">()
   .build({
     method: "delete",
     path: "/apps/{app_id}/live_activities/{activity_id}/token/{subscription_id}",
@@ -3807,6 +4465,8 @@ export const endLiveActivity = API.endpoint()
 
 export const createUser = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseUser | ResponseUser | ResponseUser>()
+  .bodyOf<BodyUser>()
   .build({
     method: "post",
     path: "/apps/{app_id}/users",
@@ -3814,15 +4474,26 @@ export const createUser = API.endpoint()
   });
 
 export const updatePlayerTags = API.endpoint()
-  .paramsOf<"app_id|external_user_id">()
+  .paramsOf<"app_id" | "external_user_id">()
+  .responseOf<ResponseUpdatePlayerTagsSuccessResponse>()
+  .bodyOf<BodyUpdatePlayerTagsRequestBody>()
   .build({
     method: "put",
     path: "/apps/{app_id}/users/{external_user_id}",
     id: "update_player_tags",
   });
 
+export const deleteUser = API.endpoint()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .build({
+    method: "delete",
+    path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
+    id: "delete_user",
+  });
+
 export const fetchUser = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .responseOf<ResponseUser>()
   .build({
     method: "get",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
@@ -3830,39 +4501,37 @@ export const fetchUser = API.endpoint()
   });
 
 export const updateUser = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .responseOf<ResponseInlineResponse202>()
+  .bodyOf<BodyUpdateUserRequest>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
     id: "update_user",
   });
 
-export const deleteUser = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
-  .build({
-    method: "delete",
-    path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
-    id: "delete_user",
-  });
-
-export const identifyUserByAlias = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
-  .build({
-    method: "patch",
-    path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity",
-    id: "identify_user_by_alias",
-  });
-
 export const fetchUserIdentity = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .responseOf<ResponseInlineResponse200>()
   .build({
     method: "get",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity",
     id: "fetch_user_identity",
   });
 
+export const identifyUserByAlias = API.endpoint()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .responseOf<ResponseInlineResponse200>()
+  .bodyOf<BodyUserIdentityRequestBody>()
+  .build({
+    method: "patch",
+    path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity",
+    id: "identify_user_by_alias",
+  });
+
 export const deleteAlias = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id|alias_label_to_delete">()
+  .paramsOf<"app_id" | "alias_label" | "alias_id" | "alias_label_to_delete">()
+  .responseOf<ResponseInlineResponse200>()
   .build({
     method: "delete",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity/{alias_label_to_delete}",
@@ -3870,31 +4539,35 @@ export const deleteAlias = API.endpoint()
   });
 
 export const createSubscription = API.endpoint()
-  .paramsOf<"app_id|alias_label|alias_id">()
+  .paramsOf<"app_id" | "alias_label" | "alias_id">()
+  .responseOf<ResponseInlineResponse201 | ResponseInlineResponse201>()
+  .bodyOf<BodyCreateSubscriptionRequestBody>()
   .build({
     method: "post",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/subscriptions",
     id: "create_subscription",
   });
 
-export const updateSubscription = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
-  .build({
-    method: "patch",
-    path: "/apps/{app_id}/subscriptions/{subscription_id}",
-    id: "update_subscription",
-  });
-
 export const deleteSubscription = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
+  .paramsOf<"app_id" | "subscription_id">()
   .build({
     method: "delete",
     path: "/apps/{app_id}/subscriptions/{subscription_id}",
     id: "delete_subscription",
   });
 
+export const updateSubscription = API.endpoint()
+  .paramsOf<"app_id" | "subscription_id">()
+  .bodyOf<BodyUpdateSubscriptionRequestBody>()
+  .build({
+    method: "patch",
+    path: "/apps/{app_id}/subscriptions/{subscription_id}",
+    id: "update_subscription",
+  });
+
 export const fetchAliases = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
+  .paramsOf<"app_id" | "subscription_id">()
+  .responseOf<ResponseUserIdentityResponse>()
   .build({
     method: "get",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/user/identity",
@@ -3902,7 +4575,9 @@ export const fetchAliases = API.endpoint()
   });
 
 export const identifyUserBySubscriptionId = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
+  .paramsOf<"app_id" | "subscription_id">()
+  .responseOf<ResponseUserIdentityResponse>()
+  .bodyOf<BodyUserIdentityRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/user/identity",
@@ -3910,7 +4585,9 @@ export const identifyUserBySubscriptionId = API.endpoint()
   });
 
 export const transferSubscription = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
+  .paramsOf<"app_id" | "subscription_id">()
+  .responseOf<ResponseUserIdentityResponse>()
+  .bodyOf<BodyTransferSubscriptionRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/owner",
@@ -3918,7 +4595,8 @@ export const transferSubscription = API.endpoint()
   });
 
 export const getEligibleIams = API.endpoint()
-  .paramsOf<"app_id|subscription_id">()
+  .paramsOf<"app_id" | "subscription_id">()
+  .responseOf<ResponseInlineResponse2003>()
   .build({
     method: "get",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/iams",
@@ -3926,6 +4604,7 @@ export const getEligibleIams = API.endpoint()
   });
 
 export const getPlayers = API.endpoint()
+  .responseOf<ResponsePlayerSlice>()
   .queryOf<QueryGetPlayers>()
   .build({
     method: "get",
@@ -3934,7 +4613,8 @@ export const getPlayers = API.endpoint()
   });
 
 export const createPlayer = API.endpoint()
-
+  .responseOf<ResponseCreatePlayerSuccessResponse>()
+  .bodyOf<BodyPlayer>()
   .build({
     method: "post",
     path: "/players",
@@ -3943,6 +4623,7 @@ export const createPlayer = API.endpoint()
 
 export const deletePlayer = API.endpoint()
   .paramsOf<"player_id">()
+  .responseOf<ResponseDeletePlayerSuccessResponse>()
   .queryOf<QueryDeletePlayer>()
   .build({
     method: "delete",
@@ -3952,6 +4633,7 @@ export const deletePlayer = API.endpoint()
 
 export const getPlayer = API.endpoint()
   .paramsOf<"player_id">()
+  .responseOf<ResponsePlayer>()
   .queryOf<QueryGetPlayer>()
   .build({
     method: "get",
@@ -3961,6 +4643,8 @@ export const getPlayer = API.endpoint()
 
 export const updatePlayer = API.endpoint()
   .paramsOf<"player_id">()
+  .responseOf<ResponseUpdatePlayerSuccessResponse>()
+  .bodyOf<BodyPlayer>()
   .build({
     method: "put",
     path: "/players/{player_id}",
@@ -3969,6 +4653,8 @@ export const updatePlayer = API.endpoint()
 
 export const exportPlayers = API.endpoint()
   .paramsOf<"app_id">()
+  .responseOf<ResponseExportPlayersSuccessResponse>()
+  .bodyOf<BodyExportPlayersRequestBody>()
   .build({
     method: "post",
     path: "/players/csv_export?app_id={app_id}",
@@ -3977,6 +4663,7 @@ export const exportPlayers = API.endpoint()
 
 export const exportEvents = API.endpoint()
   .paramsOf<"notification_id">()
+  .responseOf<ResponseExportEventsSuccessResponse>()
   .queryOf<QueryExportEvents>()
   .build({
     method: "post",
