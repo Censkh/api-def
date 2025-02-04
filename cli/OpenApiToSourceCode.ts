@@ -97,7 +97,7 @@ ${Object.entries(routes)
 
       let responseType = undefined;
 
-      const responseTypes: string[] = [];
+      const responseTypes = new Set<string>();
       for (const status of successfulResponse) {
         const response = methodDef.responses[status];
         if (response) {
@@ -120,13 +120,13 @@ ${Object.entries(routes)
               }
 
               extraTypes[typeName] = `components["schemas"]["${name}"]`;
-              responseTypes.push(typeName);
+              responseTypes.add(typeName);
             }
           }
         }
       }
 
-      const bodyTypes: string[] = [];
+      const bodyTypes = new Set<string>();
       if (methodDef.requestBody) {
         // find the schema
         const requestBodyDef = resolveComponent(schema, methodDef.requestBody);
@@ -136,13 +136,13 @@ ${Object.entries(routes)
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
               extraTypes[createTypeName(name)] = `components["schemas"]["${name}"]`;
-              bodyTypes.push(createTypeName(name));
+              bodyTypes.add(createTypeName(name));
             }
           }
         }
       }
 
-      const queryTypes: string[] = [];
+      const queryTypes = new Set<string>();
       if (methodDef.parameters?.length) {
         const anyQueryParams = methodDef.parameters.some((param: any) => {
           if (param.in === "query") {
@@ -160,11 +160,11 @@ ${Object.entries(routes)
 
         if (anyQueryParams) {
           extraTypes[createTypeName(id)] = `operations["${id}"]["parameters"]["query"]`;
-          queryTypes.push(createTypeName(id));
+          queryTypes.add(createTypeName(id));
         }
       }
 
-      const requestHeaderTypes: string[] = [];
+      const requestHeaderTypes = new Set<string>();
       if (methodDef.parameters?.length) {
         const anyHeaderParams = methodDef.parameters.some((param: any) => {
           if (param.in === "header") {
@@ -182,27 +182,27 @@ ${Object.entries(routes)
 
         if (anyHeaderParams) {
           extraTypes[createTypeName(id)] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
-          requestHeaderTypes.push(createTypeName(id));
+          requestHeaderTypes.add(createTypeName(id));
         }
       }
 
-      const responseHeaderTypes: string[] = [];
+      const responseHeaderTypes = new Set<string>();
 
-      let pathParams: string[] = [];
+      let pathParams = new Set<string>();
       if (methodDef.parameters?.length) {
-        pathParams = methodDef.parameters.reduce((pathParams: string[], param: any) => {
+        pathParams = methodDef.parameters.reduce((pathParams: Set<string>, param: any) => {
           if (param.in === "path") {
-            pathParams.push(param.name);
+            pathParams.add(param.name);
           } else if (param.$ref) {
             const ref = param.$ref;
 
             const paramDef = schema.components.parameters[ref.split("/").pop()];
             if (paramDef.in === "path") {
-              pathParams.push(paramDef.name);
+              pathParams.add(paramDef.name);
             }
           }
           return pathParams;
-        }, []);
+        }, pathParams);
       }
 
       /*
@@ -211,12 +211,16 @@ ${Object.entries(routes)
          */
 
       const endpointParts = [
-        pathParams.length > 0 ? `.paramsOf<${pathParams.map((string) => `"${string}"`).join(" | ")}>()` : "",
-        responseTypes.length > 0 ? `.responseOf<${responseTypes.join(" | ")}>()` : "",
-        bodyTypes.length > 0 ? `.bodyOf<${bodyTypes.join(" | ")}>()` : "",
-        queryTypes.length > 0 ? `.queryOf<${queryTypes.join(" | ")}>()` : "",
-        requestHeaderTypes.length > 0 ? `.requestHeadersOf<${requestHeaderTypes.join(" | ")}>()` : "",
-        responseHeaderTypes.length > 0 ? `.responseHeadersOf<${responseHeaderTypes.join(" | ")}>()` : "",
+        pathParams.size > 0
+          ? `.paramsOf<${Array.from(pathParams)
+              .map((string) => `"${string}"`)
+              .join(" | ")}>()`
+          : "",
+        responseTypes.size > 0 ? `.responseOf<${Array.from(responseTypes).join(" | ")}>()` : "",
+        bodyTypes.size > 0 ? `.bodyOf<${Array.from(bodyTypes).join(" | ")}>()` : "",
+        queryTypes.size > 0 ? `.queryOf<${Array.from(queryTypes).join(" | ")}>()` : "",
+        requestHeaderTypes.size > 0 ? `.requestHeadersOf<${Array.from(requestHeaderTypes).join(" | ")}>()` : "",
+        responseHeaderTypes.size > 0 ? `.responseHeadersOf<${Array.from(responseHeaderTypes).join(" | ")}>()` : "",
       ];
 
       return `export const ${camelCase(id)} = API.endpoint()

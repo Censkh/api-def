@@ -4426,7 +4426,7 @@ export const endLiveActivity = API.endpoint()
 
 export const createUser = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<User | User | User>()
+  .responseOf<User>()
   .bodyOf<User>()
   .build({
     method: "post",
@@ -4501,7 +4501,7 @@ export const deleteAlias = API.endpoint()
 
 export const createSubscription = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<CreateSubscriptionResponse | CreateSubscriptionResponse>()
+  .responseOf<CreateSubscriptionResponse>()
   .bodyOf<CreateSubscriptionRequestBody>()
   .build({
     method: "post",

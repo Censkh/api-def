@@ -3852,7 +3852,7 @@ export const endLiveActivity = API.endpoint()
 
 export const createUser = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<User | User | User>()
+  .responseOf<User>()
   .bodyOf<User>()
   .build({
     method: "post",
