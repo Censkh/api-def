@@ -4222,38 +4222,30 @@ export interface operations {
 export type App = components["schemas"]["App"];
 export type Apps = components["schemas"]["Apps"];
 export type BeginLiveActivityRequest = components["schemas"]["BeginLiveActivityRequest"];
-export type BodyApp = App;
-export type BodyBeginLiveActivityRequest = BeginLiveActivityRequest;
-export type BodyCreateSubscriptionRequestBody = CreateSubscriptionRequestBody;
-export type BodyExportPlayersRequestBody = export_players_request_body;
-export type BodyGetNotificationRequestBody = get_notification_request_body;
-export type BodyNotification = Notification;
-export type BodyPlayer = Player;
-export type BodySegment = Segment;
-export type BodyTransferSubscriptionRequestBody = TransferSubscriptionRequestBody;
-export type BodyUpdateLiveActivityRequest = UpdateLiveActivityRequest;
-export type BodyUpdatePlayerTagsRequestBody = update_player_tags_request_body;
-export type BodyUpdateSubscriptionRequestBody = UpdateSubscriptionRequestBody;
-export type BodyUpdateUserRequest = UpdateUserRequest;
-export type BodyUser = User;
-export type BodyUserIdentityRequestBody = UserIdentityRequestBody;
 export type CancelNotification = operations["cancel_notification"]["parameters"]["query"];
 export type CancelNotificationSuccessResponse = components["schemas"]["CancelNotificationSuccessResponse"];
 export type CreateNotificationSuccessResponse = components["schemas"]["CreateNotificationSuccessResponse"];
 export type CreatePlayerSuccessResponse = components["schemas"]["CreatePlayerSuccessResponse"];
 export type CreateSegmentSuccessResponse = components["schemas"]["CreateSegmentSuccessResponse"];
 export type CreateSubscriptionRequestBody = components["schemas"]["CreateSubscriptionRequestBody"];
+export type CreateSubscriptionResponse = components["schemas"]["inline_response_201"];
+export type DeleteAliasResponse = components["schemas"]["inline_response_200"];
 export type DeletePlayer = operations["delete_player"]["parameters"]["query"];
 export type DeletePlayerSuccessResponse = components["schemas"]["DeletePlayerSuccessResponse"];
 export type DeleteSegmentSuccessResponse = components["schemas"]["DeleteSegmentSuccessResponse"];
 export type ExportEvents = operations["export_events"]["parameters"]["query"];
 export type ExportEventsSuccessResponse = components["schemas"]["ExportEventsSuccessResponse"];
+export type ExportPlayersRequestBody = components["schemas"]["export_players_request_body"];
 export type ExportPlayersSuccessResponse = components["schemas"]["ExportPlayersSuccessResponse"];
+export type FetchUserIdentityResponse = components["schemas"]["inline_response_200"];
+export type GetEligibleIamsResponse = components["schemas"]["inline_response_200_3"];
 export type GetNotification = operations["get_notification"]["parameters"]["query"];
+export type GetNotificationRequestBody = components["schemas"]["get_notification_request_body"];
 export type GetNotifications = operations["get_notifications"]["parameters"]["query"];
 export type GetOutcomes = operations["get_outcomes"]["parameters"]["query"];
 export type GetPlayer = operations["get_player"]["parameters"]["query"];
 export type GetPlayers = operations["get_players"]["parameters"]["query"];
+export type IdentifyUserByAliasResponse = components["schemas"]["inline_response_200"];
 export type Notification = components["schemas"]["Notification"];
 export type NotificationHistorySuccessResponse = components["schemas"]["NotificationHistorySuccessResponse"];
 export type NotificationSlice = components["schemas"]["NotificationSlice"];
@@ -4261,57 +4253,19 @@ export type NotificationWithMeta = components["schemas"]["NotificationWithMeta"]
 export type OutcomesData = components["schemas"]["OutcomesData"];
 export type Player = components["schemas"]["Player"];
 export type PlayerSlice = components["schemas"]["PlayerSlice"];
-export type QueryCancelNotification = CancelNotification;
-export type QueryDeletePlayer = DeletePlayer;
-export type QueryExportEvents = ExportEvents;
-export type QueryGetNotification = GetNotification;
-export type QueryGetNotifications = GetNotifications;
-export type QueryGetOutcomes = GetOutcomes;
-export type QueryGetPlayer = GetPlayer;
-export type QueryGetPlayers = GetPlayers;
-export type ResponseApp = App;
-export type ResponseApps = Apps;
-export type ResponseCancelNotificationSuccessResponse = CancelNotificationSuccessResponse;
-export type ResponseCreateNotificationSuccessResponse = CreateNotificationSuccessResponse;
-export type ResponseCreatePlayerSuccessResponse = CreatePlayerSuccessResponse;
-export type ResponseCreateSegmentSuccessResponse = CreateSegmentSuccessResponse;
-export type ResponseDeletePlayerSuccessResponse = DeletePlayerSuccessResponse;
-export type ResponseDeleteSegmentSuccessResponse = DeleteSegmentSuccessResponse;
-export type ResponseExportEventsSuccessResponse = ExportEventsSuccessResponse;
-export type ResponseExportPlayersSuccessResponse = ExportPlayersSuccessResponse;
-export type ResponseInlineResponse200 = inline_response_200;
-export type ResponseInlineResponse2003 = inline_response_200_3;
-export type ResponseInlineResponse201 = inline_response_201;
-export type ResponseInlineResponse202 = inline_response_202;
-export type ResponseNotificationHistorySuccessResponse = NotificationHistorySuccessResponse;
-export type ResponseNotificationSlice = NotificationSlice;
-export type ResponseNotificationWithMeta = NotificationWithMeta;
-export type ResponseOutcomesData = OutcomesData;
-export type ResponsePlayer = Player;
-export type ResponsePlayerSlice = PlayerSlice;
-export type ResponseUpdateLiveActivitySuccessResponse = UpdateLiveActivitySuccessResponse;
-export type ResponseUpdatePlayerSuccessResponse = UpdatePlayerSuccessResponse;
-export type ResponseUpdatePlayerTagsSuccessResponse = UpdatePlayerTagsSuccessResponse;
-export type ResponseUser = User;
-export type ResponseUserIdentityResponse = UserIdentityResponse;
 export type Segment = components["schemas"]["Segment"];
 export type TransferSubscriptionRequestBody = components["schemas"]["TransferSubscriptionRequestBody"];
 export type UpdateLiveActivityRequest = components["schemas"]["UpdateLiveActivityRequest"];
 export type UpdateLiveActivitySuccessResponse = components["schemas"]["UpdateLiveActivitySuccessResponse"];
 export type UpdatePlayerSuccessResponse = components["schemas"]["UpdatePlayerSuccessResponse"];
+export type UpdatePlayerTagsRequestBody = components["schemas"]["update_player_tags_request_body"];
 export type UpdatePlayerTagsSuccessResponse = components["schemas"]["UpdatePlayerTagsSuccessResponse"];
 export type UpdateSubscriptionRequestBody = components["schemas"]["UpdateSubscriptionRequestBody"];
 export type UpdateUserRequest = components["schemas"]["UpdateUserRequest"];
+export type UpdateUserResponse = components["schemas"]["inline_response_202"];
 export type User = components["schemas"]["User"];
 export type UserIdentityRequestBody = components["schemas"]["UserIdentityRequestBody"];
 export type UserIdentityResponse = components["schemas"]["UserIdentityResponse"];
-export type export_players_request_body = components["schemas"]["export_players_request_body"];
-export type get_notification_request_body = components["schemas"]["get_notification_request_body"];
-export type inline_response_200 = components["schemas"]["inline_response_200"];
-export type inline_response_200_3 = components["schemas"]["inline_response_200_3"];
-export type inline_response_201 = components["schemas"]["inline_response_201"];
-export type inline_response_202 = components["schemas"]["inline_response_202"];
-export type update_player_tags_request_body = components["schemas"]["update_player_tags_request_body"];
 
 // API Def
 
@@ -4331,8 +4285,8 @@ const API = new Api({
 });
 
 export const getNotifications = API.endpoint()
-  .responseOf<ResponseNotificationSlice>()
-  .queryOf<QueryGetNotifications>()
+  .responseOf<NotificationSlice>()
+  .queryOf<GetNotifications>()
   .build({
     method: "get",
     path: "/notifications",
@@ -4340,8 +4294,8 @@ export const getNotifications = API.endpoint()
   });
 
 export const createNotification = API.endpoint()
-  .responseOf<ResponseCreateNotificationSuccessResponse>()
-  .bodyOf<BodyNotification>()
+  .responseOf<CreateNotificationSuccessResponse>()
+  .bodyOf<Notification>()
   .build({
     method: "post",
     path: "/notifications",
@@ -4350,8 +4304,8 @@ export const createNotification = API.endpoint()
 
 export const cancelNotification = API.endpoint()
   .paramsOf<"notification_id">()
-  .responseOf<ResponseCancelNotificationSuccessResponse>()
-  .queryOf<QueryCancelNotification>()
+  .responseOf<CancelNotificationSuccessResponse>()
+  .queryOf<CancelNotification>()
   .build({
     method: "delete",
     path: "/notifications/{notification_id}",
@@ -4360,8 +4314,8 @@ export const cancelNotification = API.endpoint()
 
 export const getNotification = API.endpoint()
   .paramsOf<"notification_id">()
-  .responseOf<ResponseNotificationWithMeta>()
-  .queryOf<QueryGetNotification>()
+  .responseOf<NotificationWithMeta>()
+  .queryOf<GetNotification>()
   .build({
     method: "get",
     path: "/notifications/{notification_id}",
@@ -4370,8 +4324,8 @@ export const getNotification = API.endpoint()
 
 export const getNotificationHistory = API.endpoint()
   .paramsOf<"notification_id">()
-  .responseOf<ResponseNotificationHistorySuccessResponse>()
-  .bodyOf<BodyGetNotificationRequestBody>()
+  .responseOf<NotificationHistorySuccessResponse>()
+  .bodyOf<GetNotificationRequestBody>()
   .build({
     method: "post",
     path: "/notifications/{notification_id}/history",
@@ -4379,7 +4333,7 @@ export const getNotificationHistory = API.endpoint()
   });
 
 export const getApps = API.endpoint()
-  .responseOf<ResponseApps>()
+  .responseOf<Apps>()
   .build({
     method: "get",
     path: "/apps",
@@ -4387,8 +4341,8 @@ export const getApps = API.endpoint()
   });
 
 export const createApp = API.endpoint()
-  .responseOf<ResponseApp>()
-  .bodyOf<BodyApp>()
+  .responseOf<App>()
+  .bodyOf<App>()
   .build({
     method: "post",
     path: "/apps",
@@ -4397,7 +4351,7 @@ export const createApp = API.endpoint()
 
 export const getApp = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseApp>()
+  .responseOf<App>()
   .build({
     method: "get",
     path: "/apps/{app_id}",
@@ -4406,8 +4360,8 @@ export const getApp = API.endpoint()
 
 export const updateApp = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseApp>()
-  .bodyOf<BodyApp>()
+  .responseOf<App>()
+  .bodyOf<App>()
   .build({
     method: "put",
     path: "/apps/{app_id}",
@@ -4416,8 +4370,8 @@ export const updateApp = API.endpoint()
 
 export const createSegments = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseCreateSegmentSuccessResponse>()
-  .bodyOf<BodySegment>()
+  .responseOf<CreateSegmentSuccessResponse>()
+  .bodyOf<Segment>()
   .build({
     method: "post",
     path: "/apps/{app_id}/segments",
@@ -4426,7 +4380,7 @@ export const createSegments = API.endpoint()
 
 export const deleteSegments = API.endpoint()
   .paramsOf<"app_id" | "segment_id">()
-  .responseOf<ResponseDeleteSegmentSuccessResponse>()
+  .responseOf<DeleteSegmentSuccessResponse>()
   .build({
     method: "delete",
     path: "/apps/{app_id}/segments/{segment_id}",
@@ -4435,8 +4389,8 @@ export const deleteSegments = API.endpoint()
 
 export const getOutcomes = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseOutcomesData>()
-  .queryOf<QueryGetOutcomes>()
+  .responseOf<OutcomesData>()
+  .queryOf<GetOutcomes>()
   .build({
     method: "get",
     path: "/apps/{app_id}/outcomes",
@@ -4445,8 +4399,8 @@ export const getOutcomes = API.endpoint()
 
 export const updateLiveActivity = API.endpoint()
   .paramsOf<"app_id" | "activity_id">()
-  .responseOf<ResponseUpdateLiveActivitySuccessResponse>()
-  .bodyOf<BodyUpdateLiveActivityRequest>()
+  .responseOf<UpdateLiveActivitySuccessResponse>()
+  .bodyOf<UpdateLiveActivityRequest>()
   .build({
     method: "post",
     path: "/apps/{app_id}/live_activities/{activity_id}/notifications",
@@ -4455,7 +4409,7 @@ export const updateLiveActivity = API.endpoint()
 
 export const beginLiveActivity = API.endpoint()
   .paramsOf<"app_id" | "activity_id">()
-  .bodyOf<BodyBeginLiveActivityRequest>()
+  .bodyOf<BeginLiveActivityRequest>()
   .build({
     method: "post",
     path: "/apps/{app_id}/live_activities/{activity_id}/token",
@@ -4472,8 +4426,8 @@ export const endLiveActivity = API.endpoint()
 
 export const createUser = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseUser | ResponseUser | ResponseUser>()
-  .bodyOf<BodyUser>()
+  .responseOf<User | User | User>()
+  .bodyOf<User>()
   .build({
     method: "post",
     path: "/apps/{app_id}/users",
@@ -4482,8 +4436,8 @@ export const createUser = API.endpoint()
 
 export const updatePlayerTags = API.endpoint()
   .paramsOf<"app_id" | "external_user_id">()
-  .responseOf<ResponseUpdatePlayerTagsSuccessResponse>()
-  .bodyOf<BodyUpdatePlayerTagsRequestBody>()
+  .responseOf<UpdatePlayerTagsSuccessResponse>()
+  .bodyOf<UpdatePlayerTagsRequestBody>()
   .build({
     method: "put",
     path: "/apps/{app_id}/users/{external_user_id}",
@@ -4500,7 +4454,7 @@ export const deleteUser = API.endpoint()
 
 export const fetchUser = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<ResponseUser>()
+  .responseOf<User>()
   .build({
     method: "get",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
@@ -4509,8 +4463,8 @@ export const fetchUser = API.endpoint()
 
 export const updateUser = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<ResponseInlineResponse202>()
-  .bodyOf<BodyUpdateUserRequest>()
+  .responseOf<UpdateUserResponse>()
+  .bodyOf<UpdateUserRequest>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}",
@@ -4519,7 +4473,7 @@ export const updateUser = API.endpoint()
 
 export const fetchUserIdentity = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<ResponseInlineResponse200>()
+  .responseOf<FetchUserIdentityResponse>()
   .build({
     method: "get",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity",
@@ -4528,8 +4482,8 @@ export const fetchUserIdentity = API.endpoint()
 
 export const identifyUserByAlias = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<ResponseInlineResponse200>()
-  .bodyOf<BodyUserIdentityRequestBody>()
+  .responseOf<IdentifyUserByAliasResponse>()
+  .bodyOf<UserIdentityRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity",
@@ -4538,7 +4492,7 @@ export const identifyUserByAlias = API.endpoint()
 
 export const deleteAlias = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id" | "alias_label_to_delete">()
-  .responseOf<ResponseInlineResponse200>()
+  .responseOf<DeleteAliasResponse>()
   .build({
     method: "delete",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/identity/{alias_label_to_delete}",
@@ -4547,8 +4501,8 @@ export const deleteAlias = API.endpoint()
 
 export const createSubscription = API.endpoint()
   .paramsOf<"app_id" | "alias_label" | "alias_id">()
-  .responseOf<ResponseInlineResponse201 | ResponseInlineResponse201>()
-  .bodyOf<BodyCreateSubscriptionRequestBody>()
+  .responseOf<CreateSubscriptionResponse | CreateSubscriptionResponse>()
+  .bodyOf<CreateSubscriptionRequestBody>()
   .build({
     method: "post",
     path: "/apps/{app_id}/users/by/{alias_label}/{alias_id}/subscriptions",
@@ -4565,7 +4519,7 @@ export const deleteSubscription = API.endpoint()
 
 export const updateSubscription = API.endpoint()
   .paramsOf<"app_id" | "subscription_id">()
-  .bodyOf<BodyUpdateSubscriptionRequestBody>()
+  .bodyOf<UpdateSubscriptionRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/subscriptions/{subscription_id}",
@@ -4574,7 +4528,7 @@ export const updateSubscription = API.endpoint()
 
 export const fetchAliases = API.endpoint()
   .paramsOf<"app_id" | "subscription_id">()
-  .responseOf<ResponseUserIdentityResponse>()
+  .responseOf<UserIdentityResponse>()
   .build({
     method: "get",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/user/identity",
@@ -4583,8 +4537,8 @@ export const fetchAliases = API.endpoint()
 
 export const identifyUserBySubscriptionId = API.endpoint()
   .paramsOf<"app_id" | "subscription_id">()
-  .responseOf<ResponseUserIdentityResponse>()
-  .bodyOf<BodyUserIdentityRequestBody>()
+  .responseOf<UserIdentityResponse>()
+  .bodyOf<UserIdentityRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/user/identity",
@@ -4593,8 +4547,8 @@ export const identifyUserBySubscriptionId = API.endpoint()
 
 export const transferSubscription = API.endpoint()
   .paramsOf<"app_id" | "subscription_id">()
-  .responseOf<ResponseUserIdentityResponse>()
-  .bodyOf<BodyTransferSubscriptionRequestBody>()
+  .responseOf<UserIdentityResponse>()
+  .bodyOf<TransferSubscriptionRequestBody>()
   .build({
     method: "patch",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/owner",
@@ -4603,7 +4557,7 @@ export const transferSubscription = API.endpoint()
 
 export const getEligibleIams = API.endpoint()
   .paramsOf<"app_id" | "subscription_id">()
-  .responseOf<ResponseInlineResponse2003>()
+  .responseOf<GetEligibleIamsResponse>()
   .build({
     method: "get",
     path: "/apps/{app_id}/subscriptions/{subscription_id}/iams",
@@ -4611,8 +4565,8 @@ export const getEligibleIams = API.endpoint()
   });
 
 export const getPlayers = API.endpoint()
-  .responseOf<ResponsePlayerSlice>()
-  .queryOf<QueryGetPlayers>()
+  .responseOf<PlayerSlice>()
+  .queryOf<GetPlayers>()
   .build({
     method: "get",
     path: "/players",
@@ -4620,8 +4574,8 @@ export const getPlayers = API.endpoint()
   });
 
 export const createPlayer = API.endpoint()
-  .responseOf<ResponseCreatePlayerSuccessResponse>()
-  .bodyOf<BodyPlayer>()
+  .responseOf<CreatePlayerSuccessResponse>()
+  .bodyOf<Player>()
   .build({
     method: "post",
     path: "/players",
@@ -4630,8 +4584,8 @@ export const createPlayer = API.endpoint()
 
 export const deletePlayer = API.endpoint()
   .paramsOf<"player_id">()
-  .responseOf<ResponseDeletePlayerSuccessResponse>()
-  .queryOf<QueryDeletePlayer>()
+  .responseOf<DeletePlayerSuccessResponse>()
+  .queryOf<DeletePlayer>()
   .build({
     method: "delete",
     path: "/players/{player_id}",
@@ -4640,8 +4594,8 @@ export const deletePlayer = API.endpoint()
 
 export const getPlayer = API.endpoint()
   .paramsOf<"player_id">()
-  .responseOf<ResponsePlayer>()
-  .queryOf<QueryGetPlayer>()
+  .responseOf<Player>()
+  .queryOf<GetPlayer>()
   .build({
     method: "get",
     path: "/players/{player_id}",
@@ -4650,8 +4604,8 @@ export const getPlayer = API.endpoint()
 
 export const updatePlayer = API.endpoint()
   .paramsOf<"player_id">()
-  .responseOf<ResponseUpdatePlayerSuccessResponse>()
-  .bodyOf<BodyPlayer>()
+  .responseOf<UpdatePlayerSuccessResponse>()
+  .bodyOf<Player>()
   .build({
     method: "put",
     path: "/players/{player_id}",
@@ -4660,8 +4614,8 @@ export const updatePlayer = API.endpoint()
 
 export const exportPlayers = API.endpoint()
   .paramsOf<"app_id">()
-  .responseOf<ResponseExportPlayersSuccessResponse>()
-  .bodyOf<BodyExportPlayersRequestBody>()
+  .responseOf<ExportPlayersSuccessResponse>()
+  .bodyOf<ExportPlayersRequestBody>()
   .build({
     method: "post",
     path: "/players/csv_export?app_id={app_id}",
@@ -4670,8 +4624,8 @@ export const exportPlayers = API.endpoint()
 
 export const exportEvents = API.endpoint()
   .paramsOf<"notification_id">()
-  .responseOf<ResponseExportEventsSuccessResponse>()
-  .queryOf<QueryExportEvents>()
+  .responseOf<ExportEventsSuccessResponse>()
+  .queryOf<ExportEvents>()
   .build({
     method: "post",
     path: "/notifications/{notification_id}/export_events?app_id={app_id}",

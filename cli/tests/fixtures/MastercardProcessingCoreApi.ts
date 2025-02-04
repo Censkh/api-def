@@ -11731,48 +11731,6 @@ export type AuthenticationMethod = components["schemas"]["AuthenticationMethod"]
 export type AuthenticationParameterValue = components["schemas"]["AuthenticationParameterValue"];
 export type BlockedFundsRelease = components["schemas"]["BlockedFundsRelease"];
 export type BlockedFundsReleaseResult = components["schemas"]["BlockedFundsReleaseResult"];
-export type BodyAccountContractCreation = AccountContractCreation;
-export type BodyAccountContractIdentifier = AccountContractIdentifier;
-export type BodyAccountContractIdentifierSearch = AccountContractIdentifierSearch;
-export type BodyAccountContractIdentifierWithClientIdentifier = AccountContractIdentifierWithClientIdentifier;
-export type BodyAccountContractModification = AccountContractModification;
-export type BodyAccountContractStatusWithReason = AccountContractStatusWithReason;
-export type BodyAddressCreation = AddressCreation;
-export type BodyAddressModification = AddressModification;
-export type BodyAuthenticationMethod = AuthenticationMethod;
-export type BodyBlockedFundsRelease = BlockedFundsRelease;
-export type BodyCardContractActivation = CardContractActivation;
-export type BodyCardContractCreation = CardContractCreation;
-export type BodyCardContractDetailsVerification = CardContractDetailsVerification;
-export type BodyCardContractIdentifierSearch = CardContractIdentifierSearch;
-export type BodyCardContractModification = CardContractModification;
-export type BodyCardContractReissue = CardContractReissue;
-export type BodyCardContractStatusWithReason = CardContractStatusWithReason;
-export type BodyChargeFee = ChargeFee;
-export type BodyClassifierCreation = ClassifierCreation;
-export type BodyClientCreation = ClientCreation;
-export type BodyClientIdentifier = ClientIdentifier;
-export type BodyClientIdentifierSearch = ClientIdentifierSearch;
-export type BodyClientIdentifierWithRelinkType = ClientIdentifierWithRelinkType;
-export type BodyClientModification = ClientModification;
-export type BodyCustomDataTags = CustomDataTags;
-export type BodyCvcSearchCriteria = CvcSearchCriteria;
-export type BodyCvcVerification = CvcVerification;
-export type BodyEvent = Event;
-export type BodyOnlinePinAttemptsClearance = OnlinePinAttemptsClearance;
-export type BodyOnlinePinAttemptsClearanceForClient = OnlinePinAttemptsClearanceForClient;
-export type BodyParameterModification = ParameterModification;
-export type BodyPinCreation = PinCreation;
-export type BodyPinSearchCriteria = PinSearchCriteria;
-export type BodyPinVerification = PinVerification;
-export type BodyReverseTransactionReason = ReverseTransactionReason;
-export type BodyServiceLimitTariff = ServiceLimitTariff;
-export type BodyTransactionContractCredit = TransactionContractCredit;
-export type BodyTransactionContractDebit = TransactionContractDebit;
-export type BodyUsageLimitModification = UsageLimitModification;
-export type BodyUsageLimitOriginalValue = UsageLimitOriginalValue;
-export type BodyUsageLimitResetting = UsageLimitResetting;
-export type BodyUsageLimitStatus = UsageLimitStatus;
 export type CardContractActivation = components["schemas"]["CardContractActivation"];
 export type CardContractCreation = components["schemas"]["CardContractCreation"];
 export type CardContractDetailsVerification = components["schemas"]["CardContractDetailsVerification"];
@@ -11841,33 +11799,6 @@ export type GetTechnicalAccounts = operations["getTechnicalAccounts"]["parameter
 export type GetTransactionDocuments = operations["getTransactionDocuments"]["parameters"]["query"];
 export type GetTransactions = operations["getTransactions"]["parameters"]["query"];
 export type GetUsageLimits = operations["getUsageLimits"]["parameters"]["query"];
-export type HeadersAddClientAddress = AddClientAddress;
-export type HeadersAddContractAddress = AddContractAddress;
-export type HeadersChargeFee = ChargeFee;
-export type HeadersCreateAccountContract = CreateAccountContract;
-export type HeadersCreateCardContract = CreateCardContract;
-export type HeadersCreateClient = CreateClient;
-export type HeadersCreditContract = CreditContract;
-export type HeadersDebitContract = DebitContract;
-export type HeadersGetAccountContractId = GetAccountContractId;
-export type HeadersGetCardContract = GetCardContract;
-export type HeadersGetCardContractId = GetCardContractId;
-export type HeadersGetClientId = GetClientId;
-export type HeadersGetCvc = GetCvc;
-export type HeadersGetPin = GetPin;
-export type HeadersOpenEvent = OpenEvent;
-export type HeadersReissueCard = ReissueCard;
-export type HeadersReverseTransaction = ReverseTransaction;
-export type HeadersSetClientCustomData = SetClientCustomData;
-export type HeadersSetContractCustomData = SetContractCustomData;
-export type HeadersSetPin = SetPin;
-export type HeadersSetServiceLimitTariff = SetServiceLimitTariff;
-export type HeadersUpdateAccountContract = UpdateAccountContract;
-export type HeadersUpdateCardContract = UpdateCardContract;
-export type HeadersUpdateClient = UpdateClient;
-export type HeadersVerifyCardDetails = VerifyCardDetails;
-export type HeadersVerifyCvc = VerifyCvc;
-export type HeadersVerifyPin = VerifyPin;
 export type OnlinePinAttemptsClearance = components["schemas"]["OnlinePinAttemptsClearance"];
 export type OnlinePinAttemptsClearanceForClient = components["schemas"]["OnlinePinAttemptsClearanceForClient"];
 export type OpenEvent = NonNullable<operations["openEvent"]["parameters"]["header"]>;
@@ -11877,66 +11808,8 @@ export type PinSearchCriteria = components["schemas"]["PinSearchCriteria"];
 export type PinVerification = components["schemas"]["PinVerification"];
 export type PinVerificationResult = components["schemas"]["PinVerificationResult"];
 export type PublicRsaKeyData = components["schemas"]["PublicRsaKeyData"];
-export type QueryGetAccountContractsByClient = GetAccountContractsByClient;
-export type QueryGetAuthenticationParameterValue = GetAuthenticationParameterValue;
-export type QueryGetCardContract = GetCardContract;
-export type QueryGetCardContractsByAccount = GetCardContractsByAccount;
-export type QueryGetCardContractsByClient = GetCardContractsByClient;
-export type QueryGetClientClassifiers = GetClientClassifiers;
-export type QueryGetContractBalances = GetContractBalances;
-export type QueryGetContractClassifiers = GetContractClassifiers;
-export type QueryGetContractParameters = GetContractParameters;
-export type QueryGetContractTariffData = GetContractTariffData;
-export type QueryGetContractTransactionDocuments = GetContractTransactionDocuments;
-export type QueryGetContractTreeSummary = GetContractTreeSummary;
-export type QueryGetPublicRsaKey = GetPublicRsaKey;
-export type QueryGetSubAccountContracts = GetSubAccountContracts;
-export type QueryGetTechnicalAccounts = GetTechnicalAccounts;
-export type QueryGetTransactionDocuments = GetTransactionDocuments;
-export type QueryGetTransactions = GetTransactions;
-export type QueryGetUsageLimits = GetUsageLimits;
 export type ReissueCard = NonNullable<operations["reissueCard"]["parameters"]["header"]>;
 export type ReissuedCardContract = components["schemas"]["ReissuedCardContract"];
-export type ResponseAccountContract = AccountContract;
-export type ResponseAccountContractCardContracts = AccountContractCardContracts;
-export type ResponseAccountContractIdentifier = AccountContractIdentifier;
-export type ResponseAccountContractStatus = AccountContractStatus;
-export type ResponseAuthenticationParameterValue = AuthenticationParameterValue;
-export type ResponseBlockedFundsReleaseResult = BlockedFundsReleaseResult;
-export type ResponseCardContractDetailsVerificationResult = CardContractDetailsVerificationResult;
-export type ResponseCardContractIdentifier = CardContractIdentifier;
-export type ResponseCardContractPlastics = CardContractPlastics;
-export type ResponseCardContractStatus = CardContractStatus;
-export type ResponseCardContractWithEncryptedCardContractNumber = CardContractWithEncryptedCardContractNumber;
-export type ResponseClient = Client;
-export type ResponseClientAccountContracts = ClientAccountContracts;
-export type ResponseClientAddresses = ClientAddresses;
-export type ResponseClientCardContracts = ClientCardContracts;
-export type ResponseClientClassifiers = ClientClassifiers;
-export type ResponseClientCustomDataTagValues = ClientCustomDataTagValues;
-export type ResponseClientIdentifier = ClientIdentifier;
-export type ResponseContractAddresses = ContractAddresses;
-export type ResponseContractBalances = ContractBalances;
-export type ResponseContractClassifiers = ContractClassifiers;
-export type ResponseContractCustomDataTagValues = ContractCustomDataTagValues;
-export type ResponseContractFinancial = ContractFinancial;
-export type ResponseContractParameters = ContractParameters;
-export type ResponseContractSummaryTree = ContractSummaryTree;
-export type ResponseContractTariffs = ContractTariffs;
-export type ResponseCvc = Cvc;
-export type ResponseCvcVerificationResult = CvcVerificationResult;
-export type ResponseEncryptedPin = EncryptedPin;
-export type ResponsePinVerificationResult = PinVerificationResult;
-export type ResponsePublicRsaKeyData = PublicRsaKeyData;
-export type ResponseReissuedCardContract = ReissuedCardContract;
-export type ResponseReverseTransactionId = ReverseTransactionId;
-export type ResponseSubAccountContracts = SubAccountContracts;
-export type ResponseTechnicalAccounts = TechnicalAccounts;
-export type ResponseTransactionDocuments = TransactionDocuments;
-export type ResponseTransactionFees = TransactionFees;
-export type ResponseTransactionId = TransactionId;
-export type ResponseTransactions = Transactions;
-export type ResponseUsageLimits = UsageLimits;
 export type ReverseTransaction = NonNullable<operations["reverseTransaction"]["parameters"]["header"]>;
 export type ReverseTransactionId = components["schemas"]["ReverseTransactionId"];
 export type ReverseTransactionReason = components["schemas"]["ReverseTransactionReason"];
@@ -11977,9 +11850,9 @@ const API = new Api({
 });
 
 export const createClient = API.endpoint()
-  .responseOf<ResponseClientIdentifier>()
-  .bodyOf<BodyClientCreation>()
-  .requestHeadersOf<HeadersCreateClient>()
+  .responseOf<ClientIdentifier>()
+  .bodyOf<ClientCreation>()
+  .requestHeadersOf<CreateClient>()
   .build({
     method: "post",
     path: "/clients",
@@ -11988,7 +11861,7 @@ export const createClient = API.endpoint()
 
 export const getClient = API.endpoint()
   .paramsOf<"client_id">()
-  .responseOf<ResponseClient>()
+  .responseOf<Client>()
   .build({
     method: "get",
     path: "/clients/{client_id}",
@@ -11997,8 +11870,8 @@ export const getClient = API.endpoint()
 
 export const updateClient = API.endpoint()
   .paramsOf<"client_id">()
-  .bodyOf<BodyClientModification>()
-  .requestHeadersOf<HeadersUpdateClient>()
+  .bodyOf<ClientModification>()
+  .requestHeadersOf<UpdateClient>()
   .build({
     method: "patch",
     path: "/clients/{client_id}",
@@ -12007,8 +11880,8 @@ export const updateClient = API.endpoint()
 
 export const getAccountContractsByClient = API.endpoint()
   .paramsOf<"client_id">()
-  .responseOf<ResponseClientAccountContracts>()
-  .queryOf<QueryGetAccountContractsByClient>()
+  .responseOf<ClientAccountContracts>()
+  .queryOf<GetAccountContractsByClient>()
   .build({
     method: "get",
     path: "/clients/{client_id}/account-contracts",
@@ -12017,8 +11890,8 @@ export const getAccountContractsByClient = API.endpoint()
 
 export const getCardContractsByClient = API.endpoint()
   .paramsOf<"client_id">()
-  .responseOf<ResponseClientCardContracts>()
-  .queryOf<QueryGetCardContractsByClient>()
+  .responseOf<ClientCardContracts>()
+  .queryOf<GetCardContractsByClient>()
   .build({
     method: "get",
     path: "/clients/{client_id}/card-contracts",
@@ -12027,8 +11900,8 @@ export const getCardContractsByClient = API.endpoint()
 
 export const openEvent = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyEvent>()
-  .requestHeadersOf<HeadersOpenEvent>()
+  .bodyOf<Event>()
+  .requestHeadersOf<OpenEvent>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/events",
@@ -12037,7 +11910,7 @@ export const openEvent = API.endpoint()
 
 export const getContractFinancials = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractFinancial>()
+  .responseOf<ContractFinancial>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/financials",
@@ -12046,8 +11919,8 @@ export const getContractFinancials = API.endpoint()
 
 export const getContractBalances = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractBalances>()
-  .queryOf<QueryGetContractBalances>()
+  .responseOf<ContractBalances>()
+  .queryOf<GetContractBalances>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/balances",
@@ -12056,8 +11929,8 @@ export const getContractBalances = API.endpoint()
 
 export const getTechnicalAccounts = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTechnicalAccounts>()
-  .queryOf<QueryGetTechnicalAccounts>()
+  .responseOf<TechnicalAccounts>()
+  .queryOf<GetTechnicalAccounts>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/technical-accounts",
@@ -12066,8 +11939,8 @@ export const getTechnicalAccounts = API.endpoint()
 
 export const getContractTreeSummary = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractSummaryTree>()
-  .queryOf<QueryGetContractTreeSummary>()
+  .responseOf<ContractSummaryTree>()
+  .queryOf<GetContractTreeSummary>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/tree-summaries",
@@ -12075,9 +11948,9 @@ export const getContractTreeSummary = API.endpoint()
   });
 
 export const createAccountContract = API.endpoint()
-  .responseOf<ResponseAccountContractIdentifier>()
-  .bodyOf<BodyAccountContractCreation>()
-  .requestHeadersOf<HeadersCreateAccountContract>()
+  .responseOf<AccountContractIdentifier>()
+  .bodyOf<AccountContractCreation>()
+  .requestHeadersOf<CreateAccountContract>()
   .build({
     method: "post",
     path: "/accounts",
@@ -12086,7 +11959,7 @@ export const createAccountContract = API.endpoint()
 
 export const getAccountContract = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .responseOf<ResponseAccountContract>()
+  .responseOf<AccountContract>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}",
@@ -12095,8 +11968,8 @@ export const getAccountContract = API.endpoint()
 
 export const updateAccountContract = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .bodyOf<BodyAccountContractModification>()
-  .requestHeadersOf<HeadersUpdateAccountContract>()
+  .bodyOf<AccountContractModification>()
+  .requestHeadersOf<UpdateAccountContract>()
   .build({
     method: "patch",
     path: "/accounts/{account_contract_id}",
@@ -12105,7 +11978,7 @@ export const updateAccountContract = API.endpoint()
 
 export const changeAccountContractStatus = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .bodyOf<BodyAccountContractStatusWithReason>()
+  .bodyOf<AccountContractStatusWithReason>()
   .build({
     method: "put",
     path: "/accounts/{account_contract_id}/status",
@@ -12114,7 +11987,7 @@ export const changeAccountContractStatus = API.endpoint()
 
 export const getAccountContractStatus = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .responseOf<ResponseAccountContractStatus>()
+  .responseOf<AccountContractStatus>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/statuses",
@@ -12123,7 +11996,7 @@ export const getAccountContractStatus = API.endpoint()
 
 export const changeAccountContractClient = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .bodyOf<BodyClientIdentifierWithRelinkType>()
+  .bodyOf<ClientIdentifierWithRelinkType>()
   .build({
     method: "put",
     path: "/accounts/{account_contract_id}/client-identifier",
@@ -12132,7 +12005,7 @@ export const changeAccountContractClient = API.endpoint()
 
 export const changeContractMainContract = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyAccountContractIdentifierWithClientIdentifier>()
+  .bodyOf<AccountContractIdentifierWithClientIdentifier>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/main-contract",
@@ -12141,8 +12014,8 @@ export const changeContractMainContract = API.endpoint()
 
 export const getSubAccountContracts = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .responseOf<ResponseSubAccountContracts>()
-  .queryOf<QueryGetSubAccountContracts>()
+  .responseOf<SubAccountContracts>()
+  .queryOf<GetSubAccountContracts>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/sub-accounts",
@@ -12151,8 +12024,8 @@ export const getSubAccountContracts = API.endpoint()
 
 export const getCardContractsByAccount = API.endpoint()
   .paramsOf<"account_contract_id">()
-  .responseOf<ResponseAccountContractCardContracts>()
-  .queryOf<QueryGetCardContractsByAccount>()
+  .responseOf<AccountContractCardContracts>()
+  .queryOf<GetCardContractsByAccount>()
   .build({
     method: "get",
     path: "/accounts/{account_contract_id}/card-contracts",
@@ -12160,9 +12033,9 @@ export const getCardContractsByAccount = API.endpoint()
   });
 
 export const createCardContract = API.endpoint()
-  .responseOf<ResponseCardContractIdentifier>()
-  .bodyOf<BodyCardContractCreation>()
-  .requestHeadersOf<HeadersCreateCardContract>()
+  .responseOf<CardContractIdentifier>()
+  .bodyOf<CardContractCreation>()
+  .requestHeadersOf<CreateCardContract>()
   .build({
     method: "post",
     path: "/cards",
@@ -12171,9 +12044,9 @@ export const createCardContract = API.endpoint()
 
 export const getCardContract = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseCardContractWithEncryptedCardContractNumber>()
-  .queryOf<QueryGetCardContract>()
-  .requestHeadersOf<HeadersGetCardContract>()
+  .responseOf<CardContractWithEncryptedCardContractNumber>()
+  .queryOf<GetCardContract>()
+  .requestHeadersOf<GetCardContract>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}",
@@ -12182,8 +12055,8 @@ export const getCardContract = API.endpoint()
 
 export const updateCardContract = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyCardContractModification>()
-  .requestHeadersOf<HeadersUpdateCardContract>()
+  .bodyOf<CardContractModification>()
+  .requestHeadersOf<UpdateCardContract>()
   .build({
     method: "patch",
     path: "/cards/{card_contract_id}",
@@ -12191,9 +12064,9 @@ export const updateCardContract = API.endpoint()
   });
 
 export const verifyCardDetails = API.endpoint()
-  .responseOf<ResponseCardContractDetailsVerificationResult>()
-  .bodyOf<BodyCardContractDetailsVerification>()
-  .requestHeadersOf<HeadersVerifyCardDetails>()
+  .responseOf<CardContractDetailsVerificationResult>()
+  .bodyOf<CardContractDetailsVerification>()
+  .requestHeadersOf<VerifyCardDetails>()
   .build({
     method: "post",
     path: "/cards/details-verifications",
@@ -12202,7 +12075,7 @@ export const verifyCardDetails = API.endpoint()
 
 export const changeCardContractStatus = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyCardContractStatusWithReason>()
+  .bodyOf<CardContractStatusWithReason>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/status",
@@ -12211,7 +12084,7 @@ export const changeCardContractStatus = API.endpoint()
 
 export const getCardContractStatus = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseCardContractStatus>()
+  .responseOf<CardContractStatus>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}/statuses",
@@ -12220,7 +12093,7 @@ export const getCardContractStatus = API.endpoint()
 
 export const changeCardContractClient = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyClientIdentifier>()
+  .bodyOf<ClientIdentifier>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/client-identifier",
@@ -12229,7 +12102,7 @@ export const changeCardContractClient = API.endpoint()
 
 export const changeCardContractMainContract = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyAccountContractIdentifier>()
+  .bodyOf<AccountContractIdentifier>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/main-contract",
@@ -12238,7 +12111,7 @@ export const changeCardContractMainContract = API.endpoint()
 
 export const clearOnlinePinAttempts = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyOnlinePinAttemptsClearance>()
+  .bodyOf<OnlinePinAttemptsClearance>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/online-pin-attempts-counter",
@@ -12247,7 +12120,7 @@ export const clearOnlinePinAttempts = API.endpoint()
 
 export const clearOnlinePinAttemptsForClient = API.endpoint()
   .paramsOf<"client_id">()
-  .bodyOf<BodyOnlinePinAttemptsClearanceForClient>()
+  .bodyOf<OnlinePinAttemptsClearanceForClient>()
   .build({
     method: "put",
     path: "/clients/{client_id}/online-pin-attempts-counter",
@@ -12256,7 +12129,7 @@ export const clearOnlinePinAttemptsForClient = API.endpoint()
 
 export const activateCard = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyCardContractActivation>()
+  .bodyOf<CardContractActivation>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/active",
@@ -12265,8 +12138,8 @@ export const activateCard = API.endpoint()
 
 export const setPin = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .bodyOf<BodyPinCreation>()
-  .requestHeadersOf<HeadersSetPin>()
+  .bodyOf<PinCreation>()
+  .requestHeadersOf<SetPin>()
   .build({
     method: "put",
     path: "/cards/{card_contract_id}/pin",
@@ -12275,9 +12148,9 @@ export const setPin = API.endpoint()
 
 export const getPin = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseEncryptedPin>()
-  .bodyOf<BodyPinSearchCriteria>()
-  .requestHeadersOf<HeadersGetPin>()
+  .responseOf<EncryptedPin>()
+  .bodyOf<PinSearchCriteria>()
+  .requestHeadersOf<GetPin>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/pins/searches",
@@ -12286,9 +12159,9 @@ export const getPin = API.endpoint()
 
 export const verifyPin = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponsePinVerificationResult>()
-  .bodyOf<BodyPinVerification>()
-  .requestHeadersOf<HeadersVerifyPin>()
+  .responseOf<PinVerificationResult>()
+  .bodyOf<PinVerification>()
+  .requestHeadersOf<VerifyPin>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/pins/verifications",
@@ -12297,9 +12170,9 @@ export const verifyPin = API.endpoint()
 
 export const getCvc = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseCvc>()
-  .bodyOf<BodyCvcSearchCriteria>()
-  .requestHeadersOf<HeadersGetCvc>()
+  .responseOf<Cvc>()
+  .bodyOf<CvcSearchCriteria>()
+  .requestHeadersOf<GetCvc>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/card-verification-codes/searches",
@@ -12308,9 +12181,9 @@ export const getCvc = API.endpoint()
 
 export const verifyCvc = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseCvcVerificationResult>()
-  .bodyOf<BodyCvcVerification>()
-  .requestHeadersOf<HeadersVerifyCvc>()
+  .responseOf<CvcVerificationResult>()
+  .bodyOf<CvcVerification>()
+  .requestHeadersOf<VerifyCvc>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/card-verification-codes/verifications",
@@ -12319,9 +12192,9 @@ export const verifyCvc = API.endpoint()
 
 export const reissueCard = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseReissuedCardContract>()
-  .bodyOf<BodyCardContractReissue>()
-  .requestHeadersOf<HeadersReissueCard>()
+  .responseOf<ReissuedCardContract>()
+  .bodyOf<CardContractReissue>()
+  .requestHeadersOf<ReissueCard>()
   .build({
     method: "post",
     path: "/cards/{card_contract_id}/plastics",
@@ -12330,7 +12203,7 @@ export const reissueCard = API.endpoint()
 
 export const getCardPlastics = API.endpoint()
   .paramsOf<"card_contract_id">()
-  .responseOf<ResponseCardContractPlastics>()
+  .responseOf<CardContractPlastics>()
   .build({
     method: "get",
     path: "/cards/{card_contract_id}/plastics",
@@ -12339,8 +12212,8 @@ export const getCardPlastics = API.endpoint()
 
 export const addClientAddress = API.endpoint()
   .paramsOf<"client_id">()
-  .bodyOf<BodyAddressCreation>()
-  .requestHeadersOf<HeadersAddClientAddress>()
+  .bodyOf<AddressCreation>()
+  .requestHeadersOf<AddClientAddress>()
   .build({
     method: "post",
     path: "/clients/{client_id}/addresses",
@@ -12349,7 +12222,7 @@ export const addClientAddress = API.endpoint()
 
 export const getClientAddresses = API.endpoint()
   .paramsOf<"client_id">()
-  .responseOf<ResponseClientAddresses>()
+  .responseOf<ClientAddresses>()
   .build({
     method: "get",
     path: "/clients/{client_id}/addresses",
@@ -12358,7 +12231,7 @@ export const getClientAddresses = API.endpoint()
 
 export const updateClientAddress = API.endpoint()
   .paramsOf<"client_id" | "address_type">()
-  .bodyOf<BodyAddressModification>()
+  .bodyOf<AddressModification>()
   .build({
     method: "put",
     path: "/clients/{client_id}/addresses/{address_type}",
@@ -12367,8 +12240,8 @@ export const updateClientAddress = API.endpoint()
 
 export const addContractAddress = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyAddressCreation>()
-  .requestHeadersOf<HeadersAddContractAddress>()
+  .bodyOf<AddressCreation>()
+  .requestHeadersOf<AddContractAddress>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/addresses",
@@ -12377,7 +12250,7 @@ export const addContractAddress = API.endpoint()
 
 export const getContractAddresses = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractAddresses>()
+  .responseOf<ContractAddresses>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/addresses",
@@ -12386,7 +12259,7 @@ export const getContractAddresses = API.endpoint()
 
 export const updateContractAddress = API.endpoint()
   .paramsOf<"contract_id" | "address_type">()
-  .bodyOf<BodyAddressModification>()
+  .bodyOf<AddressModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/addresses/{address_type}",
@@ -12395,7 +12268,7 @@ export const updateContractAddress = API.endpoint()
 
 export const setClientClassifier = API.endpoint()
   .paramsOf<"client_id" | "classifier_code">()
-  .bodyOf<BodyClassifierCreation>()
+  .bodyOf<ClassifierCreation>()
   .build({
     method: "put",
     path: "/clients/{client_id}/classifiers/{classifier_code}",
@@ -12404,8 +12277,8 @@ export const setClientClassifier = API.endpoint()
 
 export const getClientClassifiers = API.endpoint()
   .paramsOf<"client_id">()
-  .responseOf<ResponseClientClassifiers>()
-  .queryOf<QueryGetClientClassifiers>()
+  .responseOf<ClientClassifiers>()
+  .queryOf<GetClientClassifiers>()
   .build({
     method: "get",
     path: "/clients/{client_id}/classifiers",
@@ -12414,7 +12287,7 @@ export const getClientClassifiers = API.endpoint()
 
 export const setContractClassifier = API.endpoint()
   .paramsOf<"contract_id" | "classifier_code">()
-  .bodyOf<BodyClassifierCreation>()
+  .bodyOf<ClassifierCreation>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/classifiers/{classifier_code}",
@@ -12423,8 +12296,8 @@ export const setContractClassifier = API.endpoint()
 
 export const getContractClassifiers = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractClassifiers>()
-  .queryOf<QueryGetContractClassifiers>()
+  .responseOf<ContractClassifiers>()
+  .queryOf<GetContractClassifiers>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/classifiers",
@@ -12433,8 +12306,8 @@ export const getContractClassifiers = API.endpoint()
 
 export const setClientCustomData = API.endpoint()
   .paramsOf<"client_id">()
-  .bodyOf<BodyCustomDataTags>()
-  .requestHeadersOf<HeadersSetClientCustomData>()
+  .bodyOf<CustomDataTags>()
+  .requestHeadersOf<SetClientCustomData>()
   .build({
     method: "post",
     path: "/clients/{client_id}/custom-data",
@@ -12443,7 +12316,7 @@ export const setClientCustomData = API.endpoint()
 
 export const getClientCustomData = API.endpoint()
   .paramsOf<"client_id" | "tag_name">()
-  .responseOf<ResponseClientCustomDataTagValues>()
+  .responseOf<ClientCustomDataTagValues>()
   .build({
     method: "get",
     path: "/clients/{client_id}/custom-data/{tag_name}",
@@ -12452,8 +12325,8 @@ export const getClientCustomData = API.endpoint()
 
 export const setContractCustomData = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyCustomDataTags>()
-  .requestHeadersOf<HeadersSetContractCustomData>()
+  .bodyOf<CustomDataTags>()
+  .requestHeadersOf<SetContractCustomData>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/custom-data",
@@ -12462,7 +12335,7 @@ export const setContractCustomData = API.endpoint()
 
 export const getContractCustomData = API.endpoint()
   .paramsOf<"contract_id" | "tag_name">()
-  .responseOf<ResponseContractCustomDataTagValues>()
+  .responseOf<ContractCustomDataTagValues>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/custom-data/{tag_name}",
@@ -12471,7 +12344,7 @@ export const getContractCustomData = API.endpoint()
 
 export const setContractParameter = API.endpoint()
   .paramsOf<"contract_id" | "parameter_code">()
-  .bodyOf<BodyParameterModification>()
+  .bodyOf<ParameterModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/parameters/{parameter_code}",
@@ -12480,8 +12353,8 @@ export const setContractParameter = API.endpoint()
 
 export const getContractParameters = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractParameters>()
-  .queryOf<QueryGetContractParameters>()
+  .responseOf<ContractParameters>()
+  .queryOf<GetContractParameters>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/parameters",
@@ -12490,9 +12363,9 @@ export const getContractParameters = API.endpoint()
 
 export const debitContract = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTransactionId>()
-  .bodyOf<BodyTransactionContractDebit>()
-  .requestHeadersOf<HeadersDebitContract>()
+  .responseOf<TransactionId>()
+  .bodyOf<TransactionContractDebit>()
+  .requestHeadersOf<DebitContract>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/debits",
@@ -12501,9 +12374,9 @@ export const debitContract = API.endpoint()
 
 export const creditContract = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTransactionId>()
-  .bodyOf<BodyTransactionContractCredit>()
-  .requestHeadersOf<HeadersCreditContract>()
+  .responseOf<TransactionId>()
+  .bodyOf<TransactionContractCredit>()
+  .requestHeadersOf<CreditContract>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/credits",
@@ -12512,9 +12385,9 @@ export const creditContract = API.endpoint()
 
 export const chargeFee = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTransactionId>()
-  .bodyOf<BodyChargeFee>()
-  .requestHeadersOf<HeadersChargeFee>()
+  .responseOf<TransactionId>()
+  .bodyOf<ChargeFee>()
+  .requestHeadersOf<ChargeFee>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/charge-fees",
@@ -12523,8 +12396,8 @@ export const chargeFee = API.endpoint()
 
 export const getTransactions = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTransactions>()
-  .queryOf<QueryGetTransactions>()
+  .responseOf<Transactions>()
+  .queryOf<GetTransactions>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/transactions",
@@ -12533,8 +12406,8 @@ export const getTransactions = API.endpoint()
 
 export const getContractTransactionDocuments = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseTransactionDocuments>()
-  .queryOf<QueryGetContractTransactionDocuments>()
+  .responseOf<TransactionDocuments>()
+  .queryOf<GetContractTransactionDocuments>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/transaction-documents",
@@ -12542,8 +12415,8 @@ export const getContractTransactionDocuments = API.endpoint()
   });
 
 export const getTransactionDocuments = API.endpoint()
-  .responseOf<ResponseTransactionDocuments>()
-  .queryOf<QueryGetTransactionDocuments>()
+  .responseOf<TransactionDocuments>()
+  .queryOf<GetTransactionDocuments>()
   .build({
     method: "get",
     path: "/transaction-documents",
@@ -12552,7 +12425,7 @@ export const getTransactionDocuments = API.endpoint()
 
 export const getTransactionFees = API.endpoint()
   .paramsOf<"transaction_id">()
-  .responseOf<ResponseTransactionFees>()
+  .responseOf<TransactionFees>()
   .build({
     method: "get",
     path: "/transactions/{transaction_id}/fees",
@@ -12561,7 +12434,7 @@ export const getTransactionFees = API.endpoint()
 
 export const setUsageLimit = API.endpoint()
   .paramsOf<"contract_id" | "usage_limit_code">()
-  .bodyOf<BodyUsageLimitModification>()
+  .bodyOf<UsageLimitModification>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}",
@@ -12570,8 +12443,8 @@ export const setUsageLimit = API.endpoint()
 
 export const getUsageLimits = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseUsageLimits>()
-  .queryOf<QueryGetUsageLimits>()
+  .responseOf<UsageLimits>()
+  .queryOf<GetUsageLimits>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/usage-limits",
@@ -12580,7 +12453,7 @@ export const getUsageLimits = API.endpoint()
 
 export const restoreUsageLimitOriginalValues = API.endpoint()
   .paramsOf<"contract_id" | "usage_limit_code">()
-  .bodyOf<BodyUsageLimitOriginalValue>()
+  .bodyOf<UsageLimitOriginalValue>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/original-values",
@@ -12589,7 +12462,7 @@ export const restoreUsageLimitOriginalValues = API.endpoint()
 
 export const resetUsageLimitCounters = API.endpoint()
   .paramsOf<"contract_id" | "usage_limit_code">()
-  .bodyOf<BodyUsageLimitResetting>()
+  .bodyOf<UsageLimitResetting>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/resetting-counters",
@@ -12598,7 +12471,7 @@ export const resetUsageLimitCounters = API.endpoint()
 
 export const changeUsageLimitStatus = API.endpoint()
   .paramsOf<"contract_id" | "usage_limit_code">()
-  .bodyOf<BodyUsageLimitStatus>()
+  .bodyOf<UsageLimitStatus>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/usage-limits/{usage_limit_code}/status",
@@ -12607,8 +12480,8 @@ export const changeUsageLimitStatus = API.endpoint()
 
 export const setServiceLimitTariff = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyServiceLimitTariff>()
-  .requestHeadersOf<HeadersSetServiceLimitTariff>()
+  .bodyOf<ServiceLimitTariff>()
+  .requestHeadersOf<SetServiceLimitTariff>()
   .build({
     method: "post",
     path: "/contracts/{contract_id}/service-limit-tariffs",
@@ -12617,8 +12490,8 @@ export const setServiceLimitTariff = API.endpoint()
 
 export const getContractTariffData = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseContractTariffs>()
-  .queryOf<QueryGetContractTariffData>()
+  .responseOf<ContractTariffs>()
+  .queryOf<GetContractTariffData>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/tariff-data",
@@ -12626,9 +12499,9 @@ export const getContractTariffData = API.endpoint()
   });
 
 export const getClientId = API.endpoint()
-  .responseOf<ResponseClientIdentifier>()
-  .bodyOf<BodyClientIdentifierSearch>()
-  .requestHeadersOf<HeadersGetClientId>()
+  .responseOf<ClientIdentifier>()
+  .bodyOf<ClientIdentifierSearch>()
+  .requestHeadersOf<GetClientId>()
   .build({
     method: "post",
     path: "/clients/searches",
@@ -12636,9 +12509,9 @@ export const getClientId = API.endpoint()
   });
 
 export const getAccountContractId = API.endpoint()
-  .responseOf<ResponseAccountContractIdentifier>()
-  .bodyOf<BodyAccountContractIdentifierSearch>()
-  .requestHeadersOf<HeadersGetAccountContractId>()
+  .responseOf<AccountContractIdentifier>()
+  .bodyOf<AccountContractIdentifierSearch>()
+  .requestHeadersOf<GetAccountContractId>()
   .build({
     method: "post",
     path: "/accounts/searches",
@@ -12646,9 +12519,9 @@ export const getAccountContractId = API.endpoint()
   });
 
 export const getCardContractId = API.endpoint()
-  .responseOf<ResponseCardContractIdentifier>()
-  .bodyOf<BodyCardContractIdentifierSearch>()
-  .requestHeadersOf<HeadersGetCardContractId>()
+  .responseOf<CardContractIdentifier>()
+  .bodyOf<CardContractIdentifierSearch>()
+  .requestHeadersOf<GetCardContractId>()
   .build({
     method: "post",
     path: "/cards/searches",
@@ -12656,8 +12529,8 @@ export const getCardContractId = API.endpoint()
   });
 
 export const getPublicRsaKey = API.endpoint()
-  .responseOf<ResponsePublicRsaKeyData>()
-  .queryOf<QueryGetPublicRsaKey>()
+  .responseOf<PublicRsaKeyData>()
+  .queryOf<GetPublicRsaKey>()
   .build({
     method: "get",
     path: "/public-keys",
@@ -12666,7 +12539,7 @@ export const getPublicRsaKey = API.endpoint()
 
 export const setAuthenticationMethod = API.endpoint()
   .paramsOf<"contract_id">()
-  .bodyOf<BodyAuthenticationMethod>()
+  .bodyOf<AuthenticationMethod>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/authentication-method",
@@ -12675,8 +12548,8 @@ export const setAuthenticationMethod = API.endpoint()
 
 export const releaseBlockedFunds = API.endpoint()
   .paramsOf<"contract_id" | "transaction_id">()
-  .responseOf<ResponseBlockedFundsReleaseResult>()
-  .bodyOf<BodyBlockedFundsRelease>()
+  .responseOf<BlockedFundsReleaseResult>()
+  .bodyOf<BlockedFundsRelease>()
   .build({
     method: "put",
     path: "/contracts/{contract_id}/transactions/{transaction_id}/releasing-blocked-funds",
@@ -12685,9 +12558,9 @@ export const releaseBlockedFunds = API.endpoint()
 
 export const reverseTransaction = API.endpoint()
   .paramsOf<"transaction_id">()
-  .responseOf<ResponseReverseTransactionId>()
-  .bodyOf<BodyReverseTransactionReason>()
-  .requestHeadersOf<HeadersReverseTransaction>()
+  .responseOf<ReverseTransactionId>()
+  .bodyOf<ReverseTransactionReason>()
+  .requestHeadersOf<ReverseTransaction>()
   .build({
     method: "post",
     path: "/transactions/{transaction_id}/reversal",
@@ -12696,8 +12569,8 @@ export const reverseTransaction = API.endpoint()
 
 export const getAuthenticationParameterValue = API.endpoint()
   .paramsOf<"contract_id">()
-  .responseOf<ResponseAuthenticationParameterValue>()
-  .queryOf<QueryGetAuthenticationParameterValue>()
+  .responseOf<AuthenticationParameterValue>()
+  .queryOf<GetAuthenticationParameterValue>()
   .build({
     method: "get",
     path: "/contracts/{contract_id}/authentication-parameter-values",

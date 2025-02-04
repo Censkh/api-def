@@ -34,7 +34,8 @@
     "ignore": ["fixtures"]
   },
   "files": {
-    "include": ["src/**/*.ts", "cli/**/*.ts"]
+    "include": ["src/**/*.ts", "cli/**/*.ts"],
+    "maxSize": 2000000
   },
   "vcs": {
     "enabled": true,

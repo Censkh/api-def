@@ -1721,44 +1721,18 @@ export interface operations {
 }
 
 export type AccessToken = components["schemas"]["AccessToken"];
-export type BodyDriversLicenseSourceVerificationRequestAttributes = DriversLicenseSourceVerificationRequestAttributes;
-export type BodyEmailOtp = EmailOtp;
-export type BodyMedicareCardSourceVerificationRequestAttributes = MedicareCardSourceVerificationRequestAttributes;
-export type BodyOtpVerification = OtpVerification;
-export type BodyPassportSourceVerificationRequestAttributes = PassportSourceVerificationRequestAttributes;
-export type BodyRetrieveAccessToken = RetrieveAccessToken;
-export type BodySMSOtp = SMSOtp;
-export type BodySelfieVerificationRequest = SelfieVerificationRequest;
 export type DocumentVerificationExtractedData = components["schemas"]["DocumentVerificationExtractedData"];
 export type DriversLicenseSourceVerificationRequestAttributes = components["schemas"]["DriversLicenseSourceVerificationRequestAttributes"];
 export type EmailOtp = components["schemas"]["EmailOtp"];
 export type ExtractScannedDocumentData = NonNullable<operations["extractScannedDocumentData"]["parameters"]["header"]>;
 export type FacematchSourceVerificationResult = components["schemas"]["FacematchSourceVerificationResult"];
 export type FacematchVerification = NonNullable<operations["facematchVerification"]["parameters"]["header"]>;
-export type HeadersExtractScannedDocumentData = ExtractScannedDocumentData;
-export type HeadersFacematchVerification = FacematchVerification;
-export type HeadersRetrieveDataExtractionAccessToken = RetrieveDataExtractionAccessToken;
-export type HeadersSendEmailOtp = SendEmailOtp;
-export type HeadersSendSmsOtp = SendSmsOtp;
-export type HeadersVerifyDriversLicense = VerifyDriversLicense;
-export type HeadersVerifyEmailOtp = VerifyEmailOtp;
-export type HeadersVerifyMedicareCard = VerifyMedicareCard;
-export type HeadersVerifyPassport = VerifyPassport;
-export type HeadersVerifySmsOtp = VerifySmsOtp;
 export type MedicareCardSourceVerificationRequestAttributes = components["schemas"]["MedicareCardSourceVerificationRequestAttributes"];
 export type MedicareCardSourceVerificationResult = components["schemas"]["MedicareCardSourceVerificationResult"];
 export type Otp = components["schemas"]["Otp"];
 export type OtpVerification = components["schemas"]["OtpVerification"];
 export type OtpVerificationResult = components["schemas"]["OtpVerificationResult"];
 export type PassportSourceVerificationRequestAttributes = components["schemas"]["PassportSourceVerificationRequestAttributes"];
-export type QueryExtractScannedDocumentData = ExtractScannedDocumentData;
-export type ResponseAccessToken = AccessToken;
-export type ResponseDocumentVerificationExtractedData = DocumentVerificationExtractedData;
-export type ResponseFacematchSourceVerificationResult = FacematchSourceVerificationResult;
-export type ResponseMedicareCardSourceVerificationResult = MedicareCardSourceVerificationResult;
-export type ResponseOtp = Otp;
-export type ResponseOtpVerificationResult = OtpVerificationResult;
-export type ResponseSourceVerificationResult = SourceVerificationResult;
 export type RetrieveAccessToken = components["schemas"]["RetrieveAccessToken"];
 export type RetrieveDataExtractionAccessToken = NonNullable<operations["retrieveDataExtractionAccessToken"]["parameters"]["header"]>;
 export type SMSOtp = components["schemas"]["SMSOtp"];
@@ -1772,20 +1746,21 @@ export type VerifyMedicareCard = NonNullable<operations["verifyMedicareCard"]["p
 export type VerifyPassport = NonNullable<operations["verifyPassport"]["parameters"]["header"]>;
 export type VerifySmsOtp = NonNullable<operations["verifySmsOtp"]["parameters"]["header"]>;
 
-//API Def
+// API Def
 
 import { Api } from "api-def";
+
+
 
 const API = new Api({
   name: "Id Verification API",
   baseUrl: "https://api.mastercard.com.au/idverify",
-  mutable: true,
 });
 
 export const retrieveDataExtractionAccessToken = API.endpoint()
-  .responseOf<ResponseAccessToken>()
-  .bodyOf<BodyRetrieveAccessToken>()
-  .requestHeadersOf<HeadersRetrieveDataExtractionAccessToken>()
+  .responseOf<AccessToken>()
+  .bodyOf<RetrieveAccessToken>()
+  .requestHeadersOf<RetrieveDataExtractionAccessToken>()
   .build({
     method: "post",
     path: "/data-extractions/access-tokens",
@@ -1793,9 +1768,9 @@ export const retrieveDataExtractionAccessToken = API.endpoint()
   });
 
 export const facematchVerification = API.endpoint()
-  .responseOf<ResponseFacematchSourceVerificationResult>()
-  .bodyOf<BodySelfieVerificationRequest>()
-  .requestHeadersOf<HeadersFacematchVerification>()
+  .responseOf<FacematchSourceVerificationResult>()
+  .bodyOf<SelfieVerificationRequest>()
+  .requestHeadersOf<FacematchVerification>()
   .build({
     method: "post",
     path: "/data-extractions/facematch",
@@ -1803,9 +1778,9 @@ export const facematchVerification = API.endpoint()
   });
 
 export const sendSmsOtp = API.endpoint()
-  .responseOf<ResponseOtp>()
-  .bodyOf<BodySMSOtp>()
-  .requestHeadersOf<HeadersSendSmsOtp>()
+  .responseOf<Otp>()
+  .bodyOf<SMSOtp>()
+  .requestHeadersOf<SendSmsOtp>()
   .build({
     method: "post",
     path: "/sms-otps",
@@ -1813,9 +1788,9 @@ export const sendSmsOtp = API.endpoint()
   });
 
 export const sendEmailOtp = API.endpoint()
-  .responseOf<ResponseOtp>()
-  .bodyOf<BodyEmailOtp>()
-  .requestHeadersOf<HeadersSendEmailOtp>()
+  .responseOf<Otp>()
+  .bodyOf<EmailOtp>()
+  .requestHeadersOf<SendEmailOtp>()
   .build({
     method: "post",
     path: "/email-otps",
@@ -1823,9 +1798,9 @@ export const sendEmailOtp = API.endpoint()
   });
 
 export const verifySmsOtp = API.endpoint()
-  .responseOf<ResponseOtpVerificationResult>()
-  .bodyOf<BodyOtpVerification>()
-  .requestHeadersOf<HeadersVerifySmsOtp>()
+  .responseOf<OtpVerificationResult>()
+  .bodyOf<OtpVerification>()
+  .requestHeadersOf<VerifySmsOtp>()
   .build({
     method: "post",
     path: "/sms-otp-verifications",
@@ -1833,9 +1808,9 @@ export const verifySmsOtp = API.endpoint()
   });
 
 export const verifyEmailOtp = API.endpoint()
-  .responseOf<ResponseOtpVerificationResult>()
-  .bodyOf<BodyOtpVerification>()
-  .requestHeadersOf<HeadersVerifyEmailOtp>()
+  .responseOf<OtpVerificationResult>()
+  .bodyOf<OtpVerification>()
+  .requestHeadersOf<VerifyEmailOtp>()
   .build({
     method: "post",
     path: "/email-otp-verifications",
@@ -1844,9 +1819,9 @@ export const verifyEmailOtp = API.endpoint()
 
 export const extractScannedDocumentData = API.endpoint()
   .paramsOf<"scan_id">()
-  .responseOf<ResponseDocumentVerificationExtractedData>()
-  .queryOf<QueryExtractScannedDocumentData>()
-  .requestHeadersOf<HeadersExtractScannedDocumentData>()
+  .responseOf<DocumentVerificationExtractedData>()
+  .queryOf<ExtractScannedDocumentData>()
+  .requestHeadersOf<ExtractScannedDocumentData>()
   .build({
     method: "get",
     path: "/data-extractions/scans/{scan_id}",
@@ -1855,9 +1830,9 @@ export const extractScannedDocumentData = API.endpoint()
 
 export const verifyMedicareCard = API.endpoint()
   .paramsOf<"issuing_country">()
-  .responseOf<ResponseMedicareCardSourceVerificationResult>()
-  .bodyOf<BodyMedicareCardSourceVerificationRequestAttributes>()
-  .requestHeadersOf<HeadersVerifyMedicareCard>()
+  .responseOf<MedicareCardSourceVerificationResult>()
+  .bodyOf<MedicareCardSourceVerificationRequestAttributes>()
+  .requestHeadersOf<VerifyMedicareCard>()
   .build({
     method: "post",
     path: "/source-verifications/{issuing_country}/medicare-cards",
@@ -1866,9 +1841,9 @@ export const verifyMedicareCard = API.endpoint()
 
 export const verifyPassport = API.endpoint()
   .paramsOf<"issuing_country">()
-  .responseOf<ResponseSourceVerificationResult>()
-  .bodyOf<BodyPassportSourceVerificationRequestAttributes>()
-  .requestHeadersOf<HeadersVerifyPassport>()
+  .responseOf<SourceVerificationResult>()
+  .bodyOf<PassportSourceVerificationRequestAttributes>()
+  .requestHeadersOf<VerifyPassport>()
   .build({
     method: "post",
     path: "/source-verifications/{issuing_country}/passports",
@@ -1877,9 +1852,9 @@ export const verifyPassport = API.endpoint()
 
 export const verifyDriversLicense = API.endpoint()
   .paramsOf<"issuing_country">()
-  .responseOf<ResponseSourceVerificationResult>()
-  .bodyOf<BodyDriversLicenseSourceVerificationRequestAttributes>()
-  .requestHeadersOf<HeadersVerifyDriversLicense>()
+  .responseOf<SourceVerificationResult>()
+  .bodyOf<DriversLicenseSourceVerificationRequestAttributes>()
+  .requestHeadersOf<VerifyDriversLicense>()
   .build({
     method: "post",
     path: "/source-verifications/{issuing_country}/driving-licenses",

@@ -39,3 +39,12 @@ it("4. generated types match - opensignal yaml file", async () => {
   const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/OneSignalYamlApi.ts"), "utf-8");
   expect(output).toEqual(expected);
 });
+
+it("5. generated types match - rapyd", async () => {
+  const output = await openApiToSourceCode({
+    openApiPath: path.resolve(__dirname, "./fixtures/rapyd-openapi.yaml"),
+  });
+
+  const expected = fs.readFileSync(path.resolve(__dirname, "./fixtures/RapydApi.ts"), "utf-8");
+  expect(output).toEqual(expected);
+});

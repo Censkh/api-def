@@ -88,6 +88,9 @@ ${Object.entries(routes)
   .flatMap(([path, route]: [string, any]) => {
     return Object.entries(route).map(([method, methodDef]: [string, any]) => {
       const id = methodDef.operationId;
+      if (!id) {
+        return "";
+      }
 
       const responseStatuses = Object.keys(methodDef.responses);
       const successfulResponse = responseStatuses.filter((status) => status.startsWith("2") || status.startsWith("3"));
@@ -109,9 +112,15 @@ ${Object.entries(routes)
 
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
-              extraTypes[createTypeName("Response", name)] = name;
-              extraTypes[name] = `components["schemas"]["${name}"]`;
-              responseTypes.push(createTypeName("Response", name));
+              let typeName: string;
+              if (name.startsWith("inline_response_")) {
+                typeName = createTypeName(id, "Response");
+              } else {
+                typeName = createTypeName(name);
+              }
+
+              extraTypes[typeName] = `components["schemas"]["${name}"]`;
+              responseTypes.push(typeName);
             }
           }
         }
@@ -126,9 +135,8 @@ ${Object.entries(routes)
             const schema = requestBodyDef.content[mediaType].schema;
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
-              extraTypes[createTypeName("Body", name)] = name;
-              extraTypes[name] = `components["schemas"]["${name}"]`;
-              bodyTypes.push(createTypeName("Body", name));
+              extraTypes[createTypeName(name)] = `components["schemas"]["${name}"]`;
+              bodyTypes.push(createTypeName(name));
             }
           }
         }
@@ -151,9 +159,8 @@ ${Object.entries(routes)
         });
 
         if (anyQueryParams) {
-          extraTypes[createTypeName("Query", id)] = createTypeName(id);
           extraTypes[createTypeName(id)] = `operations["${id}"]["parameters"]["query"]`;
-          queryTypes.push(createTypeName("Query", id));
+          queryTypes.push(createTypeName(id));
         }
       }
 
@@ -174,9 +181,8 @@ ${Object.entries(routes)
         });
 
         if (anyHeaderParams) {
-          extraTypes[createTypeName("Headers", id)] = createTypeName(id);
           extraTypes[createTypeName(id)] = `NonNullable<operations["${id}"]["parameters"]["header"]>`;
-          requestHeaderTypes.push(createTypeName("Headers", id));
+          requestHeaderTypes.push(createTypeName(id));
         }
       }
 
