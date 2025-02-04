@@ -1721,12 +1721,24 @@ export interface operations {
 }
 
 export type AccessToken = components["schemas"]["AccessToken"];
+export type ApiError = components["schemas"]["ApiError"];
+export type DeviceIpAddress = components["schemas"]["DeviceIpAddress"];
+export type DevicePhoneNumber = components["schemas"]["DevicePhoneNumber"];
+export type DeviceVerificationFingerprint = components["schemas"]["DeviceVerificationFingerprint"];
 export type DocumentVerificationExtractedData = components["schemas"]["DocumentVerificationExtractedData"];
+export type DocumentVerificationExtractedDataDocumentData = components["schemas"]["DocumentVerificationExtractedDataDocumentData"];
 export type DriversLicenseSourceVerificationRequestAttributes = components["schemas"]["DriversLicenseSourceVerificationRequestAttributes"];
 export type EmailOtp = components["schemas"]["EmailOtp"];
+export type Error = components["schemas"]["Error"];
+export type ErrorList = components["schemas"]["ErrorList"];
+export type Errors = components["schemas"]["Errors"];
 export type ExtractScannedDocumentData = NonNullable<operations["extractScannedDocumentData"]["parameters"]["header"]>;
 export type FacematchSourceVerificationResult = components["schemas"]["FacematchSourceVerificationResult"];
 export type FacematchVerification = NonNullable<operations["facematchVerification"]["parameters"]["header"]>;
+export type Identity = components["schemas"]["Identity"];
+export type IdentityPrefill = components["schemas"]["IdentityPrefill"];
+export type IdentityVerification = components["schemas"]["IdentityVerification"];
+export type IdentityVerificationUserInfo = components["schemas"]["IdentityVerificationUserInfo"];
 export type MedicareCardSourceVerificationRequestAttributes = components["schemas"]["MedicareCardSourceVerificationRequestAttributes"];
 export type MedicareCardSourceVerificationResult = components["schemas"]["MedicareCardSourceVerificationResult"];
 export type Otp = components["schemas"]["Otp"];

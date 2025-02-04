@@ -3,7 +3,7 @@ import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
 import { camelCase, startCase, upperFirst } from "lodash";
-import openapiTS, { astToString, resolveRef } from "openapi-typescript";
+import openapiTS, { astToString, resolveRef, transformSchemaObject } from "openapi-typescript";
 
 export interface OpenApiToSourceCodeOptions {
   openApiPath: string;
@@ -60,6 +60,12 @@ export const openApiToSourceCode = async (options: OpenApiToSourceCodeOptions) =
   const server = schema.servers[0];
 
   const extraTypes: Record<string, string> = {};
+
+  for (const key in schema.components.schemas) {
+    if (!key.startsWith("inline_response_")) {
+      extraTypes[createTypeName(key)] = `components["schemas"]["${key}"]`;
+    }
+  }
 
   const source = `import { Api } from "api-def";
 
