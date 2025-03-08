@@ -3,16 +3,16 @@ id: node
 title: Node & Browser Support
 ---
 
-## Environments without Fetch
-
 In environments without `fetch` you will need to provide your own request backend:
 
 ### Fetch Backend
 
-If your environment has it's own version of `fetch` (eg. `node-fetch`) you can use that by creating a `FetchRequestBackend` and supplying it with your lib
+In older versions of Node.JS you may need to provide your own fetch implementation.
+
+You can provide a fetch implementation to `api-def` by setting the request backend:
 
 ```typescript {3} title="/api.ts"
-import {setRequestBackend, AxiosRequestBackend, Api} from "api-def";
+import {setRequestBackend} from "api-def";
 
 setRequestBackend(new FetchRequestBackend(fetch));
 
