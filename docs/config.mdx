@@ -6,25 +6,24 @@ title: Config
 When define your API and endpoints you can give them some default config which are cascaded down to requests:
 
 ```typescript {4,5,6,7,8,9,15,16,17,18}
-const api = new Api({
-  name   : "My Backend",
+const API = new Api({
+  name: "My Backend",
   baseUrl: "http://localhost:5000/v1",
   config: {
     retry: 2,
     headers: {
-      "Cool-Header": "hello!"
-    }
-  }
+      "Cool-Header": "hello!",
+    },
+  },
 });
 
-export const fetchData = api.endpoint()
-  .build({
-    id: "fetch_data",
-    config: {
-      retry: false,
-      cache: 1000 * 60 * 15 // 15 mins
-    }
-  })
+export const fetchData = API.endpoint().build({
+  id: "fetch_data",
+  config: {
+    retry: false,
+    cache: 1000 * 60 * 15, // 15 mins
+  },
+});
 ```
 
 ## Properties

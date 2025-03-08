@@ -64,7 +64,7 @@ const API = new Api({
 Eg. to use the [qs](https://www.npmjs.com/package/qs) library:
 
 ```typescript
-import * as  qs from "qs";
+import * as qs from "qs";
 
 const API = new Api({
   baseUrl: "https://example.com",
@@ -76,7 +76,7 @@ const API = new Api({
 
 const queryByObjectEndpoint = API.endpoint()
   .queryOf<{
-    ids: string[]
+    ids: string[];
   }>()
   .build({
     id: "query-by-string",

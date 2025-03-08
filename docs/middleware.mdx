@@ -10,29 +10,27 @@ When we make requests a lot of the time there is some consistent logic between a
 Middleware are functions that return an object whose keys are event names and values are listeners to those events. These event listeners must be async
 
 ```typescript title="/auth-middleware.ts"
-import {RequestMiddleware} from "api-def";
+import { RequestMiddleware } from "api-def";
 
 const getAuthToken = (): Promise<string> => {
-  return ...;
-}
+  return /*... */;
+};
 
 /*
  Add auth header to requests
 */
 const AuthMiddleware = (): RequestMiddleware => {
   return {
-  
     // called before a send occurs
-    "beforeSend": async (context) => {
+    beforeSend: async (context) => {
       const authToken = await getAuthToken();
-      
+
       if (authToken) {
         context.updateHeaders({
-          "Authorization": `Referer ${authToken}`,
+          Authorization: `Referer ${authToken}`,
         });
       }
     },
-    
   };
 };
 
@@ -42,15 +40,15 @@ export default AuthMiddleware;
 Now that we have our fancy new middleware we can add it to our api:
 
 ```typescript {6} title="/api.ts"
-import {Api} from "api-def";
+import { Api } from "api-def";
 
-const api = new Api({
-  name   : "My Backend",
+const API = new Api({
+  name: "My Backend",
   baseUrl: "http://localhost:5000/v1",
-  middleware: [AuthMiddleware()]
+  middleware: [AuthMiddleware()],
 });
 
-export default api;
+export default API;
 ```
 
 ## Events
@@ -59,7 +57,7 @@ export default api;
 | ---                   | ---
 | `beforeSend`          | Called before send.
 | `success`             | When the request was a success.
-| `error`               | The request failed. May be called multiple times due to retries 
+| `error`               | The request failed. May be called multiple times due to retries
 | `unrecoverableError`  | The request failed. Called only once when all retires have been tried. A normal error event is also triggered with this one
 
 
@@ -84,7 +82,7 @@ return {
 };
 ```
 
-### Retry 
+### Retry
 
 Applicable in the `error` event.
 
@@ -92,6 +90,6 @@ Trigger a retry despite the `retry` option. Be careful of causing infinite loops
 
 ```typescript
 return {
-    type: "retry"
+  type: "retry"
 };
 ```

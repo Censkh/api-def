@@ -12,25 +12,29 @@ In older versions of Node.JS you may need to provide your own fetch implementati
 You can provide a fetch implementation to `api-def` by setting the request backend:
 
 ```typescript {3} title="/api.ts"
-import {setRequestBackend} from "api-def";
+import { setRequestBackend } from "api-def";
 
 setRequestBackend(new FetchRequestBackend(fetch));
 
-const Api = new Api({...});
+const API = new Api({
+  /*...*/
+});
 
-export default api;
+export default API;
 ```
 
 ### Axios Backend
 
 ```typescript {4,5} title="/api.ts"
 import axios from "axios";
-import {setRequestBackend, AxiosRequestBackend, Api} from "api-def";
+import { setRequestBackend, AxiosRequestBackend, Api } from "api-def";
 
 // set the request backend and pass in your version of axios
 setRequestBackend(new AxiosRequestBackend(axios));
 
-const Api = new Api({...});
+const API = new Api({
+  /* ... */
+});
 
-export default api;
+export default API;
 ```
