@@ -4,30 +4,33 @@ Typed APIs with middleware support
 
 API def provides a unified way to type your endpoints allowing for compile time checking of query, body, response and even url parameters
 
-``` npm i api-def ```
+```bash
+npm i api-def
+```
 
 - [Documentation](https://censkh.github.io/api-def/)
 
 ```typescript
-import {Api} from "api-def";
+import { Api } from "api-def";
 
 const api = new Api({
   baseUrl: "https://my-api/",
   name: "My API",
 });
 
-const fetchData = api.endpoint()
-    .queryOf<{ includeAwesome: boolean; }>()
-    .responseOf<{ data: {awesome: boolean; } }>()
-    .build({
-      id: "fetch_data",
-      method: "get",
-      path: "/data"
-    });
+const fetchData = api
+  .endpoint()
+  .queryOf<{ includeAwesome: boolean }>()
+  .responseOf<{ data: { awesome: boolean } }>()
+  .build({
+    id: "fetch_data",
+    method: "get",
+    path: "/data",
+  });
 
 // calls GET https://my-api/data?includeAwesome=true
 const res = await fetchData.submit({
-  query: {includeAwesome: true}
+  query: { includeAwesome: true },
 });
 
 console.log(res.data); // { data: { awesome: true } }
