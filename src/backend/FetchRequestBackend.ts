@@ -4,8 +4,8 @@ import type RequestContext from "../RequestContext";
 import { RequestErrorCode, convertToRequestError } from "../RequestError";
 import * as Utils from "../Utils";
 import { type Fetch, getGlobal, getGlobalFetch } from "../Utils";
-import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import type RequestBackend from "./RequestBackend";
 
 class FetchError extends Error {
   response?: Response;
@@ -62,6 +62,8 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       } else if (responseType === "json") {
         text = await response.text();
         data = JSON.parse(text);
+      } else if (responseType === "stream") {
+        data = response.body;
       } else {
         data = await response.text();
       }

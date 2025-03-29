@@ -37,6 +37,7 @@ export const isAcceptableStatus = (status: number, acceptableStatus?: Acceptable
 const TEXT_CONTENT_TYPES = ["text/plain", "text/html", "text/xml", "application/xml"];
 const JSON_CONTENT_TYPES = ["text/json", "application/json"];
 const ARRAY_BUFFER_CONTENT_TYPES = ["application/octet-stream"];
+const STREAM_CONTENT_TYPES = ["text/event-stream", "application/x-ndjson"];
 
 export const inferResponseType = (contentType: string | null | undefined): ResponseType => {
   const contentTypePart = contentType?.split(";")[0].trim();
@@ -50,6 +51,44 @@ export const inferResponseType = (contentType: string | null | undefined): Respo
     if (ARRAY_BUFFER_CONTENT_TYPES.includes(contentTypePart)) {
       return "arraybuffer";
     }
+    if (STREAM_CONTENT_TYPES.includes(contentTypePart)) {
+      return "stream";
+    }
   }
   return "text";
+};
+
+export const resolvePathParams = (path: string, params: Record<string, string> | undefined): string => {
+  let computedPath = path.startsWith("/") ? path : `/${path}`;
+  if (params) {
+    const keys = Object.keys(params);
+    for (let i = 0; i < keys.length; i++) {
+      const argName = keys[i];
+      const argValue = (params as any)[argName];
+
+      computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
+    }
+  }
+  if (computedPath.includes(":") || computedPath.includes("{")) {
+    throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
+  }
+  return computedPath;
+};
+
+export const resolveUrl = (baseUrl: string, path: string): URL => {
+  let result = !baseUrl.endsWith("/") ? `${baseUrl}/` : baseUrl;
+  result += path.startsWith("/") ? path.substring(1) : path;
+
+  let origin: string | undefined = undefined;
+  if (typeof window !== "undefined") {
+    origin = window.origin;
+  }
+
+  if (!origin) {
+    if (result.indexOf("://") === -1) {
+      result = `https://${result}`;
+    }
+  }
+
+  return new URL(result, origin);
 };

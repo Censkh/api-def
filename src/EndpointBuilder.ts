@@ -1,8 +1,17 @@
 import type * as zod from "zod";
 import type { Api } from "./Api";
+import type { ResponseType } from "./ApiConstants";
 import type { Body, Params, Query, RawHeaders, State } from "./ApiTypes";
 import Endpoint, { type EndpointOptions } from "./Endpoint";
 import type { Validation } from "./Validation";
+
+type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
+  ? string
+  : T extends "arraybuffer"
+    ? ArrayBuffer
+    : "stream" extends T
+      ? AsyncIterable<Uint8Array>
+      : never;
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
   ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>
@@ -10,7 +19,7 @@ import type { Validation } from "./Validation";
  */
 
 export default class EndpointBuilder<
-  TResponse = any,
+  TResponse = unknown,
   TParams extends Params | undefined = undefined,
   TQuery extends Query | undefined = undefined,
   TBody extends Body | undefined = undefined,
@@ -89,12 +98,23 @@ export default class EndpointBuilder<
     return this as any;
   }
 
-  build<TPath extends string>(
+  build<TPath extends string, TResponseType extends ResponseType>(
     options: Omit<
       EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
       "validation"
-    >,
-  ): Endpoint<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> {
+    > & {
+      responseType?: TResponseType;
+    },
+  ): Endpoint<
+    TResponse extends unknown ? DefaultResponseOf<TResponseType> : TResponse,
+    TParams,
+    TQuery,
+    TBody,
+    TState,
+    TPath,
+    TRequestHeaders,
+    TResponseHeaders
+  > {
     const endpoint = new Endpoint(this.api, { ...options, validation: this.validation });
     (this.api as any).endpoints[endpoint.id] = endpoint as Endpoint;
     return endpoint as any;

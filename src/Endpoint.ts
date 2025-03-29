@@ -14,10 +14,20 @@ import type {
   RequestHost,
   State,
 } from "./ApiTypes";
+import { resolvePathParams } from "./ApiUtils";
 import type * as Mocking from "./MockingTypes";
 import { processRequestConfigs } from "./RequestConfig";
 import type { Validation } from "./Validation";
 import type RequestBackend from "./backend/RequestBackend";
+
+export interface EndpointResolveUrlOptions<TParams extends Params | undefined, TQuery extends Query | undefined> {
+  params?: (TParams extends string | symbol | number ? Record<TParams, string> : never) | undefined;
+  query?: TQuery;
+}
+
+export interface EndpointResolvePathOptions<TParams extends Params | undefined> {
+  params?: (TParams extends string | symbol | number ? Record<TParams, string> : never) | undefined;
+}
 
 export interface EndpointOptions<
   TResponse,
@@ -187,21 +197,18 @@ export default class Endpoint<
     return Requester.submit(this, config, mock ? this.mocking : null);
   }
 
-  computePath(path: string, request: RequestConfig): string {
-    let computedPath = path.startsWith("/") ? path : `/${path}`;
-    if (request.params) {
-      const keys = Object.keys(request.params);
-      for (let i = 0; i < keys.length; i++) {
-        const argName = keys[i];
-        const argValue = request.params[argName];
+  resolveUrl(options: EndpointResolveUrlOptions<TParams, TQuery>): URL {
+    const { query } = options;
+    const url = this.api.resolveUrl(this.resolvePath(options));
+    if (query) {
+      url.search = new URLSearchParams(query as any).toString();
+    }
+    return url;
+  }
 
-        computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
-      }
-    }
-    if (computedPath.includes(":") || computedPath.includes("{")) {
-      throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
-    }
-    return computedPath;
+  resolvePath(options: EndpointResolvePathOptions<TParams>): string {
+    const { params } = options;
+    return resolvePathParams(this.path, params);
   }
 
   get baseUrl(): string {

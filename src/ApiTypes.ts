@@ -138,8 +138,6 @@ export interface RequestHost {
     config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
   ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>;
 
-  computePath(path: string, config: RequestConfig): string;
-
   getRequestBackend(): RequestBackend;
 }
 

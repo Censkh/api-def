@@ -12,6 +12,7 @@ import type {
   RequestMiddleware,
   State,
 } from "./ApiTypes";
+import { resolveUrl } from "./ApiUtils";
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import type { ApiMockingConfig } from "./MockingTypes";
@@ -43,14 +44,14 @@ export interface ApiOptions {
   readonly name: string;
   readonly baseUrl: string;
   readonly middleware?: RequestMiddleware[];
-  /** @deprecated use `requestConfig` instead */
+  /** @deprecated use `defaultRequestConfig` instead */
   readonly config?: BaseRequestConfig | (() => BaseRequestConfig);
-  readonly requestConfig?: BaseRequestConfig | (() => BaseRequestConfig);
+  readonly defaultRequestConfig?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
   readonly requestBackend?: RequestBackend;
 }
 
-export type ApiInfo = ApiOptions & Required<Pick<ApiOptions, "middleware" | "requestBackend">>;
+export type ApiInfo = Omit<ApiOptions, "config"> & Required<Pick<ApiOptions, "middleware" | "requestBackend">>;
 
 class HotRequestHost implements RequestHost {
   readonly api: Api;
@@ -83,10 +84,6 @@ class HotRequestHost implements RequestHost {
     return processRequestConfigs([apiDefaults, config]);
   }
 
-  computePath(path: string, config: RequestConfig): string {
-    return path.startsWith("/") ? path : `/${path}`;
-  }
-
   getRequestBackend(): RequestBackend {
     return this.api.requestBackend;
   }
@@ -116,8 +113,7 @@ export class Api implements ApiInfo {
       name: options.name,
       baseUrl: options.baseUrl,
       middleware: options.middleware || [],
-      config: options.config,
-      requestConfig: options.requestConfig,
+      defaultRequestConfig: options.defaultRequestConfig ?? options.config ?? undefined,
       mocking: options.mocking ?? undefined,
       requestBackend: requestBackend,
     };
@@ -135,14 +131,14 @@ export class Api implements ApiInfo {
   }
 
   /**
-   * @deprecated use `requestConfig` instead
+   * @deprecated use `defaultRequestConfig` instead
    */
   get config(): BaseRequestConfig | (() => BaseRequestConfig) | undefined {
-    return this.info.config;
+    return this.info.defaultRequestConfig;
   }
 
-  get requestConfig(): BaseRequestConfig | (() => BaseRequestConfig) | undefined {
-    return this.info.requestConfig;
+  get defaultRequestConfig(): BaseRequestConfig | (() => BaseRequestConfig) | undefined {
+    return this.info.defaultRequestConfig;
   }
 
   get middleware(): RequestMiddleware[] {
@@ -176,7 +172,9 @@ export class Api implements ApiInfo {
   }
 
   computeRequestConfig(): BaseRequestConfig {
-    return (typeof this.requestConfig === "function" ? this.requestConfig() : this.requestConfig) || {};
+    return (
+      (typeof this.defaultRequestConfig === "function" ? this.defaultRequestConfig() : this.defaultRequestConfig) || {}
+    );
   }
 
   /*configure(info: Partial<ApiInfo>): void {
@@ -200,4 +198,8 @@ export class Api implements ApiInfo {
   public put = this.hotRequest(RequestMethod.PUT);
   public delete = this.hotRequest(RequestMethod.DELETE);
   public patch = this.hotRequest(RequestMethod.PATCH);
+
+  resolveUrl(path: string): URL {
+    return resolveUrl(this.baseUrl, path);
+  }
 }

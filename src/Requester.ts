@@ -11,7 +11,7 @@ import type {
 } from "./ApiTypes";
 
 import { EventResultType, RequestEvent } from "./ApiConstants";
-import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
+import { inferResponseType, isAcceptableStatus, isNetworkError, resolvePathParams } from "./ApiUtils";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import RequestContext from "./RequestContext";
 import { type RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
@@ -44,7 +44,7 @@ export const submit = async <
     backend,
     host,
     computedConfig,
-    host.computePath(host.path, config as RequestConfig),
+    resolvePathParams(host.path, config.params),
     mocking,
   );
 
@@ -59,7 +59,7 @@ export const submit = async <
   }
   */
 
-  const { lock } = context.computedConfig || {};
+  const { lock } = context.requestConfig || {};
 
   if (typeof lock === "string") {
     const lockedContext = locks[lock];
@@ -72,8 +72,8 @@ export const submit = async <
   try {
     let response = await (runningOperations[key] = makeRequest(context as RequestContext<TResponse>));
 
-    const successEventResult = await context.triggerEvent(RequestEvent.Success);
-    if (successEventResult && successEventResult.type === EventResultType.Respond) {
+    const successEventResult = await context.triggerEvent(RequestEvent.SUCCESS);
+    if (successEventResult && successEventResult.type === EventResultType.RESPOND) {
       context.response = response = successEventResult.response;
     }
 
@@ -101,15 +101,15 @@ const parseRetryOptions = (retryConfig: number | false | RetryOptions | undefine
 };
 
 const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R>> => {
-  const beforeSendEventResult = await context.triggerEvent(RequestEvent.BeforeSend);
-  if (beforeSendEventResult && beforeSendEventResult.type === EventResultType.Respond) {
+  const beforeSendEventResult = await context.triggerEvent(RequestEvent.BEFORE_SEND);
+  if (beforeSendEventResult && beforeSendEventResult.type === EventResultType.RESPOND) {
     return (context.response = beforeSendEventResult.response);
   }
 
   // validation
   if (context.validation.query) {
     try {
-      context.computedConfig.queryObject = context.validation.query.parse(context.computedConfig.queryObject) as any;
+      context.requestConfig.queryObject = context.validation.query.parse(context.requestConfig.queryObject) as any;
     } catch (error: any) {
       throw convertToRequestError({
         error: error,
@@ -121,7 +121,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
 
   if (context.validation.body) {
     try {
-      context.computedConfig.body = context.validation.body.parse(context.computedConfig.body) as any;
+      context.requestConfig.body = context.validation.body.parse(context.requestConfig.body) as any;
     } catch (error: any) {
       throw convertToRequestError({
         error: error,
@@ -131,7 +131,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
     }
   }
 
-  const retryOptions = parseRetryOptions(context.computedConfig?.retry);
+  const retryOptions = parseRetryOptions(context.requestConfig?.retry);
 
   const internalRetryOptions: InternalRetryOptions = {
     retries: retryOptions.maxAttempts,
@@ -151,7 +151,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       const response = await promise;
       const parsedResponse = (await parseResponse<R>(context, response))!;
 
-      if (!isAcceptableStatus(parsedResponse.status, context.computedConfig.acceptableStatus)) {
+      if (!isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)) {
         throw convertToRequestError({
           error: new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,
@@ -171,8 +171,8 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       context.error = error;
       context.response = error.response;
 
-      const errorEventResult = await context.triggerEvent(RequestEvent.Error);
-      if (errorEventResult?.type === EventResultType.Respond) {
+      const errorEventResult = await context.triggerEvent(RequestEvent.ERROR);
+      if (errorEventResult?.type === EventResultType.RESPOND) {
         return errorEventResult.response;
       }
 
@@ -183,7 +183,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       //}
 
       // if we have an event that tells us to retry, we must do it
-      const forceRetry = errorEventResult?.type === EventResultType.Retry;
+      const forceRetry = errorEventResult?.type === EventResultType.RETRY;
       if (forceRetry) {
         return performRequest(fnBail, attemptCount);
       }
@@ -194,9 +194,9 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       }
 
       // error is unrecoverable, bail
-      const unrecoverableErrorEventResult = await context.triggerEvent(RequestEvent.UnrecoverableError);
+      const unrecoverableErrorEventResult = await context.triggerEvent(RequestEvent.UNRECOVERABLE_ERROR);
       if (unrecoverableErrorEventResult) {
-        if (unrecoverableErrorEventResult.type === EventResultType.Respond) {
+        if (unrecoverableErrorEventResult.type === EventResultType.RESPOND) {
           return unrecoverableErrorEventResult.response;
         }
       }
@@ -289,7 +289,7 @@ const parseError = async (context: RequestContext, rawError: Error) => {
       ? RequestErrorCode.REQUEST_NETWORK_ERROR
       : RequestErrorCode.MISC_UNKNOWN_ERROR;
     if (errorResponse) {
-      if (!isAcceptableStatus(errorResponse.status, context.computedConfig.acceptableStatus)) {
+      if (!isAcceptableStatus(errorResponse.status, context.requestConfig.acceptableStatus)) {
         code = RequestErrorCode.REQUEST_INVALID_STATUS;
       }
     } else {

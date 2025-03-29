@@ -14,6 +14,7 @@ import type {
   RequestHost,
   State,
 } from "./ApiTypes";
+import { resolveUrl } from "./ApiUtils";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import type { RequestError } from "./RequestError";
 import * as Utils from "./Utils";
@@ -47,10 +48,7 @@ export default class RequestContext<
 
   cancelled = false;
 
-  /**
-   * @deprecated Use `requestConfig` instead
-   */
-  readonly computedConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState>;
+  readonly requestConfig: ComputedRequestConfig<TParams, TQuery, TBody, TState>;
   private computedRequestUrl: URL;
 
   readonly mocking: EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | null | undefined;
@@ -69,8 +67,8 @@ export default class RequestContext<
     this.backend = backend;
     this.id = contextIdCounter++;
     this.host = host;
-    this.computedConfig = config;
-    Utils.assign({}, this.computedConfig.headers);
+    this.requestConfig = config;
+    Utils.assign({}, this.requestConfig.headers);
     this.computedPath = computedPath;
     this.computedBaseUrl = host.baseUrl;
     this.computedMethod = host.method;
@@ -85,11 +83,14 @@ export default class RequestContext<
     this.validation = host.validation as any;
     this.initMiddleware();
     this.parseRequestBody();
-    this.computedRequestUrl = this.generateRequestUrl();
+    this.computedRequestUrl = this.resolveRequestUrl();
   }
 
-  get requestConfig(): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
-    return this.computedConfig;
+  /**
+   * @deprecated Use `requestConfig` instead
+   */
+  get computedConfig(): ComputedRequestConfig<TParams, TQuery, TBody, TState> {
+    return this.requestConfig;
   }
 
   get method(): RequestMethod {
@@ -127,35 +128,34 @@ export default class RequestContext<
   private generateKey() {
     let key = this.computedPath.trim();
 
-    if (this.computedConfig.queryString) {
-      key += `?${this.computedConfig.queryString}`;
+    if (this.requestConfig.queryString) {
+      key += `?${this.requestConfig.queryString}`;
     }
 
     return key;
   }
 
   updateHeaders(newHeaders: RawHeaders): this {
-    this.computedConfig.headers = Utils.assign({}, this.computedConfig.headers, newHeaders);
+    this.requestConfig.headers = Utils.assign({}, this.requestConfig.headers, newHeaders);
     this.parseRequestBody();
     return this;
   }
 
   private parseRequestBody() {
-    if (this.computedConfig.body && this.computedConfig.headers) {
-      const contentTypeKey = Object.keys(this.computedConfig.headers).find(
+    if (this.requestConfig.body && this.requestConfig.headers) {
+      const contentTypeKey = Object.keys(this.requestConfig.headers).find(
         (key) => key.toLowerCase() === "content-type",
       );
-      const contentType =
-        contentTypeKey && this.computedConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
+      const contentType = contentTypeKey && this.requestConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
       if (contentType === "application/x-www-form-urlencoded") {
         const searchParams = new URLSearchParams();
-        for (const key of Object.keys(this.computedConfig.body)) {
-          const value = (this.computedConfig.body as any)[key];
+        for (const key of Object.keys(this.requestConfig.body)) {
+          const value = (this.requestConfig.body as any)[key];
           searchParams.append(key, value?.toString());
         }
         this.parsedBody = searchParams;
       } else {
-        this.parsedBody = this.computedConfig.body;
+        this.parsedBody = this.requestConfig.body;
       }
     } else {
       this.parsedBody = undefined;
@@ -167,8 +167,8 @@ export default class RequestContext<
   }
 
   updateQuery(newQuery: Partial<TQuery>): this {
-    this.computedConfig.queryObject = Utils.assign({}, this.computedConfig.queryObject, newQuery);
-    this.computedRequestUrl = this.generateRequestUrl();
+    this.requestConfig.queryObject = Utils.assign({}, this.requestConfig.queryObject, newQuery);
+    this.computedRequestUrl = this.resolveRequestUrl();
     return this;
   }
 
@@ -207,12 +207,12 @@ export default class RequestContext<
 
   updatePath(path: string): void {
     this.computedPath = path;
-    this.computedRequestUrl = this.generateRequestUrl();
+    this.computedRequestUrl = this.resolveRequestUrl();
   }
 
   updateBaseUrl(baseUrl: string): void {
     this.computedBaseUrl = baseUrl;
-    this.computedRequestUrl = this.generateRequestUrl();
+    this.computedRequestUrl = this.resolveRequestUrl();
   }
 
   updateMethod(method: RequestMethod): void {
@@ -221,28 +221,14 @@ export default class RequestContext<
 
   updateBody(body: TBody): void {
     // @ts-ignore
-    this.computedConfig.body = body;
+    this.requestConfig.body = body;
     this.parseRequestBody();
   }
 
-  private generateRequestUrl(): URL {
-    let path = !this.baseUrl.endsWith("/") ? `${this.baseUrl}/` : this.baseUrl;
-    path += this.computedPath.startsWith("/") ? this.computedPath.substring(1) : this.computedPath;
-
-    let origin: string | undefined = undefined;
-    if (typeof window !== "undefined") {
-      origin = window.origin;
-    }
-
-    if (!origin) {
-      if (path.indexOf("://") === -1) {
-        path = `https://${path}`;
-      }
-    }
-
-    const url = new URL(path, origin);
-    if (this.computedConfig.queryString) {
-      url.search = this.computedConfig.queryString;
+  private resolveRequestUrl(): URL {
+    const url = resolveUrl(this.baseUrl, this.computedPath);
+    if (this.requestConfig.queryString) {
+      url.search = this.requestConfig.queryString;
     }
 
     return url;

@@ -9,10 +9,10 @@ export interface CacheMiddlewareOptions {
 
 const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddleware => {
   return {
-    [RequestEvent.Success]: async (context) => {
-      if (context.method !== RequestMethod.Get) return;
+    [RequestEvent.SUCCESS]: async (context) => {
+      if (context.method !== RequestMethod.GET) return;
 
-      const { cache } = context.computedConfig || {};
+      const { cache } = context.requestConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {
@@ -20,10 +20,10 @@ const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddlewar
         await Caching.setCachedItem(context.key, context.response, expiry);
       }
     },
-    [RequestEvent.BeforeSend]: async (context) => {
-      if (context.method !== RequestMethod.Get) return;
+    [RequestEvent.BEFORE_SEND]: async (context) => {
+      if (context.method !== RequestMethod.GET) return;
 
-      const { cache } = context.computedConfig || {};
+      const { cache } = context.requestConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
       if (cache && shouldCache) {
@@ -32,14 +32,14 @@ const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddlewar
           if (cachedValue) {
             context.stats.cached = {
               is: true,
-              by: CacheSource.Local,
+              by: CacheSource.LOCAL,
             };
 
-            context.cacheInfo.source = CacheSource.Local;
+            context.cacheInfo.source = CacheSource.LOCAL;
             context.cacheInfo.cached = true;
 
             return {
-              type: EventResultType.Respond,
+              type: EventResultType.RESPOND,
               response: cachedValue,
             } as any;
           }

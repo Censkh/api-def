@@ -28,7 +28,7 @@ const queryReturnEndpoint = api
   .build({
     name: "Fetch Users",
     id: "fetchUsers",
-    method: RequestMethod.Get,
+    method: RequestMethod.GET,
     path: "/users",
 
     mocking: {

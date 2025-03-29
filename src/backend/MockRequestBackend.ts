@@ -1,11 +1,12 @@
 import type { ApiResponse } from "../ApiTypes";
+import { inferResponseType } from "../ApiUtils";
 import type { MockRequest, MockRequestError, MockResponse } from "../MockingTypes";
 import type RequestContext from "../RequestContext";
 import { RequestErrorCode, convertToRequestError } from "../RequestError";
 import * as Utils from "../Utils";
 import { delayThenReturn, randInt } from "../Utils";
-import type RequestBackend from "./RequestBackend";
 import type { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import type RequestBackend from "./RequestBackend";
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   readonly id = "mock";
@@ -44,16 +45,12 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
 
     const res: MockResponse = {
       statusCode: -1,
-
       headers: {},
-
       response: undefined,
-
       status(statusCode) {
         res.statusCode = statusCode;
         return res;
       },
-
       send(response) {
         res.response = response;
         if (response && typeof response === "object") {
@@ -97,11 +94,35 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       return parsedHeaders;
     }, new Headers());
 
+    const responseType = context.responseType ?? inferResponseType(res.headers["content-type"]?.toString());
+    let data: any;
+
+    if (responseType === "stream") {
+      // For streaming responses, we create a mock async iterator
+      data = {
+        async *[Symbol.asyncIterator]() {
+          if (res.response) {
+            // If the response is an array, yield each item
+            if (Array.isArray(res.response)) {
+              for (const item of res.response) {
+                yield new TextEncoder().encode(`${JSON.stringify(item)}\n`);
+              }
+            } else {
+              // Otherwise yield the entire response
+              yield new TextEncoder().encode(`${JSON.stringify(res.response)}\n`);
+            }
+          }
+        },
+      };
+    } else {
+      data = res.response;
+    }
+
     return {
       url: context.requestUrl.href,
       method: context.method,
       headers: parsedHeaders,
-      data: res.response,
+      data: data,
       status: res.statusCode,
       state: context.requestConfig.state,
     };

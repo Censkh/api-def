@@ -13,7 +13,7 @@ const api = new Api({
 export const fetchRequiresToken = api.endpoint().build({
   name: "Requires Token",
   id: "fetchRequiresToken",
-  method: RequestMethod.Get,
+  method: RequestMethod.GET,
   path: "/requires-token",
 
   mocking: {

@@ -56,8 +56,8 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
     attempts: context.stats.attempt,
     request: {
       url: context.requestUrl.href,
-      query: context.computedConfig.queryObject,
-      headers: context.computedConfig.headers,
+      query: context.requestConfig.queryObject,
+      headers: context.requestConfig.headers,
       body: body,
     },
   });

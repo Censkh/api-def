@@ -1,8 +1,9 @@
 import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
 import type { ApiResponse } from "../ApiTypes";
+import { inferResponseType } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
-import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import type RequestBackend from "./RequestBackend";
 
 let axios: AxiosStatic;
 
@@ -25,10 +26,35 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
+    const responseType = context.responseType ?? inferResponseType(response.headers["content-type"]);
+
+    let data: any;
+    if (responseType === "stream") {
+      // For streaming responses, we create an async iterator from the response data
+      if (!response.data) {
+        throw new Error("[api-def] Response data is null for streaming response");
+      }
+      data = {
+        async *[Symbol.asyncIterator]() {
+          const stream = response.data;
+          if (stream[Symbol.asyncIterator]) {
+            yield* stream;
+          } else if (stream.on) {
+            // Handle Node.js streams
+            yield* stream;
+          } else {
+            throw new Error("[api-def] Response data is not a valid stream");
+          }
+        },
+      };
+    } else {
+      data = response.data;
+    }
+
     return {
       method: context.method,
       url: response.request.res?.responseUrl ?? response.request?._redirectable?._currentUrl,
-      data: response.data,
+      data: data,
       headers: response.headers as any,
       status: response.status,
       state: context.requestConfig.state,

@@ -3,7 +3,7 @@ import { bundle, createConfig } from "@redocly/openapi-core";
 // @ts-ignore
 import chalk from "chalk";
 import { camelCase, startCase, upperFirst } from "lodash";
-import openapiTS, { astToString, resolveRef, transformSchemaObject } from "openapi-typescript";
+import openapiTS, { astToString, resolveRef } from "openapi-typescript";
 
 export interface OpenApiToSourceCodeOptions {
   openApiPath: string;

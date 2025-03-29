@@ -10,17 +10,17 @@ export interface LoggingMiddlewareOptions {
 }
 
 enum LogType {
-  Info = 0,
-  Success = 1,
-  Error = 2,
-  Warn = 3,
+  INFO = 0,
+  SUCCESS = 1,
+  ERROR = 2,
+  WARNING = 3,
 }
 
 const COLOR_MAP: Record<LogType, string> = {
-  [LogType.Error]: "#c8646c",
-  [LogType.Info]: "#85a6c7",
-  [LogType.Success]: "#a9c490",
-  [LogType.Warn]: "#d19a66",
+  [LogType.ERROR]: "#c8646c",
+  [LogType.INFO]: "#85a6c7",
+  [LogType.SUCCESS]: "#a9c490",
+  [LogType.WARNING]: "#d19a66",
 };
 
 interface DiagnosedError {
@@ -84,29 +84,31 @@ const log = (
 
 const LoggingMiddleware = (config: LoggingMiddlewareOptions = {}): RequestMiddleware => {
   return {
-    [RequestEvent.BeforeSend]: (context) => {
-      log(context, LogType.Info, context.stats.attempt > 1 ? "retrying" : "sending", config);
+    [RequestEvent.BEFORE_SEND]: (context) => {
+      log(context, LogType.INFO, context.stats.attempt > 1 ? "retrying" : "sending", config);
     },
-    [RequestEvent.Success]: (context) => {
+    [RequestEvent.SUCCESS]: (context) => {
       const cacheSource = context.cacheInfo.source;
 
       log(
         context,
-        LogType.Success,
+        LogType.SUCCESS,
         `responded with ${context.response?.status}${cacheSource ? ` (cached by ${cacheSource})` : ""}`,
         config,
       );
     },
-    [RequestEvent.Error]: (context) => {
+    [RequestEvent.ERROR]: (context) => {
       if (context.error) {
         const { error, message } = diagnoseError(context.error);
-        log(context, LogType.Warn, `error on attempt ${context.stats.attempt} - ${message}`, config, { error: error });
+        log(context, LogType.WARNING, `error on attempt ${context.stats.attempt} - ${message}`, config, {
+          error: error,
+        });
       }
     },
-    [RequestEvent.UnrecoverableError]: (context) => {
+    [RequestEvent.UNRECOVERABLE_ERROR]: (context) => {
       if (context.error) {
         const { error, message } = diagnoseError(context.error);
-        log(context, LogType.Error, `failed - ${message}`, config, {
+        log(context, LogType.ERROR, `failed - ${message}`, config, {
           error: error,
         });
       }
