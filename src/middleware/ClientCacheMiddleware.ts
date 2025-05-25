@@ -1,34 +1,37 @@
 import { CacheSource, EventResultType, RequestEvent, RequestMethod } from "../ApiConstants";
 import type { RequestMiddleware } from "../ApiTypes";
-import * as Caching from "../cache/Caching";
+import * as ClientCaching from "../cache/ClientCaching";
 
-export interface CacheMiddlewareOptions {
+export interface ClientCacheMiddlewareOptions {
   defaultExpiry?: number;
   predicate?: () => boolean;
 }
 
-const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddleware => {
+const ClientCacheMiddleware = (options: ClientCacheMiddlewareOptions = {}): RequestMiddleware => {
   return {
     [RequestEvent.SUCCESS]: async (context) => {
       if (context.method !== RequestMethod.GET) return;
 
-      const { cache } = context.requestConfig || {};
+      const { clientCache } = context.requestConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
-      if (cache && shouldCache) {
-        const expiry = typeof cache === "number" ? cache : options.defaultExpiry || Caching.DEFAULT_CACHE_EXPIRY;
-        await Caching.setCachedItem(context.key, context.response, expiry);
+      if (clientCache && shouldCache) {
+        const expiry =
+          typeof clientCache === "number"
+            ? clientCache
+            : options.defaultExpiry || ClientCaching.DEFAULT_CLIENT_CACHE_EXPIRY;
+        await ClientCaching.setClientCachedItem(context.key, context.response, expiry);
       }
     },
     [RequestEvent.BEFORE_SEND]: async (context) => {
       if (context.method !== RequestMethod.GET) return;
 
-      const { cache } = context.requestConfig || {};
+      const { clientCache } = context.requestConfig || {};
       const shouldCache = !options.predicate || options.predicate();
 
-      if (cache && shouldCache) {
-        if (cache) {
-          const cachedValue = await Caching.getCachedItem<Response>(context.key);
+      if (clientCache && shouldCache) {
+        if (clientCache) {
+          const cachedValue = await ClientCaching.getClientCachedItem<Response>(context.key);
           if (cachedValue) {
             context.stats.cached = {
               is: true,
@@ -45,7 +48,8 @@ const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddlewar
           }
         }
       }
-      if (cache === false) {
+
+      if (clientCache === false) {
         context.updateQuery({
           _bust: Math.floor(Math.random() * 9000) + 1000,
         });
@@ -58,4 +62,4 @@ const CacheMiddleware = (options: CacheMiddlewareOptions = {}): RequestMiddlewar
   };
 };
 
-export default CacheMiddleware;
+export default ClientCacheMiddleware;

@@ -11,6 +11,31 @@ export const isAxiosError = (error: Error): error is AxiosError => {
   return "isAxiosError" in error;
 };
 
+const getCacheHeaders = (browserCache?: RequestCache): Record<string, string> => {
+  switch (browserCache) {
+    case "no-store":
+      return {
+        "Cache-Control": "no-store",
+        Pragma: "no-cache",
+      };
+    case "no-cache":
+      return {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      };
+    case "force-cache":
+      return {
+        "Cache-Control": "max-age=31536000",
+      };
+    case "only-if-cached":
+      return {
+        "Cache-Control": "only-if-cached",
+      };
+    default:
+      return {};
+  }
+};
+
 export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
   readonly id = "axios";
 
@@ -72,7 +97,10 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       method: context.method,
       url: url.href,
       data: context.getParsedBody(),
-      headers: requestConfig.headers || {},
+      headers: {
+        ...getCacheHeaders(requestConfig.browserCache),
+        ...requestConfig.headers,
+      },
       responseType: context.responseType,
       withCredentials: requestConfig.credentials === "include" || requestConfig.credentials === "same-origin",
       cancelToken: new axios.CancelToken((cancellerFunc) => {

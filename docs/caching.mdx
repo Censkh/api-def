@@ -3,16 +3,23 @@ id: caching
 title: Caching
 ---
 
-To use client-side caching on your requests you can add the cache middleware and then use the config option `cache` to specify how long in ms a response should be kept in browser:
+There are two types of caching available in api-def:
+
+1. Client-side caching using the `ClientCacheMiddleware`
+2. Browser's fetch cache using the `browserCache` option
+
+## Client-side Caching
+
+To use client-side caching on your requests you can add the client cache middleware and then use the config option `clientCache` to specify how long in ms a response should be kept in browser:
 
 ```typescript {6} title="/api.ts"
-import { CacheMiddleware } from "api-def";
+import { ClientCacheMiddleware } from "api-def";
 
 const API = new Api({
   name: "My Backend",
   baseUrl: "http://localhost:5000/v1",
   middleware: [
-    new CacheMiddleware({ defaultExpiry: 1000 * 60 * 20 /* 20 mins */ }),
+    new ClientCacheMiddleware({ defaultExpiry: 1000 * 60 * 20 /* 20 mins */ }),
   ],
 });
 ```
@@ -23,7 +30,7 @@ You can also pass in a predicate function to disable caching upon certain condit
 
 ```typescript
   middleware: [
-    CacheMiddleware({
+    ClientCacheMiddleware({
       predicate: () => isCacheEnabled(),
     }),
   ];
@@ -31,13 +38,37 @@ You can also pass in a predicate function to disable caching upon certain condit
 
 ## Cache Backend
 
-By default `api-def` will use `localStorage` to store the data for the cache. You can specify your own cache backend using `setCacheBackend`.
+By default `api-def` will use `localStorage` to store the data for the client cache. You can specify your own cache backend using `setClientCacheBackend`.
 
 If you use [localforage](https://www.npmjs.com/package/localforage) you can use it as your cache backend for a small performance increase:
 
 ```typescript
 import localforage from "localforage";
-import { setCacheBackend, LocalForageCacheBackend } from "api-def";
+import { setClientCacheBackend, LocalForageClientCacheBackend } from "api-def";
 
-setCacheBackend(new LocalForageCacheBackend(localforage));
+setClientCacheBackend(new LocalForageClientCacheBackend(localforage));
 ```
+
+## Browser Cache
+
+You can use the browser's built-in cache by setting the `browserCache` option in your request config. This works with both the Fetch and Axios backends:
+
+```typescript
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "http://localhost:5000/v1",
+  config: {
+    browserCache: "force-cache", // Use cached response if available
+  },
+});
+```
+
+Available cache modes:
+- `"default"` - The browser looks for a matching request in its HTTP cache
+- `"no-store"` - The browser fetches the resource from the remote server without first looking in the cache
+- `"reload"` - The browser fetches the resource from the remote server without first looking in the cache, but will then update the cache with the downloaded resource
+- `"no-cache"` - The browser looks for a matching request in its HTTP cache
+- `"force-cache"` - The browser uses a cached version of the resource, regardless of its expiration date
+- `"only-if-cached"` - The browser only uses a cached version of the resource
+
+Note: When using the Axios backend, these cache modes are implemented using appropriate Cache-Control headers.

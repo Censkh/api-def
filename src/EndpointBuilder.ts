@@ -11,7 +11,7 @@ type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
     ? ArrayBuffer
     : "stream" extends T
       ? AsyncIterable<Uint8Array>
-      : never;
+      : unknown;
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
   ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>
@@ -106,7 +106,7 @@ export default class EndpointBuilder<
       responseType?: TResponseType;
     },
   ): Endpoint<
-    TResponse extends unknown ? DefaultResponseOf<TResponseType> : TResponse,
+    unknown extends TResponse ? DefaultResponseOf<TResponseType> : TResponse,
     TParams,
     TQuery,
     TBody,

@@ -1,11 +1,19 @@
 # 0.12.0
 
+## Breaking Changes
+
+- Rename `cache` option to `clientCache` to avoid confusion with browser's cache parameter
+- `Endpoint.computePath` is replaced by `Endpoint.resolvePath`
+
+## Features
+
+- Add support for browser's cache via `browserCache` option in RequestConfig
+- Add polyfill support for browser cache in Axios backend using Cache-Control headers
 - streaming response type
 - add CLI to generate api-def from openapi spec
 - add `reconfigure` method to `Api` & `Endpoint` to allow for changing options after creation
 - support for path params surrounded by curly braces, e.g. `/users/{id}`
 - add `updateBody` to `RequestContext` to allow for changing the body in middleware
-- `Endpoint.computePath` is replaced by `Endpoint.resolvePath`
 
 # 0.11.1
 

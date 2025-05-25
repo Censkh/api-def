@@ -26,7 +26,7 @@ const withColons = api
   .build({
     name: "Fetch Users",
     id: "fetchUsers",
-    method: RequestMethod.Get,
+    method: RequestMethod.GET,
     path: "/users/:id/:sub_id",
 
     mocking: {
@@ -42,7 +42,7 @@ const withBrackets = api
   .build({
     name: "Fetch Users",
     id: "fetchUsers",
-    method: RequestMethod.Get,
+    method: RequestMethod.GET,
     path: "/users/{id}/{sub_id}",
 
     mocking: {

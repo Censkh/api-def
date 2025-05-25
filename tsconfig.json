@@ -15,13 +15,11 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
   ],
   "exclude": [
     "bin",
     "esm",
-    "cjs",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "cjs"
   ]
 }

@@ -41,7 +41,8 @@ export interface RetryOptions {
 
 export interface BaseRequestConfig {
   debug?: boolean;
-  cache?: number | boolean;
+  clientCache?: number | boolean;
+  browserCache?: RequestCache;
   lock?: RequestLock;
   credentials?: "omit" | "same-origin" | "include";
   retry?: number | false | RetryOptions;

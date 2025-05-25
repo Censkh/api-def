@@ -125,6 +125,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       body: bodyJsonify ? JSON.stringify(body) : (body as any),
       headers: parsedHeaders,
       signal: abortSignal,
+      cache: requestConfig.browserCache,
     };
 
     if ("mode" in Request.prototype) {
@@ -132,7 +133,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     }
 
     if ("credentials" in Request.prototype) {
-      fetchOptions.credentials = context.requestConfig.credentials ? "include" : undefined;
+      fetchOptions.credentials = requestConfig.credentials ? "include" : undefined;
     }
 
     if (requestConfig.debug) {

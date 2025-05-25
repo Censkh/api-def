@@ -21,7 +21,8 @@ export const fetchData = API.endpoint().build({
   id: "fetch_data",
   config: {
     retry: false,
-    cache: 1000 * 60 * 15, // 15 mins
+    clientCache: 1000 * 60 * 15, // 15 mins
+    browserCache: "force-cache", // Use browser's cache
   },
 });
 ```
@@ -32,6 +33,7 @@ Request config properties:
 
 | Name        | Type                    | Default           | Usage
 | ---         | ---                     | ---               | ---
-| `retry`     | `number` or `false`               | `false`   | How many times should the request be retried if there was a non-network error?
-| `cache`     | `number` or `boolean`     | `false`           | If a number, how long to cache response for in ms
+| `retry`     | `number` or `false`     | `false`           | How many times should the request be retried if there was a non-network error?
+| `clientCache` | `number` or `boolean`   | `false`           | If a number, how long to cache response for in ms using client-side caching
+| `browserCache` | `RequestCache`         | `undefined`       | Browser's cache mode (works with both Fetch and Axios backends)
 | `headers`   | `Record<string, string` | `undefined`       | Base headers for the request

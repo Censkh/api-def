@@ -12,12 +12,12 @@ export { isRequestError, type RequestError } from "./RequestError";
 
 export { default as Endpoint, type EndpointConfig } from "./Endpoint";
 
-export { clearCache, setCacheBackend } from "./cache/Caching";
-export { default as LocalStorageCacheBackend } from "./cache/LocalStorageCacheBackend";
-export { default as LocaleForageCacheBackend } from "./cache/LocalForageCacheBackend";
+export { clearClientCache, setClientCacheBackend } from "./cache/ClientCaching";
+export { default as LocalStorageClientCacheBackend } from "./cache/LocalStorageClientCacheBackend";
+export { default as LocalForageClientCacheBackend } from "./cache/LocalForageClientCacheBackend";
 
 export { default as AxiosRequestBackend } from "./backend/AxiosRequestBackend";
 export { default as FetchRequestBackend } from "./backend/FetchRequestBackend";
 
-export { default as CacheMiddleware } from "./middleware/CacheMiddleware";
+export { default as ClientCacheMiddleware } from "./middleware/ClientCacheMiddleware";
 export { default as LoggingMiddleware } from "./middleware/LoggingMiddleware";
