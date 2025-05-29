@@ -125,6 +125,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       data: data,
       status: res.statusCode,
       state: context.requestConfig.state,
+      stats: context.stats,
     };
   }
 

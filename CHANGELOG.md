@@ -7,6 +7,7 @@
 
 ## Features
 
+- Add request timing information via `startTimestamp` and `durationMs` in `RequestContextStats`
 - Add support for browser's cache via `browserCache` option in RequestConfig
 - Add polyfill support for browser cache in Axios backend using Cache-Control headers
 - streaming response type

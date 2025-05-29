@@ -84,6 +84,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
       status: response.status,
       state: context.requestConfig.state,
       __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
+      stats: context.stats,
     };
   }
 

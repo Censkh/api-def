@@ -9,9 +9,9 @@ import type {
   Query,
   RawHeaders,
   RequestCacheInfo,
-  RequestContextStats,
   RequestEventHandlers,
   RequestHost,
+  RequestStats,
   State,
 } from "./ApiTypes";
 import { resolveUrl } from "./ApiUtils";
@@ -35,7 +35,7 @@ export default class RequestContext<
   private computedPath: string;
   private computedBaseUrl: string;
   private computedMethod: RequestMethod;
-  readonly stats: RequestContextStats;
+  readonly stats: RequestStats;
   private readonly host: RequestHost;
   readonly eventHandlers: RequestEventHandlers<TResponse>;
 
@@ -77,6 +77,7 @@ export default class RequestContext<
     this.stats = {
       attempt: 0,
       cached: false,
+      startTimestamp: Date.now(),
     };
     this.eventHandlers = {};
     this.mocking = mocking;

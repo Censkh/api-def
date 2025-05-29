@@ -6,6 +6,7 @@ import FetchRequestBackend from "../backend/FetchRequestBackend";
 const cleanResponse = (response: any) => {
   response.headers = undefined;
   response.__lowercaseHeaders = undefined;
+  response.stats = undefined;
   return response;
 };
 

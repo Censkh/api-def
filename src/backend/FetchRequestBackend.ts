@@ -50,7 +50,8 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       status: status,
       headers: headers,
       state: context.requestConfig.state,
-    };
+      stats: context.stats,
+    } satisfies ApiResponse<T>;
     const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
 
     let text: string | undefined;

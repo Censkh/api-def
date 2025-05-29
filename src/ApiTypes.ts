@@ -20,6 +20,7 @@ export interface ApiResponse<T = any> {
   readonly data: T;
   readonly headers: Headers;
   readonly state: State;
+  readonly stats: RequestStats;
 }
 
 export type RequestLock = string | false;
@@ -116,9 +117,11 @@ export type RequestMiddleware<O = undefined> = {
   [key in RequestEvent]?: RequestEventHandler<any> | undefined | false;
 };
 
-export interface RequestContextStats {
+export interface RequestStats {
   cached: false | { is: true; by: "local" | "api" };
   attempt: number;
+  startTimestamp: number;
+  durationMs?: number;
 }
 
 export interface RequestHost {
