@@ -17,7 +17,7 @@ export const RequestErrorCode = {
 } as const;
 export type RequestErrorCode = EnumOf<typeof RequestErrorCode>;
 
-const REQUEST_ERROR_SYMBOL = Symbol("isRequestError");
+const REQUEST_ERROR_SYMBOL = "isApiDefError";
 
 export interface RequestError extends Error {
   [REQUEST_ERROR_SYMBOL]: true;
