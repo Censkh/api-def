@@ -18,6 +18,23 @@ type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
   : Path extends `:${infer Param}` ? Param : undefined;
  */
 
+export type EndpointBuildOptions<
+  TResponse = unknown,
+  TParams extends Params | undefined = undefined,
+  TQuery extends Query | undefined = undefined,
+  TBody extends Body | undefined = undefined,
+  TState extends State = State,
+  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TPath extends string = string,
+  TResponseType extends ResponseType | undefined = undefined,
+> = Omit<
+  EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+  "validation"
+> & {
+  responseType?: TResponseType;
+};
+
 export default class EndpointBuilder<
   TResponse = unknown,
   TParams extends Params | undefined = undefined,
@@ -99,12 +116,17 @@ export default class EndpointBuilder<
   }
 
   build<TPath extends string, TResponseType extends ResponseType>(
-    options: Omit<
-      EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
-      "validation"
-    > & {
-      responseType?: TResponseType;
-    },
+    options: EndpointBuildOptions<
+      TResponse,
+      TParams,
+      TQuery,
+      TBody,
+      TState,
+      TRequestHeaders,
+      TResponseHeaders,
+      TPath,
+      TResponseType
+    >,
   ): Endpoint<
     unknown extends TResponse ? DefaultResponseOf<TResponseType> : TResponse,
     TParams,

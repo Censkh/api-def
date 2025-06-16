@@ -11,6 +11,7 @@ export type { RetryOptions } from "./util/retry/interfaces";
 export { isRequestError, type RequestError } from "./RequestError";
 
 export { default as Endpoint, type EndpointConfig } from "./Endpoint";
+export { default as EndpointBuilder, type EndpointBuildOptions } from "./EndpointBuilder";
 
 export { clearClientCache, setClientCacheBackend } from "./cache/ClientCaching";
 export { default as LocalStorageClientCacheBackend } from "./cache/LocalStorageClientCacheBackend";
