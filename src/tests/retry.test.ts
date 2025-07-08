@@ -51,14 +51,14 @@ it("allow for retries in middleware", async () => {
 
 it("make sure retry only happens a max number of times", async () => {
   const api = new Api({
-    baseUrl: "httpstat.us",
+    baseUrl: "www.google.com",
     name: "Http Status API",
   });
 
   const endpoint = api.endpoint().build({
     id: "404",
     method: "get",
-    path: "/404",
+    path: "/thispagedoesnotexist",
     config: {
       retry: 3,
     },

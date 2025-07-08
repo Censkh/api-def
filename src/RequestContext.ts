@@ -111,9 +111,15 @@ export default class RequestContext<
   }
 
   private initMiddleware(): void {
-    const { middleware } = this.api;
-    for (let i = 0; i < middleware.length; i++) {
-      const events = middleware[i];
+    // Merge API-level and endpoint-level middleware
+    const allMiddleware = [
+      ...this.api.middleware,
+      ...("middleware" in this.host && Array.isArray(this.host.middleware) ? this.host.middleware : []),
+    ];
+
+    // Process all middleware in one pass
+    for (let i = 0; i < allMiddleware.length; i++) {
+      const events = allMiddleware[i];
       const eventTypes = Object.keys(events);
       for (let n = 0; n < eventTypes.length; n++) {
         const eventType = eventTypes[n] as RequestEvent;

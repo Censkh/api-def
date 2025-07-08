@@ -4,10 +4,11 @@
 
 - Rename `cache` option to `clientCache` to avoid confusion with browser's cache parameter
 - `Endpoint.computePath` is replaced by `Endpoint.resolvePath`
+- Deprecate `config` option in `EndpointOptions` in favor of `defaultRequestConfig` to align with API-level configuration
 
 ## Features
 
-- Add request timing information via `startTimestamp` and `durationMs` in `RequestContextStats`
+- Added endpoint level middleware
 - Add support for browser's cache via `browserCache` option in RequestConfig
 - Add polyfill support for browser cache in Axios backend using Cache-Control headers
 - streaming response type

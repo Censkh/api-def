@@ -12,6 +12,7 @@ import type {
   RawHeaders,
   RequestConfig,
   RequestHost,
+  RequestMiddleware,
   State,
 } from "./ApiTypes";
 import { resolvePathParams } from "./ApiUtils";
@@ -52,7 +53,15 @@ export interface EndpointOptions<
    * Describe your endpoint to help with debugging and documentation
    */
   readonly description?: string;
+
+  /** @deprecated use `defaultRequestConfig` instead */
   readonly config?: BaseRequestConfig;
+
+  /**
+   * Default request configuration for this endpoint
+   */
+  readonly defaultRequestConfig?: BaseRequestConfig;
+
   /**
    * Let the backend requestor (fetch, axios, etc.) know what type of response
    * you are expecting from this endpoint
@@ -67,6 +76,11 @@ export interface EndpointOptions<
    */
   readonly mocking?: Mocking.EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState>;
 
+  /**
+   * Middleware specific to this endpoint. These will be executed after API-level middleware.
+   */
+  readonly middleware?: RequestMiddleware[];
+
   readonly validation?: Validation<TResponse, TParams, TQuery, TBody, TState>;
 }
 
@@ -80,11 +94,14 @@ export type EndpointInfo<
   TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
   TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > = EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders> &
-  Required<
-    Pick<
-      EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
-      "name" | "validation"
-    >
+  Omit<
+    Required<
+      Pick<
+        EndpointOptions<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
+        "name" | "validation" | "defaultRequestConfig"
+      >
+    >,
+    "config"
   >;
 
 /**
@@ -135,8 +152,11 @@ export default class Endpoint<
 
     this.info = {
       ...options,
+      config: undefined,
       name: options.name || options.id,
       validation: options.validation || {},
+      middleware: options.middleware || [],
+      defaultRequestConfig: options.defaultRequestConfig ?? options.config ?? {},
     };
   }
 
@@ -160,8 +180,13 @@ export default class Endpoint<
     return this.info.description;
   }
 
+  /** @deprecated Use `defaultRequestConfig` instead */
   get config(): BaseRequestConfig {
-    return this.info.config || {};
+    return this.defaultRequestConfig;
+  }
+
+  get defaultRequestConfig(): BaseRequestConfig {
+    return this.info.defaultRequestConfig;
   }
 
   get responseType(): ResponseType | undefined {
@@ -174,6 +199,10 @@ export default class Endpoint<
 
   get validation(): Validation<TResponse, TParams, TQuery, TBody, TState> {
     return this.info.validation;
+  }
+
+  get middleware(): RequestMiddleware[] {
+    return this.info.middleware || [];
   }
 
   public async submit(
@@ -216,7 +245,7 @@ export default class Endpoint<
   }
 
   /**
-   * @deprecated Use `computeRequestConfig` instead
+   * @deprecated Use `defaultRequestConfig` instead
    */
   computeConfig<
     TParams extends Params | undefined,
@@ -240,8 +269,9 @@ export default class Endpoint<
     config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
   ): ComputedRequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders> {
     const apiDefaults = this.api.computeRequestConfig();
+    const endpointDefaults = this.defaultRequestConfig || {};
 
-    return processRequestConfigs([apiDefaults, this.config, config]);
+    return processRequestConfigs([apiDefaults, endpointDefaults, config]);
   }
 
   getRequestBackend(): RequestBackend {

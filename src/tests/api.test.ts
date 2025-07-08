@@ -97,6 +97,52 @@ it("qs", async () => {
   ]);
 });
 
+it("endpoint-level middleware is executed after API-level middleware", async () => {
+  const endpointWithMiddleware = api
+    .endpoint()
+    .responseOf<{ query: { test: string; endpoint: string } }>()
+    .queryOf<{ test?: string; endpoint?: string }>()
+    .build({
+      name: "Test Middleware",
+      id: "testMiddleware",
+      method: RequestMethod.GET,
+      path: "/test-middleware",
+
+      middleware: [
+        {
+          beforeSend: async (context) => {
+            // This should be added after the API-level 'test=abc'
+            context.updateQuery({
+              endpoint: "xyz",
+            });
+          },
+        },
+      ],
+
+      mocking: {
+        handler: (req, res) => {
+          const query = req.query || { test: "", endpoint: "" };
+          // Ensure we return the exact type expected
+          return res.status(200).send({
+            query: {
+              test: query.test || "",
+              endpoint: query.endpoint || "",
+            },
+          });
+        },
+      },
+    });
+
+  const res = await endpointWithMiddleware.submit({
+    query: {}, // Provide empty query object that will be populated by middleware
+  });
+
+  expect(res.data.query).toEqual({
+    test: "abc", // From API-level middleware
+    endpoint: "xyz", // From endpoint-level middleware
+  });
+});
+
 /*it("infer params in typescript", async (t) => {
   const endpoint = mockApi.endpoint()
     .build({

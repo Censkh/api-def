@@ -12,7 +12,7 @@ const cleanResponse = (response: any) => {
 
 it("request backends output", async () => {
   const api = new Api({
-    baseUrl: "httpstat.us",
+    baseUrl: "www.google.com",
     name: "Example API",
 
     middleware: [
@@ -30,7 +30,7 @@ it("request backends output", async () => {
     name: "Get 200",
     id: "200",
     method: "get",
-    path: "/200",
+    path: "/generate_204",
   });
 
   setRequestBackend(new FetchRequestBackend());
@@ -46,5 +46,5 @@ it("request backends output", async () => {
   });
 
   expect(cleanResponse(fetchResult)).toEqual(cleanResponse(axiosResult));
-  expect(fetchResult.url).toBe("https://httpstat.us/200?test=true&id=abc");
+  expect(fetchResult.url).toBe("https://www.google.com/generate_204?test=true&id=abc");
 });
