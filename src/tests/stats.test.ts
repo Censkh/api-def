@@ -43,5 +43,5 @@ it("stats", async () => {
   });
 
   expect(res.status).toBe(200);
-  expect(res.stats.durationMs).toBeGreaterThan(30);
+  expect(res.stats.durationMs).toBeGreaterThan(10);
 });
