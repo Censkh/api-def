@@ -63,7 +63,7 @@ it("should throw error if missing param", async () => {
 
       return res;
     })(),
-  ).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/:sub_id'");
+  ).rejects.toThrow("[api-def] Not all path params have been resolved: '/users/123/:sub_id'");
 
   await expect(
     (async () => {
@@ -75,7 +75,7 @@ it("should throw error if missing param", async () => {
 
       return res;
     })(),
-  ).rejects.toThrowError("[api-def] Not all path params have been resolved: '/users/123/{sub_id}'");
+  ).rejects.toThrow("[api-def] Not all path params have been resolved: '/users/123/{sub_id}'");
 
   // This should not throw an error
 
