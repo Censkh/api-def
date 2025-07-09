@@ -31,7 +31,7 @@ const queryReturnEndpoint = api
 
     mocking: {
       handler: async (req, res) => {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 20));
         return res.status(200).send([{ name: "Test", query: req.query }]);
       },
     },
@@ -42,5 +42,6 @@ it("stats", async () => {
     query: "test=1&id=3",
   });
 
-  expect(res.stats.durationMs).toBeGreaterThan(100);
+  expect(res.status).toBe(200);
+  expect(res.stats.durationMs).toBeGreaterThan(30);
 });
