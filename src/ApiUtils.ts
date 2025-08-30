@@ -1,6 +1,11 @@
 import type { ResponseType } from "./ApiConstants";
 import type { AcceptableStatus, CancelledRequestError } from "./ApiTypes";
 
+export interface ResolveUrlOptions {
+  path: string;
+  baseUrl: string;
+}
+
 export const isCancelledError = (error: Error): error is CancelledRequestError => {
   return "isCancelledRequest" in error;
 };
@@ -75,7 +80,8 @@ export const resolvePathParams = (path: string, params: Record<string, string> |
   return computedPath;
 };
 
-export const resolveUrl = (baseUrl: string, path: string): URL => {
+export const resolveUrl = (options: ResolveUrlOptions): URL => {
+  const { baseUrl, path } = options;
   let result = !baseUrl.endsWith("/") ? `${baseUrl}/` : baseUrl;
   result += path.startsWith("/") ? path.substring(1) : path;
 

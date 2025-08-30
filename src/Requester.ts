@@ -103,8 +103,6 @@ const parseRetryOptions = (retryConfig: number | false | RetryOptions | undefine
 const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R>> => {
   const beforeSendEventResult = await context.triggerEvent(RequestEvent.BEFORE_SEND);
   if (beforeSendEventResult && beforeSendEventResult.type === EventResultType.RESPOND) {
-    // Calculate duration for early responses
-    context.stats.durationMs = Date.now() - context.stats.startTimestamp;
     return (context.response = beforeSendEventResult.response);
   }
 
@@ -163,12 +161,9 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       }
 
       context.response = parsedResponse;
-      // Calculate duration for successful responses
-      context.stats.durationMs = Date.now() - context.stats.startTimestamp;
+      context.stats.endTimestamp = Date.now();
       return parsedResponse;
     } catch (rawError: any) {
-      // Calculate duration for failed requests
-      context.stats.durationMs = Date.now() - context.stats.startTimestamp;
       if (context.cancelled) {
         rawError.isCancelledRequest = true;
       }
@@ -176,6 +171,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       const error = await parseError(context, rawError);
       context.error = error;
       context.response = error.response;
+      context.stats.endTimestamp = Date.now();
 
       const errorEventResult = await context.triggerEvent(RequestEvent.ERROR);
       if (errorEventResult?.type === EventResultType.RESPOND) {

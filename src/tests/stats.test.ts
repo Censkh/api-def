@@ -42,6 +42,8 @@ it("stats", async () => {
     query: "test=1&id=3",
   });
 
+  expect(res.stats.endTimestamp).toBeGreaterThan(res.stats.startTimestamp);
+  const durationMs = (res.stats.endTimestamp ?? 0) - res.stats.startTimestamp;
   expect(res.status).toBe(200);
-  expect(res.stats.durationMs).toBeGreaterThan(10);
+  expect(durationMs).toBeGreaterThan(10);
 });

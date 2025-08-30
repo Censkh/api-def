@@ -78,6 +78,7 @@ export default class RequestContext<
       attempt: 0,
       cached: false,
       startTimestamp: Date.now(),
+      endTimestamp: undefined,
     };
     this.eventHandlers = {};
     this.mocking = mocking;
@@ -233,7 +234,7 @@ export default class RequestContext<
   }
 
   private resolveRequestUrl(): URL {
-    const url = resolveUrl(this.baseUrl, this.computedPath);
+    const url = resolveUrl({ baseUrl: this.baseUrl, path: this.computedPath });
     if (this.requestConfig.queryString) {
       url.search = this.requestConfig.queryString;
     }

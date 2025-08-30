@@ -47,6 +47,13 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
   const { error, context, response, code } = config;
 
   const body = context.getParsedBody();
+  if (error.constructor.name === "TypeError") {
+    error.constructor = TypeError;
+    Object.setPrototypeOf(error, TypeError.prototype);
+  } else if (error.constructor.name === "Error") {
+    error.constructor = Error;
+    Object.setPrototypeOf(error, Error.prototype);
+  }
 
   const resultError = Object.assign(error, {
     name: "RequestError",
@@ -64,7 +71,7 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
 
   try {
     Object.defineProperty(resultError, "message", {
-      value: `Request failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${
+      value: `Request to '${context.requestUrl.href}' failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${
         resultError.message
       }`,
     });
@@ -74,8 +81,6 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
 
   (resultError as any).config = undefined;
   (resultError as any).toJSON = undefined;
-
-  Object.setPrototypeOf(error, Error);
 
   return resultError;
 };

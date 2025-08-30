@@ -12,7 +12,7 @@ import type {
   RequestMiddleware,
   State,
 } from "./ApiTypes";
-import { resolveUrl } from "./ApiUtils";
+import { type ResolveUrlOptions, resolveUrl } from "./ApiUtils";
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import type { ApiMockingConfig } from "./MockingTypes";
@@ -49,6 +49,10 @@ export interface ApiOptions {
   readonly defaultRequestConfig?: BaseRequestConfig | (() => BaseRequestConfig);
   readonly mocking?: ApiMockingConfig;
   readonly requestBackend?: RequestBackend;
+}
+
+export interface ApiResolveUrlOptions extends Omit<ResolveUrlOptions, "baseUrl"> {
+  baseUrl?: string;
 }
 
 export type ApiInfo = Omit<ApiOptions, "config"> & Required<Pick<ApiOptions, "middleware" | "requestBackend">>;
@@ -199,7 +203,10 @@ export class Api implements ApiInfo {
   public delete = this.hotRequest(RequestMethod.DELETE);
   public patch = this.hotRequest(RequestMethod.PATCH);
 
-  resolveUrl(path: string): URL {
-    return resolveUrl(this.baseUrl, path);
+  resolveUrl(options: ApiResolveUrlOptions): URL {
+    return resolveUrl({
+      baseUrl: options.baseUrl ?? this.baseUrl,
+      path: options.path,
+    });
   }
 }

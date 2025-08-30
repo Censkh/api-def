@@ -121,7 +121,7 @@ export interface RequestStats {
   cached: false | { is: true; by: "local" | "api" };
   attempt: number;
   startTimestamp: number;
-  durationMs?: number;
+  endTimestamp: number | undefined;
 }
 
 export interface RequestHost {

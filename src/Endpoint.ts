@@ -22,6 +22,7 @@ import type { Validation } from "./Validation";
 import type RequestBackend from "./backend/RequestBackend";
 
 export interface EndpointResolveUrlOptions<TParams extends Params | undefined, TQuery extends Query | undefined> {
+  baseUrl?: string;
   params?: (TParams extends string | symbol | number ? Record<TParams, string> : never) | undefined;
   query?: TQuery;
 }
@@ -228,7 +229,10 @@ export default class Endpoint<
 
   resolveUrl(options: EndpointResolveUrlOptions<TParams, TQuery>): URL {
     const { query } = options;
-    const url = this.api.resolveUrl(this.resolvePath(options));
+    const url = this.api.resolveUrl({
+      path: this.resolvePath(options),
+      baseUrl: options.baseUrl,
+    });
     if (query) {
       url.search = new URLSearchParams(query as any).toString();
     }
