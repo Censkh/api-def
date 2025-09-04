@@ -20,6 +20,8 @@ it("1. error should include path", async () => {
   }
 
   expect(error).toBeDefined();
-  expect(error.message.startsWith("Request to 'http://localhost:1111/test' failed [misc/unknown-error]:")).toBe(true);
+  expect(error.message.startsWith("A GET request to 'http://localhost:1111/test' failed [misc/unknown-error]:")).toBe(
+    true,
+  );
   expect(error instanceof Error).toBe(true);
 });

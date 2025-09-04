@@ -71,7 +71,7 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
 
   try {
     Object.defineProperty(resultError, "message", {
-      value: `Request to '${context.requestUrl.href}' failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${
+      value: `A ${context.method.toUpperCase()} request to '${context.requestUrl.href}' failed${response?.status ? ` with status code ${response.status}` : ""} [${code}]: ${
         resultError.message
       }`,
     });
