@@ -84,3 +84,10 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
 
   return resultError;
 };
+
+export const getErrorResponse = (error: Error) => {
+  if (isRequestError(error)) {
+    return error.response ?? undefined;
+  }
+  return undefined;
+};

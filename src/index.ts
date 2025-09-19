@@ -8,7 +8,7 @@ export * from "./ApiConstants";
 export { default as retry } from "./util/retry";
 export type { RetryOptions } from "./util/retry/interfaces";
 
-export { isRequestError, type RequestError } from "./RequestError";
+export { isRequestError, getErrorResponse, type RequestError } from "./RequestError";
 
 export { default as Endpoint, type EndpointConfig } from "./Endpoint";
 export { default as EndpointBuilder, type EndpointBuildOptions } from "./EndpointBuilder";
