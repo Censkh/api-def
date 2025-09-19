@@ -64,18 +64,36 @@ export const inferResponseType = (contentType: string | null | undefined): Respo
 };
 
 export const resolvePathParams = (path: string, params: Record<string, string> | undefined): string => {
-  let computedPath = path.startsWith("/") ? path : `/${path}`;
-  if (params) {
-    const keys = Object.keys(params);
-    for (let i = 0; i < keys.length; i++) {
-      const argName = keys[i];
-      const argValue = (params as any)[argName];
+  const computedPath = path.startsWith("/") ? path : `/${path}`;
 
-      computedPath = computedPath.replace(`:${argName}`, argValue).replace(`{${argName}}`, argValue);
+  if (params) {
+    const computedPathParts = computedPath.split("/");
+    const unusedKeys = new Set(Object.keys(params));
+
+    for (let i = 0; i < computedPathParts.length; i++) {
+      const part = computedPathParts[i];
+
+      let paramKey: string | undefined;
+      if (part.startsWith(":")) {
+        paramKey = part.substring(1);
+      } else if (part.startsWith("{") && part.endsWith("}")) {
+        paramKey = part.substring(1, part.length - 1);
+      }
+
+      if (paramKey) {
+        const paramValue = params[paramKey];
+        if (!paramValue) {
+          throw new Error(`[api-def] Missing param '${paramKey}'`);
+        }
+        computedPathParts[i] = paramValue;
+        unusedKeys.delete(paramKey);
+      }
     }
-  }
-  if (computedPath.includes(":") || computedPath.includes("{")) {
-    throw new Error(`[api-def] Not all path params have been resolved: '${computedPath}'`);
+    if (unusedKeys.size > 0) {
+      throw new Error(`[api-def] Missing param '${Array.from(unusedKeys)[0]}'`);
+    }
+
+    return computedPathParts.join("/");
   }
   return computedPath;
 };

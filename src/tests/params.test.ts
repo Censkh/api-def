@@ -36,6 +36,22 @@ const withColons = api
     },
   });
 
+const withColonsInMiddle = api
+  .endpoint()
+  .paramsOf<"id">()
+  .build({
+    name: "Account Update",
+    id: "accountUpdate",
+    method: RequestMethod.POST,
+    path: "/users/:id/account:update",
+
+    mocking: {
+      handler: (req, res) => {
+        return res.status(200).send([{ name: "Test", data: req.url }]);
+      },
+    },
+  });
+
 const withBrackets = api
   .endpoint()
   .paramsOf<"id" | "sub_id">()
@@ -52,7 +68,7 @@ const withBrackets = api
     },
   });
 
-it("should throw error if missing param", async () => {
+it("1. should throw error if missing param", async () => {
   await expect(
     (async () => {
       const res = await withColons.submit({
@@ -63,7 +79,7 @@ it("should throw error if missing param", async () => {
 
       return res;
     })(),
-  ).rejects.toThrow("[api-def] Not all path params have been resolved: '/users/123/:sub_id'");
+  ).rejects.toThrow("[api-def] Missing param 'sub_id'");
 
   await expect(
     (async () => {
@@ -75,7 +91,7 @@ it("should throw error if missing param", async () => {
 
       return res;
     })(),
-  ).rejects.toThrow("[api-def] Not all path params have been resolved: '/users/123/{sub_id}'");
+  ).rejects.toThrow("[api-def] Missing param 'sub_id'");
 
   // This should not throw an error
 
@@ -95,4 +111,14 @@ it("should throw error if missing param", async () => {
   });
 
   expect(res2.data).toEqual([{ name: "Test", data: "https://example.com/users/123/456" }]);
+});
+
+it("2. handle colon midway", async () => {
+  const res = await withColonsInMiddle.submit({
+    params: {
+      id: "account",
+    },
+  });
+
+  expect(res.data).toBeDefined();
 });
