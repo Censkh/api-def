@@ -141,6 +141,7 @@ it("endpoint-level middleware is executed after API-level middleware", async () 
     test: "abc", // From API-level middleware
     endpoint: "xyz", // From endpoint-level middleware
   });
+  expect(res.url).toEqual("https://example.com/test-middleware?test=abc&endpoint=xyz");
 });
 
 /*it("infer params in typescript", async (t) => {

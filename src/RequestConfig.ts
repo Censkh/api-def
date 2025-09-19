@@ -52,43 +52,40 @@ export const processRequestConfigs = <
 
   const query: TQuery = (computedConfig as any).query;
 
-  let queryString: string | undefined;
-  let queryObject: TQuery | undefined;
+  let queryString = "";
+  let queryObject: Query = {};
 
   if (query) {
-    Object.defineProperty(computedConfig, "queryString", {
-      get() {
-        if (queryString) {
-          return queryString;
-        }
-
-        if (typeof query === "string") {
-          return (queryString = query);
-        }
-
-        return (queryString = computedConfig.queryHandling.stringify(query));
-      },
-    });
-
-    Object.defineProperty(computedConfig, "queryObject", {
-      get() {
-        if (queryObject) {
-          return queryObject;
-        }
-
-        if (typeof query === "string") {
-          return (queryObject = computedConfig.queryHandling.parse(query));
-        }
-
-        return (queryObject = query);
-      },
-
-      set(value: any) {
-        queryObject = value;
-        queryString = computedConfig.queryHandling.stringify(value);
-      },
-    });
+    if (typeof query === "string") {
+      queryString = query;
+      queryObject = computedConfig.queryHandling.parse(query);
+    } else {
+      queryObject = query;
+      queryString = computedConfig.queryHandling.stringify(query);
+    }
   }
+
+  Object.defineProperty(computedConfig, "queryString", {
+    get() {
+      return queryString;
+    },
+
+    set(value) {
+      queryString = value;
+      queryObject = computedConfig.queryHandling.parse(value);
+    },
+  });
+
+  Object.defineProperty(computedConfig, "queryObject", {
+    get() {
+      return queryObject;
+    },
+
+    set(value: any) {
+      queryObject = value;
+      queryString = computedConfig.queryHandling.stringify(value);
+    },
+  });
 
   if (!computedConfig.state) {
     computedConfig.state = {} as TState;

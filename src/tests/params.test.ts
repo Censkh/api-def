@@ -9,15 +9,7 @@ const api = new Api({
     enabled: true,
   },
 
-  middleware: [
-    {
-      beforeSend: async (context) => {
-        context.updateQuery({
-          test: "abc",
-        });
-      },
-    },
-  ],
+  middleware: [{}],
 });
 
 const withColons = api
