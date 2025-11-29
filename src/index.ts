@@ -17,6 +17,7 @@ export { clearClientCache, setClientCacheBackend } from "./cache/ClientCaching";
 export { default as LocalStorageClientCacheBackend } from "./cache/LocalStorageClientCacheBackend";
 export { default as LocalForageClientCacheBackend } from "./cache/LocalForageClientCacheBackend";
 
+export { default as RequestBackend } from "./backend/RequestBackend";
 export { default as AxiosRequestBackend } from "./backend/AxiosRequestBackend";
 export { default as FetchRequestBackend } from "./backend/FetchRequestBackend";
 

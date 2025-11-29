@@ -9,7 +9,15 @@ const api = new Api({
     enabled: true,
   },
 
-  middleware: [{}],
+  middleware: [
+    {
+      beforeSend: async (context) => {
+        context.updateParams({
+          id: "123",
+        });
+      },
+    },
+  ],
 });
 
 const withColons = api
@@ -113,4 +121,14 @@ it("2. handle colon midway", async () => {
   });
 
   expect(res.data).toBeDefined();
+});
+
+it("3. updateParams", async () => {
+  const res = await withColons.submit({
+    params: {
+      sub_id: "123",
+    },
+  });
+
+  expect(res.status).toEqual(200);
 });

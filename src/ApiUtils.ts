@@ -63,7 +63,11 @@ export const inferResponseType = (contentType: string | null | undefined): Respo
   return "text";
 };
 
-export const resolvePathParams = (path: string, params: Record<string, string> | undefined): string => {
+export const resolvePathParams = (
+  path: string,
+  params: Record<string, string> | undefined,
+  allowMissing?: boolean,
+): string => {
   const computedPath = path.startsWith("/") ? path : `/${path}`;
 
   if (params) {
@@ -83,13 +87,16 @@ export const resolvePathParams = (path: string, params: Record<string, string> |
       if (paramKey) {
         const paramValue = params[paramKey];
         if (!paramValue) {
+          if (allowMissing) {
+            continue;
+          }
           throw new Error(`[api-def] Missing param '${paramKey}'`);
         }
         computedPathParts[i] = paramValue;
         unusedKeys.delete(paramKey);
       }
     }
-    if (unusedKeys.size > 0) {
+    if (unusedKeys.size > 0 && !allowMissing) {
       throw new Error(`[api-def] Missing param '${Array.from(unusedKeys)[0]}'`);
     }
 

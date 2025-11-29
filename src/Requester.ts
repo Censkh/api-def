@@ -11,7 +11,7 @@ import type {
 } from "./ApiTypes";
 
 import { EventResultType, RequestEvent } from "./ApiConstants";
-import { inferResponseType, isAcceptableStatus, isNetworkError, resolvePathParams } from "./ApiUtils";
+import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import RequestContext from "./RequestContext";
 import { type RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
@@ -44,7 +44,7 @@ export const submit = async <
     backend,
     host,
     computedConfig,
-    resolvePathParams(host.path, config.params),
+    host.path,
     mocking,
   );
 
@@ -105,6 +105,8 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
   if (beforeSendEventResult && beforeSendEventResult.type === EventResultType.RESPOND) {
     return (context.response = beforeSendEventResult.response);
   }
+
+  context.validatePath();
 
   // validation
   if (context.validation.query) {

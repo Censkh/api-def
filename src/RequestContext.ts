@@ -14,7 +14,7 @@ import type {
   RequestStats,
   State,
 } from "./ApiTypes";
-import { resolveUrl } from "./ApiUtils";
+import { resolvePathParams, resolveUrl } from "./ApiUtils";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import type { RequestError } from "./RequestError";
 import * as Utils from "./Utils";
@@ -32,6 +32,7 @@ export default class RequestContext<
 > {
   readonly id: number;
   readonly key: string;
+  private readonly rawPath: string;
   private computedPath: string;
   private computedBaseUrl: string;
   private computedMethod: RequestMethod;
@@ -61,7 +62,7 @@ export default class RequestContext<
     backend: RequestBackend,
     host: RequestHost,
     config: ComputedRequestConfig<TParams, TQuery, TBody, TState>,
-    computedPath: string,
+    rawPath: string,
     mocking: EndpointMockingConfig<TResponse, TParams, TQuery, TBody, TState> | null | undefined,
   ) {
     this.backend = backend;
@@ -69,7 +70,8 @@ export default class RequestContext<
     this.host = host;
     this.requestConfig = config;
     Utils.assign({}, this.requestConfig.headers);
-    this.computedPath = computedPath;
+    this.rawPath = rawPath;
+    this.computedPath = resolvePathParams(host.path, config.params, true);
     this.computedBaseUrl = host.baseUrl;
     this.computedMethod = host.method;
 
@@ -86,6 +88,10 @@ export default class RequestContext<
     this.initMiddleware();
     this.parseRequestBody();
     this.computedRequestUrl = this.resolveRequestUrl();
+  }
+
+  validatePath() {
+    this.computedPath = resolvePathParams(this.rawPath, this.requestConfig.params);
   }
 
   /**
@@ -146,6 +152,13 @@ export default class RequestContext<
   updateHeaders(newHeaders: RawHeaders): this {
     this.requestConfig.headers = Utils.assign({}, this.requestConfig.headers, newHeaders);
     this.parseRequestBody();
+    return this;
+  }
+
+  updateParams(params: Partial<Record<string, string>>): this {
+    this.requestConfig.params = Utils.assign({}, this.requestConfig.params, params);
+    this.computedPath = resolvePathParams(this.rawPath, this.requestConfig.params);
+    this.computedRequestUrl = this.resolveRequestUrl();
     return this;
   }
 
