@@ -2,7 +2,7 @@ import type { ResponseType } from "./ApiConstants";
 import type { AcceptableStatus, CancelledRequestError } from "./ApiTypes";
 
 export interface ResolveUrlOptions {
-  path: string;
+  path: string | URL;
   baseUrl: string;
 }
 
@@ -16,6 +16,10 @@ export const isNetworkError = (error: Error): boolean => {
     error.message === "Network Error" ||
     (error as any).constructor?.name === "NetworkError"
   );
+};
+
+export const isAbsoluteUrl = (url: string): boolean => {
+  return /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(url);
 };
 
 const DEFAULT_ACCEPTABLE_STATUS = [[200, 299], 304];
@@ -68,7 +72,7 @@ export const resolvePathParams = (
   params: Record<string, string> | undefined,
   allowMissing?: boolean,
 ): string => {
-  const computedPath = path.startsWith("/") ? path : `/${path}`;
+  const computedPath = path.startsWith("/") || isAbsoluteUrl(path) ? path : `/${path}`;
 
   if (params) {
     const computedPathParts = computedPath.split("/");
@@ -107,6 +111,14 @@ export const resolvePathParams = (
 
 export const resolveUrl = (options: ResolveUrlOptions): URL => {
   const { baseUrl, path } = options;
+  if (path instanceof URL) {
+    return new URL(path.href);
+  }
+
+  if (isAbsoluteUrl(path)) {
+    return new URL(path);
+  }
+
   let result = !baseUrl.endsWith("/") ? `${baseUrl}/` : baseUrl;
   result += path.startsWith("/") ? path.substring(1) : path;
 
@@ -116,7 +128,7 @@ export const resolveUrl = (options: ResolveUrlOptions): URL => {
   }
 
   if (!origin) {
-    if (result.indexOf("://") === -1) {
+    if (!isAbsoluteUrl(result)) {
       result = `https://${result}`;
     }
   }

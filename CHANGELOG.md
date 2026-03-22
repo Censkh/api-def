@@ -2,6 +2,11 @@
 
 - add CLI to generate api-def from openapi spec
 
+## 0.12.1
+
+- add support for `Api.get`/`Api.post` hot requests with full URL strings and `URL` objects
+- add shared `isAbsoluteUrl` helper and use it for URL resolution checks
+
 # 0.12.0
 
 ## Breaking Changes

@@ -194,8 +194,12 @@ export class Api implements ApiInfo {
 
   private hotRequest =
     (requestMethod: RequestMethod) =>
-    async <R = unknown>(path: string, config: RequestConfig): Promise<ApiResponse<R>> =>
-      await Requester.submit(new HotRequestHost(this, path, requestMethod), config, null);
+    async <R = unknown>(path: string | URL, config: RequestConfig): Promise<ApiResponse<R>> =>
+      await Requester.submit(
+        new HotRequestHost(this, path instanceof URL ? path.href : path, requestMethod),
+        config,
+        null,
+      );
 
   public get = this.hotRequest(RequestMethod.GET);
   public post = this.hotRequest(RequestMethod.POST);

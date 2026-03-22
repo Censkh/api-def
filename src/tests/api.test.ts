@@ -1,6 +1,7 @@
 import * as qs from "qs";
 import { Api } from "../Api";
 import { RequestMethod } from "../ApiConstants";
+import type { ApiResponse } from "../ApiTypes";
 import { postIdVerifStatus } from "./mock/MockApi";
 
 const api = new Api({
@@ -142,6 +143,51 @@ it("endpoint-level middleware is executed after API-level middleware", async () 
     endpoint: "xyz", // From endpoint-level middleware
   });
   expect(res.url).toEqual("https://example.com/test-middleware?test=abc&endpoint=xyz");
+});
+
+it("api get/post accept URL object and full URL string", async () => {
+  const requestBackend = {
+    id: "test",
+    makeRequest(context: any) {
+      return {
+        canceler: () => {},
+        promise: Promise.resolve({
+          url: context.requestUrl.href,
+          method: context.method,
+          status: 200,
+          data: { ok: true },
+          headers: new Headers({ "content-type": "application/json" }),
+          state: context.requestConfig.state ?? {},
+          stats: context.stats,
+        } as ApiResponse),
+      };
+    },
+    async convertResponse<T>(_context: any, response: ApiResponse): Promise<ApiResponse<T>> {
+      return response as ApiResponse<T>;
+    },
+    async extractResponseFromError(): Promise<ApiResponse | null | undefined> {
+      return undefined;
+    },
+    getErrorInfo() {
+      return undefined;
+    },
+  };
+
+  const api = new Api({
+    baseUrl: "example.com",
+    name: "Hot Requests API",
+    requestBackend: requestBackend as any,
+  });
+
+  const getRes = await api.get(new URL("https://service.example/v1/users"), {});
+  const postRes = await api.post("https://service.example/v1/events", {
+    body: { type: "test" },
+  });
+
+  expect(getRes.url).toBe("https://service.example/v1/users");
+  expect(getRes.method).toBe("get");
+  expect(postRes.url).toBe("https://service.example/v1/events");
+  expect(postRes.method).toBe("post");
 });
 
 /*it("infer params in typescript", async (t) => {
