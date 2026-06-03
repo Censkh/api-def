@@ -2,8 +2,8 @@ import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
 import type { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
-import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 import type RequestBackend from "./RequestBackend";
+import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 let axios: AxiosStatic;
 
@@ -51,7 +51,9 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
-    const responseType = context.responseType ?? inferResponseType(response.headers["content-type"]);
+    const contentType = response.headers["content-type"];
+    const responseType =
+      context.responseType ?? inferResponseType(contentType == null ? contentType : String(contentType));
 
     let data: any;
     if (responseType === "stream") {

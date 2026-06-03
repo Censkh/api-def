@@ -1,7 +1,6 @@
 import * as fs from "node:fs";
 import { bundle, createConfig } from "@redocly/openapi-core";
-// @ts-ignore
-import chalk from "chalk";
+import kleur from "kleur";
 import { camelCase, startCase, upperFirst } from "lodash";
 import openapiTS, { astToString, resolveRef } from "openapi-typescript";
 
@@ -20,13 +19,12 @@ const createTypeName = (...parts: string[]) => {
   ).replace(/\s/g, "");
 };
 
-// @ts-ignore
 const METHOD_COLORS = {
-  get: chalk.green,
-  post: chalk.blue,
-  put: chalk.yellow,
-  delete: chalk.red,
-  patch: chalk.magenta,
+  get: kleur.green,
+  post: kleur.blue,
+  put: kleur.yellow,
+  delete: kleur.red,
+  patch: kleur.magenta,
 } satisfies Record<string, any>;
 
 const resolveComponent = (schema: any, object: any) => {
@@ -101,7 +99,7 @@ ${Object.entries(routes)
       const responseStatuses = Object.keys(methodDef.responses);
       const successfulResponse = responseStatuses.filter((status) => status.startsWith("2") || status.startsWith("3"));
 
-      let responseType = undefined;
+      let responseType;
 
       const responseTypes = new Set<string>();
       for (const status of successfulResponse) {
@@ -212,7 +210,7 @@ ${Object.entries(routes)
       }
 
       /*
-        const methodColor = METHOD_COLORS[method] || chalk.gray;
+        const methodColor = METHOD_COLORS[method] || kleur.gray;
         console.log(`Generating ${methodColor(method.toUpperCase())} '${id}'`);
          */
 

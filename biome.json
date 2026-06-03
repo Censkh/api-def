@@ -1,25 +1,21 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "organizeImports": { "enabled": true },
+  "files": {
+    "includes": ["**", "!bin", "!cjs", "!esm", "!example", "!cli/tests/fixtures"]
+  },
   "linter": {
     "enabled": true,
 
     "rules": {
       "recommended": true,
-      "complexity": {
-        "noBannedTypes": "off"
-      },
-      "a11y": {
-        "useKeyWithClickEvents": "off"
-      },
       "security": {
         "noDangerouslySetInnerHtml": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "off",
-        "noConfusingVoidType": "off",
         "noExplicitAny": "off",
-        "noArrayIndexKey": "off"
+        "noImplicitAnyLet": "off",
+        "noPrototypeBuiltins": "off"
       },
       "style": {
         "noNonNullAssertion": "off"
@@ -29,17 +25,6 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "lineWidth": 120,
-
-    "ignore": ["fixtures"]
-  },
-  "files": {
-    "include": ["src/**/*.ts", "cli/**/*.ts"],
-    "maxSize": 2000000
-  },
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
+    "lineWidth": 120
   }
 }

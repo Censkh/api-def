@@ -1,3 +1,4 @@
+import { EventResultType, RequestEvent } from "./ApiConstants";
 import type {
   ApiResponse,
   Body,
@@ -9,14 +10,12 @@ import type {
   RetryOptions,
   State,
 } from "./ApiTypes";
-
-import { EventResultType, RequestEvent } from "./ApiConstants";
 import { inferResponseType, isAcceptableStatus, isNetworkError } from "./ApiUtils";
+import MockRequestBackend from "./backend/MockRequestBackend";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import RequestContext from "./RequestContext";
-import { type RequestError, RequestErrorCode, convertToRequestError, isRequestError } from "./RequestError";
+import { convertToRequestError, isRequestError, type RequestError, RequestErrorCode } from "./RequestError";
 import { textDecode } from "./TextDecoding";
-import MockRequestBackend from "./backend/MockRequestBackend";
 import retry from "./util/retry";
 import type { RetryOptions as InternalRetryOptions, RetryFunction } from "./util/retry/interfaces";
 
@@ -284,7 +283,7 @@ const parseError = async (context: RequestContext, rawError: Error) => {
     error = rawError;
   } else {
     const extractedResponse = await context.backend.extractResponseFromError(rawError);
-    let errorResponse: ApiResponse | undefined | null = undefined;
+    let errorResponse: ApiResponse | undefined | null;
     if (extractedResponse !== undefined) {
       errorResponse = await parseResponse(context, extractedResponse, true);
     }

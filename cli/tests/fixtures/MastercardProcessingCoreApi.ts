@@ -19,7 +19,6 @@ export interface paths {
          *
          *     Upon successful client creation, a unique client identifier is returned.
          *     The Issuer shall create a client before they request for an account contract creation (`POST /accounts`) or a card contract creation (`POST /cards`).
-         *
          */
         post: operations["createClient"];
         delete?: never;
@@ -40,7 +39,6 @@ export interface paths {
          * @description Operation name: `getClient`
          *
          *     Operation is used to retrieve information about the specified client, existing in the MP's CMS.
-         *
          */
         get: operations["getClient"];
         put?: never;
@@ -100,7 +98,6 @@ export interface paths {
          *       * `client.embossedData.firstName`
          *       * `client.embossedData.lastName`
          *       * `client.embossedData.companyName`
-         *
          */
         patch: operations["updateClient"];
         trace?: never;
@@ -117,7 +114,6 @@ export interface paths {
          * @description Operation name: `getAccountContractsByClient`
          *
          *     Operation is used to retrieve a list of account contracts for a specified client.
-         *
          */
         get: operations["getAccountContractsByClient"];
         put?: never;
@@ -144,7 +140,6 @@ export interface paths {
          *     Additional filtering can be applied:
          *       * **Card contract opening date** - to retrieve cards created after defined date
          *       * **Card contract status** - to retrieve cards with specified statuses only
-         *
          */
         get: operations["getCardContractsByClient"];
         put?: never;
@@ -169,7 +164,6 @@ export interface paths {
          * @description Operation name: `openEvent`
          *
          *     Operation is used to open event for a specified contract (**account contract** or **card contract**).
-         *
          */
         post: operations["openEvent"];
         delete?: never;
@@ -190,7 +184,6 @@ export interface paths {
          * @description Operation name: `getContractFinancials`
          *
          *     Operation is used to retrieve financial information for the contract (**account contract** or **card contract**).
-         *
          */
         get: operations["getContractFinancials"];
         put?: never;
@@ -232,7 +225,6 @@ export interface paths {
          *     | STMT_BALANCE  	| Balance type calculated at end of cycle                                                                             	| Credit                    	|
          *     | TOTAL_BALANCE 	| Balance type reflecting contract's balance including balances of liability subcontracts                             	| Credit, Prepaid           	|
          *     | TOTAL_DUE     	| SUM of `DUE` and `PAST_DUE` balances. This is the amount presented in the Statement as Minimum to Pay               	| Credit                    	|
-         *
          */
         get: operations["getContractBalances"];
         put?: never;
@@ -263,7 +255,6 @@ export interface paths {
          *       * If a technical account code is not provided response will contain all technical accounts.
          *       * Technical accounts are created for the contract during 1st transfer of funds from or to a given technical account.
          *        Hence, right after contract creation response will not contain all possible technical accounts for the contract.
-         *
          */
         get: operations["getTechnicalAccounts"];
         put?: never;
@@ -290,7 +281,6 @@ export interface paths {
          *     The operation returns a summary of the contracts created under the specified contract and upper-level contracts from the tree structure created in the CMS. For example, if there is one account contract (top account contract) with one subaccount under which 3 card contracts have been created, then:
          *     * if the operation is used to retrieve tree summary for the top account contract then API returns 5 contracts (top account contract, subaccount contract and all 3 card contracts)
          *     * if the operation is used to retrieve tree summary for one of the card contracts then API returns 3 contracts (top account contract, subaccount contract and 1 card contract specified in the request)
-         *
          */
         get: operations["getContractTreeSummary"];
         put?: never;
@@ -330,7 +320,6 @@ export interface paths {
          *     To create an account contract with liability link to another account contract, the Issuer must fill in the `liabilityContract`.
          *
          *     Upon successful account contract creation, a unique `accountContractId` is returned. The identifier must be used later on in a card contract creation request (`POST /cards`).
-         *
          */
         post: operations["createAccountContract"];
         delete?: never;
@@ -351,7 +340,6 @@ export interface paths {
          * @description Operation name: `getAccountContract`
          *
          *     Operation is used to retrieve information about the specified account contract.
-         *
          */
         get: operations["getAccountContract"];
         put?: never;
@@ -372,7 +360,6 @@ export interface paths {
          *     * `accountContractName`
          *
          *     * `cbsNumber`
-         *
          */
         patch: operations["updateAccountContract"];
         trace?: never;
@@ -392,7 +379,6 @@ export interface paths {
          *     Operation is used to change an account contract status.
          *
          *     Change is possible according to configured priorities of account contract statuses. Change to status with lower priority is not possible. For example `Account closed` has higher priority than `Account OK` and changing from `Account closed` to `Account OK` is not possible.
-         *
          */
         put: operations["changeAccountContractStatus"];
         post?: never;
@@ -414,7 +400,6 @@ export interface paths {
          * @description Operation name: `getAccountContractStatus`
          *
          *     Operation is used to retrieve an account contract status detailed information.
-         *
          */
         get: operations["getAccountContractStatus"];
         put?: never;
@@ -443,7 +428,6 @@ export interface paths {
          *       * **ALL** – the client will be changed for the entire account contract tree
          *       * **THIS** – the client will be changed only for the specified account contract
          *       * **DOWN** – the client will be changed for all contracts (including cards) in the hierarchy that are under the account contract.
-         *
          */
         put: operations["changeAccountContractClient"];
         post?: never;
@@ -466,7 +450,6 @@ export interface paths {
          * @description Operation name: `changeContractMainContract`
          *
          *     Operation is used to associate the subaccount or card contract with a different parent account contract. Optionally operation allows to also associate contract with a different client.
-         *
          */
         put: operations["changeContractMainContract"];
         post?: never;
@@ -488,7 +471,6 @@ export interface paths {
          * @description Operation name: `getSubAccountContracts`
          *
          *     Operation is used to retrieve a list of subaccounts for a specified account contract. The list contains basic information about subaccount contracts.
-         *
          */
         get: operations["getSubAccountContracts"];
         put?: never;
@@ -515,7 +497,6 @@ export interface paths {
          *     Additional filtering can be applied:
          *       * **Card creation date** - to retrieve cards open date greater or equal than passed date
          *       * **Card statuses** - to retrieve cards with selected statuses only
-         *
          */
         get: operations["getCardContractsByAccount"];
         put?: never;
@@ -545,7 +526,6 @@ export interface paths {
          *     To create a card contract, the Issuer must specify the `accountContractId`. If the `clientId` is not provided, MP's CMS will assign the same Client as the account contract owner.
          *
          *     Upon successful card contract creation, a unique card contract identifier is returned.
-         *
          */
         post: operations["createCardContract"];
         delete?: never;
@@ -566,7 +546,6 @@ export interface paths {
          * @description Operation name: `getCardContract`
          *
          *     Operation is used to retrieve details of a given card contract.
-         *
          */
         get: operations["getCardContract"];
         put?: never;
@@ -587,7 +566,6 @@ export interface paths {
          *       * `embossedData.firstName`
          *       * `embossedData.lastName`
          *       * `embossedData.companyName`
-         *
          */
         patch: operations["updateCardContract"];
         trace?: never;
@@ -606,7 +584,6 @@ export interface paths {
          * @description Operation name: `verifyCardDetails`
          *
          *     Operation is used to verify card details.
-         *
          */
         post: operations["verifyCardDetails"];
         delete?: never;
@@ -630,7 +607,6 @@ export interface paths {
          *     Operation is used to change the card contract status.
          *
          *     In the MP's CMS, the Issuer can set either a temporary status (which can be reversed) or a permanent one (without the possibility to change it afterwards). The change is possible according to the configured priorities of card contract statuses. A change to a status with lower priority is not possible.
-         *
          */
         put: operations["changeCardContractStatus"];
         post?: never;
@@ -652,7 +628,6 @@ export interface paths {
          * @description Operation name: `getCardContractStatus`
          *
          *     Operation is used to retrieve card status detailed information.
-         *
          */
         get: operations["getCardContractStatus"];
         put?: never;
@@ -676,7 +651,6 @@ export interface paths {
          * @description Operation name: `changeCardContractClient`
          *
          *     Operation is used to associate the card contract with a different client (change of client - cardholder).
-         *
          */
         put: operations["changeCardContractClient"];
         post?: never;
@@ -699,7 +673,6 @@ export interface paths {
          * @description Operation name: `changeCardContractMainContract`
          *
          *     Operation is used to associate the card contract with a different account contract.
-         *
          */
         put: operations["changeCardContractMainContract"];
         post?: never;
@@ -722,7 +695,6 @@ export interface paths {
          * @description Operation name: `clearOnlinePinAttempts`
          *
          *     Operation is used to reset Online PIN Try Counter for a specified card contract.
-         *
          */
         put: operations["clearOnlinePinAttempts"];
         post?: never;
@@ -745,7 +717,6 @@ export interface paths {
          * @description Operation name: `clearOnlinePinAttemptsForClient`
          *
          *     Operation is used to reset Online PIN Try Counter for a specified client.
-         *
          */
         put: operations["clearOnlinePinAttemptsForClient"];
         post?: never;
@@ -771,7 +742,6 @@ export interface paths {
          *     When a new card contract is created, usually a card plastic is produced with the status `Locked` to prevent the card from unauthorized transactions.
          *     If the card plastic status is `Locked`, the cardholder is not able to perform any transactions as they will be rejected.
          *     Plastic activation unlocks the plastic and allows the cardholder to use it in POS, e-commerce, ATM, etc.
-         *
          */
         put: operations["activateCard"];
         post?: never;
@@ -811,7 +781,6 @@ export interface paths {
          *     PIN block ISO formats usage:
          *       * **ISO-0 format** is used when full `cardContractNumber`(PAN) is known to the Issuer (usually for PCI-compliant Issuers).
          *       * **ISO-1 format** is used when full `cardContractNumber`(PAN) is not known to the Issuer (usually for non-PCI-compliant Issuers).
-         *
          */
         put: operations["setPin"];
         post?: never;
@@ -842,7 +811,6 @@ export interface paths {
          *     The Public RSA key will be generated by the Issuer and the Issuer will have a matching private key that can be used to decrypt the PIN value.
          *
          *     Note: Apart from above symmetric encryption payload JWE encryption is used.
-         *
          */
         post: operations["getPin"];
         delete?: never;
@@ -885,7 +853,6 @@ export interface paths {
          *
          *     Note: If there is more than one card plastic with the same value of expiry date then the CMS system will verify provided PIN with the PIN from the
          *     plastic currently treated as active by the CMS system.
-         *
          */
         post: operations["verifyPin"];
         delete?: never;
@@ -910,7 +877,6 @@ export interface paths {
          *     Operation is used to retrieve a Card Verification Code (CVC2) for a given card plastic (card plastic exists also for a virtual card - is not always a physical card) from MP's CMS.
          *
          *       If there is no `cardContractId` matching the requested `expiryDate` HTTP 404 error with `INVALID_EXPIRY_DATE` `reasonCode` will be returned.
-         *
          */
         post: operations["getCvc"];
         delete?: never;
@@ -935,7 +901,6 @@ export interface paths {
          *     Operation is used to verify a Card Verification Code 2 (CVC2) for specified card plastic (in the CMS card plastic exists also for a virtual card - card plastic is not always a physical card).
          *
          *     The verification result is returned in the response.
-         *
          */
         post: operations["verifyCvc"];
         delete?: never;
@@ -958,7 +923,6 @@ export interface paths {
          *     Operation is used to retrieve information about all card plastics created under a specified card contract.
          *
          *     Each card plastic has a sequential number assigned. The card plastic number sequence starts with 1 and is increased by 1 for each reissued card, whenever a new card plastic is created under the same card contract.
-         *
          */
         get: operations["getCardPlastics"];
         put?: never;
@@ -977,7 +941,6 @@ export interface paths {
          *     Note: `newCardContractNumber` is not used when:
          *       * `reissueType` defines that a new card contract is not created (only a new `Plastic` is created under the same card contract)
          *       * `reissueType` defines that a card contract will be replaced with a PIN inheritance (the MP's CMS generates `newCardContractNumber` in this case)
-         *
          */
         post: operations["reissueCard"];
         delete?: never;
@@ -998,7 +961,6 @@ export interface paths {
          * @description Operation name: `getClientAddresses`
          *
          *     Operation is used to retrieve a list of additional addresses assigned to the specified client object.
-         *
          */
         get: operations["getClientAddresses"];
         put?: never;
@@ -1013,7 +975,6 @@ export interface paths {
          *     The additional address can be used to store for example:
          *       * statement delivery address.
          *       * PIN mailer delivery address.
-         *
          */
         post: operations["addClientAddress"];
         delete?: never;
@@ -1035,7 +996,6 @@ export interface paths {
          * @description Operation name: `updateClientAddress`
          *
          *     Operation is used to update the additional address for a specified client object.
-         *
          */
         put: operations["updateClientAddress"];
         post?: never;
@@ -1057,7 +1017,6 @@ export interface paths {
          * @description Operation name: `getContractAddresses`
          *
          *     Operation is used to retrieve a list of additional addresses assigned to the specified contract (**account contract** or **card contract**).
-         *
          */
         get: operations["getContractAddresses"];
         put?: never;
@@ -1072,7 +1031,6 @@ export interface paths {
          *     Additional address can be used to store for example:
          *       * statement delivery address.
          *       * PIN mailer delivery address
-         *
          */
         post: operations["addContractAddress"];
         delete?: never;
@@ -1094,7 +1052,6 @@ export interface paths {
          * @description Operation name: `updateContractAddress`
          *
          *     Operation is used to update the additional address for a specified contract (**account contract** or **card contract**).
-         *
          */
         put: operations["updateContractAddress"];
         post?: never;
@@ -1123,7 +1080,6 @@ export interface paths {
          *       * Classifiers make it possible to set conditions for executing various actions, depending on the current status of a client
          *
          *     For example, a client classifier can be used to mark the client as a migrated client.
-         *
          */
         put: operations["setClientClassifier"];
         post?: never;
@@ -1151,7 +1107,6 @@ export interface paths {
          *     |--------------------	|---------------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|-----------------------------	|
          *     | GDPR_DATA_ERASE    	| N                   	| According to the GDPR the right to be forgotten, Issuer can flag appropriate Client in the Workbench. It would be the only channel how such request could be raised by the issuer. 	| Prepaid                     	|
          *     | GDPR_DATA_ERASE    	| Y                   	| According to the GDPR the right to be forgotten, Issuer can flag appropriate Client in the Workbench. It would be the only channel how such request could be raised by the issuer. 	| Prepaid                     	|
-         *
          */
         get: operations["getClientClassifiers"];
         put?: never;
@@ -1210,7 +1165,6 @@ export interface paths {
          *     | MEMB_FEE_FREQ      	| Y                              	| Any Contract       	| Switch to signify what kind of recurring fee (Billing, Monthly, None or Yearly) to charge on contract.  Can be reversed. Default – Y. 	  | Credit 	                                                                                                                                    |
          *     | SDD_AGREED_TO_PAY  	| MTP                     	      | Any Contract       	| Simplified Direct debit option (Minimum to pay or Statement value). Default = MTP                                                        	| Credit                                                                                                                                     	|
          *     | SDD_AGREED_TO_PAY  	| STMT                      	    | Any Contract       	| Simplified Direct debit option (Minimum to pay or Statement value). Default = MTP                                                        	| Credit                                                                                                                                     	|
-         *
          */
         put: operations["setContractClassifier"];
         post?: never;
@@ -1280,7 +1234,6 @@ export interface paths {
          *     | STOCK              	| Y                               	    | Account Contract   	| Identifying whether contract is STOCK (value = Y) or TARGET (value = N)/Cannot be changed through `setContractClassifier`                                                                           	  | Prepaid                                                                                                                                    	|
          *     | TRX_FEES_ENABLED   	| N                               	    | Any Contract       	| Transaction Fees Enabled Default - Y. Cannot be changed through `setContractClassifier`                                                                                                               	| Credit                                                                                                                                     	|
          *     | TRX_FEES_ENABLED   	| Y                               	    | Any Contract       	| Transaction Fees Enabled Default - Y. Cannot be changed through `setContractClassifier`                                                                                                               	| Credit                                                                                                                                     	|
-         *
          */
         get: operations["getContractClassifiers"];
         put?: never;
@@ -1316,7 +1269,6 @@ export interface paths {
          *     Custom data tags are stored in fixed containers (four containers are available) in TAG=VALUE; format (for example: CATEGORY=A;GROUP=G1;).
          *
          *     Each container has length of 3900 characters.
-         *
          */
         post: operations["setClientCustomData"];
         delete?: never;
@@ -1337,7 +1289,6 @@ export interface paths {
          * @description Operation name: `getClientCustomData`
          *
          *     Operation is used to retrieve selected custom data of the client object.
-         *
          */
         get: operations["getClientCustomData"];
         put?: never;
@@ -1373,7 +1324,6 @@ export interface paths {
          *     Custom data tags are stored in fixed containers (four containers are available) in TAG=VALUE; format (for example: CATEGORY=A;GROUP=G1;).
          *
          *     Each container has length of 255 characters.
-         *
          */
         post: operations["setContractCustomData"];
         delete?: never;
@@ -1394,7 +1344,6 @@ export interface paths {
          * @description Operation name: `getContractCustomData`
          *
          *     Operation is used to retrieve selected custom data of the specified contract (**account contract** or **card contract**).
-         *
          */
         get: operations["getContractCustomData"];
         put?: never;
@@ -1448,7 +1397,6 @@ export interface paths {
          *     | TARIFF_PLAN                	| FEE_PLAN_01	                                | Any   Contract     	| Fee plan   management                        	| Credit, Prepaid             |
          *     | TARIFF_PLAN                	| FEE_PLAN_02                                 | Any   Contract     	| Fee plan   management                        	| Credit, Prepaid             |
          *     | TARIFF_PLAN                	| FEE_PLAN_03 	                              | Any   Contract     	| Fee plan   management                        	| Credit                    	|
-         *
          */
         put: operations["setContractParameter"];
         post?: never;
@@ -1493,7 +1441,6 @@ export interface paths {
          *     | TARIFF_PLAN                	| FEE_PLAN_01                             	  | Any   Contract     	| Fee plan   management                        	| Credit, Prepaid             |
          *     | TARIFF_PLAN                	| FEE_PLAN_02 	                              | Any   Contract     	| Fee plan   management                        	| Credit, Prepaid             |
          *     | TARIFF_PLAN                	| FEE_PLAN_03 	                              | Any   Contract     	| Fee plan   management                        	| Credit                    	|
-         *
          */
         get: operations["getContractParameters"];
         put?: never;
@@ -1526,7 +1473,6 @@ export interface paths {
          *     | FP                    	| Fee posting                 	| Account contract   	| Credit                    	|
          *     | I_TPD                 	| Transaction posting - debit 	| Account contract   	| Credit, Prepaid           	|
          *     | TPD                   	| Transaction posting - debit 	| Account contract   	| Credit                    	|
-         *
          */
         post: operations["debitContract"];
         delete?: never;
@@ -1557,7 +1503,6 @@ export interface paths {
          *     | PT_1                  	| Payment to Client Contract   	| Account contract   	| Credit                    	|
          *     | TP                    	| Top-up prepaid card          	| Account contract   	| Prepaid                   	|
          *     | TPC_1                 	| Transaction posting - credit 	| Account contract   	| Credit, Prepaid           	|
-         *
          */
         post: operations["creditContract"];
         delete?: never;
@@ -1587,7 +1532,6 @@ export interface paths {
          *     | APSF        	| Paper statement fee      	| Account contract   	| Credit                    	|
          *     | AUCF        	| Urgent card fee          	| Card contract      	| Credit, Prepaid           	|
          *     | MFM         	| Miscellaneous custom fee 	| Account contract   	| Prepaid                   	|
-         *
          */
         post: operations["chargeFee"];
         delete?: never;
@@ -1617,7 +1561,6 @@ export interface paths {
          *       * **Transaction type code** - to retrieve transactions of a specified type
          *
          *     Note: Date filters use CMS "transaction date" (`transactionDate` field) to filter the records.
-         *
          */
         get: operations["getTransactions"];
         put?: never;
@@ -1651,7 +1594,6 @@ export interface paths {
          *       * **Transaction type code** - to retrieve transactions of a specified type
          *
          *     Note: Date filters use CMS posting date (`postingDate` field) to filter the records.
-         *
          */
         get: operations["getContractTransactionDocuments"];
         put?: never;
@@ -1695,7 +1637,6 @@ export interface paths {
          *
          *
          *     SRN - Document registration number assigned by the sender
-         *
          */
         get: operations["getTransactionDocuments"];
         put?: never;
@@ -1718,7 +1659,6 @@ export interface paths {
          * @description Operation name: `getTransactionFees`
          *
          *     Operation is used to retrieve fees generated for a specified transaction.
-         *
          */
         get: operations["getTransactionFees"];
         put?: never;
@@ -1804,7 +1744,6 @@ export interface paths {
          *       | MONTHLY_TOTAL         	| Card contract        	| Monthly all types of transactions                                       	| Any product               	|
          *       | PREPAID_BALANCE_LIMIT 	| Account contract     	| Prepaid Balance Limit                                                   	| Prepaid                   	|
          *       | YEARLY_TOP_UP         	| Account contract     	| Cumulative yearly top-up limit                                          	| Prepaid                   	|
-         *
          */
         put: operations["setUsageLimit"];
         post?: never;
@@ -1856,7 +1795,6 @@ export interface paths {
          *       | MONTHLY_TOTAL         	| Card contract        	| Monthly all types of transactions                                       	| Any product               	|
          *       | PREPAID_BALANCE_LIMIT 	| Account contract     	| Prepaid Balance Limit                                                   	| Prepaid                   	|
          *       | YEARLY_TOP_UP         	| Account contract     	| Cumulative yearly top-up limit                                          	| Prepaid                   	|
-         *
          */
         get: operations["getUsageLimits"];
         put?: never;
@@ -1906,7 +1844,6 @@ export interface paths {
          *       | MONTHLY_TOTAL         	| Card contract        	| Monthly all types of transactions                                       	| Any product               	|
          *       | PREPAID_BALANCE_LIMIT 	| Account contract     	| Prepaid Balance Limit                                                   	| Prepaid                   	|
          *       | YEARLY_TOP_UP         	| Account contract     	| Cumulative yearly top-up limit                                          	| Prepaid                   	|
-         *
          */
         put: operations["restoreUsageLimitOriginalValues"];
         post?: never;
@@ -1955,7 +1892,6 @@ export interface paths {
          *       | MONTHLY_TOTAL         	| Card contract        	| Monthly all types of transactions                                       	| Any product               	|
          *       | PREPAID_BALANCE_LIMIT 	| Account contract     	| Prepaid Balance Limit                                                   	| Prepaid                   	|
          *       | YEARLY_TOP_UP         	| Account contract     	| Cumulative yearly top-up limit                                          	| Prepaid                   	|
-         *
          */
         put: operations["resetUsageLimitCounters"];
         post?: never;
@@ -2018,7 +1954,6 @@ export interface paths {
          *       | MONTHLY_TOTAL         	| Card contract        	| Monthly all types of transactions                                       	| Any product               	|
          *       | PREPAID_BALANCE_LIMIT 	| Account contract     	| Prepaid Balance Limit                                                   	| Prepaid                   	|
          *       | YEARLY_TOP_UP         	| Account contract     	| Cumulative yearly top-up limit                                          	| Prepaid                   	|
-         *
          */
         put: operations["changeUsageLimitStatus"];
         post?: never;
@@ -2046,7 +1981,6 @@ export interface paths {
          *     Service Tariff Role - is used to set up fee calculation rules in Services
          *     Service Limit Tariff Role - is used to set up Services for calculating the maximum and minimum transaction amount,
          *     or to specify account balance limitations, or to specify limitations related to Events that open or close when the value of a specific balance type changes.
-         *
          */
         post: operations["setServiceLimitTariff"];
         delete?: never;
@@ -2067,7 +2001,6 @@ export interface paths {
          * @description Operation name: `getContractTariffData`
          *
          *     Operation is used to retrieve information about tariff configuration for a given contract (**account contract** or **card contract**).
-         *
          */
         get: operations["getContractTariffData"];
         put?: never;
@@ -2096,7 +2029,6 @@ export interface paths {
          *       * `identificationDocumentNumber` assigned by the Issuer or
          *       * `socialNumber` assigned by the Issuer or
          *       * `taxpayerIdentifier` assigned by the Issuer
-         *
          */
         post: operations["getClientId"];
         delete?: never;
@@ -2123,7 +2055,6 @@ export interface paths {
          *       * `cbsNumber` (Core Banking System number assigned usually by the Issuer)
          *
          *     An `accountContractId` is a unique, technical account contract identifier assigned by the MP's CMS system. The identifier is used in the MP API operations to identify particular account contract.
-         *
          */
         post: operations["getAccountContractId"];
         delete?: never;
@@ -2150,7 +2081,6 @@ export interface paths {
          *       * `cbsNumber` (Core Banking System number assigned usually by the Issuer)
          *
          *     A `cardContractId` is a unique, technical card contract identifier assigned by the MP's CMS system. The identifier is used in the MP API operations to identify particular card contract.
-         *
          */
         post: operations["getCardContractId"];
         delete?: never;
@@ -2173,7 +2103,6 @@ export interface paths {
          *     Operation is used to request a public RSA key information from the MP. In the response to the request, MP will return the MP's public RSA key and its index.
          *
          *     Operation is used for PIN Block asymmetric encryption in `setPin` and `verifyPin` operations.
-         *
          */
         get: operations["getPublicRsaKey"];
         put?: never;
@@ -2197,7 +2126,6 @@ export interface paths {
          * @description Operation name: `setAuthenticationMethod`
          *
          *     Operation is used to set up a contract (**account contract** or **card contract**) authentication method.
-         *
          */
         put: operations["setAuthenticationMethod"];
         post?: never;
@@ -2220,7 +2148,6 @@ export interface paths {
          * @description Operation name: `releaseBlockedFunds`
          *
          *     Operation is used to release funds for the pending transaction before automatic cancelation occurs.
-         *
          */
         put: operations["releaseBlockedFunds"];
         post?: never;
@@ -2246,7 +2173,6 @@ export interface paths {
          *     Operation is used to reverse selected transaction made by the Issuer. Transaction types that can be reversed must be preconfigured in the CMS during the onboarding process.
          *
          *     The transaction which can be reversed must be in posting status `Posted`. After a successful transaction reversal, the proper balance will be changed.
-         *
          */
         post: operations["reverseTransaction"];
         delete?: never;
@@ -2267,7 +2193,6 @@ export interface paths {
          * @description Operation name: `getAuthenticationParameterValue`
          *
          *     Operation is used to retrieve the value of a given authentication parameter for a specified contract.
-         *
          */
         get: operations["getAuthenticationParameterValue"];
         put?: never;
@@ -2359,13 +2284,11 @@ export interface components {
          *     | ILC5                  	| Overdue retail interest           	|
          *     | ILR3                  	| Retail interest                   	|
          *     | ILR5                  	| Cash interest                     	|
-         *
          * @example 0719
          */
         transactionTypeCode: string;
         /**
          * @description Transaction type.
-         *
          * @example ATM transactions
          */
         transactionType: string;
@@ -2397,7 +2320,6 @@ export interface components {
          *     | X                   	|  Additional Online Service 	|
          *     | +                   	|  Top Up                   	|
          *     | V                   	|  Verification              	|
-         *
          * @example M
          */
         serviceClassCode: string;
@@ -2408,7 +2330,6 @@ export interface components {
          *     * For card contract - value can be
          *       * unmasked - full PAN visible
          *       * masked - full PAN masked according to defined mask (mask pattern is agreed with Issuer and configured in the MP API)
-         *
          * @example 161212______0128
          */
         targetContractNumber: string;
@@ -2421,25 +2342,21 @@ export interface components {
          *       * masked - full PAN masked according to defined mask (mask pattern is agreed with Issuer and configured in the MP API)
          *
          *     In case of transaction done by card at POS field contains the terminal id.
-         *
          * @example 871818______0074
          */
         sourceContractNumber: string;
         /**
          * @description Authentication parameter name.
-         *
          * @example PHONE
          */
         authenticationParameterName: string;
         /**
          * @description Authentication parameter value.
-         *
          * @example +48 123456789
          */
         authenticationParameterValue: string;
         /**
          * @description Contract authentication type code.
-         *
          * @example 3DS_EXT_ENROLLMENT
          */
         authenticationTypeCode: string;
@@ -2451,7 +2368,6 @@ export interface components {
              *     |-------------------------	|--------------------------------------	|
              *     | RELEASE_FUNDS_PERFORMED 	| When blocked funds were released     	|
              *     | RELEASE_FUNDS_FAILURE   	| When blocked funds were not released 	|
-             *
              * @example RELEASE_FUNDS_FAILURE
              */
             cancelHoldResult?: string;
@@ -2462,7 +2378,6 @@ export interface components {
         ReverseTransactionReason: {
             /**
              * @description The reason for reversing the transaction, if not filled by the Issuer, will be filled with the default value.
-             *
              * @example Reversal
              */
             reason?: string;
@@ -2470,7 +2385,6 @@ export interface components {
         BlockedFundsRelease: {
             /**
              * @description Description of the reason which leads to the release of blocked funds.
-             *
              * @example Transaction aborted
              */
             reason?: string;
@@ -2536,7 +2450,6 @@ export interface components {
          *     Notes:
          *       * `productionCode` is configured in the MP's CMS and the Issuer is allowed to use only the value set by the MP (the Issuer cannot use their own value).
          *       * Passing `productionCode` field is optional. The MP's CMS allows to configure a default `productionCode` assigned to the `productCode`.
-         *
          * @example NWOPIN_NOPROD
          */
         productionCode: string;
@@ -2591,7 +2504,6 @@ export interface components {
          *         * PAN - New
          *         * PIN - Not required
          *         * Expiry date - Set by the MP or the Issuer
-         *
          * @example RALLRE
          */
         cardContractProductionCode: string;
@@ -2599,7 +2511,6 @@ export interface components {
          * Format: int64
          * @description A unique technical client identifier, generated by the MP's CMS database engine.
          *     The identifier is generated when client creation is completed successfully and is returned in a client creation response (`POST /clients`).
-         *
          * @example 40000
          */
         clientId: number;
@@ -2609,7 +2520,6 @@ export interface components {
          *     `clientNumber` should be prefixed with a unique Issuer designation, for example "ABC_", as it must be unique in the MP's CMS.
          *
          *     Note: The Issuer designation "ABC_" is configured in the MP's CMS and the Issuer is allowed to use only the value agreed with the MP.
-         *
          * @example ABC_5698521931
          */
         clientNumber: string;
@@ -2626,27 +2536,23 @@ export interface components {
          *     Notes:
          *       * The field cannot be freely used because the client type has an impact on many CMS internal procedures. The Issuer must always agree with the MP which value should be used (in most cases "PR" is the default value)
          *       * Please contact the MP representative should a value different than "PR" be needed, as using it requires configuration on the MP's side.
-         *
          * @example PR
          */
         clientType: string;
         /**
          * Format: date
          * @description Date of client expiration (YYYY-MM-DD format). When the date is met in the MP's CMS, the Issuer will not be able to create new account contracts or new cards for the client.
-         *
          * @example 2029-06-25
          */
         clientExpiryDate: string;
         /**
          * Format: int64
          * @description Contract record id from MP's CMS database.
-         *
          * @example 70001
          */
         contractId: number;
         /**
          * @description Contract name.
-         *
          * @example Contract name
          */
         contractName: string;
@@ -2668,14 +2574,12 @@ export interface components {
          *       * .2.1. - for 1st card contract
          *       * .2.2. - for 2nd card contract
          *       * .2.3. - for 3rd card contract
-         *
          * @example .
          */
         contractLevel: string;
         /**
          * Format: int64
          * @description Account's unique technical identifier from the MP's CMS database, which represents a parent account. The field is empty when an account is a top account. Non-empty value means the account has been created as a sub-account.
-         *
          * @example 31412211
          */
         parentAccountContractId: number;
@@ -2683,7 +2587,6 @@ export interface components {
          * Format: int64
          * @description Unique technical identifier for an account contract generated by the MP's CMS.
          *     The identifier is generated when the account contract creation finishes successfully and is returned in the account contract creation response (`POST /accounts`).
-         *
          * @example 60001
          */
         accountContractId: number;
@@ -2694,13 +2597,11 @@ export interface components {
          *     `accountContractNumber` should be prefixed with a unique Issuer designation, for example "ABC_", as it must be unique in the MP's CMS.
          *
          *     Note: The Issuer designation "ABC_" is configured in the MP's CMS and the Issuer is allowed to use only the value agreed with the MP.
-         *
          * @example ABC_121235694296313
          */
         accountContractNumber: string;
         /**
          * @description Account contract name set by the Issuer.
-         *
          * @example North Division Account
          */
         accountContractName: string;
@@ -2708,7 +2609,6 @@ export interface components {
          * Format: int64
          * @description Unique technical card contract identifier generated by the MP's CMS.
          *     The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-         *
          * @example 70001
          */
         cardContractId: number;
@@ -2721,7 +2621,6 @@ export interface components {
          *     The Issuer may enter a PAN number generated by themselves or leave the field empty: in such case, the MP's CMS will generate a PAN number on behalf of the Issuer.
          *
          *     To generate a PAN, the MP's CMS must be configured with BIN ranges for a given card product.
-         *
          * @example 535555______5312
          */
         cardContractNumberForReissue: string;
@@ -2734,7 +2633,6 @@ export interface components {
          *     The Issuer may enter a PAN number generated by themselves or leave the field empty: in such case, the MP's CMS will generate a PAN number on behalf of the Issuer.
          *
          *     To generate a PAN, the MP's CMS must be configured with BIN ranges for a given card product.
-         *
          * @example 1234567890123456
          */
         cardContractNumberForCreation: string;
@@ -2747,25 +2645,21 @@ export interface components {
          *     The card contract number can be returned:
          *       * unmasked - with a full PAN visible
          *       * masked - with a full PAN masked according to the defined mask (a mask pattern is agreed with the Issuer and configured in the MP API)
-         *
          * @example 123456______3456
          */
         cardContractNumber: string;
         /**
          * @description Card contract name. Free text field.
-         *
          * @example Card contract name
          */
         cardContractName: string;
         /**
          * @description Card expiry date (YYMM format).
-         *
          * @example 3004
          */
         cardExpiryDate: string;
         /**
          * @description New card expiry date (YYMM format).
-         *
          * @example 3004
          */
         newCardExpiryDate: string;
@@ -2775,21 +2669,18 @@ export interface components {
          *     The Issuer may pass their own expiry date in a card creation request, in such case the MP will set the value passed in a card creation request on the first *card plastic* which will be created under newly created card contract.
          *
          *     If the Issuer does not provide their own expiry date, the MP will generate an expiry date on behalf of the Issuer.
-         *
          * @example 3004
          */
         cardExpiryDateForCreation: string;
         /**
          * Format: int64
          * @description Technical identifier of a card plastic record in the MP's CMS.
-         *
          * @example 2188792
          */
         plasticId: number;
         /**
          * @description The sequence number of a `Plastic`, created under the given card contract.
          *     Every new `Plastic` created has the next number in a sequence following previous card plastics.
-         *
          * @example 2
          */
         plasticSequenceNumber: string;
@@ -2797,7 +2688,6 @@ export interface components {
          * Format: date
          * @description For authorization documents - authorization request processing date,
          *     for financial documents - macrotransaction processing date (YYYY-MM-DD format).
-         *
          * @example 2031-06-25
          */
         postingDate: string;
@@ -3003,34 +2893,29 @@ export interface components {
          *     | 457  |  CashBack disabled
          *     | 461  |  Exceeds CashBack amount limit
          *     -------------------------------------------------------------------
-         *
          * @example 0
          */
         responseCode: number;
         /**
          * @description Description of the transaction response code.
-         *
          * @example Successfully completed
          */
         responseCodeDescription: string;
         /**
          * Format: int64
          * @description Source contract identifier. Contract record ID from MP's CMS database.
-         *
          * @example 70001
          */
         sourceContractId: number;
         /**
          * Format: int64
          * @description Target contract identifier. Contract record ID from MP's CMS database.
-         *
          * @example 54023689
          */
         targetContractId: number;
         /**
          * Format: int64
          * @description Unique identifier of the document record in the CMS database.
-         *
          * @example 90001
          */
         transactionId: number;
@@ -3040,31 +2925,26 @@ export interface components {
          *     MCC consists of four digits and it's listed in ISO 18245 for retail financial services.
          *     Merchant Category Code (MCC) is used to classify merchants in types (i.e. one MCC is for hotels, one for automated fuel dispensers)
          *     or more specifically by merchant name (i.e. car rentals or airlines).
-         *
          * @example 6011
          */
         mcc: string;
         /**
          * @description Merchant category description according to Visa rules (Merchant Category Code, MCC) or MasterCard rules (Standard Industry Code, SIC).
-         *
          * @example 6011 ATM
          */
         mccDescription: string;
         /**
          * @description Three-letter country code (format according to ISO-3166, alpha-3 specification).
-         *
          * @example USA
          */
         merchantCountry: string;
         /**
          * @description Terminal city, in other case value is null.
-         *
          * @example BERLIN
          */
         merchantLocation: string;
         /**
          * @description Name of the retail outlet where the transaction was performed.
-         *
          * @example DESC
          */
         merchantName: string;
@@ -3084,7 +2964,6 @@ export interface components {
          *     | 59                  	| Suspected fraud (temporary status). Usually set on Issuer's request              	|
          *
          *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-         *
          * @example 00
          */
         cardContractStatusCode: string;
@@ -3099,50 +2978,42 @@ export interface components {
          *     | 14                  	| Final stats of account contract's lifecycle. Set automatically by the CMS           	|
          *
          *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-         *
          * @example 00
          */
         accountContractStatusCode: string;
         /**
          * @description Card contract status name. Name assigned in the CMS system to the `statusCode`.
-         *
          * @example Card OK
          */
         cardContractStatusName: string;
         /**
          * @description Account contract status name. Name assigned in the CMS system to the `statusCode`.
-         *
          * @example Account OK
          */
         accountContractStatusName: string;
         /**
          * @description Contract status code agreed with the Issuer according to the external system requirements.
          *     The MP's CMS configuration allows many external status codes to be assigned to the same `statusCode`.
-         *
          * @example 00
          */
         externalStatusCode: string;
         /**
          * @description External status name.
-         *
          * @example Card OK
          */
         cardContractExternalStatusName: string;
         /**
          * @description External status name.
-         *
          * @example Account OK
          */
         accountContractExternalStatusName: string;
         /**
          * @description Main Product Code.
-         *
          * @example ACCOUNT_EUR
          */
         mainProductCode: string;
         /**
          * @description Product code of the parent contract.
-         *
          * @example ACC_EUR
          */
         parentProductCode: string;
@@ -3150,7 +3021,6 @@ export interface components {
          * @description Contract's own blocked amount, which has not been unblocked yet - not including blocked amount on additional cards.
          *
          *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-         *
          * @example 751.28
          */
         blockedAmount: number;
@@ -3160,7 +3030,6 @@ export interface components {
          *     Only in specific product configuration ('SeeMain' authorization scenario configured in the CMS), the field will show credit limit of the parent contract.
          *
          *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-         *
          * @example 1231.78
          */
         creditLimit: number;
@@ -3173,39 +3042,33 @@ export interface components {
          *     | N                   	| Affiliated         	|
          *     | R                   	| Reporting          	|
          *     | Y                   	| Full Liability     	|
-         *
          * @example Y
          */
         liabilityCategory: string;
         /**
          * Format: int64
          * @description PIN attempts counter.
-         *
          * @example 55
          */
         pinAttemptsCounter: number;
         /**
          * Format: int64
          * @description Maximum number of PIN attempts.
-         *
          * @example 55
          */
         maxPinAttempts: number;
         /**
          * @description Branch code under which a contract (an account contract or a card contract) has been created on the Issuer's side and which has been passed in a contract creation request. (`POST /accounts` or `POST /cards`). The value can be later used by the Issuer for reporting purposes.
-         *
          * @example BRANCH_A
          */
         branchCode: string;
         /**
          * @description Branch name (assigned to the branch code).
-         *
          * @example Branch A
          */
         branchName: string;
         /**
          * @description Contract identifier (for an account contract or a card contract) generated on the Issuer's side and passed to the MP's CMS in the contract creation request. (`POST /accounts` or `POST /cards`).
-         *
          * @example CBS83863371812033
          */
         cbsNumber: string;
@@ -3213,7 +3076,6 @@ export interface components {
          * @description The field defines the subtype code of a contract. The value should be set only for products (an account contract or a card contract) for which a subtype definition is allowed.
          *
          *     *Disclaimer: `subtypeCode` is configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-         *
          * @example CA-p
          */
         subtypeCode: string;
@@ -3223,7 +3085,6 @@ export interface components {
          *     *Disclaimer: `productCode` is configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own value).*
          *
          *     In the standard product account `productCode` can be found in the Parametrization Workbook (PPW) in the *CD.1.3.003* and *CD.1.3.004* (in case of pre-embossed issuing mode).
-         *
          * @example STD-DEBCH-EUR
          */
         accountProductCode: string;
@@ -3233,7 +3094,6 @@ export interface components {
          *     *Disclaimer: `productCode` is configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own value).*
          *
          *     In the standard product card `productCode` can be found in the Parametrization Workbook (PPW) in the *CD.1.4.005*.
-         *
          * @example STD-MCDEBVF-EUR
          */
         cardProductCode: string;
@@ -3246,7 +3106,6 @@ export interface components {
          *     | ADD_INFO_02         	|
          *     | ADD_INFO_03         	|
          *     | ADD_INFO_04         	|
-         *
          * @example ADD_INFO_01
          * @enum {string}
          */
@@ -3257,7 +3116,6 @@ export interface components {
          *     The tag name can be set by the Issuer, prior configuration of its name in the MP's CMS is not necessary.
          *
          *     The tag name should not contain characters ['=', ';', ' '].
-         *
          * @example TAG_01
          */
         tagName: string;
@@ -3265,52 +3123,44 @@ export interface components {
          * @description Tag value. To clear a tag value, an empty value must be sent ('').
          *
          *     The tag value should not contain characters ['=', ';']
-         *
          * @example TAG_01_VALUE
          */
         tagValue: string;
         /**
          * @description Flag informing if the tag should be removed from its container field.
-         *
          * @example false
          */
         removeTag: boolean;
         /**
          * Format: date-time
          * @description Date and time of the most recent change to the object (YYYY-MM-DDThh:mm:ssZ format).
-         *
          * @example 2019-06-25T12:51:30Z
          */
         amendmentDate: string;
         /**
          * Format: int64
          * @description Officer ID of the MP's CMS user who made the last change to the object.
-         *
          * @example 14300
          */
         amendmentOfficerId: number;
         /**
          * @description Officer name of the MP's CMS user who made the last change to the object.
-         *
          * @example John Smith
          */
         amendmentOfficerName: string;
         /**
          * Format: date
          * @description Date of the contract record creation in the MP's CMS (YYYY-MM-DD format).
-         *
          * @example 2019-06-25
          */
         dateOpen: string;
         /**
          * @description Name of the product code used to create contract.
-         *
          * @example Standard Debit Account
          */
         accountProductName: string;
         /**
          * @description Name of the product code used to create contract.
-         *
          * @example Standard Mastercard Individual Debit Card
          */
         cardProductName: string;
@@ -3319,19 +3169,16 @@ export interface components {
          * @description Unique technical client identifier, generated by the MP's CMS database engine.
          *     The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`).
          *     When a client is assigned to a card contract in the card contract creation request, they become a cardholder and are authorized to perform transactions using the card.
-         *
          * @example 41537005
          */
         cardholderId: number;
         /**
          * @description Client (cardholder) short name.
-         *
          * @example Madley
          */
         cardholderShortName: string;
         /**
          * @description Free text describing the reason for status change.
-         *
          * @example COMMENT
          */
         statusChangeReason: string;
@@ -3340,7 +3187,6 @@ export interface components {
          *
          *     *Disclaimer: Please contact MP's representative should new values be required.*
          *     Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.
-         *
          * @example Department
          */
         orderDepartment: string;
@@ -3350,7 +3196,6 @@ export interface components {
          *     Service groups can be used to configure various filters for viewing data or generating reports.
          *
          *     *Disclaimer: Please contact the MP representative should new values be required. Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.*
-         *
          * @example 021
          */
         serviceGroupCode: string;
@@ -3362,74 +3207,62 @@ export interface components {
          *     | PIN                         	| PIN mailer delivery address 	|
          *     | STMT                        	| Statement delivery address  	|
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process as they are configured in the CMS system.*
-         *
          * @example PIN
          */
         addressType: string;
         /**
          * @description First address line.
-         *
          * @example Mrs. Alice Smith Apartment
          */
         addressLine1: string;
         /**
          * @description Second address line.
-         *
          * @example 1c 213
          */
         addressLine2: string;
         /**
          * @description Third address line.
-         *
          * @example Derrick Street
          */
         addressLine3: string;
         /**
          * @description Fourth address line.
-         *
          * @example 2nd floor
          */
         addressLine4: string;
         /**
          * @description City.
-         *
          * @example Boston
          */
         city: string;
         /**
          * @description Postal code. The MP's CMS will not validate the correctness of the postal code.
-         *
          * @example 02130
          */
         postalCode: string;
         /**
          * @description State. The MP's CMS will not validate the correctness of the state name.
-         *
          * @example MA
          */
         state: string;
         /**
          * @description Three-letter country code (format according to ISO-3166, alpha-3 specification).
-         *
          * @example USA
          */
         country: string;
         /**
          * @description Client's email address. The MP's CMS will verify if the value contains the "@" character and will return an error if it does not.
          *     Requests without the "@" character in the `email` field will be rejected.
-         *
          * @example johndoe@example.com
          */
         email: string;
         /**
          * @description First name.
-         *
          * @example John
          */
         firstName: string;
         /**
          * @description Last name.
-         *
          * @example Doe
          */
         lastName: string;
@@ -3437,14 +3270,12 @@ export interface components {
          * @description Public RSA key generated by a Customer (the Issuer). ASCII/UTF-8 string of characters 0-9,A-F (ASN.1 DER Public hex unpacked to string) or PEM concatenated Base64 without BEGIN and END lines.
          *
          *     The MP will use this key to additionally encrypt sensitive data sent by the MP to the Issuer in responses of the MP's API operations.
-         *
          * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100C98A4398C273D64ABDE2F654FE5C4B0423A789ACAD9F0FE6AB00A75ACF1C974FA35F7DF89560A950F5DC4F5915C6615DA1055BD28C7C32E99191C8CDB67AB7C410DAC0B37CB545D9D2A07677A4DE4BE51529343300AE5B2790067EA885AE485A3A40E6F9C62311109562766634D7F816F9F4A4ACF9791ED281A0FF550D10C8A213F52D9DAB3E5472A3BEFFC5B8E5528BE5B9C853DF5EE95C891CD956E80737CDAC5E48B756524F2EB15AA6DCFD966FD39C58BCA9D1BE37D97EA19FC33483AE9DDE0536D61CBA12C6D1F757110A3531A9543812482CDC200F93EEDA2AC4D492B76560EB7094F90CE8A273D3623A8389FBF5F8F1B17990F1B9EB876C17C3CC2EC50203010001
          */
         customerPublicRsaKey: string;
         /**
          * Format: int64
          * @description Installment chain identifier.
-         *
          * @example 261983
          */
         installmentChainId: number;
@@ -3473,14 +3304,12 @@ export interface components {
          *     | Corrected            	|
          *     | Outstanding          	|
          *     | Complete Outstanding 	|
-         *
          * @example Inactive
          */
         installmentPlanStatus: string;
         /**
          * Format: int64
          * @description Number of billing cycle. Starting from 0. Increased by 1 for every new billing cycle.
-         *
          * @example 1
          */
         billingCycleNumber: number;
@@ -3488,7 +3317,6 @@ export interface components {
          * @description Classifier code.
          *
          *     *Disclaimer: Classifiers are preconfigured in the MP's CMS system. A list of possible classifier codes will be defined during the onboarding process as they are a part of product configuration in the MP's CMS.*
-         *
          * @example TEST_CLASSIFIER_01
          */
         classifierCode: string;
@@ -3496,7 +3324,6 @@ export interface components {
          * @description Classifier value.
          *
          *     *Disclaimer: Classifiers are preconfigured in the MP's CMS system. A list of possible classifier values will be defined during the onboarding process as they are a part of product configuration in the MP's CMS.*
-         *
          * @example VALUE_1A
          */
         classifierValue: string;
@@ -3504,7 +3331,6 @@ export interface components {
          * @description Parameter code.
          *
          *     *Disclaimer: Parameters are preconfigured in the MP's CMS system. A list of possible parameter codes will be defined during the onboarding process as they are a part of product configuration in the MP's CMS.*
-         *
          * @example TEST_PARAMETER_01
          */
         parameterCode: string;
@@ -3512,7 +3338,6 @@ export interface components {
          * @description Parameter value.
          *
          *     *Disclaimer: Parameters are preconfigured in the MP's CMS system. A list of possible parameter values will be defined during the onboarding process as they are a part of product configuration in the MP's CMS.*
-         *
          * @example 45
          */
         parameterValue: string;
@@ -3523,7 +3348,6 @@ export interface components {
          *     |---------------------	|
          *     | N                   	|
          *     | Y                   	|
-         *
          * @example N
          */
         leaf: string;
@@ -3531,7 +3355,6 @@ export interface components {
          * @description The code of the balance type.
          *
          *     *Disclaimer: Balance type codes are configured in the MP's CMS.*
-         *
          * @example AVAILABLE
          */
         contractBalanceCode: string;
@@ -3539,13 +3362,11 @@ export interface components {
          * @description Account balance at the beginning of the billing cycle.
          *
          *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-         *
          * @example 0
          */
         billingStartBalance: number;
         /**
          * @description Index of a public RSA key used for initiateDigitizationData encryption. A value is received from the MP in the response of `GET /public-keys` (API operation: `getPublicRsaKey`).
-         *
          * @example A1564386531162
          */
         keyIndex: string;
@@ -3553,53 +3374,45 @@ export interface components {
          * @description Used to ensure idempotency for the PATCH methods.
          *     This header should be populated with an `ETag` received in the response header from the GET call of the same resource being updated.
          *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for more details.
-         *
          * @example "7fedf39c3c2952a62821de4b480d1d6f"
          */
         ifMatch: string;
         /**
          * @description Authorization code.
-         *
          * @example 179651
          */
         authorizationCode: string;
         /**
          * @description 12-digit Retrieval Reference Number.
-         *
          * @example 212357021766
          */
         rrn: string;
         /**
          * @description Source Registration Number.
-         *
          * @example 122357012766
          */
         srn: string;
         /**
          * Format: int32
          * @description The number of items that are in this offset batch.
-         *
          * @example 1
          */
         paginationCount: number;
         /**
          * Format: int32
          * @description The number of items the list has been limited to.
-         *
          * @example 1
          */
         paginationLimit: number;
         /**
          * Format: int64
          * @description The number of items the start of the list has been offset from.
-         *
          * @example 0
          */
         paginationOffset: number;
         /**
          * Format: int64
          * @description The total number of items that are in the entire collection.
-         *
          * @example 15
          */
         paginationTotal: number;
@@ -3610,7 +3423,6 @@ export interface components {
         date: string;
         /**
          * @description The code of usage limit configured in the MP's CMS. Usage limit code defines the type of usage limit.
-         *
          * @example DAILY_TOTAL
          */
         usageLimitCode: string;
@@ -3618,7 +3430,8 @@ export interface components {
             accountContractId: components["schemas"]["accountContractId"];
             clientId?: components["schemas"]["clientId"];
             cardContract: components["schemas"]["CardContractData"];
-            /** @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
+            /**
+             * @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify a tag name and its value.
              *
@@ -3626,7 +3439,7 @@ export interface components {
              *     (for example: CATEGORY=A;GROUP=G1;).
              *
              *     Each container has a length of 255 characters.
-             *      */
+             */
             cardContractCustomData?: components["schemas"]["CustomDataTag"][];
         };
         /** @description Card basic information. */
@@ -3639,7 +3452,6 @@ export interface components {
             /**
              * @description Contract currency (format according to ISO 4217, alphanumeric code).
              *     Must be set for a product which references several account schemes in different currencies, otherwise, it will be ignored.
-             *
              * @example EUR
              */
             currency?: string;
@@ -3651,7 +3463,8 @@ export interface components {
         CardContractIdentifier: {
             cardContractId?: components["schemas"]["cardContractId"];
         };
-        /** @description Data embossing is used by the Issuer to specify what text shall be embossed on the physical card. Data embossing in the MP's CMS can be specified at the **client level** and at the **card contract level**. Once a card contract is created, the MP's CMS executes the card personalization process which produces data required for physical card production. The following rules apply:
+        /**
+         * @description Data embossing is used by the Issuer to specify what text shall be embossed on the physical card. Data embossing in the MP's CMS can be specified at the **client level** and at the **card contract level**. Once a card contract is created, the MP's CMS executes the card personalization process which produces data required for physical card production. The following rules apply:
          *       * If both places (client's embossed data and card's embossed data) are filled, then the personalization process takes the values from the card contract.
          *       * If the client's embossed data are not filled and a card contract creation request is being processed without data embossing passed, then the MP's CMS will not allow to create a card contract – a creation request will be rejected with proper information.
          *       * The MP's CMS creates two printed lines based on four embossing fields:
@@ -3669,23 +3482,20 @@ export interface components {
          *       * The MP's CMS allows to pass in data embossing only a limited set of characters (by default, only capital letters are allowed), as they have to be printed on the physical card using a standard font (default values are already configured). The MP's CMS validates the characters sent by the Issuer against the permitted ones. In case a passed character is not permitted, proper information will be returned and the request will be rejected.
          *
          *       *Disclaimer: Please contact the MP representative should other embossed characters be required. The available set of characters will need to be agreed by the MP and the Issuer prior to the onboarding process as it needs to be configured on the MP's side.*
-         *      */
+         */
         EmbossedData: {
             /**
              * @description Company name to be embossed.
-             *
              * @example COMPANY
              */
             companyName?: string;
             /**
              * @description First name to be embossed.
-             *
              * @example JOHN
              */
             firstName?: string;
             /**
              * @description Last name to be embossed.
-             *
              * @example DOE
              */
             lastName?: string;
@@ -3699,7 +3509,6 @@ export interface components {
              *     | MISS                          	|
              *
              *     *Disclaimer: Please contact the MP representative should other values be required. Available values will need to be agreed by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.*
-             *
              * @example MR
              */
             title?: string;
@@ -3714,13 +3523,11 @@ export interface components {
         TransactionCustomData: {
             /**
              * @description Tag name. Tag name should not contain characters ['=', ';', ' ']
-             *
              * @example TAG_NAME_1
              */
             tagName: string;
             /**
              * @description Tag value. Tag value should not contain characters ['=', ';']
-             *
              * @example TAG_VALUE_A
              */
             tagValue: string;
@@ -3749,25 +3556,21 @@ export interface components {
             Source?: string;
             /**
              * @description Reason code is a unique constant identifying the error case encountered during the request processing.
-             *
              * @example OPERATION_DENIED
              */
             ReasonCode?: string;
             /**
              * @description User-friendly short description of the reasonCode.
-             *
              * @example Operation <operationId> is disabled in your API configuration.
              */
             Description?: string;
             /**
              * @description Optional detailed description provides information about the data received and calculated during the request processing, to help the user with diagnosing errors.
-             *
              * @example You must have permission to use this operation.
              */
             Details?: string;
             /**
              * @description Recoverable flag indicates whether this error will always be returned for this request or if retrying could change the outcome.
-             *
              * @example false
              */
             Recoverable?: boolean;
@@ -3776,14 +3579,15 @@ export interface components {
             cbsNumber?: components["schemas"]["cbsNumber"];
             cardContractName?: components["schemas"]["cardContractName"];
             embossedData?: components["schemas"]["EmbossedData"];
-            /** @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
+            /**
+             * @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify a tag name and its value.
              *
              *     Custom data tags are stored in fixed containers (four containers are available) in a TAG=VALUE; format (for example CATEGORY=A;GROUP=G1;).
              *
              *     Each container has a length of 255 characters.
-             *      */
+             */
             cardContractCustomData?: components["schemas"]["CustomDataTag"][];
         };
         AccountContractCardContracts: {
@@ -3791,8 +3595,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `CardContractSummary`.
-             *      */
+            /** @description List of `CardContractSummary`. */
             accountContractCardContracts: components["schemas"]["CardContractSummary"][];
         };
         CardContractSummary: {
@@ -3809,13 +3612,11 @@ export interface components {
             creditLimit?: components["schemas"]["creditLimit"];
             /**
              * @description Card contract currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Card contract currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -3843,7 +3644,6 @@ export interface components {
              * @description Available card balance.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1401.21
              */
             availableBalance?: number;
@@ -3861,13 +3661,11 @@ export interface components {
             creditLimit?: components["schemas"]["creditLimit"];
             /**
              * @description Card contract currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Card contract currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -3887,7 +3685,6 @@ export interface components {
          * Format: int64
          * @description Unique technical identifier of the previous card contract, generated for the current card contract by the MP's CMS.
          *     The identifier is generated when the previous card contract creation is successfully completed and is returned in a new card contract creation response. (`POST /cards`).
-         *
          * @example 77691090
          */
         previousCardContractId: number;
@@ -3900,7 +3697,6 @@ export interface components {
          *     The card contract number can be returned:
          *       * unmasked - with a full PAN visible
          *       * masked - with a full PAN masked according to the defined mask (a mask pattern is agreed with the Issuer and configured in the MP API)
-         *
          * @example 535773______2767
          */
         previousCardContractNumber: string;
@@ -3925,7 +3721,6 @@ export interface components {
              *     | To Request           	| The smart card applet is ready to be sent to a third-party vendor                                                         	|
              *     | Waiting for Response 	| The smart card applet is waiting for a response from a third-party vendor                                                 	|
              *     | Waiting for Subs     	| The smart card is waiting for a response from a third-party vendor                                                        	|
-             *
              * @example Ready
              */
             productionStatus?: string;
@@ -3946,7 +3741,6 @@ export interface components {
              *     | 59                  	| Suspected fraud (temporary status). Usually set on Issuer's request              	|
              *
              *      *Disclaimer: Please contact the MP representative in case other status codes are necessary.*
-             *
              * @example 00
              */
             statusCode: string;
@@ -3955,7 +3749,6 @@ export interface components {
             /**
              * @description This field must be always `true`. Executing this action will unblock the `Plastic` of the card contract and allow the card to be used for transactions.
              *     Card contract will be activated (status of the `Plastic` will be changed to `Active`).
-             *
              * @example true
              */
             activated: boolean;
@@ -3965,8 +3758,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `CardContract`.
-             *      */
+            /** @description List of `CardContract`. */
             clientCardContracts: components["schemas"]["CardContract"][];
         };
         Plastic: {
@@ -3975,38 +3767,32 @@ export interface components {
             cardExpiryDate?: components["schemas"]["cardExpiryDate"];
             /**
              * @description Name of a chip scheme used to create a physical card. For smart cards (cards with a chip), the chip scheme defines a set of transaction limiters saved in the chip memory during the card personalization (physical production).
-             *
              * @example BNK ADVANCE DEBIT
              */
             chipScheme?: string;
             /**
              * @description Client company name (free text field).
-             *
              * @example Company
              */
             companyName?: string;
             /**
              * Format: date
              * @description Start date of a card's effective period (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             effectiveDate?: string;
             /**
              * @description Value embossed on a physical card.
-             *
              * @example MR JOHN DOE
              */
             embossedName?: string;
             /**
              * @description Issuer's office that sent the card production order.
-             *
              * @example Office A
              */
             orderSource?: string;
             /**
              * @description Issuer's office to which the issued card and a PIN mailer will be sent.
-             *
              * @example Target Office
              */
             orderTarget?: string;
@@ -4014,7 +3800,6 @@ export interface components {
              * @description The name of a personalization file (a file sent to the personalization bureau).
              *
              *     Personalization files are generated by the MP. The process of file generation is executed by the MP several times per day, according to a defined schedule. All created cards marked for production are processed and placed in a personalization file.
-             *
              * @example PM_REQ_0018__20200129_000003MDSDEU.xml
              */
             personalizationFileName?: string;
@@ -4023,7 +3808,6 @@ export interface components {
             /**
              * Format: date
              * @description Date of generating a card plastic personalization file (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             productionDate?: string;
@@ -4032,7 +3816,6 @@ export interface components {
              *     |---------------------	|
              *     | Produce Card        	|
              *     | Replace Card        	|
-             *
              * @example Produce Card
              */
             productionEvent?: string;
@@ -4054,7 +3837,6 @@ export interface components {
              *     | Replace Add Parms   	| In the current system version, this production type is used to issue a PIN2.                                                       	|
              *     | Replace Chip Data   	| Calculation of encryption values for smart cards (no PIN code is generated and no PIN mailer is printed).                          	|
              *     | REPRINT_PIN         	| Obsolete.                                                                                                                          	|
-             *
              * @example Replace All
              */
             productionType?: string;
@@ -4072,20 +3854,17 @@ export interface components {
              *     | From File           	| The request to reissue the card (received via batch file) is being processed by the MP's CMS                                      	|
              *     | Locked for Online   	|                                                                                                                                   	|
              *     | Deferred            	|                                                                                                                                   	|
-             *
              * @example Closed
              */
             status: string;
         };
         CardContractPlastics: {
-            /** @description Object contains list of `Plastic` records for the given card contract.
-             *      */
+            /** @description Object contains list of `Plastic` records for the given card contract. */
             cardContractPlastics: components["schemas"]["Plastic"][];
         };
         CardContractReissue: {
             /**
              * @description Primary Account Number (PAN) of a new card contract, which shall be created in the MP's CMS.
-             *
              * @example 5355840352135312
              */
             newCardContractNumber?: string;
@@ -4093,7 +3872,6 @@ export interface components {
             /**
              * @description Card contract identifier generated on the Issuer's side and passed to the MP's CMS.
              *     The value will be stored on a newly created card contract in the CMS.
-             *
              * @example CBS15863242747061
              */
             newCbsNumber?: string;
@@ -4123,7 +3901,6 @@ export interface components {
              *     | REPRINT                       |        N/A          |   N/A     | N/A                           |                      Same                       |
              *
              *     *Disclaimer: `reissueType` is configured in the MP's CMS and the Issuer is allowed to use only the values configured by the MP.*
-             *
              * @example REISSUE
              */
             reissueType: string;
@@ -4139,7 +3916,6 @@ export interface components {
             /**
              * Format: int64
              * @description Unique identifier of the document record in the CMS database.
-             *
              * @example 2829673
              */
             transactionId: number;
@@ -4151,7 +3927,6 @@ export interface components {
             /**
              * Format: date-time
              * @description The date and time of setting the status (YYYY-MM-DDThh:mm:ssZ format).
-             *
              * @example 2020-09-21T12:14:01Z
              */
             changeDate?: string;
@@ -4160,13 +3935,11 @@ export interface components {
             /**
              * Format: int64
              * @description The system user ID assigned the status value.
-             *
              * @example 27051
              */
             officerId?: number;
             /**
              * @description The system user name who assigned the status value.
-             *
              * @example OfficerName
              */
             officerName?: string;
@@ -4181,7 +3954,6 @@ export interface components {
              *     | 14                  	| Final stats of account contract's lifecycle. Set automatically by the CMS           	|
              *
              *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-             *
              * @example 00
              */
             previousStatusCode?: string;
@@ -4192,7 +3964,6 @@ export interface components {
             previousStatusName?: string;
             /**
              * @description The reason comment for status change.
-             *
              * @example COMMENT
              */
             statusChangeReason?: string;
@@ -4207,7 +3978,6 @@ export interface components {
              *     | 14                  	| Final stats of account contract's lifecycle. Set automatically by the CMS           	|
              *
              *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-             *
              * @example 00
              */
             statusCode?: string;
@@ -4217,7 +3987,6 @@ export interface components {
             /**
              * Format: date-time
              * @description The date and time of setting the status (YYYY-MM-DDThh:mm:ssZ format).
-             *
              * @example 2020-09-21T12:14:01Z
              */
             changeDate?: string;
@@ -4226,13 +3995,11 @@ export interface components {
             /**
              * Format: int64
              * @description The system user ID assigned the status value.
-             *
              * @example 27051
              */
             officerId?: number;
             /**
              * @description The system user name who assigned the status value.
-             *
              * @example OfficerName
              */
             officerName?: string;
@@ -4252,7 +4019,6 @@ export interface components {
              *     | 59                  	| Suspected fraud (temporary status). Usually set on Issuer's request              	|
              *
              *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-             *
              * @example 00
              */
             previousStatusCode?: string;
@@ -4263,7 +4029,6 @@ export interface components {
             previousStatusName?: string;
             /**
              * @description The reason comment for status change.
-             *
              * @example COMMENT
              */
             statusChangeReason?: string;
@@ -4283,7 +4048,6 @@ export interface components {
              *     | 59                  	| Suspected fraud (temporary status). Usually set on Issuer's request              	|
              *
              *     *Disclaimer: please contact the MP representative should other codes be necessary.*
-             *
              * @example 00
              */
             statusCode?: string;
@@ -4294,8 +4058,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `ContractTariff`.
-             *      */
+            /** @description List of `ContractTariff`. */
             contractTariffs: components["schemas"]["ContractTariff"][];
         };
         BaseClient: {
@@ -4321,7 +4084,8 @@ export interface components {
             serviceGroupCode?: components["schemas"]["serviceGroupCode"];
         } & components["schemas"]["BaseClient"];
         ClientCreation: {
-            /** @description Client custom data allow the Issuer to pass specific client tags during the creation request.
+            /**
+             * @description Client custom data allow the Issuer to pass specific client tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify a tag name and its value.
              *
@@ -4329,7 +4093,7 @@ export interface components {
              *     (for example: CATEGORY=A;GROUP=G1;).
              *
              *     Each container has a length of 3900 characters.
-             *      */
+             */
             clientCustomData?: components["schemas"]["CustomDataTag"][];
             clientNumber: components["schemas"]["clientNumber"];
             clientType: components["schemas"]["clientType"];
@@ -4343,7 +4107,6 @@ export interface components {
          * Format: date-time
          * @description Additional date to meet the Issuer's individual needs.
          *     It can be any date which the Issuer wants to store on the client record - for example, the date when the client signed the agreement. (YYYY-MM-DDThh:mm:ssZ format).
-         *
          * @example 2021-01-27T09:59:44Z
          */
         additionalDate01: string;
@@ -4351,12 +4114,10 @@ export interface components {
          * Format: date-time
          * @description Additional date to meet the Issuer's individual needs.
          *     It can be any date which the Issuer wants to store on the client record - for example, the date when the client signed the agreement. (YYYY-MM-DDThh:mm:ssZ format).
-         *
          * @example 2021-02-15T20:58:39Z
          */
         additionalDate02: string;
-        /** @description Client's base address stored in the MP's CMS at the client level.
-         *      */
+        /** @description Client's base address stored in the MP's CMS at the client level. */
         ClientBaseAddressData: {
             addressLine1?: components["schemas"]["addressLine1"];
             addressLine2?: components["schemas"]["addressLine2"];
@@ -4367,43 +4128,36 @@ export interface components {
             postalCode?: components["schemas"]["postalCode"];
             state?: components["schemas"]["state"];
         };
-        /** @description The client's company object represents a repository where the Issuer can store information on what company the client belongs to.
-         *      */
+        /** @description The client's company object represents a repository where the Issuer can store information on what company the client belongs to. */
         ClientCompanyData: {
             /**
              * @description Company department name.
-             *
              * @example Department
              */
             companyDepartment?: string;
             /**
              * @description Company name.
-             *
              * @example Company
              */
             companyName?: string;
             /**
              * @description Company trade name.
-             *
              * @example Company Trade
              */
             companyTradeName?: string;
             /**
              * @description Client's position in their company.
-             *
              * @example Employee
              */
             position?: string;
         };
-        /** @description Client's contact data.
-         *      */
+        /** @description Client's contact data. */
         ClientContactData: {
             email?: components["schemas"]["email"];
             /**
              * @description Fax number.
              *
              *     Note: The pattern for this field is configured in the MP's API during the onboarding process.
-             *
              * @example 0048123456777
              */
             fax?: string;
@@ -4411,7 +4165,6 @@ export interface components {
              * @description Home fax number.
              *
              *     Note: The pattern for this field is configured in the MP's API during the onboarding process.
-             *
              * @example 0048123456888
              */
             faxHome?: string;
@@ -4419,7 +4172,6 @@ export interface components {
              * @description Home phone number.
              *
              *     Note: The pattern for this field is configured in the MP's API during the onboarding process.
-             *
              * @example 0048123456999
              */
             phoneNumberHome?: string;
@@ -4427,7 +4179,6 @@ export interface components {
              * @description Mobile phone number (i.e. used for SMS notifications).
              *
              *     Note: The pattern for this field is configured in the MP's API during the onboarding process.
-             *
              * @example 0048123456778
              */
             phoneNumberMobile?: string;
@@ -4435,77 +4186,64 @@ export interface components {
              * @description Work phone number.
              *
              *     Note: The pattern for this field is configured in the MP's API during the onboarding process.
-             *
              * @example 0048123456789
              */
             phoneNumberWork?: string;
         };
-        /** @description Client's identification data.
-         *      */
+        /** @description Client's identification data. */
         ClientIdentificationData: {
             /**
              * @description Client identification document details. Free text field, could be the document's date of issue.
-             *
              * @example 161235698529429
              */
             identificationDocumentDetails?: string;
             /**
              * @description Client's identification document number e.g. national ID document, passport number.
              *     Free text field. The MP's CMS will not validate the correctness of the identification number.
-             *
              * @example 161235698529328
              */
             identificationDocumentNumber?: string;
             /**
              * @description Client's identification document type. Free text, e.g. National ID, Passport.
-             *
              * @example Passport
              */
             identificationDocumentType?: string;
             /**
              * @description Client's social security number. The MP's CMS will not validate the correctness of the social security number.
-             *
              * @example 161235698529227
              */
             socialNumber?: string;
             /**
              * @description Additional information related to tax purposes. Free text field.
-             *
              * @example Tax position
              */
             taxPosition?: string;
             /**
              * @description Identification number used for tax purposes.
-             *
              * @example 161235698529531
              */
             taxpayerIdentifier?: string;
         };
-        /** @description Client's personal data.
-         *      */
+        /** @description Client's personal data. */
         ClientPersonalData: {
             /**
              * Format: date
              * @description Date of birth (format: YYYY-MM-DD).
-             *
              * @example 2021-06-25
              */
             birthDate?: string;
             /**
              * @description Birth name.
-             *
              * @example Doe
              */
             birthName?: string;
             /**
              * @description Place of birth.
-             *
              * @example Warsaw
              */
             birthPlace?: string;
             /**
              * @description Client's citizenship. The allowed format is ISO 3166-1 alfa-3 country code (3-letter country designation).
-             *
              * @example USA
              */
             citizenship?: string;
@@ -4518,7 +4256,6 @@ export interface components {
              *     | F                   	| Female          	|
              *     | M                   	| Male            	|
              *     | N                   	| Not specified   	|
-             *
              * @example M
              */
             gender?: string;
@@ -4527,7 +4264,6 @@ export interface components {
              *     It follows the Internet Engineering Task Force (IETF) [BCP 47](https://tools.ietf.org/html/bcp47#appendix-A) standard.
              *
              *     *Disclaimer: Please contact the MP representative should the language code be used. Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side and have an impact on different areas of configuration (e.g. statement file generating, workbench screens, etc.).*
-             *
              * @example en
              */
             language?: string;
@@ -4543,26 +4279,22 @@ export interface components {
              *     | DX                    | Miscellaneous     |
              *
              *     *Disclaimer: Please contact the MP representative should other values be required. Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.*
-             *
              * @example DS
              */
             maritalStatus?: string;
             /**
              * @description Middle name.
-             *
              * @example Carl
              */
             middleName?: string;
             /**
              * @description Secret phrase can be used by the Issuer to authenticate a client.
              *     E.g. mother's maiden name used for authentication process between the client and the call center.
-             *
              * @example secret
              */
             secretPhrase?: string;
             /**
              * @description Client's short name.
-             *
              * @example Madley
              */
             shortName?: string;
@@ -4571,7 +4303,6 @@ export interface components {
              *     The Issuer can choose any text the client wishes, e.g. PhD, Dr.
              *
              *     *Disclaimer: Please contact the MP representative should the suffix be used. Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.*
-             *
              * @example PhD
              */
             suffix?: string;
@@ -4585,13 +4316,13 @@ export interface components {
              *     | MISS                          	|
              *
              *     *Disclaimer: Please contact the MP representative should other values be required. Available values will need to be agreed upon by the MP and the Issuer prior to the onboarding process as they need to be configured on the MP's side.*
-             *
              * @example MR
              */
             title?: string;
         };
         ClientModification: {
-            /** @description Client custom data allow the Issuer to pass specific client tags during the creation request.
+            /**
+             * @description Client custom data allow the Issuer to pass specific client tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify a tag name and its value.
              *
@@ -4599,7 +4330,7 @@ export interface components {
              *     (for example: CATEGORY=A;GROUP=G1;).
              *
              *     Each container has a length of 3900 characters.
-             *      */
+             */
             clientCustomData?: components["schemas"]["CustomDataTag"][];
         } & components["schemas"]["BaseClient"];
         PinSearchCriteria: {
@@ -4609,13 +4340,11 @@ export interface components {
         EncryptedPin: {
             /**
              * @description Card contract number - PAN encrypted with `Customer-Public-Rsa-Key`.
-             *
              * @example 43165173F6A016EDF4075FFBC4F38DD8C1F59C0ACE3BC35853AB91A2A93AC20FC166C26723CCD261CCE41AE142D0AB0CF08CD1996CA6499D8301ABD9964EAE00B932786357FEF1DD7425D8D332980ABE18642438864CB3313CCFA4A5C4490F6A3D4348037295E9957309757E8D18835F7616869DB4692665EF765948A3D3C61B6B75C0CA130A80AFB8A937B203E009A8FC26BB8FBBFEA4E41FC186416D58129FDADC1F80AB88458A8212551CD874157C3F19F876D1E747D525E534885709906647AF017F0EC7662FD76F886EBAFDB9EF558C1ED5AC3B1A38CB5A34D70FF1517C819CCE26054798E40F9FFECC3B37146D4A3F4AF5B25A4D4554C1B08AA14FAD8B
              */
             encryptedCardContractNumber: string;
             /**
              * @description PIN block encrypted with ZPK (Zone PIN Key) returned in `encryptedZpk`.
-             *
              * @example 0B8315C81719E9CA
              */
             encryptedPinBlock: string;
@@ -4625,19 +4354,16 @@ export interface components {
              *     Before encrypting with `Customer-Public-Rsa-Key`, ZPK is wrapped under Standard Key Block type.
              *
              *     The standard key block format is a TLV (Type-Length-Value) encoding scheme with length as represented in Hexadecimal.
-             *
              * @example 21CB78205C03CC9DEF06497F3DCC413DA9C25C51473F3BDADCA61F56184B0D199E9E0C175A5E082A4ED9044C5F2D21A930A255203D4A051EF6108B496FAA5ABFCFA146CF76A61DA330F84BEF2F2701BC17282FB6BC542F0E3F50AC3C4D27FC32E7009E5C8D406D019E7D6679DEEF09463CFCDB7957263597D65C1D31472B5E1B72252CE491BE0C67415A8D4F935F11F6CA2909511FAE7B9D453FEE102AD8BF0CD69C34CAC4028627855221AD381FD1376F6AB99F0C6693B384089C1ACEB5ED63ACB3ED0B644CFDC39EEC87887D8D5C60B5EF50CF29041F19C91FF84F677F27108D6FC0DEC9FB6575A36C65C630C20D3DA2D071135B3F829674493799C64F908B
              */
             encryptedZpk: string;
         };
         ClientAddresses: {
-            /** @description List of `Address` for the client.
-             *      */
+            /** @description List of `Address` for the client. */
             clientAddresses: components["schemas"]["Address"][];
         };
         ContractAddresses: {
-            /** @description List of `Address` for the contract.
-             *      */
+            /** @description List of `Address` for the contract. */
             contractAddresses: components["schemas"]["Address"][];
         };
         BaseAddress: {
@@ -4660,7 +4386,6 @@ export interface components {
             addressType: components["schemas"]["addressType"];
             /**
              * @description Flag informing about the status of the address. The address can be enabled or disabled.
-             *
              * @example true
              */
             enabled: boolean;
@@ -4668,32 +4393,34 @@ export interface components {
         AddressModification: {
             /**
              * @description Flag informing about the status of the address. The address can be enabled or disabled.
-             *
              * @example true
              */
             enabled?: boolean;
         } & components["schemas"]["BaseAddress"];
         AccountContractCreation: {
-            /** @description A contract classifier is an additional system configuration allowing the MP platform to execute specific flows in the system.
+            /**
+             * @description A contract classifier is an additional system configuration allowing the MP platform to execute specific flows in the system.
              *
              *     *Disclaimer: possible values of contract classifiers shall be provided by the MP.*
-             *      */
+             */
             accountContractClassifiers?: components["schemas"]["AccountContractClassifier"][];
             accountContractData: components["schemas"]["AccountContractData"];
-            /** @description A contract parameters allow the MP platform to execute specific flows in the system.
+            /**
+             * @description A contract parameters allow the MP platform to execute specific flows in the system.
              *
              *     *Disclaimer: possible values of contract parameters shall be provided by the MP.*
-             *      */
+             */
             accountContractParameters?: components["schemas"]["AccountContractParameter"][];
             creditData?: components["schemas"]["CreditData"];
             liabilityContract?: components["schemas"]["LiabilityContract"];
         };
-        /** @description Liability defines the type of relation between the current product and its parent product in a "Liability" hierarchy.
+        /**
+         * @description Liability defines the type of relation between the current product and its parent product in a "Liability" hierarchy.
          *
          *     Liability information allows the Issuer to define how the MP's CMS shall check the 'Open To Buy' amount when a transaction is performed by the cardholder.
          *
          *     A liability link is set between two account contracts during the account contract creation request (`POST /accounts`).
-         *      */
+         */
         LiabilityContract: {
             /**
              * @description Type of link between an upper-level liability account contract and the account contract being created. Usually, the link is created to indicate one corporate headquarter account and many corporate branch accounts.
@@ -4719,20 +4446,17 @@ export interface components {
              *
              *     * R - Reporting
              *       * This link type is used to gather statistical data on account activity within its tree. The data are required for generating "non-financial" reports, such as statements on all corporate accounts – without their consolidated totals.
-             *
              * @example Y
              * @enum {string}
              */
             liabilityCategory: "Y" | "N" | "A" | "R";
             /**
              * @description Technical identifier of an upper-level liability account contract to which a liability link is set for the account contract being created.
-             *
              * @example 125879812
              */
             liabilityContractId: string;
         };
-        /** @description Account contract data represents basic account information for any account: is it a top account or a sub-account, a debit or a credit account.
-         *      */
+        /** @description Account contract data represents basic account information for any account: is it a top account or a sub-account, a debit or a credit account. */
         AccountContractData: {
             accountContractName?: components["schemas"]["accountContractName"];
             accountContractNumber: components["schemas"]["accountContractNumber"];
@@ -4742,11 +4466,11 @@ export interface components {
             clientId?: components["schemas"]["clientId"];
             /**
              * @description Account currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
-            /** @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
+            /**
+             * @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify a tag name and its value.
              *
@@ -4754,7 +4478,7 @@ export interface components {
              *     (for example: CATEGORY=A;GROUP=G1;).
              *
              *     Each container has a length of 255 characters.
-             *      */
+             */
             customData?: components["schemas"]["CustomDataTag"][];
             parentAccountContractId?: components["schemas"]["parentAccountContractId"];
             productCode: components["schemas"]["accountProductCode"];
@@ -4769,7 +4493,6 @@ export interface components {
              *      * a statement is generated
              *
              *     In the generic solution, the possible values are integers between 1 and 31. If value 31 is chosen, `billingDay` is set to the end of the month.
-             *
              * @example 10
              */
             billingDay?: string;
@@ -4778,7 +4501,6 @@ export interface components {
              *     Credit limit must be provided in the account currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 20
              */
             creditLimitAmount?: number;
@@ -4794,7 +4516,8 @@ export interface components {
         AccountContractModification: {
             accountContractName?: components["schemas"]["accountContractName"];
             cbsNumber?: components["schemas"]["cbsNumber"];
-            /** @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
+            /**
+             * @description Contract custom data allow the Issuer to pass specific contract tags during the creation request.
              *     The tags may represent Issuer-specific field names and values, not available as separate, dedicated fields.
              *     The Issuer can specify the tag name and its value.
              *
@@ -4802,7 +4525,7 @@ export interface components {
              *     (for example: CATEGORY=A;GROUP=G1;).
              *
              *     Each container has length 255 characters.
-             *      */
+             */
             customData?: components["schemas"]["CustomDataTag"][];
         };
         AccountContractStatusWithReason: {
@@ -4815,7 +4538,6 @@ export interface components {
              *     |---------------------	|-------------------------------------------------------------------------------------	|
              *     | 00                  	| Account contract is active and ready for use                                        	|
              *     | 00c                 	| Account contract closure procedure was initiated and is ongoing (transition period) 	|
-             *
              * @example 00
              */
             statusCode: string;
@@ -4825,8 +4547,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `AccountContract`.
-             *      */
+            /** @description List of `AccountContract`. */
             subAccountContracts: components["schemas"]["AccountContract"][];
         };
         ContractSummaryTree: {
@@ -4834,8 +4555,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `ContractSummary`.
-             *      */
+            /** @description List of `ContractSummary`. */
             contractSummaries: components["schemas"]["ContractSummary"][];
         };
         ContractSummary: {
@@ -4847,7 +4567,6 @@ export interface components {
              *     | Account             	|
              *     | Card                	|
              *     | Device              	|
-             *
              * @example Card
              */
             contractCategory?: string;
@@ -4856,7 +4575,6 @@ export interface components {
             contractName?: components["schemas"]["contractName"];
             /**
              * @description Contract number (can be masked if PAN present).
-             *
              * @example 915555______0017
              */
             contractNumber?: string;
@@ -4884,41 +4602,35 @@ export interface components {
              *
              *     * R - Reporting
              *       * This link type is used to gather statistical data on account activity within its tree. This data is needed for generating "non-financial" reports, such as statements on all corporate accounts – without their consolidated totals.
-             *
              * @example Y
              */
             liabilityCategory?: string;
             /**
              * Format: int64
              * @description Liability contract record id from the CMS database.
-             *
              * @example 4124881
              */
             liabilityContractId?: number;
             /**
              * @description Liability contract number.
-             *
              * @example 3219843718
              */
             liabilityContractNumber?: string;
         };
         ContractBalances: {
-            /** @description List of `ContractBalance`.
-             *      */
+            /** @description List of `ContractBalance`. */
             contractBalances: components["schemas"]["ContractBalance"][];
         };
         ContractBalance: {
             balanceCode: components["schemas"]["contractBalanceCode"];
             /**
              * @description Currency in which the balance amount is expressed (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             balanceCurrency?: string;
             /**
              * Format: int64
              * @description Balance record ID.
-             *
              * @example 89516416
              */
             balanceId: number;
@@ -4926,7 +4638,6 @@ export interface components {
              * @description The current amount of the contract balance specified by the `balanceCode` attribute.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 9811.31
              */
             balanceValue?: number;
@@ -4936,46 +4647,39 @@ export interface components {
              * @description The amount parameter for the event. Only one of 2 options: (`amount` and `currency`) or (`parameterString`) may be input in `POST /contracts/{contract_id}/events`.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 100
              */
             amount?: number;
             /**
              * @description The currency parameter for the event (format according to ISO 4217, alphanumeric code).
              *     Only one of 2 options: (`amount` and `currency`) or (`parameterString`) may be input in `POST /contracts/{contract_id}/events`.
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * Format: date
              * @description Event closing date (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             endDate?: string;
             /**
              * @description Event code which will be executed in the MP's CMS. A list of possible codes will be defined by the MP during the project based on Issuer requirements.
-             *
              * @example MDES_TKN_DEACTIVATE
              */
             eventCode: string;
             /**
              * @description The parameter string for the event. Only one of 2 options: (`amount` and `currency`) or (`parameterString`) may be input in `POST /contracts/{contract_id}/events`.
-             *
              * @example VALUE
              */
             parameterString?: string;
             /**
              * @description Reason of the Event.
-             *
              * @example MP_API_OPEN_EVENT
              */
             reason?: string;
             /**
              * Format: date
              * @description Event opening date (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             startDate?: string;
@@ -4985,8 +4689,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `AccountContract`.
-             *      */
+            /** @description List of `AccountContract`. */
             clientAccountContracts: components["schemas"]["AccountContract"][];
         };
         AccountContract: {
@@ -4995,7 +4698,6 @@ export interface components {
              * Format: int64
              * @description Unique technical identifier for an account contract generated by the MP's CMS.
              *     The identifier is generated when the account contract creation finishes successfully and is returned in the account contract creation response (`POST /accounts`).
-             *
              * @example 60002
              */
             accountContractId: number;
@@ -5017,7 +4719,6 @@ export interface components {
              *       * .2.1. - for the first card contract
              *       * .2.2. - for the second card contract
              *       * .2.3. - for the third card contract
-             *
              * @example .1.
              */
             accountContractLevel: string;
@@ -5028,13 +4729,11 @@ export interface components {
             /**
              * @description Name of an account contract's subtype code which has been used during the account creation.
              *     The name may be returned even when a subtype code has not been passed by the Issuer in an account creation request.
-             *
              * @example 018-Private Client Account
              */
             accountContractSubtype?: string;
             /**
              * @description Additional tagged specified field.
-             *
              * @example FIRST_CYCLE=2020-01-01;AS=&lt;ASV160927172745>&lt;SOV160927172745>;SP=&lt;SPV180802100310>&lt;SPA1002>;INIT_EVNT;
              */
             additionalParameters?: string;
@@ -5045,13 +4744,11 @@ export interface components {
              * Format: int64
              * @description Technical identifier of a billing account (the value is set by the MP's CMS).
              *     A billing account contract defines the account used for settlements and the main account in the account hierarchy.
-             *
              * @example 60002
              */
             billingAccountContractId: number;
             /**
              * @description Account contract identifier of a billing account. The value is defined in the Issuer's system and is passed to the MP's CMS during the billing account creation request (`POST /accounts`).
-             *
              * @example ABC_121235694296313
              */
             billingAccountContractNumber: string;
@@ -5060,20 +4757,17 @@ export interface components {
             cbsNumber?: components["schemas"]["cbsNumber"];
             /**
              * @description Account contract currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Account contract currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
             /**
              * Format: date
              * @description Date of contract closure (YYYY-MM-DD format).
-             *
              * @example 2021-12-31
              */
             dateClose?: string;
@@ -5089,14 +4783,12 @@ export interface components {
              *     Possible configuration:
              *       * First day of the cycle (no grace days)
              *       * Number of days (X days) after the first day of the cycle.
-             *
              * @example 2021-06-25
              */
             dueDate?: string;
             /**
              * Format: date
              * @description Contract's last billing date (the date when the last cycle was closed) (YYYY-MM-DD format).
-             *
              * @example 2021-12-28
              */
             lastBillingDate?: string;
@@ -5105,7 +4797,6 @@ export interface components {
              * Format: int64
              * @description Technical identifier (set by the MP's CMS) of a liability account contract linked to a specific account contract.
              *     An empty value means that the given account contract has not been created with liability information.
-             *
              * @example 60001
              */
             liabilityAccountContractId?: number;
@@ -5113,7 +4804,6 @@ export interface components {
              * @description Account contract number (set by the Issuer) of a liability account contract linked to a specific account contract.
              *
              *     An empty value means that the given account contract has not been created with liability information.
-             *
              * @example ABC_35697292146
              */
             liabilityAccountContractNumber?: string;
@@ -5126,7 +4816,6 @@ export interface components {
              *     | N                   	| Affiliated         	|
              *     | R                   	| Reporting          	|
              *     | Y                   	| Full Liability     	|
-             *
              * @example Y
              */
             liabilityCategory?: string;
@@ -5134,7 +4823,6 @@ export interface components {
             /**
              * Format: date
              * @description Contract's nearest billing date (in the future) (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             nextBillingDate?: string;
@@ -5143,7 +4831,6 @@ export interface components {
              * @description Account contract number (set by the Issuer) which represents a parent account contract.
              *     The field is empty in case a specific account contract is a top account contract.
              *     A non-empty value means that the given account contract has been created as a sub-account.
-             *
              * @example ABC_35697292146
              */
             parentAccountContractNumber?: string;
@@ -5154,7 +4841,6 @@ export interface components {
              *
              *     The field is filled only when a past due balance exists (past due amount is not repaid).
              *     The date on which delinquency arises is set in the Past Due Date field when funds are transferred from a standard account to a delinquency account (format: YYYY-MM-DD)
-             *
              * @example 2021-06-25
              */
             pastDueDate?: string;
@@ -5164,7 +4850,6 @@ export interface components {
              *     The field is filled only when a past due balance exists (past due amount is not repaid).
              *
              *     For example, delinquency arose on 01 March. This date is shown in the `pastDueDate` field. On 15 March, the total number of past due days shown in the Past Due Days field is 15 days.
-             *
              * @example 233
              */
             pastDueDays?: number;
@@ -5173,7 +4858,6 @@ export interface components {
             serviceGroupCode?: components["schemas"]["serviceGroupCode"];
             /**
              * @description Name of a service group code which has been passed by the Issuer in an account creation request.
-             *
              * @example GROUP1
              */
             serviceGroupName?: string;
@@ -5182,7 +4866,6 @@ export interface components {
              * @description Technical identifier from the MP's CMS which represents the top account contract of a specific account contract.
              *
              *     When an account contract is created as a top account, the value returned is the same as the technical identifier from the MP's CMS of the given account contract.
-             *
              * @example 60001
              */
             topAccountContractId: number;
@@ -5190,32 +4873,29 @@ export interface components {
              * @description Contract number (set by the Issuer) which represents the top account contract of a specific account contract.
              *
              *     When an account contract is created as a top account, the value returned is the same as the contract name of the given account.
-             *
              * @example ABC_35697292146
              */
             topAccountContractNumber: string;
         };
-        /** @description This section is returned for every account and it contains information on the account owner.
+        /**
+         * @description This section is returned for every account and it contains information on the account owner.
          *     In case when an account has been created as a sub-account, the MP's CMS assigns a client owner taken from the parent account.
-         *      */
+         */
         AccountContractOwner: {
             /**
              * Format: int64
              * @description Technical identifier of a client which is the owner of an account contract.
              *     The identifier is created by the MP's CMS during the client creation request (`POST /clients`).
-             *
              * @example 453135
              */
             accountContractOwnerId: number;
             /**
              * @description Client number of the account owner, set by the Issuer in a client creation request (`POST /clients`).
-             *
              * @example ABC_685400081
              */
             accountContractOwnerNumber: string;
             /**
              * @description Client's full name.
-             *
              * @example John Doe
              */
             accountContractOwnerName?: string;
@@ -5226,7 +4906,6 @@ export interface components {
              *     If the authorization amount is greater than the available amount but smaller than the available amount and the additional authorization limit combined, the authorization will be permitted. The amount exceeding the granted credit limit will be reflected in an over-limit account.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 123.12
              */
             additionalLimit?: number;
@@ -5234,7 +4913,6 @@ export interface components {
              * @description Open To Buy: amount available for a client to perform transactions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1401.21
              */
             available?: number;
@@ -5242,7 +4920,6 @@ export interface components {
              * @description The amount used by a client, without contract blockages. For debit cards, the amount represents posted transactions, for credit cards it represents the amount owed to the Issuer.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 15123.56
              */
             balance?: number;
@@ -5251,7 +4928,6 @@ export interface components {
              *     The purpose of amount blocking is to decrease the Open To Buy amount so that the client will not use more money than is available at the account contract level.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 751.28
              */
             blockedAmount?: number;
@@ -5262,7 +4938,6 @@ export interface components {
              *     By default, the amount is presented as a positive number (without a minus sign) but can be a negative number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1231.78
              */
             creditLimit?: number;
@@ -5273,7 +4948,6 @@ export interface components {
              *     By default, the amount is presented as a negative number (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 241.21
              */
             pastDue?: number;
@@ -5284,7 +4958,6 @@ export interface components {
              *     By default, the amount is presented as a negative number (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 381.14
              */
             totalDue?: number;
@@ -5304,14 +4977,12 @@ export interface components {
              *     | D                   	| Skip            	|
              *     | N                   	| Inactive        	|
              *     | Y                   	| From tariff     	|
-             *
              * @example D
              */
             applyMode?: string;
             /**
              * Format: int64
              * @description Tariff data identifier.
-             *
              * @example 17960
              */
             activeTariffDataId?: number;
@@ -5319,26 +4990,22 @@ export interface components {
              * @description Additional minimum allowed amount, e.g. minimum loan payment.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 765
              */
             baseAmount?: number;
             /**
              * Format: int64
              * @description Contract technical identifier.
-             *
              * @example 70001
              */
             contractId?: number;
             /**
              * @description Currency of the fee (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Currency of the fee (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -5357,27 +5024,23 @@ export interface components {
              *     |          G          	|          Group         	|
              *     |          C          	|       Counterparty     	|
              *     |          M          	|         Grouped        	|
-             *
              * @example P
              */
             domainFrom?: string;
             /**
              * Format: int32
              * @description Tariff domain level in tariff hierarchy.
-             *
              * @example 14
              */
             domainLevel?: number;
             /**
              * @description Tariff domain name.
-             *
              * @example INB Acc general tariffs
              */
             domainName?: string;
             /**
              * Format: int32
              * @description Due period value.
-             *
              * @example 12
              */
             duePeriod?: number;
@@ -5385,7 +5048,6 @@ export interface components {
              * @description Additional interest rate, e.g. fee rate charged on revenue from account interest.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1223311
              */
             feeRateValue?: number;
@@ -5396,47 +5058,40 @@ export interface components {
              *     |---------------------	|-----------------	|
              *     | B                   	| Buy/Sell        	|
              *     | M                   	| Middle          	|
-             *
              * @example B
              */
             fxRateType?: string;
             /**
              * @description Account number in the general ledger, used for synthetic accounting.
-             *
              * @example 110101
              */
             generalLedgerNumber?: string;
             /**
              * @description General ledger number name.
-             *
              * @example Accounts receivables - households-110101
              */
             generalLedgerNumberName?: string;
             /**
              * Format: int64
              * @description Global tariff identifier.
-             *
              * @example 7564
              */
             globalTariffId?: number;
             /**
              * Format: int32
              * @description The time interval used, for example, to specify a time shift for merchant reimbursement or to specify a loan grace period.
-             *
              * @example 5634
              */
             gracePeriod?: number;
             /**
              * Format: int32
              * @description Minimum allowed counter value.
-             *
              * @example 43
              */
             minCount?: number;
             /**
              * Format: int32
              * @description Maximum allowed counter value.
-             *
              * @example 34
              */
             maxCount?: number;
@@ -5444,7 +5099,6 @@ export interface components {
              * @description Maximum allowed amount, e.g. maximum fee or maximum transaction amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 8444
              */
             maxAmount?: number;
@@ -5452,7 +5106,6 @@ export interface components {
              * @description Minimum allowed amount, e.g. minimum fee or minimum transaction amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 6543
              */
             minAmount?: number;
@@ -5466,14 +5119,12 @@ export interface components {
              *     |          D          	|        Personalised       	|
              *     |          T          	| Personal (Template Based) 	|
              *     |          L          	|          Template         	|
-             *
              * @example G
              */
             personalisationType?: string;
             /**
              * Format: int64
              * @description Personal tariff identifier.
-             *
              * @example 8112
              */
             personalTariffId?: number;
@@ -5481,7 +5132,6 @@ export interface components {
              * @description The interest rate on an account or fee rate.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 433111
              */
             rateValue?: number;
@@ -5489,46 +5139,39 @@ export interface components {
              * @description Additional allowed amount, e.g. maximum payment in installment schedule.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 7444312
              */
             singleAmount?: number;
             /**
              * Format: date
              * @description Date from which tariff data is active (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             startDate?: string;
             /**
              * @description Tariff code.
-             *
              * @example MTP_CALC_RULE
              */
             tariffCode?: string;
             /**
              * Format: int64
              * @description Tariff domain identifier.
-             *
              * @example 11460
              */
             tariffDomainId?: number;
             /**
              * @description Tariff domain code.
-             *
              * @example GL
              */
             tariffDomainCode?: string;
             /**
              * Format: int64
              * @description Tariff identifier.
-             *
              * @example 16270
              */
             tariffId?: number;
             /**
              * @description Tariff name.
-             *
              * @example INB MTP Calculation Rule 1
              */
             tariffName?: string;
@@ -5552,32 +5195,27 @@ export interface components {
              *     | TECHNICAL           	|  Technical                 	|
              *     | FX                  	|  Conversion                	|
              *     | REDEFINITION        	|  Redefinition              	|
-             *
              * @example AGEING
              */
             tariffRole?: string;
             /**
              * Format: date
              * @description Date from which tariff data is active (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             tariffStartDate?: string;
             /**
              * @description Tariff type code.
-             *
              * @example MTP_CALC_RULE
              */
             tariffTypeCode?: string;
             /**
              * @description Tariff type name.
-             *
              * @example BCC MTP Calculation Rule
              */
             tariffTypeName?: string;
             /**
              * @description Tariff value.
-             *
              * @example Zero tariff
              */
             tariffValue?: string;
@@ -5588,7 +5226,6 @@ export interface components {
              *     |---------------------	|
              *     | N                   	|
              *     | Y                   	|
-             *
              * @example Y
              */
             volumeBased?: string;
@@ -5598,21 +5235,18 @@ export interface components {
              * @description Amount of additional credit limit assigned to the contract. Amount expressed in the contract currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 172.23
              */
             additionalCreditLimit?: number;
             /**
              * Format: date
              * @description Additional credit limit effective date (YYYY-MM-DD format). Defines when additional credit limit becomes effective.
-             *
              * @example 2021-06-25
              */
             additionalCreditLimitEffectiveDate?: string;
             /**
              * Format: date
              * @description Additional credit limit expiration date (YYYY-MM-DD format). Defines when additional credit limit expires.
-             *
              * @example 2021-06-25
              */
             additionalCreditLimitExpiryDate?: string;
@@ -5623,7 +5257,6 @@ export interface components {
              *     Presented as a positive amount (without a minus sign) but can be a negative number depending on the CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 12114.21
              */
             availableAmount?: number;
@@ -5633,7 +5266,6 @@ export interface components {
              *     Presented as a negative amount (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 15123.56
              */
             balance?: number;
@@ -5643,7 +5275,6 @@ export interface components {
              *     Presented as a positive amount (without a minus sign) but can be a negative number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 301.19
              */
             blockedAmount?: number;
@@ -5655,26 +5286,22 @@ export interface components {
              *     Presented as a positive amount (without a minus sign) but can be a negative number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1231.78
              */
             creditLimit?: number;
             /**
              * Format: date
              * @description Date when the credit limit becomes effective (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             creditLimitEffectiveDate?: string;
             /**
              * @description Currency of the due amount (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency: string;
             /**
              * @description Currency of the due amount (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -5684,7 +5311,6 @@ export interface components {
              *     Presented as a negative amount (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 165.99
              */
             currentDueAmount?: number;
@@ -5717,7 +5343,6 @@ export interface components {
              *     That should be read as follows. From right to left: from 10 to 7 months ago the funds were on Due balance (+), 6 months ago funds were on OVD_01 balance (1), 5 months ago funds were on OVD_02 balance (2), ..., 1 month ago funds were on OVD_06 balance (6), the current period is not closed, so it's marked as 'E' - no debt.
              *
              *     Then client repaid and does not have any debts for the next 10 months. The history will change as follows: EEEEEEEEEEE654321+++____
-             *
              * @example 888887654321++E_________
              */
             delinquencyHistory?: string;
@@ -5725,7 +5350,6 @@ export interface components {
              * @description Contract's disputed amount. Amount expressed in the contract currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 230.3
              */
             disputeAmount?: number;
@@ -5740,14 +5364,12 @@ export interface components {
              *     Possible configuration:
              *       * First day of the cycle (no grace days)
              *       * Number of days (X days) after the first day of the cycle.
-             *
              * @example 2021-04-28
              */
             dueDate?: string;
             /**
              * Format: date
              * @description Contract's last billing grace date (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             graceDate?: string;
@@ -5755,27 +5377,23 @@ export interface components {
              * @description Amount expressed in the contract currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 49.3
              */
             lastPaymentAmount?: number;
             /**
              * Format: date
              * @description Date the last payment was made (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             lastPaymentDate?: string;
             /**
              * Format: int64
              * @description Main contract record id from the CMS database.
-             *
              * @example 541984165419
              */
             mainContractId?: number;
             /**
              * @description The contract number of the main contract.
-             *
              * @example 915555______0017
              */
             mainContractNumber?: string;
@@ -5783,20 +5401,17 @@ export interface components {
              * @description Contract's overlimit amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 689.9
              */
             overlimitAmount?: number;
             /**
              * Format: int64
              * @description Parent contract record id from the CMS database.
-             *
              * @example 67038174
              */
             parentContractId?: number;
             /**
              * @description The contract number of the parent contract number.
-             *
              * @example ABC_11810015631
              */
             parentContractNumber?: string;
@@ -5806,7 +5421,6 @@ export interface components {
              *     Presented as a negative amount (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 140.11
              */
             pastDueAmount?: number;
@@ -5816,7 +5430,6 @@ export interface components {
              *
              *     The field is filled only when a past due balance exists (past due amount is not repaid).
              *     The date on which delinquency arises is set in the Past Due Date field when funds are transferred from a standard account to a delinquency account
-             *
              * @example 2021-06-25
              */
             pastDueDate?: string;
@@ -5826,7 +5439,6 @@ export interface components {
              *     The field is filled only when a past due balance exists (past due amount is not repaid).
              *
              *     For example, delinquency arose on 01 March. This date is shown in the `pastDueDate` field. On 15 March, the total number of past due days shown in the Past Due Days field is 15 days.
-             *
              * @example 233
              */
             pastDueDays?: number;
@@ -5834,14 +5446,12 @@ export interface components {
              * @description Previous credit limit assigned to the contract. Amount expressed in the contract currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1240.1
              */
             previousCreditLimit?: number;
             /**
              * Format: date
              * @description Previous credit limit effective date. The date when the previous credit limit became effective (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             previousCreditLimitEffectiveDate?: string;
@@ -5849,21 +5459,18 @@ export interface components {
              * @description Temporary credit limit assigned to the contract. Amount expressed in the contract currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1000
              */
             temporaryCreditLimit?: number;
             /**
              * Format: date
              * @description Temporary credit limit effective date. Defines when temporary credit limit becomes effective for the contract (YYYY-MM-DD format).
-             *
              * @example 2030-06-25
              */
             temporaryCreditLimitEffectiveDate?: string;
             /**
              * Format: date
              * @description Temporary credit limit expiration date. Defines when temporary credit limit expires (YYYY-MM-DD format).
-             *
              * @example 2030-07-25
              */
             temporaryCreditLimitExpiryDate?: string;
@@ -5873,7 +5480,6 @@ export interface components {
              *     Presented as a negative amount (with a minus sign) but can be a positive number depending on CMS configuration.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1500
              */
             totalDueAmount?: number;
@@ -5897,7 +5503,6 @@ export interface components {
              *     | DOWN                	| the client will be changed for all contracts (including cards) in the hierarchy that are under the account contract 	|
              *
              *     The default value is "ALL".
-             *
              * @default ALL
              * @example ALL
              * @enum {string}
@@ -5905,45 +5510,38 @@ export interface components {
             relinkType: "ALL" | "THIS" | "DOWN";
         };
         TechnicalAccounts: {
-            /** @description List of `TechnicalAccount`.
-             *      */
+            /** @description List of `TechnicalAccount`. */
             technicalAccounts: components["schemas"]["TechnicalAccount"][];
         };
         TechnicalAccount: {
             /**
              * @description Identification number of the account template the account is based on.
-             *
              * @example 203040
              */
             accountTemplateId?: string;
             /**
              * @description Alphanumeric description of the account template the account is based on.
-             *
              * @example BCC Current Retail
              */
             accountTemplateName?: string;
             /**
              * Format: int64
              * @description Technical account priority, which influences the order of account interest accrual and the order of repayments to loan accounts.
-             *
              * @example 67
              */
             ageingPriority?: number;
             /**
              * @description Identification number of the technical account to which funds are transferred when due normalization is performed.
-             *
              * @example 21611840
              */
             ageingTechnicalAccountId?: string;
             /**
              * @description Alphanumeric description of the technical account to which funds are transferred when due normalization is performed.
-             *
              * @example BCC Billed Grace Retail
              */
             ageingTechnicalAccountName?: string;
             /**
              * @description General ledger account number used for analytic accounting.
-             *
              * @example CCREUR-LOAN-978
              */
             analyticNumber?: string;
@@ -5951,7 +5549,6 @@ export interface components {
              * @description Current technical account balance.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1240.1
              */
             balance?: number;
@@ -5971,32 +5568,27 @@ export interface components {
              *     |          X          	|           Primary         	|
              *     |          p          	|  Credit Limit Payment Due 	|
              *     |          i          	|    Credit Limit Overdue   	|
-             *
              * @example O
              */
             category?: string;
             /**
              * Format: int64
              * @description Contract record id from the CMS database of contract for which technical account is created.
-             *
              * @example 984621965
              */
             contractId?: number;
             /**
              * @description Contract number for which technical account is created.
-             *
              * @example 111235697296337
              */
             contractNumber?: string;
             /**
              * @description Technical account currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Technical account currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -6015,20 +5607,17 @@ export interface components {
              *     | F                   	|  Fixed Day Due   	|
              *     | Q                   	|  Quarter         	|
              *     | N                   	|  None            	|
-             *
              * @example S
              */
             dueType?: string;
             /**
              * Format: date
              * @description Technical cycle end date (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             endDate?: string;
             /**
              * @description Shows whether the technical account balance is considered during the amount available calculation.
-             *
              * @example true
              */
             inAmountAvailable?: boolean;
@@ -6036,7 +5625,6 @@ export interface components {
              * @description Interest fee rate for the technical account.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 156.56
              */
             interestFeeRate?: number;
@@ -6044,19 +5632,16 @@ export interface components {
              * @description Interest rate for the technical account.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 10
              */
             interestRate?: number;
             /**
              * @description Identification number of the technical account to which interest accrued for the account is transferred.
-             *
              * @example 21611750
              */
             interestTechnicalAccountId?: string;
             /**
              * @description Alphanumeric description of the technical account to which interest accrued for the account is transferred.
-             *
              * @example Cl Loan Int
              */
             interestTechnicalAccountName?: string;
@@ -6064,19 +5649,16 @@ export interface components {
              * @description Minimum technical account balance.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 100
              */
             lowerLimit?: number;
             /**
              * @description Identification number of the technical account to which excessive funds will be transferred if the account balance exceeds the value of the `upperLimit` field.
-             *
              * @example 21611760
              */
             overLimitTechnicalAccountId?: string;
             /**
              * @description Alphanumeric description of the technical account to which excessive funds will be transferred if the account balance exceeds the value of the `upperLiimit` field.
-             *
              * @example CH Current/Credits
              */
             overLimitTechnicalAccountName?: string;
@@ -6084,14 +5666,12 @@ export interface components {
              * @description Technical account's blocked amount not considering blocked amounts of the subcontracts.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 150.9
              */
             ownBlockedAmount?: number;
             /**
              * Format: int64
              * @description Technical account priority, which influences the order of account interest accrual and the order of repayments to loan accounts.
-             *
              * @example 67
              */
             paymentPriority?: number;
@@ -6099,38 +5679,32 @@ export interface components {
             /**
              * Format: date
              * @description Technical cycle start date (YYYY-MM-DD format).
-             *
              * @example 2021-06-25
              */
             startDate?: string;
             /**
              * @description General ledger account number used for synthetic accounting.
-             *
              * @example CCREUR-LOAN-978
              */
             syntheticNumber?: string;
             /**
              * Format: int64
              * @description Unique identifier of the technical account record in the database.
-             *
              * @example 2156184
              */
             technicalAccountId?: number;
             /**
              * @description Technical account code.
-             *
              * @example BF
              */
             technicalAccountCode?: string;
             /**
              * @description Technical account name.
-             *
              * @example Cl Loan Int
              */
             technicalAccountName?: string;
             /**
              * @description Technical account type.
-             *
              * @example BCC Current Retail
              */
             technicalAccountType?: string;
@@ -6138,7 +5712,6 @@ export interface components {
              * @description Technical account's blocked amount considering blocked amounts of the subcontracts.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 199.9
              */
             totalBlockedAmount?: number;
@@ -6146,7 +5719,6 @@ export interface components {
              * @description Maximum technical account balance.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 5000
              */
             upperLimit?: number;
@@ -6156,40 +5728,34 @@ export interface components {
             /**
              * Format: date
              * @description Date until which the classifier should obtain new value (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             endDate?: string;
             /**
              * Format: date
              * @description Date from which the classifier should obtain new value (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             startDate?: string;
         };
         ClientClassifiers: {
-            /** @description List of `Classifier` for the client.
-             *      */
+            /** @description List of `Classifier` for the client. */
             clientClassifiers: components["schemas"]["Classifier"][];
         };
         ContractClassifiers: {
-            /** @description List of `Classifier` for the contract.
-             *      */
+            /** @description List of `Classifier` for the contract. */
             contractClassifiers: components["schemas"]["Classifier"][];
         };
         Classifier: {
             classifierCode: components["schemas"]["classifierCode"];
             /**
              * @description Classifier name.
-             *
              * @example ABU
              */
             classifierName?: string;
             classifierValue?: components["schemas"]["classifierValue"];
             /**
              * @description Classifier value name.
-             *
              * @example Yes
              */
             classifierValueName?: string;
@@ -6201,7 +5767,6 @@ export interface components {
              *     | Active              	|
              *     | Inactive            	|
              *     | Closed              	|
-             *
              * @example Active
              */
             status: string;
@@ -6214,7 +5779,6 @@ export interface components {
              *     |---------------------	|
              *     | CVC2_CORRECT        	|
              *     | CVC2_NOT_CORRECT    	|
-             *
              * @example CVC2_CORRECT
              */
             verificationResult: string;
@@ -6223,7 +5787,6 @@ export interface components {
             cardExpiryDate: components["schemas"]["cardExpiryDate"];
             /**
              * @description Card Verification Code 2 (CVC2). Other names: Card Security Code (CSC), Card Verification Value 2 (CVV2).
-             *
              * @example 347
              */
             cardVerificationCode: string;
@@ -6244,7 +5807,6 @@ export interface components {
              *     If the PIN block is encrypted with symmetric encryption using ZPK (Zone Pin Key) then:
              *       * Key-Index field shouldn't be provided
              *       * only ISO-0 format is allowed.
-             *
              * @example 69DF3BAA5CAF165A940FC1F8AE68573B8AF93F5EDB20E208953E87CC50C19F0BB11A448AE76FA87A8940EE290FEBC2518DDAAB85BF4AA393FAE060F4CD30CC73AAFF3755680E59FC59BF8D2303B7990C1EC648A0D24D66D57DAB0147434B54955FEA38890C1AFDE6C60EE6D9174BC567D151669576D0395A1B235AF4CD7C581EF238FD26E1DF53085B09DDA9A81EE9DA02D7C7C9E0C266B60C7E9BAC046DCF704EC6CA31486CF6B562C28D47CD6ED124CAE28D3A2E590CFBAA90604090F601B16423E375D6CC01FAC5E0125F7BCC735ED53F88CB7D34FDEFBB19A0EE09F156E337150CE96B2A16419D0F0981CCE44EC8A946CEA69A238AA04EC46FDFFE91A03D
              */
             pinBlock: string;
@@ -6258,7 +5820,6 @@ export interface components {
              *     | PIN_CORRECT         	|
              *     | PIN_NOT_CORRECT     	|
              *     | VERIFICATION_ERROR  	|
-             *
              * @example PIN_CORRECT
              */
             verificationResult: string;
@@ -6279,7 +5840,6 @@ export interface components {
              *     If the PIN block is encrypted with symmetric encryption using a ZPK (Zone Pin Key), then:
              *       * The `Key-Index` field should not be provided.
              *       * Only the ISO-0 format is allowed.
-             *
              * @example 69DF3BAA5CAF165A940FC1F8AE68573B8AF93F5EDB20E208953E87CC50C19F0BB11A448AE76FA87A8940EE290FEBC2518DDAAB85BF4AA393FAE060F4CD30CC73AAFF3755680E59FC59BF8D2303B7990C1EC648A0D24D66D57DAB0147434B54955FEA38890C1AFDE6C60EE6D9174BC567D151669576D0395A1B235AF4CD7C581EF238FD26E1DF53085B09DDA9A81EE9DA02D7C7C9E0C266B60C7E9BAC046DCF704EC6CA31486CF6B562C28D47CD6ED124CAE28D3A2E590CFBAA90604090F601B16423E375D6CC01FAC5E0125F7BCC735ED53F88CB7D34FDEFBB19A0EE09F156E337150CE96B2A16419D0F0981CCE44EC8A946CEA69A238AA04EC46FDFFE91A03D
              */
             newPinBlock: string;
@@ -6288,26 +5848,22 @@ export interface components {
             parameterValue: components["schemas"]["parameterValue"];
         };
         ContractParameters: {
-            /** @description List of `ContractParameter`
-             *      */
+            /** @description List of `ContractParameter` */
             contractParameters: components["schemas"]["ContractParameter"][];
         };
         ContractParameter: {
             /**
              * @description Contract parameter code.
-             *
              * @example MTP_CALC_RULE
              */
             parameterCode: string;
             /**
              * @description Contract parameter name.
-             *
              * @example MTP Calculation rule
              */
             parameterName?: string;
             /**
              * @description Contract parameter value.
-             *
              * @example 45
              */
             parameterValue?: string;
@@ -6317,19 +5873,16 @@ export interface components {
              * @description Amount to charge a fee. If the field is not passed in the request, the amount is taken from the tariff level.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1200
              */
             amount?: number;
             /**
              * @description Transaction currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Identifier of the fee type in the MP's CMS system.
-             *
              * @example MB_1
              */
             feeTypeId: string;
@@ -6337,7 +5890,6 @@ export interface components {
              * Format: date
              * @description Posting date (YYYY-MM-DD format). If empty, current banking date will be used.
              *     If future date, fee record will stay in `Waiting` status and will be posted only when banking date reaches defined `postingDate`. Past date not recommended.
-             *
              * @example 2031-06-25
              */
             postingDate?: string;
@@ -6345,7 +5897,6 @@ export interface components {
              * @description Unique reference number for fee transaction record.
              *     If filled system will check the uniqueness of this value. It will not be possible to create two records with the same value.
              *     Exported as SRN (Source Reference Number).
-             *
              * @example 122357012766
              */
             uniqueReferenceNumber: string;
@@ -6355,40 +5906,34 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `Transaction`.
-             *      */
+            /** @description List of `Transaction`. */
             transactions: components["schemas"]["Transaction"][];
         };
         Transaction: {
             /**
              * @description Currency of account which was debited/credited for base amount and fee amount. (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             accountCurrency?: string;
             /**
              * @description Currency of account which was debited/credited for base amount and fee amount. (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             accountCurrencyNumericCode?: string;
             /**
              * @description Acquirer Reference Number.
-             *
              * @example 06116638346121300000317
              */
             arn?: string;
             authorizationCode?: components["schemas"]["authorizationCode"];
             /**
              * @description Determines whether the transaction was authorized.
-             *
              * @example true
              */
             authorized?: boolean;
             /**
              * Format: int64
              * @description Unique identifier of the authorization document record in the MP's CMS database.
-             *
              * @example 3177523
              */
             authorizationId?: number;
@@ -6396,22 +5941,18 @@ export interface components {
              * @description Amount which contract is debited/credited for, not including fee amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1567.23
              */
             baseAmount?: number;
-            /** @description List of `TransactionCustomData`.
-             *      */
+            /** @description List of `TransactionCustomData`. */
             customTransactionData?: components["schemas"]["TransactionCustomData"][];
             /**
              * @description Custom Transaction Condition Code.
-             *
              * @example ATMC
              */
             customTransactionCondition?: string;
             /**
              * @description Custom transaction type code.
-             *
              * @example IBF
              */
             customTransactionTypeCode?: string;
@@ -6419,21 +5960,18 @@ export interface components {
              * @description Fee amount for which the contract is debited for, associated with the transaction.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 910.18
              */
             feeAmount?: number;
             /**
              * @description Description of fees included in the total `feeAmount`.
              *     Final format of the field depends on the product setup. Typical presentation format: [`feeCode` `feeAmount` `feeCurrency`], [`feeCode` `feeAmount` `feeCurrency`]
-             *
              * @example 2.00 (EUR)
              */
             feeDescription?: string;
             /**
              * Format: int64
              * @description Unique identifier of the financial document record in the MP's CMS database.
-             *
              * @example 1254151
              */
             financialDocumentId?: number;
@@ -6452,7 +5990,6 @@ export interface components {
              *       * PS Rate: 0.801 (EUR -> GBP)
              *       * PS Rate: 0.8009 (EUR -> GBP)
              *       * PS Rate: 0.832468 (USD -> EUR); 1.5 (EUR -> GBP)
-             *
              * @example PS Rate: 0.203 (PLN -> EUR)
              */
             fxRate?: string;
@@ -6475,19 +6012,16 @@ export interface components {
              *     - for internal transactions (like due normalizations or interest accruals) has the same value as the transaction amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 128
              */
             settlementAmount?: number;
             /**
              * @description Settlement currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             settlementCurrency?: string;
             /**
              * @description Settlement currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             settlementCurrencyNumericCode?: string;
@@ -6500,7 +6034,6 @@ export interface components {
             targetContractNumber?: components["schemas"]["targetContractNumber"];
             /**
              * @description Masked token number.
-             *
              * @example 161212______0128
              */
             tokenNumberSafe?: string;
@@ -6508,32 +6041,27 @@ export interface components {
              * @description Transaction amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 471.9
              */
             transactionAmount?: number;
             /**
              * @description Transaction currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             transactionCurrency?: string;
             /**
              * @description Transaction currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             transactionCurrencyNumericCode?: string;
             /**
              * Format: date-time
              * @description Transaction date. Timestamp (format: YYYY-MM-DDThh:mm:ssZ).
-             *
              * @example 2031-06-25T12:00:00Z
              */
             transactionDate?: string;
             /**
              * @description Description of the transaction from the CMS system.
-             *
              * @example Fee Posting
              */
             transactionDescription?: string;
@@ -6550,7 +6078,6 @@ export interface components {
              *     | Reversed               	| Reversal document was successfully posted                           	|
              *
              *     In case of an unsuccessful transaction, field will contain `responseCodeDescription`.
-             *
              * @example Reversed
              */
             transactionStatus?: string;
@@ -6568,7 +6095,6 @@ export interface components {
              *      | 337                 | Garmin Pay                                                                                        |
              *
              *      Other values possible.
-             *
              * @example 103
              */
             walletId?: string;
@@ -6581,7 +6107,6 @@ export interface components {
              * @description Card Verification Code 2 (CVC2), known also as a Card Security Code (CSC) or a Card Verification Value 2 (CVV2).
              *
              *     Field is returned if `Customer-Public-Rsa-Key` header is empty.
-             *
              * @example 347
              */
             cardVerificationCode?: string;
@@ -6589,14 +6114,12 @@ export interface components {
              * @description Card verification code encrypted with the `Customer-Public-Rsa-Key`.
              *
              *     Field is returned if `Customer-Public-Rsa-Key` header is not empty.
-             *
              * @example 87D039805B7EDBF7CFD3E72658355A3855C0CB6F1456D6B10498AD63B06904D0282ECCBB5B6A59775C78B9373C13BF53629096451CD3B66501CF198D48A755AC2EC8EC2F204A1E0C29994E14A816300A75791743B82C3C8884EFF363A8CF6D64BF88CD507ADEEA2112734FDAD0E73588FE3CE3D89469A819A9BE807D2C87BCEC3F868DAFF4B27CD213A9E1D60FF8A05CD0EB2EA551D75A38650E926BB79283FBA469642C88FEE332B02C58860EFEF41DB0D2866DE44C8F89573EB2B7C99EBAE994E0AF16F8C8E9839DFCA4C21D2CDB08B8D35456C46113546B0EE3DDF1F329A7939E6EF77C3BD213A02BB47F4DAFD74314AAE020FA0C390E908658A669517A7A
              */
             encryptedCardVerificationCode?: string;
         };
         TransactionFees: {
-            /** @description List of `TransactionFee`.
-             *      */
+            /** @description List of `TransactionFee`. */
             transactionFees: components["schemas"]["TransactionFee"][];
         };
         TransactionFee: {
@@ -6604,45 +6127,38 @@ export interface components {
              * @description Fee amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 199.9
              */
             amount?: number;
             /**
              * @description Currency of the fee (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description Currency of the fee (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
             /**
              * @description Fee code of the fee which should be applied for the transaction. The fee code which can be used must be configured in the MP's CMS.
-             *
              * @example FX_FEE
              */
             feeCode: string;
             /**
              * Format: int64
              * @description Fee record id from the CMS system.
-             *
              * @example 84650468
              */
             feeId: number;
             /**
              * @description Name of the fee from the CMS system.
-             *
              * @example Retail (EuroCard Acq)
              */
             feeName?: string;
             /**
              * Format: int64
              * @description Transaction record id to which the given fee was generated.
-             *
              * @example 900001
              */
             transactionId: number;
@@ -6650,7 +6166,6 @@ export interface components {
         OnlinePinAttemptsClearance: {
             /**
              * @description This field must be always `true`. Flag informing if Online PIN Try Counter should be cleared.
-             *
              * @example true
              */
             cleared: boolean;
@@ -6658,7 +6173,6 @@ export interface components {
         OnlinePinAttemptsClearanceForClient: {
             /**
              * @description This field must be always `true`. Flag determines if the reset of PIN attempts will happen only on the client or also on all client cards.
-             *
              * @example true
              */
             clearAttemptsOnClientCards: boolean;
@@ -6668,8 +6182,7 @@ export interface components {
             limit: components["schemas"]["paginationLimit"];
             offset: components["schemas"]["paginationOffset"];
             total: components["schemas"]["paginationTotal"];
-            /** @description List of `TransactionDocument`.
-             *      */
+            /** @description List of `TransactionDocument`. */
             transactionDocuments: components["schemas"]["TransactionDocument"][];
         };
         TransactionDocument: {
@@ -6683,19 +6196,16 @@ export interface components {
         TransactionAddInfo: {
             /**
              * @description Additional transaction data (TAG=VALUE; format)
-             *
              * @example PSCR=Y0;CVR=204000044000
              */
             addInfo?: string;
             /**
              * @description Transaction attributes. Attributes which determine the value of `transactionCondition` field.
-             *
              * @example 67;,ATM,TERM_UNATT,TERM,TERM_CHIP,TERM_KEY_ENTRY,AUTHENTICATED;
              */
             attributes1?: string;
             /**
              * @description Secondary transaction attributes.
-             *
              * @example CARD_CHIP,CHIP_SVC,READ_CHIP,DATA_TRACK,DATA_CHIP
              */
             attributes2?: string;
@@ -6704,7 +6214,6 @@ export interface components {
              *     MP's CMS creates the value based on the transaction message received from the device.
              *     The type of transaction condition depends on the executed transaction type.
              *     Transaction conditions define the document processing method.
-             *
              * @example ATMC
              */
             transactionCondition?: string;
@@ -6731,7 +6240,6 @@ export interface components {
              *     | System              	| Status assigned to Product Inspector technical docs.                                                                                                                                                                                                                                                                                            	|
              *     | Under Workflow      	| The document is being processed in the Workflow Management module. This status is assigned to documents when it is necessary to stop standard processing of documents for additional checks (manual review). For example, when manually entering a batch of documents, or if the corresponding documents were not found during reconciliation.” 	|
              *     | Waiting             	| Document is waiting.                                                                                                                                                                                                                                                                                                                            	|
-             *
              * @example Decline Service
              */
             postingStatus?: string;
@@ -6740,7 +6248,6 @@ export interface components {
             /**
              * Format: date
              * @description Date when the transaction amount was converted from the settlement currency of the source bank into the settlement currency of the target bank (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             settlementDate?: string;
@@ -6751,7 +6258,6 @@ export interface components {
             /**
              * Format: date-time
              * @description Transaction date and time. (format: YYYY-MM-DDThh:mm:ssZ)
-             *
              * @example 2031-06-25T12:00:00Z
              */
             transactionDate?: string;
@@ -6759,33 +6265,28 @@ export interface components {
         TransactionIdentifiers: {
             /**
              * @description ARN - Acquiring Reference Number.
-             *
              * @example 06116638346121300000317
              */
             arn?: string;
             /**
              * @description Original authorization number which, in case of annulation or devolution transaction, allows identifying the original transaction.
-             *
              * @example 981561
              */
             authorizationCode?: string;
             /**
              * Format: int64
              * @description Identifier of the original transaction document in a document chain.
-             *
              * @example 12479
              */
             originalTransactionDocumentId?: number;
             /**
              * Format: int64
              * @description Identifier of the previous transaction document in a document chain.
-             *
              * @example 8494
              */
             previousTransactionDocumentId?: number;
             /**
              * @description Payment scheme reference number.
-             *
              * @example 17167
              */
             paymentSchemeReferenceNumber?: string;
@@ -6809,7 +6310,6 @@ export interface components {
              *     | Credit              	|
              *     | Debit               	|
              *     | None                	|
-             *
              * @example Credit
              */
             direction?: string;
@@ -6823,7 +6323,6 @@ export interface components {
              *     | Part Advice         	|
              *     | Request             	|
              *     | Reversal            	|
-             *
              * @example Request
              */
             requestCategory?: string;
@@ -6836,13 +6335,11 @@ export interface components {
              *     | Account             	|
              *     | Card                	|
              *     | Device              	|
-             *
              * @example Device
              */
             sourceCategory?: string;
             /**
              * @description Transaction message code for incoming documents.
-             *
              * @example CHANGE_PIN
              */
             sourceCode?: string;
@@ -6854,7 +6351,6 @@ export interface components {
              *     | Account             	|
              *     | Card                	|
              *     | Device              	|
-             *
              * @example Account
              */
             targetCategory?: string;
@@ -6872,7 +6368,6 @@ export interface components {
              *     | Auth Check          	|
              *     | Auth Check Transit  	|
              *     | PostAuth            	|
-             *
              * @example PreAuth
              */
             transactionDocumentCategory?: string;
@@ -6884,19 +6379,16 @@ export interface components {
              * @description Amount of interchange fee.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 49.9
              */
             interchangeFee?: number;
             /**
              * @description Interchange fee currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             interchangeFeeCurrency?: string;
             /**
              * @description Interchange fee currency (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             interchangeFeeCurrencyNumericCode?: string;
@@ -6904,19 +6396,16 @@ export interface components {
              * @description Transaction amount in the currency specified in the `reconciliationCurrency` field.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 209.9
              */
             reconciliationAmount?: number;
             /**
              * @description Currency used by the source bank to present transaction data to the payment scheme (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             reconciliationCurrency?: string;
             /**
              * @description Currency code defining currency of the amount in the field `reconciliationAmount` (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             reconciliationCurrencyNumericCode?: string;
@@ -6924,19 +6413,16 @@ export interface components {
              * @description Transaction settlement amount if present or otherwise transaction cardholder billing amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 140.9
              */
             settlementAmount?: number;
             /**
              * @description Currency code defining currency of the amount in the field `settlementAmount` (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             settlementCurrency?: string;
             /**
              * @description Currency code defining currency of the amount in the field `settlementAmount` (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             settlementCurrencyNumericCode?: string;
@@ -6944,19 +6430,16 @@ export interface components {
              * @description Amount of transaction in original currency.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 130.9
              */
             sourceAmount?: number;
             /**
              * @description Currency code defining currency of the amount in the field `sourceAmount` (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             sourceCurrency?: string;
             /**
              * @description Currency code defining currency of the amount in the field `sourceAmount` (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             sourceCurrencyNumericCode?: string;
@@ -6964,19 +6447,16 @@ export interface components {
              * @description Amount of any additional fee transaction related in account currency. Fees applied by the MP.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 123.1
              */
             transactionFeeAmount?: number;
             /**
              * @description Currency code defining currency of the fee in the field `transactionFeeAmount` (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             transactionFeeCurrency?: string;
             /**
              * @description Currency code defining currency of the fee in the field `transactionFeeAmount` (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             transactionFeeCurrencyNumericCode?: string;
@@ -6988,56 +6468,49 @@ export interface components {
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
              *
              *     Note: For some specific `transactionTypeCode` values (for example, `APSF` - paper statement fee) transaction amount is taken from the tariff level configured in the CMS (the `amount` value from the request is ignored, and cannot override the amount defined in the CMS for the tariff).
-             *
              * @example 1254
              */
             amount: number;
             /**
              * @description Transaction currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency: string;
-            /** @description An array that allows passing additional information to the created transaction record.
+            /**
+             * @description An array that allows passing additional information to the created transaction record.
              *     Maximum length of all `tagName` and `tagValue` amounts to 255 characters.
-             *      */
+             */
             customData?: components["schemas"]["TransactionCustomData"][];
             /**
              * @description Transaction description.
-             *
              * @example Payment From Client Contract
              */
             description: string;
             /**
              * @description Fee code of the fee which should be applied for the transaction. The fee code which can be used must be configured in the MP's CMS.
-             *
              * @example FX_FEE
              */
             feeCode?: string;
             /**
              * Format: date
              * @description Transaction posting date (YYYY-MM-DD format). If not filled the sysdate will be placed in the field.
-             *
              * @example 2031-06-25
              */
             postingDate?: string;
             /**
              * @description Transaction type code. Transaction type code which can be used must be configured in the MP's CMS.
-             *
              * @example FP
              */
             transactionTypeCode: string;
             /**
              * @description Transaction type extensions make it possible to more exactly determine the service that should be used to process a transaction.
              *     Transaction type extension is defined on transaction type configuration.
-             *
              * @example Ext
              */
             transactionTypeExtension?: string;
             /**
              * @description Unique reference number for the transaction. If filled system will check the uniqueness of this value.
              *     It will not be possible to create two records with the same value. Exported as SRN (Source Reference Number).
-             *
              * @example 122357012766
              */
             uniqueReferenceNumber?: string;
@@ -7046,14 +6519,12 @@ export interface components {
             /**
              * Format: date-time
              * @description Effective date and time of the usage limit. (YYYY-MM-DDThh:mm:ssZ format)
-             *
              * @example 2031-06-25T12:51:30Z
              */
             activityPeriodStartDate?: string;
             /**
              * Format: date-time
              * @description Expiration date and time of the usage limit. Date must be greater or equal to `activityPeriodStartDate`. (YYYY-MM-DDThh:mm:ssZ format)
-             *
              * @example 2031-07-25T12:51:30Z
              */
             activityPeriodEndDate?: string;
@@ -7061,7 +6532,6 @@ export interface components {
              * @description Additional information (TAG=VALUE; format). Can be used to pass additional parameters for usage limit definition.
              *
              *     *Disclaimer: Possible usage of additional information should be agreed upon with the MP representative for each additional parameter (tag) passed to the CMS system.*
-             *
              * @example EXC_SIC_LIST=0004;
              */
             addInfo?: string;
@@ -7069,7 +6539,6 @@ export interface components {
              * @description The currency of the maximum total amount of all transactions (`maxAmount`) and of a single transaction (`maxSingleAmount`) (format according to ISO 4217, alphanumeric code).
              *
              *     **Conditional mandatory field** - required if `maxAmount`, `maxSingleAmount` are passed.
-             *
              * @example EUR
              */
             currency?: string;
@@ -7077,14 +6546,12 @@ export interface components {
              * @description Maximum transaction amount permitted for the specific limit period. Zero amount indicates no restrictions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1851.1
              */
             maxAmount?: number;
             /**
              * Format: int64
              * @description Maximum number of transactions permitted for the specific limit period.
-             *
              * @example 10
              */
             maxNumber?: number;
@@ -7101,7 +6568,6 @@ export interface components {
              *     A null value in this field means that no limits are set.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 4
              */
             maxPercent?: number;
@@ -7109,7 +6575,6 @@ export interface components {
              * @description The maximum amount permitted for one transaction. Zero amount indicates no restrictions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1000
              */
             maxSingleAmount?: number;
@@ -7117,7 +6582,6 @@ export interface components {
         UsageLimitOriginalValue: {
             /**
              * @description This field must be always `true`. This is an action that restores usage limit parameters specified in the CMS (Service Package).
-             *
              * @example true
              */
             restore: boolean;
@@ -7125,21 +6589,18 @@ export interface components {
         UsageLimitResetting: {
             /**
              * @description This field must be always `true`. This is an action that resets counters for a usage limit.
-             *
              * @example true
              */
             reset: boolean;
         };
         UsageLimits: {
-            /** @description List of `UsageLimit`
-             *      */
+            /** @description List of `UsageLimit` */
             usageLimits: components["schemas"]["UsageLimit"][];
         };
         UsageLimit: {
             /**
              * Format: date-time
              * @description Effective date and time of the usage limit (YYYY-MM-DDThh:mm:ssZ format).
-             *
              * @example 2031-06-25T12:51:30Z
              */
             activityPeriodStartDate?: string;
@@ -7147,25 +6608,21 @@ export interface components {
              * Format: date-time
              * @description Expiration date and time of the usage limit (YYYY-MM-DDThh:mm:ssZ format).
              *     Date must be greater or equal to `activityPeriodStartDateDate`.
-             *
              * @example 2031-07-25T12:51:30Z
              */
             activityPeriodEndDate?: string;
             /**
              * @description Additional Information (TAG=VALUE; format).
-             *
              * @example EXC_SIC_LIST=0004;
              */
             addInfo?: string;
             /**
              * @description The currency of the maximum total amount of all transactions (`maxAmount`) and of a single transaction (`maxSingleAmount`) (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * @description The currency of the maximum total amount of all transactions (`maxAmount`) and of a single transaction (`maxSingleAmount`) (format according to ISO 4217, numeric code).
-             *
              * @example 978
              */
             currencyNumericCode?: string;
@@ -7174,14 +6631,12 @@ export interface components {
              * @description Maximum transaction amount permitted for the specific limit period. Zero amount indicates no restrictions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 3000
              */
             maxAmount?: number;
             /**
              * Format: int64
              * @description Maximum number of transactions permitted for the specific limit period.
-             *
              * @example 30
              */
             maxNumber?: number;
@@ -7197,7 +6652,6 @@ export interface components {
              *     A null value in this field means that no limits are set.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 10
              */
             maxPercent?: number;
@@ -7205,7 +6659,6 @@ export interface components {
              * @description Maximum amount permitted for one transaction. Zero amount indicates no restrictions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 500
              */
             maxSingleAmount?: number;
@@ -7222,7 +6675,6 @@ export interface components {
              *     | Template Closed     	|
              *     | Service Deactivated 	|
              *     | Redefined           	|
-             *
              * @example Active
              */
             status: string;
@@ -7233,14 +6685,12 @@ export interface components {
              * @description The current state of limit usage - the amount of transactions to perform.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1250.6
              */
             availableAmount?: number;
             /**
              * Format: int64
              * @description The current state of limit usage - number of transactions to perform.
-             *
              * @example 18
              */
             availableNumber?: number;
@@ -7248,14 +6698,12 @@ export interface components {
              * @description The current state of limit usage - the amount of already performed transactions.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 1749.4
              */
             usedAmount?: number;
             /**
              * Format: int64
              * @description The current state of limit usage - number of already performed transactions.
-             *
              * @example 12
              */
             usedNumber?: number;
@@ -7264,14 +6712,12 @@ export interface components {
             /**
              * Format: date-time
              * @description Activation date and time of the usage limit (YYYY-MM-DDThh:mm:ssZ format).
-             *
              * @example 2031-05-18T12:00:00Z
              */
             activationDate?: string;
             /**
              * Format: date-time
              * @description Deactivation date and time of the usage limit (YYYY-MM-DDThh:mm:ssZ format).
-             *
              * @example 2031-05-18T12:00:00Z
              */
             deactivationDate?: string;
@@ -7280,7 +6726,6 @@ export interface components {
              *     Only two actions on usage limit are possible to be set from the external system - Activation and Suspending
              *       * ACTIVE - will activate the usage limit
              *       * SUSPEND - will suspend the usage limit
-             *
              * @example ACTIVE
              * @enum {string}
              */
@@ -7295,7 +6740,6 @@ export interface components {
             /**
              * @description Public RSA key generated by the MP. ASCII/UTF-8 string of characters 0-9,A-F (ASN.1 DER Public hex unpacked to string) or PEM concatenated Base64 without BEGIN and END lines.
              *     The Issuer should use this key to encrypt sensitive data which requires secure transfer to the MP.
-             *
              * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
              */
             publicRsaKey: string;
@@ -7303,14 +6747,12 @@ export interface components {
         ServiceLimitTariff: {
             /**
              * @description Tariff's currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency?: string;
             /**
              * Format: date
              * @description Tariff's end date (YYYY-MM-DD format).
-             *
              * @example 2031-06-25
              */
             endDate?: string;
@@ -7318,7 +6760,6 @@ export interface components {
              * @description The maximum amount of a transaction that can be made without authorization.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 30
              */
             floorLimit?: number;
@@ -7327,7 +6768,6 @@ export interface components {
              *     A zero value in the field means that there are no limitations.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 10
              */
             minTransactionAmount?: number;
@@ -7336,7 +6776,6 @@ export interface components {
              *     A zero value in the field means that there are no limitations.
              *
              *     The field can contain values up to 2 decimal places. A dot is used as a decimal separator.
-             *
              * @example 200
              */
             maxTransactionAmount?: number;
@@ -7345,13 +6784,11 @@ export interface components {
              * @description Tariff's effective date (YYYY-MM-DD format).
              *
              *     If the value is not transmitted in the request the local date is used.
-             *
              * @example 2031-06-25
              */
             startDate?: string;
             /**
              * @description Tariff code from the CMS system. Uniquely identify service limit tariff which must be defined in the CMS during the onboarding process.
-             *
              * @example INT_R
              */
             tariffCode: string;
@@ -7359,7 +6796,6 @@ export interface components {
         AccountContractIdentifierSearch: {
             /**
              * @description This field must contain an identifier value according to the type specified by `accountContractIdentifierType` field (`ACCOUNT_CONTRACT_NUMBER` or `CBS_NUMBER`).
-             *
              * @example CBS83863371812033
              */
             accountContractIdentifier: string;
@@ -7370,7 +6806,6 @@ export interface components {
              *     |--------------------------	|------------------------------------------------------------------------------------------------------------------------------------	|
              *     | CBS_NUMBER               	| Search will be executed based on the CBS Number (Core Banking System Number)                                                       	|
              *     | ACCOUNT_CONTRACT_NUMBER  	| Search will be executed based on the account contract number assigned by the Issuer during the account creation (`POST /accounts`)  |
-             *
              * @example CBS_NUMBER
              * @enum {string}
              */
@@ -7379,7 +6814,6 @@ export interface components {
         CardContractIdentifierSearch: {
             /**
              * @description This field must contain an identifier value according to the type specified by `cardContractIdentifierType` field (`CARD_CONTRACT_NUMBER` or `CBS_NUMBER`).
-             *
              * @example CBS83863371812034
              */
             cardContractIdentifier: string;
@@ -7390,7 +6824,6 @@ export interface components {
              *     |-----------------------	|------------------------------------------------------------------------------------------------------------------------------	|
              *     | CBS_NUMBER            	| Search will be executed based on the CBS Number (Core Banking System Number)                                                 	|
              *     | CARD_CONTRACT_NUMBER  	| Search will be executed based on the card contract number assigned by the Issuer during the card creation (`POST /cards`)   	|
-             *
              * @example CBS_NUMBER
              * @enum {string}
              */
@@ -7399,7 +6832,6 @@ export interface components {
         ClientIdentifierSearch: {
             /**
              * @description This field must contain an identifier value according to the type specified by `clientIdentifierType` field (`clientNumber`, `identificationDocumentNumber`, `socialNumber` or `taxpayerIdentifier`).
-             *
              * @example 4718181
              */
             clientIdentifier: string;
@@ -7412,7 +6844,6 @@ export interface components {
              *     | IDENTIFICATION_DOCUMENT_NUMBER 	| Search will be executed based on registration Number            	|
              *     | SOCIAL_NUMBER                  	| Search will be executed based on Social Number                  	|
              *     | TAXPAYER_IDENTIFIER           	| Search will be executed based on Taxpayer Identification Number 	|
-             *
              * @example CLIENT_NUMBER
              * @enum {string}
              */
@@ -7420,24 +6851,23 @@ export interface components {
         };
         /**
          * @description Parameter defines a field that will be returned in a response.
-         *
          * @example cardContractNumber
          */
         fieldSelection: string;
         AuthenticationMethod: {
-            /** @description The list of `AuthenticationParameter`.
+            /**
+             * @description The list of `AuthenticationParameter`.
              *
              *     The list can contain only those parameters which are required. The others will be created automatically with the default value (if it is set) or without value.
              *
              *     To update the parameter value for the authentication method which has already been set to contract it is required to put only those pairs of parameters and values which are to be updated.
              *
              *     To reset the authentication method parameter value it is required to put only the parameter name to the `authenticationParameter` list.
-             *      */
+             */
             authenticationParameters?: components["schemas"]["AuthenticationParameter"][];
             authenticationTypeCode: components["schemas"]["authenticationTypeCode"];
             /**
              * @description Contract authentication type name.
-             *
              * @example TypeName
              */
             authenticationTypeName?: string;
@@ -7451,26 +6881,24 @@ export interface components {
              * @description Transaction amount.
              *
              *     The field can contain values up to 4 decimal places. A dot is used as a decimal separator.
-             *
              * @example 20
              */
             amount: number;
             /**
              * @description Transaction currency (format according to ISO 4217, alphanumeric code).
-             *
              * @example EUR
              */
             currency: string;
-            /** @description The Field allows passing additional information to the created transaction record.
+            /**
+             * @description The Field allows passing additional information to the created transaction record.
              *     Should be sent as: TAG_01=TAG_01_VALUE;TAG_02=TAG_02_VALUE;
              *
              *     Max length of tag name: 32, max length of tag value: 32. Total max length: 255
              *     The tag name and the tag value should not contain characters ['=', ';', ' '].
-             *      */
+             */
             customData?: components["schemas"]["TransactionCustomData"][];
             /**
              * @description Transaction description. In the CMS system stored and exported as merchant name.
-             *
              * @example Description
              */
             description: string;
@@ -7478,34 +6906,29 @@ export interface components {
              * @description Fee code of the fee which should be applied for transaction.
              *
              *     *Disclaimer: Fee code which can be used must be configured in the MP's CMS.*
-             *
              * @example FX_FEE
              */
             feeCode?: string;
             /**
              * Format: date
              * @description Transaction posting date (YYYY-MM-DD format). If not filled the sysdate will be placed in the field.
-             *
              * @example 2031-06-25
              */
             postingDate?: string;
             /**
              * @description Transaction type code which can be used must be configured in the MP's CMS.
-             *
              * @example PT_1
              */
             transactionTypeCode: string;
             /**
              * @description Transaction type extensions make it possible to more exactly determine the service that should be used to process a transaction.
              *     Transaction type extension is defined on transaction type configuration.
-             *
              * @example Description
              */
             transactionTypeExtension?: string;
             /**
              * @description Unique reference number for the transaction. If filled system will check the uniqueness of this value.
              *     It will not be possible to create two records with the same value. Exported as SRN (Source Reference Number).
-             *
              * @example 122357012766
              */
             uniqueReferenceNumber?: string;
@@ -7516,14 +6939,12 @@ export interface components {
              *       * The first six digits are the Bank Identification Number (BIN): a unique number within the payment organization (Mastercard, VISA)
              *       * The following nine digits are the contract identification number, which can be generated randomly
              *       * The last digit is a Luhn check digit.
-             *
              * @example 5355848943515330
              */
             cardContractNumber: string;
             cardExpiryDate?: components["schemas"]["cardExpiryDate"];
             /**
              * @description Card Verification Code 2 (CVC2), known also as a Card Security Code (CSC) or a Card Verification Value 2 (CVV2).
-             *
              * @example 347
              */
             cardVerificationCode?: string;
@@ -7537,7 +6958,6 @@ export interface components {
              *     |---------------------	|
              *     | PAN_CORRECT         	|
              *     | PAN_CANCELLED       	|
-             *
              * @example PAN_CORRECT
              */
             cardContractNumberVerificationResult: string;
@@ -7549,7 +6969,6 @@ export interface components {
              *     | EXPIRY_DATE_CORRECT      	|
              *     | EXPIRY_DATE_NOT_CORRECT  	|
              *     | EXPIRY_DATE_NOT_PROVIDED 	|
-             *
              * @example EXPIRY_DATE_CORRECT
              */
             cardExpiryDateVerificationResult: string;
@@ -7562,25 +6981,21 @@ export interface components {
              *     | CVC2_CORRECT        	|
              *     | CVC2_NOT_CORRECT    	|
              *     | CVC2_NOT_PROVIDED   	|
-             *
              * @example CVC2_CORRECT
              */
             cvc2VerificationResult: string;
         };
         ClientCustomDataTagValues: {
-            /** @description List of `CustomDataTagValue` for the client.
-             *      */
+            /** @description List of `CustomDataTagValue` for the client. */
             clientCustomDataTagValues: components["schemas"]["CustomDataTagValue"][];
         };
         ContractCustomDataTagValues: {
-            /** @description List of `CustomDataTagValue` for the contract.
-             *      */
+            /** @description List of `CustomDataTagValue` for the contract. */
             contractCustomDataTagValues: components["schemas"]["CustomDataTagValue"][];
         };
     };
     responses: {
-        /** @description The authentication parameter value has been fetched successfully.
-         *      */
+        /** @description The authentication parameter value has been fetched successfully. */
         AuthenticationParameterValue: {
             headers: {
                 [name: string]: unknown;
@@ -7589,8 +7004,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["AuthenticationParameterValue"];
             };
         };
-        /** @description The result of the release of the funds.
-         *      */
+        /** @description The result of the release of the funds. */
         BlockedFundsReleaseResult: {
             headers: {
                 [name: string]: unknown;
@@ -7606,7 +7020,6 @@ export interface components {
                  * @description A hash of a response body used to uniquely identify a particular version of a client.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -7614,31 +7027,27 @@ export interface components {
             };
             content?: never;
         };
-        /** @description The account contract has been successfully relinked to another client.
-         *      */
+        /** @description The account contract has been successfully relinked to another client. */
         AccountRelinked: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The contract has been successfully relinked.
-         *      */
+        /** @description The contract has been successfully relinked. */
         SubAccountRelinked: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The account contract has been successfully updated.
-         *      */
+        /** @description The account contract has been successfully updated. */
         AccountUpdated: {
             headers: {
                 /**
                  * @description A hash of a response body used to uniquely identify a particular version of a client.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -7646,39 +7055,34 @@ export interface components {
             };
             content?: never;
         };
-        /** @description The server has successfully changed an account contract status.
-         *      */
+        /** @description The server has successfully changed an account contract status. */
         AccountStatusChanged: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The card contract has been successfully relinked to another client.
-         *      */
+        /** @description The card contract has been successfully relinked to another client. */
         CardRelinkedToAnotherClient: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The card contract has been successfully relinked to another account contract.
-         *      */
+        /** @description The card contract has been successfully relinked to another account contract. */
         CardRelinkedToAnotherAccount: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The card contract has been successfully updated.
-         *      */
+        /** @description The card contract has been successfully updated. */
         CardUpdated: {
             headers: {
                 /**
                  * @description A hash of a response body used to uniquely identify a particular version of a card.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -7686,16 +7090,14 @@ export interface components {
             };
             content?: never;
         };
-        /** @description The card contract status has been successfully managed.
-         *      */
+        /** @description The card contract status has been successfully managed. */
         CardStatusChanged: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The online PIN try counter has been successfully reset.
-         *      */
+        /** @description The online PIN try counter has been successfully reset. */
         OnlinePinTryCounterReset: {
             headers: {
                 [name: string]: unknown;
@@ -7709,112 +7111,98 @@ export interface components {
             };
             content?: never;
         };
-        /** @description The address of a selected type for a client has been successfully updated.
-         *      */
+        /** @description The address of a selected type for a client has been successfully updated. */
         ClientAddressUpdated: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The address of a selected type for a contract has been successfully updated.
-         *      */
+        /** @description The address of a selected type for a contract has been successfully updated. */
         ContractAddressUpdated: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The contract parameter value has been successfully set up or changed.
-         *      */
+        /** @description The contract parameter value has been successfully set up or changed. */
         ContractParameterSetOrChanged: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The usage limit for a contract has been successfully added or updated.
-         *      */
+        /** @description The usage limit for a contract has been successfully added or updated. */
         ContractUsageLimitAddedOrUpdated: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The usage limit for a contract has been successfully restored.
-         *      */
+        /** @description The usage limit for a contract has been successfully restored. */
         ContractUsageLimitRestored: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The counters for the specified usage limit has been successfully reset.
-         *      */
+        /** @description The counters for the specified usage limit has been successfully reset. */
         ContractUsageLimitCounterReset: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The usage limit status has been successfully changed.
-         *      */
+        /** @description The usage limit status has been successfully changed. */
         ContractUsageLimitStatusChanged: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The individual service limit tariff has been successfully set up.
-         *      */
+        /** @description The individual service limit tariff has been successfully set up. */
         ServiceLimitTariffSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The custom data for a contract has been successfully set up.
-         *      */
+        /** @description The custom data for a contract has been successfully set up. */
         ContractCustomDataSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The custom data for a client has been successfully set up.
-         *      */
+        /** @description The custom data for a client has been successfully set up. */
         ClientCustomDataSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The Contract classifier has been successfully set up.
-         *      */
+        /** @description The Contract classifier has been successfully set up. */
         ContractClassifierSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The client classifier has been successfully set up.
-         *      */
+        /** @description The client classifier has been successfully set up. */
         ClientClassifierSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The address for a contract has been successfully created.
-         *      */
+        /** @description The address for a contract has been successfully created. */
         ContractAddressCreated: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The address for a client has been successfully created.
-         *      */
+        /** @description The address for a client has been successfully created. */
         ClientAddressCreated: {
             headers: {
                 [name: string]: unknown;
@@ -7828,16 +7216,14 @@ export interface components {
             };
             content?: never;
         };
-        /** @description The event for the specified contract has been successfully opened.
-         *      */
+        /** @description The event for the specified contract has been successfully opened. */
         ContractEventCreated: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestInvalidContractTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7846,8 +7232,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestInvalidTransactionTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7856,8 +7241,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestInvalidClientTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7866,8 +7250,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestInvalidCardContractTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7876,8 +7259,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestInvalidAccountContractTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7886,8 +7268,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullCardContractIdentifierError: {
             headers: {
                 [name: string]: unknown;
@@ -7896,8 +7277,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullAccountContractIdentifierError: {
             headers: {
                 [name: string]: unknown;
@@ -7906,8 +7286,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullClientIdentifierError: {
             headers: {
                 [name: string]: unknown;
@@ -7916,8 +7295,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullClientNumberError: {
             headers: {
                 [name: string]: unknown;
@@ -7926,8 +7304,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullClassifierCodeError: {
             headers: {
                 [name: string]: unknown;
@@ -7936,8 +7313,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullCardContractError: {
             headers: {
                 [name: string]: unknown;
@@ -7946,8 +7322,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestNullCardContractNumberError: {
             headers: {
                 [name: string]: unknown;
@@ -7956,8 +7331,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestMissingDataTypeToSecureError: {
             headers: {
                 [name: string]: unknown;
@@ -7966,8 +7340,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The server cannot process the request due to bad request.
-         *      */
+        /** @description The server cannot process the request due to bad request. */
         BadRequestMissingTransactionSelectorTypeError: {
             headers: {
                 [name: string]: unknown;
@@ -7976,8 +7349,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The URI did not match an existing resource.
-         *      */
+        /** @description The URI did not match an existing resource. */
         ContractNotFoundError: {
             headers: {
                 [name: string]: unknown;
@@ -7986,8 +7358,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The URI did not match an existing resource.
-         *      */
+        /** @description The URI did not match an existing resource. */
         TransactionNotFoundError: {
             headers: {
                 [name: string]: unknown;
@@ -7996,8 +7367,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The URI did not match an existing resource.
-         *      */
+        /** @description The URI did not match an existing resource. */
         CardContractNotFoundError: {
             headers: {
                 [name: string]: unknown;
@@ -8006,8 +7376,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The URI did not match an existing resource.
-         *      */
+        /** @description The URI did not match an existing resource. */
         AccountContractNotFoundError: {
             headers: {
                 [name: string]: unknown;
@@ -8016,8 +7385,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The URI did not match an existing resource.
-         *      */
+        /** @description The URI did not match an existing resource. */
         ClientNotFoundError: {
             headers: {
                 [name: string]: unknown;
@@ -8026,8 +7394,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description You do not have the permission to do this operation.
-         *      */
+        /** @description You do not have the permission to do this operation. */
         OperationDeniedError: {
             headers: {
                 [name: string]: unknown;
@@ -8036,8 +7403,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description Precondition failed. Check the description field in the response for details.
-         *      */
+        /** @description Precondition failed. Check the description field in the response for details. */
         PreconditionError: {
             headers: {
                 [name: string]: unknown;
@@ -8046,8 +7412,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ErrorWrapper"];
             };
         };
-        /** @description The client identifier has been fetched successfully.
-         *      */
+        /** @description The client identifier has been fetched successfully. */
         ClientIdentifier: {
             headers: {
                 [name: string]: unknown;
@@ -8056,13 +7421,11 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientIdentifier"];
             };
         };
-        /** @description The client has been successfully created, see the `Location` header.
-         *      */
+        /** @description The client has been successfully created, see the `Location` header. */
         ClientIdentifierCreated: {
             headers: {
                 /**
                  * @description The URI of the created client.
-                 *
                  * @example /clients/681084084
                  */
                 Location?: string;
@@ -8072,15 +7435,13 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientIdentifier"];
             };
         };
-        /** @description The client has been successfully fetched.
-         *      */
+        /** @description The client has been successfully fetched. */
         Client: {
             headers: {
                 /**
                  * @description A hash of a response body used to uniquely identify a particular version of a client.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -8090,8 +7451,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["Client"];
             };
         };
-        /** @description The list of account contracts for a specified client has been fetched successfully.
-         *      */
+        /** @description The list of account contracts for a specified client has been fetched successfully. */
         ClientAccountContracts: {
             headers: {
                 [name: string]: unknown;
@@ -8100,8 +7460,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientAccountContracts"];
             };
         };
-        /** @description The list of card contracts has been fetched successfully.
-         *      */
+        /** @description The list of card contracts has been fetched successfully. */
         ClientCardContracts: {
             headers: {
                 [name: string]: unknown;
@@ -8110,8 +7469,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientCardContracts"];
             };
         };
-        /** @description The financial information has been fetched successfully.
-         *      */
+        /** @description The financial information has been fetched successfully. */
         ContractFinancial: {
             headers: {
                 [name: string]: unknown;
@@ -8120,8 +7478,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractFinancial"];
             };
         };
-        /** @description The list of balances has been fetched successfully.
-         *      */
+        /** @description The list of balances has been fetched successfully. */
         ContractBalances: {
             headers: {
                 [name: string]: unknown;
@@ -8130,8 +7487,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractBalances"];
             };
         };
-        /** @description The list of technical accounts has been fetched successfully.
-         *      */
+        /** @description The list of technical accounts has been fetched successfully. */
         TechnicalAccounts: {
             headers: {
                 [name: string]: unknown;
@@ -8140,13 +7496,11 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TechnicalAccounts"];
             };
         };
-        /** @description The account contract has been successfully created, see the `Location` header.
-         *      */
+        /** @description The account contract has been successfully created, see the `Location` header. */
         AccountContractIdentifierCreated: {
             headers: {
                 /**
                  * @description The URI of the created account contract.
-                 *
                  * @example /accounts/3519804984
                  */
                 Location?: string;
@@ -8156,8 +7510,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["AccountContractIdentifier"];
             };
         };
-        /** @description The account contract identifier has been fetched successfully.
-         *      */
+        /** @description The account contract identifier has been fetched successfully. */
         AccountContractIdentifier: {
             headers: {
                 [name: string]: unknown;
@@ -8173,7 +7526,6 @@ export interface components {
                  * @description A hash of a response body used to uniquely identify a particular version of a account contract.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -8183,8 +7535,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["AccountContract"];
             };
         };
-        /** @description The list of subaccounts has been fetched successfully.
-         *      */
+        /** @description The list of subaccounts has been fetched successfully. */
         SubAccountContracts: {
             headers: {
                 [name: string]: unknown;
@@ -8193,8 +7544,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["SubAccountContracts"];
             };
         };
-        /** @description The list of card contract summaries has been fetched successfully.
-         *      */
+        /** @description The list of card contract summaries has been fetched successfully. */
         AccountContractCardContracts: {
             headers: {
                 [name: string]: unknown;
@@ -8203,8 +7553,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["AccountContractCardContracts"];
             };
         };
-        /** @description The summary tree has been fetched successfully.
-         *      */
+        /** @description The summary tree has been fetched successfully. */
         ContractSummaryTree: {
             headers: {
                 [name: string]: unknown;
@@ -8213,13 +7562,11 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractSummaryTree"];
             };
         };
-        /** @description The card contract has been successfully created, see the `Location` header.
-         *      */
+        /** @description The card contract has been successfully created, see the `Location` header. */
         CardContractIdentifierCreated: {
             headers: {
                 /**
                  * @description The URI of the created card contract.
-                 *
                  * @example /cards/68412281
                  */
                 Location?: string;
@@ -8229,8 +7576,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CardContractIdentifier"];
             };
         };
-        /** @description The CVC2 search was performed successfully.
-         *      */
+        /** @description The CVC2 search was performed successfully. */
         Cvc: {
             headers: {
                 [name: string]: unknown;
@@ -8239,8 +7585,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["Cvc"];
             };
         };
-        /** @description The CVC2 verification result has been fetched successfully.
-         *      */
+        /** @description The CVC2 verification result has been fetched successfully. */
         CvcVerificationResult: {
             headers: {
                 [name: string]: unknown;
@@ -8249,8 +7594,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CvcVerificationResult"];
             };
         };
-        /** @description The PIN verification result has been fetched successfully.
-         *      */
+        /** @description The PIN verification result has been fetched successfully. */
         PinVerificationResult: {
             headers: {
                 [name: string]: unknown;
@@ -8259,8 +7603,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["PinVerificationResult"];
             };
         };
-        /** @description The encrypted PIN block has been fetched successfully.
-         *      */
+        /** @description The encrypted PIN block has been fetched successfully. */
         EncryptedPin: {
             headers: {
                 [name: string]: unknown;
@@ -8269,8 +7612,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["EncryptedPin"];
             };
         };
-        /** @description The list of card plastics has been successfully fetched.
-         *      */
+        /** @description The list of card plastics has been successfully fetched. */
         CardContractPlastics: {
             headers: {
                 [name: string]: unknown;
@@ -8279,8 +7621,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CardContractPlastics"];
             };
         };
-        /** @description The list of parameters has been fetched successfully.
-         *      */
+        /** @description The list of parameters has been fetched successfully. */
         ContractParameters: {
             headers: {
                 [name: string]: unknown;
@@ -8289,8 +7630,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractParameters"];
             };
         };
-        /** @description The list of client addresses has been fetched successfully.
-         *      */
+        /** @description The list of client addresses has been fetched successfully. */
         ClientAddresses: {
             headers: {
                 [name: string]: unknown;
@@ -8299,8 +7639,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientAddresses"];
             };
         };
-        /** @description The list of contract addresses has been fetched successfully.
-         *      */
+        /** @description The list of contract addresses has been fetched successfully. */
         ContractAddresses: {
             headers: {
                 [name: string]: unknown;
@@ -8309,8 +7648,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractAddresses"];
             };
         };
-        /** @description The list of client custom data tags has been fetched successfully.
-         *      */
+        /** @description The list of client custom data tags has been fetched successfully. */
         ClientCustomDataTagValues: {
             headers: {
                 [name: string]: unknown;
@@ -8319,8 +7657,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientCustomDataTagValues"];
             };
         };
-        /** @description The list of contract custom data tags has been fetched successfully.
-         *      */
+        /** @description The list of contract custom data tags has been fetched successfully. */
         ContractCustomDataTagValues: {
             headers: {
                 [name: string]: unknown;
@@ -8329,8 +7666,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractCustomDataTagValues"];
             };
         };
-        /** @description The list of transactions has been fetched successfully.
-         *      */
+        /** @description The list of transactions has been fetched successfully. */
         Transactions: {
             headers: {
                 [name: string]: unknown;
@@ -8339,8 +7675,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["Transactions"];
             };
         };
-        /** @description The list of transaction documents has been fetched successfully.
-         *      */
+        /** @description The list of transaction documents has been fetched successfully. */
         TransactionDocuments: {
             headers: {
                 [name: string]: unknown;
@@ -8349,8 +7684,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TransactionDocuments"];
             };
         };
-        /** @description The list of transaction fees has been fetched successfully.
-         *      */
+        /** @description The list of transaction fees has been fetched successfully. */
         TransactionFees: {
             headers: {
                 [name: string]: unknown;
@@ -8359,8 +7693,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TransactionFees"];
             };
         };
-        /** @description The list of usage limits has been fetched successfully.
-         *      */
+        /** @description The list of usage limits has been fetched successfully. */
         UsageLimits: {
             headers: {
                 [name: string]: unknown;
@@ -8369,8 +7702,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["UsageLimits"];
             };
         };
-        /** @description The list of client classifiers has been fetched successfully.
-         *      */
+        /** @description The list of client classifiers has been fetched successfully. */
         ClientClassifiers: {
             headers: {
                 [name: string]: unknown;
@@ -8379,8 +7711,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ClientClassifiers"];
             };
         };
-        /** @description The list of contract classifiers has been fetched successfully.
-         *      */
+        /** @description The list of contract classifiers has been fetched successfully. */
         ContractClassifiers: {
             headers: {
                 [name: string]: unknown;
@@ -8389,8 +7720,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractClassifiers"];
             };
         };
-        /** @description The card contract identifier has been fetched successfully.
-         *      */
+        /** @description The card contract identifier has been fetched successfully. */
         CardContractIdentifier: {
             headers: {
                 [name: string]: unknown;
@@ -8399,8 +7729,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CardContractIdentifier"];
             };
         };
-        /** @description The RSA key has been successfully fetched.
-         *      */
+        /** @description The RSA key has been successfully fetched. */
         PublicRsaKeyData: {
             headers: {
                 [name: string]: unknown;
@@ -8416,7 +7745,6 @@ export interface components {
                  * @description A hash of a response body used to uniquely identify a particular version of a card contract.
                  *     This value needs to be passed as an `If-Match` header to the PATCH methods of the same resource to ensure idempotency.
                  *     See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for details.
-                 *
                  * @example 7fedf39c3c2952a62821de4b480d1d6f
                  */
                 ETag?: string;
@@ -8426,8 +7754,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CardContractWithEncryptedCardContractNumber"];
             };
         };
-        /** @description The card contract has been successfully reissued.
-         *      */
+        /** @description The card contract has been successfully reissued. */
         ReissuedCardContract: {
             headers: {
                 /**
@@ -8441,16 +7768,14 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ReissuedCardContract"];
             };
         };
-        /** @description The authentication method has been set up.
-         *      */
+        /** @description The authentication method has been set up. */
         AuthenticationMethodSetUp: {
             headers: {
                 [name: string]: unknown;
             };
             content?: never;
         };
-        /** @description The debit transaction has been posted.
-         *      */
+        /** @description The debit transaction has been posted. */
         DebitTransactionId: {
             headers: {
                 /**
@@ -8464,8 +7789,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TransactionId"];
             };
         };
-        /** @description The credit transaction has been posted.
-         *      */
+        /** @description The credit transaction has been posted. */
         CreditTransactionId: {
             headers: {
                 /**
@@ -8479,8 +7803,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TransactionId"];
             };
         };
-        /** @description The contract has been charged successfully.
-         *      */
+        /** @description The contract has been charged successfully. */
         ChargeTransactionId: {
             headers: {
                 /**
@@ -8494,8 +7817,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["TransactionId"];
             };
         };
-        /** @description The transaction has been successfully reversed.
-         *      */
+        /** @description The transaction has been successfully reversed. */
         ReverseTransactionId: {
             headers: {
                 /**
@@ -8509,8 +7831,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ReverseTransactionId"];
             };
         };
-        /** @description The contract tariffs has been fetched successfully.
-         *      */
+        /** @description The contract tariffs has been fetched successfully. */
         ContractTariffs: {
             headers: {
                 [name: string]: unknown;
@@ -8519,8 +7840,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["ContractTariffs"];
             };
         };
-        /** @description The account contract status has been retrieved successfully.
-         *      */
+        /** @description The account contract status has been retrieved successfully. */
         AccountContractStatus: {
             headers: {
                 [name: string]: unknown;
@@ -8529,8 +7849,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["AccountContractStatus"];
             };
         };
-        /** @description The card contract status has been retrieved successfully.
-         *      */
+        /** @description The card contract status has been retrieved successfully. */
         CardContractStatus: {
             headers: {
                 [name: string]: unknown;
@@ -8539,8 +7858,7 @@ export interface components {
                 "application/json;charset=utf-8": components["schemas"]["CardContractStatus"];
             };
         };
-        /** @description The card details verification result.
-         *      */
+        /** @description The card details verification result. */
         CardContractDetailsVerificationResult: {
             headers: {
                 [name: string]: unknown;
@@ -8553,13 +7871,11 @@ export interface components {
     parameters: {
         /**
          * @description Contract authentication type code.
-         *
          * @example 3DS_EXT_ENROLLMENT
          */
         authenticationTypeCode: components["schemas"]["authenticationTypeCode"];
         /**
          * @description Contract authentication parameter name.
-         *
          * @example PHONE
          */
         authenticationParameterName: components["schemas"]["authenticationParameterName"];
@@ -8567,7 +7883,6 @@ export interface components {
          * @description Public RSA key generated by the Issuer. ASCII/UTF-8 string of characters 0-9, A-F, ASN.1 DER Public hex unpacked to string or PEM concatenated Base64 without BEGIN and END lines.
          *
          *     Key is used to encrypt sensitive data (`encryptedCardContractNumber`, `encryptedZpk`) returned by the MP in the response.
-         *
          * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
          */
         mandatoryCustomerPublicRsaKey: components["schemas"]["customerPublicRsaKey"];
@@ -8575,25 +7890,21 @@ export interface components {
          * @description Public RSA key generated by the Issuer. ASCII/UTF-8 string of characters 0-9, A-F, ASN.1 DER Public hex unpacked to string or PEM concatenated Base64 without BEGIN and END lines.
          *
          *     Key is used to encrypt sensitive data returned by the MP in the response.
-         *
          * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
          */
         optionalCustomerPublicRsaKey: components["schemas"]["customerPublicRsaKey"];
         /**
          * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-         *
          * @example 40000
          */
         clientId: components["schemas"]["clientId"];
         /**
          * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-         *
          * @example 60001
          */
         accountContractId: components["schemas"]["accountContractId"];
         /**
          * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-         *
          * @example 70001
          */
         cardContractId: components["schemas"]["cardContractId"];
@@ -8603,7 +7914,6 @@ export interface components {
          *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
          *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
          *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-         *
          * @example 70001
          */
         contractId: components["schemas"]["contractId"];
@@ -8615,7 +7925,6 @@ export interface components {
          *     | CREDIT              	|
          *     | DEBIT               	|
          *     | NONE                	|
-         *
          * @example DEBIT
          */
         direction: "CREDIT" | "DEBIT" | "NONE";
@@ -8628,64 +7937,58 @@ export interface components {
          *     | M                   	| Main-Sub hierarchies only                                                                     	|
          *     | R                   	| Related Cards only. In this mode Liability and Main-Sub contract hierarchies are not analyzed 	|
          *     | Y                   	| Liability and Main-Sub contract hierarchies are analyzed                                      	|
-         *
          * @example R
          */
         contractHierarchy: "N" | "M" | "R" | "Y";
         /**
          * @description The number of items you want the list to be limited to.
-         *
          * @example 1
          */
         limit: number;
         /**
          * @description The number of items to offset the start of the list from.
-         *
          * @example 0
          */
         offset: number;
         /**
          * @description The response message can return only the data represented by field names specified in this field.
          *     The Issuer can choose any field name being returned for a card contract object or can leave the field empty (in such case all data will be returned).
-         *
          * @example cardContractNumber,embossedData
          */
         fieldsSelection: components["schemas"]["fieldSelection"][];
-        /** @description List of balance codes. The response will return information about specified balances.
+        /**
+         * @description List of balance codes. The response will return information about specified balances.
          *
          *     Note: Response will contain only specified balance codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-         *      */
+         */
         contractBalanceCodes: string[];
         /**
          * @description Index of the MP's public RSA key received in a `GET /public-keys` response (API operation: `getPublicRsaKey`).
          *
          *     If `Key-Index` is provided, then the `newPinBlock` field must be encrypted using the MP's public RSA key received together with the `Key-Index` from the MP in `GET /public-keys` response (API operation: `getPublicRsaKey`).
-         *
          * @example A1564386531162
          */
         keyIndex: components["schemas"]["keyIndex"];
         /**
          * @description Used to ensure idempotency for the PATCH methods.
          *     This header should be populated with the `ETag` received in the response header from the GET call of the same resource being updated. See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for more details.
-         *
          * @example 5c7d022061b0874200bfed735c6b9308
          */
         ifMatch: components["schemas"]["ifMatch"];
         /**
          * @description Date from (YYYY-MM-DD format).
-         *
          * @example 2031-06-25
          */
         transactionDateFrom: components["schemas"]["date"];
         /**
          * @description Date to (YYYY-MM-DD format).
-         *
          * @example 2032-06-25
          */
         transactionDateTo: components["schemas"]["date"];
-        /** @description The list of `transactionTypeCode` separated by commas.
+        /**
+         * @description The list of `transactionTypeCode` separated by commas.
          *
          *     Transactions originated from the Banknet
          *     | `transactionTypeCode` 	| `transactionType`                     	|
@@ -8761,12 +8064,12 @@ export interface components {
          *     | ILC5                  	| Overdue retail interest           	|
          *     | ILR3                  	| Retail interest                   	|
          *     | ILR5                  	| Cash interest                     	|
-         *      */
+         */
         transactionTypeCodes: string[];
-        /** @description Allows defining the type of selector passed in the `transaction_selector_value`.
-         *      */
+        /** @description Allows defining the type of selector passed in the `transaction_selector_value`. */
         transactionSelectorType: "ARN" | "ID" | "RRN" | "SRN";
-        /** @description Allows defining the value for the transactions selector.
+        /**
+         * @description Allows defining the value for the transactions selector.
          *
          *     * If `transaction_selector_type` is equal to `ARN` then maxLength of `transaction_selector_value` is 32
          *
@@ -8775,11 +8078,12 @@ export interface components {
          *     * If `transaction_selector_type` is equal to `RRN` then maxLength of `transaction_selector_value` is 12
          *
          *     * If `transaction_selector_type` is equal to `SRN` then maxLength of `transaction_selector_value` is 32
-         *      */
+         */
         transactionSelectorValue: string;
-        /** @description Allows collecting information about authorization documents.
+        /**
+         * @description Allows collecting information about authorization documents.
          *     The parameter is used in combination with the `authorization_filter_mode` parameter.
-         *      */
+         */
         transactionCollectAuthorizations: "Y" | "N";
         /**
          * @description Address type. Additional addresses allow to store any address related to the client or contract (account contract or card contract).
@@ -8790,7 +8094,6 @@ export interface components {
          *     | STMT                        	| Statement delivery address  	|
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process as they are configured in the CMS system.*
-         *
          * @example PIN
          */
         addressType: components["schemas"]["addressType"];
@@ -8798,7 +8101,6 @@ export interface components {
          * @description Code of the contract parameter for which the value will be set.
          *
          *     *Disclaimer: Parameter codes are configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-         *
          * @example MTP_CALC_RULE
          */
         parameterCode: components["schemas"]["parameterCode"];
@@ -8808,7 +8110,6 @@ export interface components {
          *     Note: Response will contain only specified parameter codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-         *
          * @example ATM_CALC_RULE,MTP_CALC_RULE
          */
         parameterCodes: components["schemas"]["parameterCode"][];
@@ -8816,32 +8117,29 @@ export interface components {
          * @description Code of the classifier for which the value will be set.
          *
          *     *Disclaimer: Classifier codes are configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-         *
          * @example TEST_CLASSIFIER_01
          */
         classifierCode: components["schemas"]["classifierCode"];
-        /** @description The list of classifiers which should be returned.
+        /**
+         * @description The list of classifiers which should be returned.
          *
          *     Note: Response will contain only specified classifier codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-         *      */
+         */
         classifierCodes: components["schemas"]["classifierCode"][];
         /**
          * @description Tag name
-         *
          * @example TAG_01
          */
         tagName: string;
         /**
          * @description Transaction record id from the CMS system.
-         *
          * @example 90001
          */
         transactionId: number;
         /**
          * @description Code of the account, which is related to the given contract.
-         *
          * @example BF
          */
         technicalAccountCode: string;
@@ -8860,28 +8158,26 @@ export interface components {
          *       * N - cardholder's requests not changing a contract's balance (Balance Inquiry, Online Statement, Top Up, Additional Online Service, Verification).
          *       * S - active authorizations that lead to a contract's balance changes, waiting for a financial document to be matched. This option is similar to 'A' but excludes closed and declined authorizations.
          *       * U - authorizations that lead to a contract's balance changes and cardholder's requests that do not change a contract's balance. Closed and declined authorizations are considered too.
-         *
          * @example A
          */
         transactionAuthorizationFilterMode: "A" | "N" | "S" | "U";
         /**
          * @description Determines whether the transaction was authorized.
-         *
          * @example Y
          */
         transactionAuthorized: "Y" | "N";
-        /** @description The list of usage limit codes which should be returned.
+        /**
+         * @description The list of usage limit codes which should be returned.
          *
          *     Note: Response will contain only specified limit codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-         *      */
+         */
         usageLimitCodes: components["schemas"]["usageLimitCode"][];
         /**
          * @description Unique usage limit code which defines the contract's usage limit for which action should be executed.
          *
          *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-         *
          * @example DAILY_TOTAL
          */
         usageLimitCode: components["schemas"]["usageLimitCode"];
@@ -8891,7 +8187,6 @@ export interface components {
          *     | **Possible values** 	| **Description**          	|
          *     |---------------------	|--------------------------	|
          *     | PIN_BLOCK           	| For PIN block encryption 	|
-         *
          * @example PIN_BLOCK
          */
         dateTypeToSecure: "PIN_BLOCK";
@@ -8899,7 +8194,6 @@ export interface components {
          * @description The list of `Status`. The response will contain contracts with specified statuses only.
          *
          *     If the list does not contain any value then the response will contain all cards without filtering by status.
-         *
          * @example 41,05
          */
         statuses: string[];
@@ -8907,19 +8201,16 @@ export interface components {
          * @description Response will return card contracts with creation date >= than date passed in the request (YYYY-MM-DD format).
          *
          *     If not filled card contracts are returned without checking the creation date.
-         *
          * @example 2019-06-24
          */
         creationDateFrom: string;
         /**
          * @description Tariff code.
-         *
          * @example MTP_CALC_RULE
          */
         tariffCode: string;
         /**
          * @description Tariff type code.
-         *
          * @example MTP_CALC_RULE
          */
         tariffTypeCode: string;
@@ -8933,13 +8224,11 @@ export interface components {
          *     |          D          	|        Personalised       	|
          *     |          T          	| Personal (Template Based) 	|
          *     |          L          	|          Template         	|
-         *
          * @example G
          */
         personalisationType: "G" | "P" | "D" | "T" | "L";
         /**
          * @description Tariff domain code.
-         *
          * @example GL
          */
         tariffDomainCode: string;
@@ -8963,12 +8252,10 @@ export interface components {
          *       | TECHNICAL           	|  Technical                 	|
          *       | FX                  	|  Conversion                	|
          *       | REDEFINITION        	|  Redefinition              	|
-         *
          * @example AGEING
          */
         tariffRole: "SERVICE" | "SERVICE_LIMIT" | "SERVICE_VD" | "INTEREST" | "AGEING" | "USAGE" | "INTEREST_TAX" | "BILLING" | "GL" | "INST_FEE" | "INSTALLMENT" | "THRESHOLD" | "TECHNICAL" | "FX" | "REDEFINITION";
-        /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-         *      */
+        /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
         idempotencyKey: string;
     };
     requestBodies: {
@@ -9192,8 +8479,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -9213,7 +8499,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -9235,18 +8520,15 @@ export interface operations {
                 /**
                  * @description Used to ensure idempotency for the PATCH methods.
                  *     This header should be populated with the `ETag` received in the response header from the GET call of the same resource being updated. See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for more details.
-                 *
                  * @example 5c7d022061b0874200bfed735c6b9308
                  */
                 "If-Match": components["parameters"]["ifMatch"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -9267,13 +8549,11 @@ export interface operations {
             query?: {
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -9282,7 +8562,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -9304,7 +8583,6 @@ export interface operations {
                  * @description Response will return card contracts with creation date >= than date passed in the request (YYYY-MM-DD format).
                  *
                  *     If not filled card contracts are returned without checking the creation date.
-                 *
                  * @example 2019-06-24
                  */
                 creation_date_from?: components["parameters"]["creationDateFrom"];
@@ -9312,19 +8590,16 @@ export interface operations {
                  * @description The list of `Status`. The response will contain contracts with specified statuses only.
                  *
                  *     If the list does not contain any value then the response will contain all cards without filtering by status.
-                 *
                  * @example 41,05
                  */
                 statuses?: components["parameters"]["statuses"];
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -9333,7 +8608,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -9352,8 +8626,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -9363,7 +8636,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9389,7 +8661,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9407,12 +8678,13 @@ export interface operations {
     getContractBalances: {
         parameters: {
             query: {
-                /** @description List of balance codes. The response will return information about specified balances.
+                /**
+                 * @description List of balance codes. The response will return information about specified balances.
                  *
                  *     Note: Response will contain only specified balance codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *      */
+                 */
                 balance_codes: components["parameters"]["contractBalanceCodes"];
             };
             header?: never;
@@ -9423,7 +8695,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9443,7 +8714,6 @@ export interface operations {
             query?: {
                 /**
                  * @description Code of the account, which is related to the given contract.
-                 *
                  * @example BF
                  */
                 technical_account_code?: components["parameters"]["technicalAccountCode"];
@@ -9456,7 +8726,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9476,13 +8745,11 @@ export interface operations {
             query?: {
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -9495,7 +8762,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9514,8 +8780,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -9536,7 +8801,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9558,18 +8822,15 @@ export interface operations {
                 /**
                  * @description Used to ensure idempotency for the PATCH methods.
                  *     This header should be populated with the `ETag` received in the response header from the GET call of the same resource being updated. See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for more details.
-                 *
                  * @example 5c7d022061b0874200bfed735c6b9308
                  */
                 "If-Match": components["parameters"]["ifMatch"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9592,7 +8853,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9614,7 +8874,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9636,7 +8895,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9662,7 +8920,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -9682,13 +8939,11 @@ export interface operations {
             query?: {
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -9697,7 +8952,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9719,7 +8973,6 @@ export interface operations {
                  * @description Response will return card contracts with creation date >= than date passed in the request (YYYY-MM-DD format).
                  *
                  *     If not filled card contracts are returned without checking the creation date.
-                 *
                  * @example 2019-06-24
                  */
                 creation_date_from?: components["parameters"]["creationDateFrom"];
@@ -9727,19 +8980,16 @@ export interface operations {
                  * @description The list of `Status`. The response will contain contracts with specified statuses only.
                  *
                  *     If the list does not contain any value then the response will contain all cards without filtering by status.
-                 *
                  * @example 41,05
                  */
                 statuses?: components["parameters"]["statuses"];
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -9748,7 +8998,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for an account contract generated by the MP's CMS. The identifier is generated when account contract creation finishes successfully and is returned in an account contract creation response (`POST /accounts`).
-                 *
                  * @example 60001
                  */
                 account_contract_id: components["parameters"]["accountContractId"];
@@ -9767,8 +9016,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -9788,7 +9036,6 @@ export interface operations {
                 /**
                  * @description The response message can return only the data represented by field names specified in this field.
                  *     The Issuer can choose any field name being returned for a card contract object or can leave the field empty (in such case all data will be returned).
-                 *
                  * @example cardContractNumber,embossedData
                  */
                 fields?: components["parameters"]["fieldsSelection"];
@@ -9798,7 +9045,6 @@ export interface operations {
                  * @description Public RSA key generated by the Issuer. ASCII/UTF-8 string of characters 0-9, A-F, ASN.1 DER Public hex unpacked to string or PEM concatenated Base64 without BEGIN and END lines.
                  *
                  *     Key is used to encrypt sensitive data returned by the MP in the response.
-                 *
                  * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
                  */
                 "Customer-Public-Rsa-Key"?: components["parameters"]["optionalCustomerPublicRsaKey"];
@@ -9806,7 +9052,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9828,18 +9073,15 @@ export interface operations {
                 /**
                  * @description Used to ensure idempotency for the PATCH methods.
                  *     This header should be populated with the `ETag` received in the response header from the GET call of the same resource being updated. See [RFC7232](https://datatracker.ietf.org/doc/html/rfc7232) for more details.
-                 *
                  * @example 5c7d022061b0874200bfed735c6b9308
                  */
                 "If-Match": components["parameters"]["ifMatch"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9859,8 +9101,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -9881,7 +9122,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9903,7 +9143,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9925,7 +9164,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9947,7 +9185,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9969,7 +9206,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -9991,7 +9227,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10013,7 +9248,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10036,7 +9270,6 @@ export interface operations {
                  * @description Index of the MP's public RSA key received in a `GET /public-keys` response (API operation: `getPublicRsaKey`).
                  *
                  *     If `Key-Index` is provided, then the `newPinBlock` field must be encrypted using the MP's public RSA key received together with the `Key-Index` from the MP in `GET /public-keys` response (API operation: `getPublicRsaKey`).
-                 *
                  * @example A1564386531162
                  */
                 "Key-Index"?: components["parameters"]["keyIndex"];
@@ -10044,7 +9277,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10067,18 +9299,15 @@ export interface operations {
                  * @description Public RSA key generated by the Issuer. ASCII/UTF-8 string of characters 0-9, A-F, ASN.1 DER Public hex unpacked to string or PEM concatenated Base64 without BEGIN and END lines.
                  *
                  *     Key is used to encrypt sensitive data (`encryptedCardContractNumber`, `encryptedZpk`) returned by the MP in the response.
-                 *
                  * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
                  */
                 "Customer-Public-Rsa-Key": components["parameters"]["mandatoryCustomerPublicRsaKey"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10101,18 +9330,15 @@ export interface operations {
                  * @description Index of the MP's public RSA key received in a `GET /public-keys` response (API operation: `getPublicRsaKey`).
                  *
                  *     If `Key-Index` is provided, then the `newPinBlock` field must be encrypted using the MP's public RSA key received together with the `Key-Index` from the MP in `GET /public-keys` response (API operation: `getPublicRsaKey`).
-                 *
                  * @example A1564386531162
                  */
                 "Key-Index"?: components["parameters"]["keyIndex"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10135,18 +9361,15 @@ export interface operations {
                  * @description Public RSA key generated by the Issuer. ASCII/UTF-8 string of characters 0-9, A-F, ASN.1 DER Public hex unpacked to string or PEM concatenated Base64 without BEGIN and END lines.
                  *
                  *     Key is used to encrypt sensitive data returned by the MP in the response.
-                 *
                  * @example 30820122300D06092A864886F70D01010105000382010F003082010A0282010100A7D079A8769BCD340574E8E6C0A2810C377279E5EA0B422B9132F955860730E7637DFAB0A1C6F117B25E3DB3D2A5A9F2691BBC7E0178ADFD12908C3E6E6D3A77AA26E25A6570FCC423561628879E918DC0C798527318308C70BBE2BC4597B83B96CB3680FE6F8E60D68B465E2B30558712A2D63A544239BE7B5F2A49C82FB3388A22644741A945EC9ACB3F219C3B6826241BE1706EF384100EC83D0D7FAE6CCF4E69E0EE02BF84C21553FA1999A8DB91C4193D1E671D5A22B1876E1DC81F1ED7033F3A26FF62E492A63ADA58AAE248D5E47896592CB9A7023CB8B8700882B4DCBF34C16F7FA00DF4C3931A4612E0E2A09586780E89D28FAAA195C07ADE88286F0203010001
                  */
                 "Customer-Public-Rsa-Key"?: components["parameters"]["optionalCustomerPublicRsaKey"];
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10165,14 +9388,12 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10194,7 +9415,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10213,14 +9433,12 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical identifier for a card contract generated by the MP's CMS. The identifier is generated when card contract creation finishes successfully and is returned in a card contract creation response (`POST /cards`).
-                 *
                  * @example 70001
                  */
                 card_contract_id: components["parameters"]["cardContractId"];
@@ -10242,7 +9460,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10261,14 +9478,12 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10290,7 +9505,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10303,7 +9517,6 @@ export interface operations {
                  *     | STMT                        	| Statement delivery address  	|
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process as they are configured in the CMS system.*
-                 *
                  * @example PIN
                  */
                 address_type: components["parameters"]["addressType"];
@@ -10329,7 +9542,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10348,8 +9560,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -10359,7 +9570,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10385,7 +9595,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10398,7 +9607,6 @@ export interface operations {
                  *     | STMT                        	| Statement delivery address  	|
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process as they are configured in the CMS system.*
-                 *
                  * @example PIN
                  */
                 address_type: components["parameters"]["addressType"];
@@ -10420,7 +9628,6 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10428,7 +9635,6 @@ export interface operations {
                  * @description Code of the classifier for which the value will be set.
                  *
                  *     *Disclaimer: Classifier codes are configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-                 *
                  * @example TEST_CLASSIFIER_01
                  */
                 classifier_code: components["parameters"]["classifierCode"];
@@ -10446,19 +9652,19 @@ export interface operations {
     getClientClassifiers: {
         parameters: {
             query: {
-                /** @description The list of classifiers which should be returned.
+                /**
+                 * @description The list of classifiers which should be returned.
                  *
                  *     Note: Response will contain only specified classifier codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *      */
+                 */
                 classifier_codes: components["parameters"]["classifierCodes"];
             };
             header?: never;
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10484,7 +9690,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10492,7 +9697,6 @@ export interface operations {
                  * @description Code of the classifier for which the value will be set.
                  *
                  *     *Disclaimer: Classifier codes are configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-                 *
                  * @example TEST_CLASSIFIER_01
                  */
                 classifier_code: components["parameters"]["classifierCode"];
@@ -10510,12 +9714,13 @@ export interface operations {
     getContractClassifiers: {
         parameters: {
             query: {
-                /** @description The list of classifiers which should be returned.
+                /**
+                 * @description The list of classifiers which should be returned.
                  *
                  *     Note: Response will contain only specified classifier codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *      */
+                 */
                 classifier_codes: components["parameters"]["classifierCodes"];
             };
             header?: never;
@@ -10526,7 +9731,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10545,14 +9749,12 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
@@ -10574,13 +9776,11 @@ export interface operations {
             path: {
                 /**
                  * @description Unique technical client identifier, generated by the MP's CMS database engine. The identifier is generated when client creation finishes successfully and is returned in a client creation response (`POST /clients`, field `clientId`).
-                 *
                  * @example 40000
                  */
                 client_id: components["parameters"]["clientId"];
                 /**
                  * @description Tag name
-                 *
                  * @example TAG_01
                  */
                 tag_name: components["parameters"]["tagName"];
@@ -10599,8 +9799,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -10610,7 +9809,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10636,13 +9834,11 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
                 /**
                  * @description Tag name
-                 *
                  * @example TAG_01
                  */
                 tag_name: components["parameters"]["tagName"];
@@ -10668,7 +9864,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10676,7 +9871,6 @@ export interface operations {
                  * @description Code of the contract parameter for which the value will be set.
                  *
                  *     *Disclaimer: Parameter codes are configured in the MP's CMS and the Issuer is allowed to use only the value configured by the MP (the Issuer cannot use their own values).*
-                 *
                  * @example MTP_CALC_RULE
                  */
                 parameter_code: components["parameters"]["parameterCode"];
@@ -10700,7 +9894,6 @@ export interface operations {
                  *     Note: Response will contain only specified parameter codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *
                  * @example ATM_CALC_RULE,MTP_CALC_RULE
                  */
                 parameter_codes: components["parameters"]["parameterCodes"];
@@ -10713,7 +9906,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10732,8 +9924,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -10743,7 +9934,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10762,8 +9952,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -10773,7 +9962,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10792,8 +9980,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -10803,7 +9990,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10823,13 +10009,11 @@ export interface operations {
             query: {
                 /**
                  * @description Date from (YYYY-MM-DD format).
-                 *
                  * @example 2031-06-25
                  */
                 date_from: components["parameters"]["transactionDateFrom"];
                 /**
                  * @description Date to (YYYY-MM-DD format).
-                 *
                  * @example 2032-06-25
                  */
                 date_to: components["parameters"]["transactionDateTo"];
@@ -10848,29 +10032,26 @@ export interface operations {
                  *       * N - cardholder's requests not changing a contract's balance (Balance Inquiry, Online Statement, Top Up, Additional Online Service, Verification).
                  *       * S - active authorizations that lead to a contract's balance changes, waiting for a financial document to be matched. This option is similar to 'A' but excludes closed and declined authorizations.
                  *       * U - authorizations that lead to a contract's balance changes and cardholder's requests that do not change a contract's balance. Closed and declined authorizations are considered too.
-                 *
                  * @example A
                  */
                 authorization_filter_mode?: components["parameters"]["transactionAuthorizationFilterMode"];
                 /**
                  * @description Determines whether the transaction was authorized.
-                 *
                  * @example Y
                  */
                 authorized?: components["parameters"]["transactionAuthorized"];
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
-                /** @description The list of `transactionTypeCode` separated by commas.
+                /**
+                 * @description The list of `transactionTypeCode` separated by commas.
                  *
                  *     Transactions originated from the Banknet
                  *     | `transactionTypeCode` 	| `transactionType`                     	|
@@ -10946,7 +10127,7 @@ export interface operations {
                  *     | ILC5                  	| Overdue retail interest           	|
                  *     | ILR3                  	| Retail interest                   	|
                  *     | ILR5                  	| Cash interest                     	|
-                 *      */
+                 */
                 transaction_type_codes?: components["parameters"]["transactionTypeCodes"];
             };
             header?: never;
@@ -10957,7 +10138,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -10977,13 +10157,11 @@ export interface operations {
             query: {
                 /**
                  * @description Date from (YYYY-MM-DD format).
-                 *
                  * @example 2031-06-25
                  */
                 date_from: components["parameters"]["transactionDateFrom"];
                 /**
                  * @description Date to (YYYY-MM-DD format).
-                 *
                  * @example 2032-06-25
                  */
                 date_to: components["parameters"]["transactionDateTo"];
@@ -11002,13 +10180,13 @@ export interface operations {
                  *       * N - cardholder's requests not changing a contract's balance (Balance Inquiry, Online Statement, Top Up, Additional Online Service, Verification).
                  *       * S - active authorizations that lead to a contract's balance changes, waiting for a financial document to be matched. This option is similar to 'A' but excludes closed and declined authorizations.
                  *       * U - authorizations that lead to a contract's balance changes and cardholder's requests that do not change a contract's balance. Closed and declined authorizations are considered too.
-                 *
                  * @example A
                  */
                 authorization_filter_mode?: components["parameters"]["transactionAuthorizationFilterMode"];
-                /** @description Allows collecting information about authorization documents.
+                /**
+                 * @description Allows collecting information about authorization documents.
                  *     The parameter is used in combination with the `authorization_filter_mode` parameter.
-                 *      */
+                 */
                 collect_authorizations?: components["parameters"]["transactionCollectAuthorizations"];
                 /**
                  * @description Contracts hierarchy analysis mode.
@@ -11019,7 +10197,6 @@ export interface operations {
                  *     | M                   	| Main-Sub hierarchies only                                                                     	|
                  *     | R                   	| Related Cards only. In this mode Liability and Main-Sub contract hierarchies are not analyzed 	|
                  *     | Y                   	| Liability and Main-Sub contract hierarchies are analyzed                                      	|
-                 *
                  * @example R
                  */
                 contract_hierarchy?: components["parameters"]["contractHierarchy"];
@@ -11031,23 +10208,21 @@ export interface operations {
                  *     | CREDIT              	|
                  *     | DEBIT               	|
                  *     | NONE                	|
-                 *
                  * @example DEBIT
                  */
                 direction?: components["parameters"]["direction"];
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
-                /** @description The list of `transactionTypeCode` separated by commas.
+                /**
+                 * @description The list of `transactionTypeCode` separated by commas.
                  *
                  *     Transactions originated from the Banknet
                  *     | `transactionTypeCode` 	| `transactionType`                     	|
@@ -11123,7 +10298,7 @@ export interface operations {
                  *     | ILC5                  	| Overdue retail interest           	|
                  *     | ILR3                  	| Retail interest                   	|
                  *     | ILR5                  	| Cash interest                     	|
-                 *      */
+                 */
                 transaction_type_codes?: components["parameters"]["transactionTypeCodes"];
             };
             header?: never;
@@ -11134,7 +10309,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11152,10 +10326,10 @@ export interface operations {
     getTransactionDocuments: {
         parameters: {
             query: {
-                /** @description Allows defining the type of selector passed in the `transaction_selector_value`.
-                 *      */
+                /** @description Allows defining the type of selector passed in the `transaction_selector_value`. */
                 transaction_selector_type: components["parameters"]["transactionSelectorType"];
-                /** @description Allows defining the value for the transactions selector.
+                /**
+                 * @description Allows defining the value for the transactions selector.
                  *
                  *     * If `transaction_selector_type` is equal to `ARN` then maxLength of `transaction_selector_value` is 32
                  *
@@ -11164,17 +10338,15 @@ export interface operations {
                  *     * If `transaction_selector_type` is equal to `RRN` then maxLength of `transaction_selector_value` is 12
                  *
                  *     * If `transaction_selector_type` is equal to `SRN` then maxLength of `transaction_selector_value` is 32
-                 *      */
+                 */
                 transaction_selector_value: components["parameters"]["transactionSelectorValue"];
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -11197,7 +10369,6 @@ export interface operations {
             path: {
                 /**
                  * @description Transaction record id from the CMS system.
-                 *
                  * @example 90001
                  */
                 transaction_id: components["parameters"]["transactionId"];
@@ -11223,7 +10394,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11231,7 +10401,6 @@ export interface operations {
                  * @description Unique usage limit code which defines the contract's usage limit for which action should be executed.
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *
                  * @example DAILY_TOTAL
                  */
                 usage_limit_code: components["parameters"]["usageLimitCode"];
@@ -11249,12 +10418,13 @@ export interface operations {
     getUsageLimits: {
         parameters: {
             query: {
-                /** @description The list of usage limit codes which should be returned.
+                /**
+                 * @description The list of usage limit codes which should be returned.
                  *
                  *     Note: Response will contain only specified limit codes that does exist in the CMS. If none exists or a list does not contain any value then the response will not return any data (HTTP 200 will be returned with an empty array `[]`).
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *      */
+                 */
                 usage_limit_codes: components["parameters"]["usageLimitCodes"];
             };
             header?: never;
@@ -11265,7 +10435,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11291,7 +10460,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11299,7 +10467,6 @@ export interface operations {
                  * @description Unique usage limit code which defines the contract's usage limit for which action should be executed.
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *
                  * @example DAILY_TOTAL
                  */
                 usage_limit_code: components["parameters"]["usageLimitCode"];
@@ -11325,7 +10492,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11333,7 +10499,6 @@ export interface operations {
                  * @description Unique usage limit code which defines the contract's usage limit for which action should be executed.
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *
                  * @example DAILY_TOTAL
                  */
                 usage_limit_code: components["parameters"]["usageLimitCode"];
@@ -11359,7 +10524,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11367,7 +10531,6 @@ export interface operations {
                  * @description Unique usage limit code which defines the contract's usage limit for which action should be executed.
                  *
                  *     *Disclaimer: Possible values which can be sent must be defined by MP and Issuer during the onboarding process.*
-                 *
                  * @example DAILY_TOTAL
                  */
                 usage_limit_code: components["parameters"]["usageLimitCode"];
@@ -11386,8 +10549,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
@@ -11397,7 +10559,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11417,13 +10578,11 @@ export interface operations {
             query?: {
                 /**
                  * @description The number of items you want the list to be limited to.
-                 *
                  * @example 1
                  */
                 limit?: components["parameters"]["limit"];
                 /**
                  * @description The number of items to offset the start of the list from.
-                 *
                  * @example 0
                  */
                 offset?: components["parameters"]["offset"];
@@ -11437,19 +10596,16 @@ export interface operations {
                  *     |          D          	|        Personalised       	|
                  *     |          T          	| Personal (Template Based) 	|
                  *     |          L          	|          Template         	|
-                 *
                  * @example G
                  */
                 personalisation_type?: components["parameters"]["personalisationType"];
                 /**
                  * @description Tariff code.
-                 *
                  * @example MTP_CALC_RULE
                  */
                 tariff_code?: components["parameters"]["tariffCode"];
                 /**
                  * @description Tariff domain code.
-                 *
                  * @example GL
                  */
                 tariff_domain_code?: components["parameters"]["tariffDomainCode"];
@@ -11473,13 +10629,11 @@ export interface operations {
                  *       | TECHNICAL           	|  Technical                 	|
                  *       | FX                  	|  Conversion                	|
                  *       | REDEFINITION        	|  Redefinition              	|
-                 *
                  * @example AGEING
                  */
                 tariff_role?: components["parameters"]["tariffRole"];
                 /**
                  * @description Tariff type code.
-                 *
                  * @example MTP_CALC_RULE
                  */
                 tariff_type_code?: components["parameters"]["tariffTypeCode"];
@@ -11492,7 +10646,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11511,8 +10664,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -11530,8 +10682,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -11549,8 +10700,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path?: never;
@@ -11573,7 +10723,6 @@ export interface operations {
                  *     | **Possible values** 	| **Description**          	|
                  *     |---------------------	|--------------------------	|
                  *     | PIN_BLOCK           	| For PIN block encryption 	|
-                 *
                  * @example PIN_BLOCK
                  */
                 data_type_to_secure: components["parameters"]["dateTypeToSecure"];
@@ -11600,7 +10749,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
@@ -11626,13 +10774,11 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];
                 /**
                  * @description Transaction record id from the CMS system.
-                 *
                  * @example 90001
                  */
                 transaction_id: components["parameters"]["transactionId"];
@@ -11651,14 +10797,12 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again.
-                 *      */
+                /** @description Unique identifier generated by the issuer. Mastercard Processing uses this identifier to recognize subsequent retries of the same request and ensure idempotent behaviour by sending the same response without repeating the operation again. */
                 "Idempotency-Key"?: components["parameters"]["idempotencyKey"];
             };
             path: {
                 /**
                  * @description Transaction record id from the CMS system.
-                 *
                  * @example 90001
                  */
                 transaction_id: components["parameters"]["transactionId"];
@@ -11678,13 +10822,11 @@ export interface operations {
             query: {
                 /**
                  * @description Contract authentication parameter name.
-                 *
                  * @example PHONE
                  */
                 authentication_parameter_name: components["parameters"]["authenticationParameterName"];
                 /**
                  * @description Contract authentication type code.
-                 *
                  * @example 3DS_EXT_ENROLLMENT
                  */
                 authentication_type_code: components["parameters"]["authenticationTypeCode"];
@@ -11697,7 +10839,6 @@ export interface operations {
                  *     The identifier is generated when contract (account or card) creation finishes successfully and is returned in:
                  *       * account contract creation response (`POST /accounts`, field: `accountContractId`).
                  *       * card contract creation response (`POST /cards`, field: `cardContractId`).
-                 *
                  * @example 70001
                  */
                 contract_id: components["parameters"]["contractId"];

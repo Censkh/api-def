@@ -1,11 +1,11 @@
 import type { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
-import { RequestErrorCode, convertToRequestError } from "../RequestError";
+import { convertToRequestError, RequestErrorCode } from "../RequestError";
 import * as Utils from "../Utils";
 import { type Fetch, getGlobal, getGlobalFetch } from "../Utils";
-import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 import type RequestBackend from "./RequestBackend";
+import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 class FetchError extends Error {
   response?: Response;

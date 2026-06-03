@@ -13,6 +13,8 @@ import type {
   State,
 } from "./ApiTypes";
 import { type ResolveUrlOptions, resolveUrl } from "./ApiUtils";
+import FetchRequestBackend from "./backend/FetchRequestBackend";
+import type RequestBackend from "./backend/RequestBackend";
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import type { ApiMockingConfig } from "./MockingTypes";
@@ -20,8 +22,6 @@ import { processRequestConfigs } from "./RequestConfig";
 import * as Requester from "./Requester";
 import * as Utils from "./Utils";
 import type { Validation } from "./Validation";
-import FetchRequestBackend from "./backend/FetchRequestBackend";
-import type RequestBackend from "./backend/RequestBackend";
 
 // use fetch as default if it is present
 let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;

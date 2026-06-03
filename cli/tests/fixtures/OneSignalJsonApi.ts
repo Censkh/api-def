@@ -17,7 +17,6 @@ export interface paths {
         /**
          * Create notification
          * @description Sends notifications to your users
-         *
          */
         post: operations["create_notification"];
         delete?: never;
@@ -134,7 +133,6 @@ export interface paths {
          *     &#x1F6A7;
          *     Does Not Update Segments
          *     This endpoint will only create segments, it does not edit or update currently created Segments. You will need to use the Delete Segments endpoint and re-create it with this endpoint to edit.
-         *
          */
         post: operations["create_segments"];
         delete?: never;
@@ -158,7 +156,6 @@ export interface paths {
          * @description Delete segments (not user devices) - Required: OneSignal Paid Plan
          *     You can delete a segment under your app by calling this API. You must provide an API key in the Authorization header that has admin access on the app.
          *     The segment_id can be found in the URL of the segment when viewing it in the dashboard.
-         *
          */
         delete: operations["delete_segments"];
         options?: never;
@@ -184,7 +181,6 @@ export interface paths {
          *     &#x1F6A7;
          *     Outcome Data Limitations
          *     Outcomes are only accessible for around 30 days before deleted from our servers. You will need to export this data every month if you want to keep it.
-         *
          */
         get: operations["get_outcomes"];
         put?: never;
@@ -264,8 +260,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Creates a User, optionally Subscriptions owned by the User as well as Aliases.
-         *     Aliases provided in the payload will be used to look up an existing User. */
+        /**
+         * @description Creates a User, optionally Subscriptions owned by the User as well as Aliases.
+         *     Aliases provided in the payload will be used to look up an existing User.
+         */
         post: operations["create_user"];
         delete?: never;
         options?: never;
@@ -300,7 +298,6 @@ export interface paths {
          *        "category": "",
          *        "class": "my_new_value"
          *     }
-         *
          */
         put: operations["update_player_tags"];
         post?: never;
@@ -463,7 +460,6 @@ export interface paths {
          * @description View the details of multiple devices in one of your OneSignal apps
          *     Unavailable for Apps Over 80,000 Users
          *     For performance reasons, this method is not available for larger apps. Larger apps should use the CSV export API endpoint, which is much more performant.
-         *
          */
         get: operations["get_players"];
         put?: never;
@@ -480,7 +476,6 @@ export interface paths {
          *     &#x1F6A7;
          *     iOS
          *     Must set test_type to 1 when building your iOS app as development. Omit this field in your production app builds.
-         *
          */
         post: operations["create_player"];
         delete?: never;
@@ -511,7 +506,6 @@ export interface paths {
          * Delete a user record
          * @description Delete player - Required:
          *     Used to delete a single, specific Player ID record from a specific OneSignal app.
-         *
          */
         delete: operations["delete_player"];
         options?: never;
@@ -575,7 +569,6 @@ export interface paths {
          *       | ip | IP Address of the device if being tracked. See Handling Personal Data. |
          *       | web_auth | Web Only authorization key. |
          *       | web_p256 | Web Only p256 key. |
-         *
          */
         post: operations["export_players"];
         delete?: never;
@@ -673,13 +666,15 @@ export interface components {
         };
         Apps: components["schemas"]["App"][];
         SegmentNotificationTarget: {
-            /** @description The segment names you want to target. Users in these segments will receive a notification. This targeting parameter is only compatible with excluded_segments.
+            /**
+             * @description The segment names you want to target. Users in these segments will receive a notification. This targeting parameter is only compatible with excluded_segments.
              *     Example: ["Active Users", "Inactive Users"]
-             *      */
+             */
             included_segments?: string[];
-            /** @description Segment that will be excluded when sending. Users in these segments will not receive a notification, even if they were included in included_segments. This targeting parameter is only compatible with included_segments.
+            /**
+             * @description Segment that will be excluded when sending. Users in these segments will not receive a notification, even if they were included in included_segments. This targeting parameter is only compatible with included_segments.
              *     Example: ["Active Users", "Inactive Users"]
-             *      */
+             */
             excluded_segments?: string[];
         };
         PlayerNotificationTarget: {
@@ -689,7 +684,6 @@ export interface components {
              *     Do not combine with other targeting parameters. Not compatible with any other targeting parameters.
              *     Example: ["1dd608f2-c6a1-11e3-851d-000c2940e62c"]
              *     Limit of 2,000 entries per REST API call
-             *
              */
             include_player_ids?: string[] | null;
             /**
@@ -700,57 +694,64 @@ export interface components {
              *     REQUIRED: REST API Key Authentication
              *     Limit of 2,000 entries per REST API call.
              *     Note: If targeting push, email, or sms subscribers with same ids, use with channel_for_external_user_ids to indicate you are sending a push or email or sms.
-             *
              */
             include_external_user_ids?: string[] | null;
-            /** @description Recommended for Sending Emails - Target specific email addresses.
+            /**
+             * @description Recommended for Sending Emails - Target specific email addresses.
              *     If an email does not correspond to an existing user, a new user will be created.
              *     Example: nick@catfac.ts
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_email_tokens?: string[];
-            /** @description Recommended for Sending SMS - Target specific phone numbers. The phone number should be in the E.164 format. Phone number should be an existing subscriber on OneSignal. Refer our docs to learn how to add phone numbers to OneSignal.
+            /**
+             * @description Recommended for Sending SMS - Target specific phone numbers. The phone number should be in the E.164 format. Phone number should be an existing subscriber on OneSignal. Refer our docs to learn how to add phone numbers to OneSignal.
              *     Example phone number: +1999999999
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_phone_numbers?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using iOS device tokens.
              *     Warning: Only works with Production tokens.
              *     All non-alphanumeric characters must be removed from each token. If a token does not correspond to an existing user, a new user will be created.
              *     Example: ce777617da7f548fe7a9ab6febb56cf39fba6d38203...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_ios_tokens?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using Windows URIs. If a token does not correspond to an existing user, a new user will be created.
              *     Example: http://s.notify.live.net/u/1/bn1/HmQAAACPaLDr-...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_wp_wns_uris?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using Amazon ADM registration IDs. If a token does not correspond to an existing user, a new user will be created.
              *     Example: amzn1.adm-registration.v1.XpvSSUk0Rc3hTVVV...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_amazon_reg_ids?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using Chrome App registration IDs. If a token does not correspond to an existing user, a new user will be created.
              *     Example: APA91bEeiUeSukAAUdnw3O2RB45FWlSpgJ7Ji_...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_chrome_reg_ids?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using Chrome Web Push registration IDs. If a token does not correspond to an existing user, a new user will be created.
              *     Example: APA91bEeiUeSukAAUdnw3O2RB45FWlSpgJ7Ji_...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_chrome_web_reg_ids?: string[];
-            /** @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
+            /**
+             * @description Not Recommended: Please consider using include_player_ids or include_external_user_ids instead.
              *     Target using Android device registration IDs. If a token does not correspond to an existing user, a new user will be created.
              *     Example: APA91bEeiUeSukAAUdnw3O2RB45FWlSpgJ7Ji_...
              *     Limit of 2,000 entries per REST API call
-             *      */
+             */
             include_android_reg_ids?: string[];
             include_aliases?: {
                 alias_label?: string[];
@@ -762,9 +763,11 @@ export interface components {
         BasicNotification: components["schemas"]["NotificationTarget"] & {
             id?: string;
             readonly value?: number;
-            /** @description Required for SMS Messages.
+            /**
+             * @description Required for SMS Messages.
              *     An identifier for tracking message within the OneSignal dashboard or export analytics.
-             *     Not shown to end user. */
+             *     Not shown to end user.
+             */
             name?: string | null;
             /** @enum {string} */
             readonly aggregation?: "sum" | "count";
@@ -774,9 +777,10 @@ export interface components {
             isAndroid?: boolean | null;
             /** @description Indicates whether to send to all devices registered under your app's Huawei Android platform. */
             isHuawei?: boolean | null;
-            /** @description Indicates whether to send to all subscribed web browser users, including Chrome, Firefox, and Safari.
+            /**
+             * @description Indicates whether to send to all subscribed web browser users, including Chrome, Firefox, and Safari.
              *     You may use this instead as a combined flag instead of separately enabling isChromeWeb, isFirefox, and isSafari, though the three options are equivalent to this one.
-             *      */
+             */
             isAnyWeb?: boolean | null;
             /** @description Indicates whether to send to all Google Chrome, Chrome on Android, and Mozilla Firefox users registered under your Chrome & Firefox web push platform. */
             isChromeWeb?: boolean | null;
@@ -788,158 +792,185 @@ export interface components {
             isWP_WNS?: boolean | null;
             /** @description Indicates whether to send to all devices registered under your app's Amazon Fire platform. */
             isAdm?: boolean | null;
-            /** @description This flag is not used for web push Please see isChromeWeb for sending to web push users. This flag only applies to Google Chrome Apps & Extensions.
+            /**
+             * @description This flag is not used for web push Please see isChromeWeb for sending to web push users. This flag only applies to Google Chrome Apps & Extensions.
              *     Indicates whether to send to all devices registered under your app's Google Chrome Apps & Extension platform.
-             *      */
+             */
             isChrome?: boolean | null;
-            /** @description Indicates if the message type when targeting with include_external_user_ids for cases where an email, sms, and/or push subscribers have the same external user id.
+            /**
+             * @description Indicates if the message type when targeting with include_external_user_ids for cases where an email, sms, and/or push subscribers have the same external user id.
              *     Example: Use the string "push" to indicate you are sending a push notification or the string "email"for sending emails or "sms"for sending SMS.
-             *      */
+             */
             channel_for_external_user_ids?: string;
-            /** @description Required: Your OneSignal Application ID, which can be found in Keys & IDs.
+            /**
+             * @description Required: Your OneSignal Application ID, which can be found in Keys & IDs.
              *     It is a UUID and looks similar to 8250eaf6-1a58-489e-b136-7c74a864b434.
-             *      */
+             */
             app_id?: string;
-            /** @description Correlation and idempotency key.
+            /**
+             * @description Correlation and idempotency key.
              *     A request received with this parameter will first look for another notification with the same external_id. If one exists, a notification will not be sent, and result of the previous operation will instead be returned. Therefore, if you plan on using this feature, it's important to use a good source of randomness to generate the UUID passed here.
              *     This key is only idempotent for 30 days. After 30 days, the notification could be removed from our system and a notification with the same external_id will be sent again.
              *       See Idempotent Notification Requests for more details
              *     writeOnly: true
-             *      */
+             */
             external_id?: string | null;
             contents?: components["schemas"]["StringMap"] & unknown;
             headings?: components["schemas"]["StringMap"] & unknown;
             subtitle?: components["schemas"]["StringMap"] & unknown;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     A custom map of data that is passed back to your app. Same as using Additional Data within the dashboard. Can use up to 2048 bytes of data.
              *     Example: {"abc": 123, "foo": "bar", "event_performed": true, "amount": 12.1}
-             *      */
+             */
             data?: Record<string, never> | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Use "data" or "message" depending on the type of notification you are sending. More details in Data & Background Notifications.
-             *      */
+             */
             huawei_msg_type?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: All
              *     The URL to open in the browser when a user clicks on the notification.
              *     Note: iOS needs https or updated NSAppTransportSecurity in plist
              *     This field supports inline substitutions.
              *     Omit if including web_url or app_url
              *     Example: https://onesignal.com
-             *      */
+             */
             url?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: All Browsers
              *     Same as url but only sent to web push platforms.
              *     Including Chrome, Firefox, Safari, Opera, etc.
              *     Example: https://onesignal.com
-             *      */
+             */
             web_url?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: All Browsers
              *     Same as url but only sent to web push platforms.
              *     Including iOS, Android, macOS, Windows, ChromeApps, etc.
              *     Example: https://onesignal.com
-             *      */
+             */
             app_url?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 10+
              *     Adds media attachments to notifications. Set as JSON object, key as a media id of your choice and the value as a valid local filename or URL. User must press and hold on the notification to view.
              *     Do not set mutable_content to download attachments. The OneSignal SDK does this automatically
              *     Example: {"id1": "https://domain.com/image.jpg"}
-             *      */
+             */
             ios_attachments?: Record<string, never> | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: All
              *     Use a template you setup on our dashboard. The template_id is the UUID found in the URL when viewing a template on our dashboard.
              *     Example: be4a8044-bbd6-11e4-a581-000c2940e62c
-             *      */
+             */
             template_id?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     Sending true wakes your app from background to run custom native code (Apple interprets this as content-available=1). Note: Not applicable if the app is in the "force-quit" state (i.e app was swiped away). Omit the contents field to prevent displaying a visible notification.
-             *      */
+             */
             content_available?: boolean | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 10+
              *     Always defaults to true and cannot be turned off. Allows tracking of notification receives and changing of the notification content in your app before it is displayed. Triggers didReceive(_:withContentHandler:) on your UNNotificationServiceExtension.
-             *      */
+             */
             mutable_content?: boolean;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 13+
              *     Use to target a specific experience in your App Clip, or to target your notification to a specific window in a multi-scene App.
-             *      */
+             */
             target_content_identifier?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Picture to display in the expanded view. Can be a drawable resource name or a URL.
-             *      */
+             */
             big_picture?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Picture to display in the expanded view. Can be a drawable resource name or a URL.
-             *      */
+             */
             huawei_big_picture?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     Picture to display in the expanded view. Can be a drawable resource name or a URL.
-             *      */
+             */
             adm_big_picture?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: ChromeApp
              *     Large picture to display below the notification text. Must be a local URL.
-             *      */
+             */
             chrome_big_picture?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Chrome 56+
              *     Sets the web push notification's large image to be shown below the notification's title and text. Please see Web Push Notification Icons.
-             *      */
+             */
             chrome_web_image?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 8.0+, Android 4.1+, and derivatives like Amazon Buttons to add to the notification. Icon only works for Android.
              *     Buttons show in reverse order of array position i.e. Last item in array shows as first button on device.
              *     Example: [{"id": "id2", "text": "second button", "icon": "ic_menu_share"}, {"id": "id1", "text": "first button", "icon": "ic_menu_send"}]
-             *      */
+             */
             buttons?: components["schemas"]["Button"][] | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Chrome 48+
              *     Add action buttons to the notification. The id field is required.
              *     Example: [{"id": "like-button", "text": "Like", "icon": "http://i.imgur.com/N8SN8ZS.png", "url": "https://yoursite.com"}, {"id": "read-more-button", "text": "Read more", "icon": "http://i.imgur.com/MIxJp1L.png", "url": "https://yoursite.com"}]
-             *      */
+             */
             web_buttons?: components["schemas"]["Button"][] | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     Category APS payload, use with registerUserNotificationSettings:categories in your Objective-C / Swift code.
              *     Example: calendar category which contains actions like accept and decline
              *     iOS 10+ This will trigger your UNNotificationContentExtension whose ID matches this category.
-             *      */
+             */
             ios_category?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     The Android Oreo Notification Category to send the notification under. See the Category documentation on creating one and getting it's id.
-             *      */
+             */
             android_channel_id?: string;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     The Android Oreo Notification Category to send the notification under. See the Category documentation on creating one and getting it's id.
-             *      */
+             */
             huawei_channel_id?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Use this if you have client side Android Oreo Channels you have already defined in your app with code.
-             *      */
+             */
             existing_android_channel_id?: string;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Use this if you have client side Android Oreo Channels you have already defined in your app with code.
-             *      */
+             */
             huawei_existing_channel_id?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Allowing setting a background image for the notification. This is a JSON object containing the following keys. See our Background Image documentation for image sizes.
-             *      */
+             */
             android_background_layout?: {
                 /** @description Asset file, android resource name, or URL to remote image. */
                 image?: string;
@@ -948,215 +979,247 @@ export interface components {
                 /** @description Body text color ARGB Hex format. Example(Red) "FFFF0000". */
                 contents_color?: string;
             };
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Icon shown in the status bar and on the top left of the notification.
              *     If not set a bell icon will be used or ic_stat_onesignal_default if you have set this resource name.
              *     See: How to create small icons
-             *      */
+             */
             small_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Icon shown in the status bar and on the top left of the notification.
              *     Use an Android resource path (E.g. /drawable/small_icon).
              *     Defaults to your app icon if not set.
-             *      */
+             */
             huawei_small_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Can be a drawable resource name or a URL.
              *     See: How to create large icons
-             *      */
+             */
             large_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Can be a drawable resource name or a URL.
              *     See: How to create large icons
-             *      */
+             */
             huawei_large_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     If not set a bell icon will be used or ic_stat_onesignal_default if you have set this resource name.
              *     See: How to create small icons
-             *      */
+             */
             adm_small_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     If blank the small_icon is used. Can be a drawable resource name or a URL.
              *     See: How to create large icons
-             *      */
+             */
             adm_large_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Chrome
              *     Sets the web push notification's icon. An image URL linking to a valid image. Common image types are supported; GIF will not animate. We recommend 256x256 (at least 80x80) to display well on high DPI devices. Firefox will also use this icon, unless you specify firefox_icon.
-             *      */
+             */
             chrome_web_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Chrome
              *     Sets the web push notification icon for Android devices in the notification shade. Please see Web Push Notification Badge.
-             *      */
+             */
             chrome_web_badge?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Firefox
              *     Not recommended Few people need to set Firefox-specific icons. We recommend setting chrome_web_icon instead, which Firefox will also use.
              *     Sets the web push notification's icon for Firefox. An image URL linking to a valid image. Common image types are supported; GIF will not animate. We recommend 256x256 (at least 80x80) to display well on high DPI devices.
-             *      */
+             */
             firefox_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: ChromeApp
              *     This flag is not used for web push For web push, please see chrome_web_icon instead.
              *     The local URL to an icon to use. If blank, the app icon will be used.
-             *      */
+             */
             chrome_icon?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     Sound file that is included in your app to play instead of the default device notification sound. Pass nil to disable vibration and sound for the notification.
              *     Example: "notification.wav"
-             *      */
+             */
             ios_sound?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     &#9888;&#65039;Deprecated, this field doesn't work on Android 8 (Oreo) and newer devices!
              *     Please use Notification Categories / Channels noted above instead to support ALL versions of Android.
              *     Sound file that is included in your app to play instead of the default device notification sound. Pass nil to disable sound for the notification.
              *     NOTE: Leave off file extension for Android.
              *     Example: "notification"
-             *      */
+             */
             android_sound?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     &#9888;&#65039;Deprecated, this field ONLY works on EMUI 5 (Android 7 based) and older devices.
              *     Please also set Notification Categories / Channels noted above to support EMUI 8 (Android 8 based) devices.
              *     Sound file that is included in your app to play instead of the default device notification sound. NOTE: Leave off file extension for and include the full path.
              *
              *     Example: "/res/raw/notification"
-             *      */
+             */
             huawei_sound?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     &#9888;&#65039;Deprecated, this field doesn't work on Android 8 (Oreo) and newer devices!
              *     Please use Notification Categories / Channels noted above instead to support ALL versions of Android.
              *     Sound file that is included in your app to play instead of the default device notification sound. Pass nil to disable sound for the notification.
              *     NOTE: Leave off file extension for Android.
              *     Example: "notification"
-             *      */
+             */
             adm_sound?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Windows
              *     Sound file that is included in your app to play instead of the default device notification sound.
              *     Example: "notification.wav"
-             *      */
+             */
             wp_wns_sound?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     &#9888;&#65039;Deprecated, this field doesn't work on Android 8 (Oreo) and newer devices!
              *     Please use Notification Categories / Channels noted above instead to support ALL versions of Android.
              *     Sets the devices LED notification light if the device has one. ARGB Hex format.
              *     Example(Blue): "FF0000FF"
-             *      */
+             */
             android_led_color?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     &#9888;&#65039;Deprecated, this field ONLY works on EMUI 5 (Android 7 based) and older devices.
              *     Please also set Notification Categories / Channels noted above to support EMUI 8 (Android 8 based) devices.
              *     Sets the devices LED notification light if the device has one. RGB Hex format.
              *     Example(Blue): "0000FF"
-             *      */
+             */
             huawei_led_color?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Sets the background color of the notification circle to the left of the notification text. Only applies to apps targeting Android API level 21+ on Android 5.0+ devices.
              *     Example(Red): "FFFF0000"
-             *      */
+             */
             android_accent_color?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     Accent Color used on Action Buttons and Group overflow count.
              *     Uses RGB Hex value (E.g. #9900FF).
              *     Defaults to device's theme color if not set.
-             *      */
+             */
             huawei_accent_color?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android 5.0_
              *     &#9888;&#65039;Deprecated, this field doesn't work on Android 8 (Oreo) and newer devices!
              *     Please use Notification Categories / Channels noted above instead to support ALL versions of Android.
              *     1 = Public (default) (Shows the full message on the lock screen unless the user has disabled all notifications from showing on the lock screen. Please consider the user and mark private if the contents are.)
              *     0 = Private (Hides message contents on lock screen if the user set "Hide sensitive notification content" in the system settings)
              *     -1 = Secret (Notification does not show on the lock screen at all)
-             *      */
+             */
             android_visibility?: number | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Huawei
              *     &#9888;&#65039;Deprecated, this field ONLY works on EMUI 5 (Android 7 based) and older devices.
              *     Please also set Notification Categories / Channels noted above to support EMUI 8 (Android 8 based) devices.
              *     1 = Public (default) (Shows the full message on the lock screen unless the user has disabled all notifications from showing on the lock screen. Please consider the user and mark private if the contents are.)
              *     0 = Private (Hides message contents on lock screen if the user set "Hide sensitive notification content" in the system settings)
              *     -1 = Secret (Notification does not show on the lock screen at all)
-             *      */
+             */
             huawei_visibility?: number | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     Describes whether to set or increase/decrease your app's iOS badge count by the ios_badgeCount specified count. Can specify None, SetTo, or Increase.
              *     `None` leaves the count unaffected.
              *     `SetTo` directly sets the badge count to the number specified in ios_badgeCount.
              *     `Increase` adds the number specified in ios_badgeCount to the total. Use a negative number to decrease the badge count.
-             *      */
+             */
             ios_badgeType?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     Used with ios_badgeType, describes the value to set or amount to increase/decrease your app's iOS badge count by.
              *     You can use a negative number to decrease the badge count when used with an ios_badgeType of Increase.
-             *      */
+             */
             ios_badgeCount?: number | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 10+, Android
              *     Only one notification with the same id will be shown on the device. Use the same id to update an existing notification instead of showing a new one. Limit of 64 characters.
-             *      */
+             */
             collapse_id?: string;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: All Browsers
              *     Display multiple notifications at once with different topics.
-             *      */
+             */
             web_push_topic?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 10+
              *     iOS can localize push notification messages on the client using special parameters such as loc-key. When using the Create Notification endpoint, you must include these parameters inside of a field called apns_alert. Please see Apple's guide on localizing push notifications to learn more.
-             *      */
+             */
             apns_alert?: Record<string, never> | null;
-            /** @description Channel: All
+            /**
+             * @description Channel: All
              *     Possible values are:
              *     timezone (Deliver at a specific time-of-day in each users own timezone)
              *     last-active Same as Intelligent Delivery . (Deliver at the same time of day as each user last used your app).
              *     If send_after is used, this takes effect after the send_after time has elapsed.
-             *      */
+             */
             delayed_option?: string | null;
-            /** @description Channel: All
+            /**
+             * @description Channel: All
              *     Use with delayed_option=timezone.
              *     Examples: "9:00AM"
              *     "21:45"
              *     "9:45:30"
-             *      */
+             */
             delivery_time_of_day?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS, Android, Chrome, Firefox, Safari, ChromeWeb
              *     Time To Live - In seconds. The notification will be expired if the device does not come back online within this time. The default is 259,200 seconds (3 days).
              *     Max value to set is 2419200 seconds (28 days).
-             *      */
+             */
             ttl?: number | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android, Chrome, ChromeWeb
              *     Delivery priority through the push server (example GCM/FCM). Pass 10 for high priority or any other integer for normal priority. Defaults to normal priority for Android and high for iOS. For Android 6.0+ devices setting priority to high will wake the device out of doze mode.
-             *      */
+             */
             priority?: number | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS
              *     valid values: voip
              *     Set the value to voip for sending VoIP Notifications
              *     This field maps to the APNS header apns-push-type.
              *     Note: alert and background are automatically set by OneSignal
-             *      */
+             */
             apns_push_type_override?: string;
-            /** @description Channel: All
+            /**
+             * @description Channel: All
              *     Apps with throttling enabled:
              *       - the parameter value will be used to override the default application throttling value set from the dashboard settings.
              *       - parameter value 0 indicates not to apply throttling to the notification.
@@ -1164,92 +1227,109 @@ export interface components {
              *     Apps with throttling disabled:
              *       - this parameter can be used to throttle delivery for the notification even though throttling is not enabled at the application level.
              *     Refer to throttling for more details.
-             *      */
+             */
             throttle_rate_per_minute?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Notifications with the same group will be stacked together using Android's Notification Grouping feature.
-             *      */
+             */
             android_group?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Android
              *     Note: This only works for Android 6 and older. Android 7+ allows full expansion of all message.
              *     Summary message to display when 2+ notifications are stacked together. Default is "# new messages". Include $[notif_count] in your message and it will be replaced with the current number.
              *     Languages - The value of each key is the message that will be sent to users for that language. "en" (English) is required. The key of each hash is either a a 2 character language code or one of zh-Hans/zh-Hant for Simplified or Traditional Chinese. Read more: supported languages.
              *     Example: {"en": "You have $[notif_count] new messages"}
-             *      */
+             */
             android_group_message?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     Notifications with the same group will be stacked together using Android's Notification Grouping feature.
-             *      */
+             */
             adm_group?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: Amazon
              *     Summary message to display when 2+ notifications are stacked together. Default is "# new messages". Include $[notif_count] in your message and it will be replaced with the current number. "en" (English) is required. The key of each hash is either a a 2 character language code or one of zh-Hans/zh-Hant for Simplified or Traditional Chinese. The value of each key is the message that will be sent to users for that language.
              *     Example: {"en": "You have $[notif_count] new messages"}
-             *      */
+             */
             adm_group_message?: Record<string, never> | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 12+
              *     This parameter is supported in iOS 12 and above. It allows you to group related notifications together.
              *     If two notifications have the same thread-id, they will both be added to the same group.
-             *      */
+             */
             thread_id?: string | null;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 12+
              *     When using thread_id to create grouped notifications in iOS 12+, you can also control the summary. For example, a grouped notification can say "12 more notifications from John Doe".
              *     The summary_arg lets you set the name of the person/thing the notifications are coming from, and will show up as "X more notifications from summary_arg"
-             *      */
+             */
             summary_arg?: string;
-            /** @description Channel: Push Notifications
+            /**
+             * @description Channel: Push Notifications
              *     Platform: iOS 12+
              *     When using thread_id, you can also control the count of the number of notifications in the group. For example, if the group already has 12 notifications, and you send a new notification with summary_arg_count = 2, the new total will be 14 and the summary will be "14 more notifications from summary_arg"
-             *      */
+             */
             summary_arg_count?: number;
-            /** @description Channel: Email
+            /**
+             * @description Channel: Email
              *     Required.  The subject of the email.
-             *      */
+             */
             email_subject?: string | null;
-            /** @description Channel: Email
+            /**
+             * @description Channel: Email
              *     Required unless template_id is set.
              *     HTML suported
              *     The body of the email you wish to send. Typically, customers include their own HTML templates here. Must include [unsubscribe_url] in an <a> tag somewhere in the email.
              *     Note: any malformed HTML content will be sent to users. Please double-check your HTML is valid.
-             *      */
+             */
             email_body?: string;
-            /** @description Channel: Email
+            /**
+             * @description Channel: Email
              *     The name the email is from. If not specified, will default to "from name" set in the OneSignal Dashboard Email Settings.
-             *      */
+             */
             email_from_name?: string | null;
-            /** @description Channel: Email
+            /**
+             * @description Channel: Email
              *     The email address the email is from. If not specified, will default to "from email" set in the OneSignal Dashboard Email Settings.
-             *      */
+             */
             email_from_address?: string | null;
-            /** @description Channel: Email
+            /**
+             * @description Channel: Email
              *     The preheader text of the email.
              *     Preheader is the preview text displayed immediately after an email subject that provides additional context about the email content.
              *     If not specified, will default to null.
-             *      */
+             */
             email_preheader?: string | null;
-            /** @description Channel: Email
-             *     Default is `false`. This field is used to send transactional notifications. If set to `true`, this notification will also be sent to unsubscribed emails. If a `template_id` is provided, the `include_unsubscribed` value from the template will be inherited. If you are using a third-party ESP, this field requires the ESP's list of unsubscribed emails to be cleared. */
+            /**
+             * @description Channel: Email
+             *     Default is `false`. This field is used to send transactional notifications. If set to `true`, this notification will also be sent to unsubscribed emails. If a `template_id` is provided, the `include_unsubscribed` value from the template will be inherited. If you are using a third-party ESP, this field requires the ESP's list of unsubscribed emails to be cleared.
+             */
             include_unsubscribed?: boolean;
-            /** @description Channel: SMS
+            /**
+             * @description Channel: SMS
              *     Phone Number used to send SMS. Should be a registered Twilio phone number in E.164 format.
-             *      */
+             */
             sms_from?: string | null;
-            /** @description Channel: SMS
+            /**
+             * @description Channel: SMS
              *     URLs for the media files to be attached to the SMS content.
              *     Limit: 10 media urls with a total max. size of 5MBs.
-             *      */
+             */
             sms_media_urls?: string[] | null;
             filters?: components["schemas"]["Filter"][] | null;
-            /** @description Channel: All
+            /**
+             * @description Channel: All
              *     JSON object that can be used as a source of message personalization data for fields that support tag variable substitution.
              *     Push, SMS: Can accept up to 2048 bytes of valid JSON. Email: Can accept up to 10000 bytes of valid JSON.
              *     Example: {"order_id": 123, "currency": "USD", "amount": 25}
-             *      */
+             */
             custom_data?: Record<string, never> | null;
         } & unknown;
         Notification: components["schemas"]["BasicNotification"] & {
@@ -1264,7 +1344,6 @@ export interface components {
              *     "Sept 24 2015 14:00:00 GMT-0700"
              *     "Thu Sep 24 2015 14:00:00 GMT-0700 (Pacific Daylight Time)"
              *     Note: SMS currently only supports send_after parameter.
-             *
              */
             send_after?: string | null;
         };
@@ -1498,7 +1577,8 @@ export interface components {
             /** @description If true, this is the equivalent of a user being Unsubscribed */
             readonly invalid_identifier?: boolean;
             app_id?: string;
-            /** @description Required
+            /**
+             * @description Required
              *     The device's platform:
              *       0 = iOS
              *       1 = Android
@@ -1514,7 +1594,7 @@ export interface components {
              *       11 = Email
              *       13 = For Huawei App Gallery Builds SDK Setup. Not for Huawei Devices using FCM
              *       14 = SMS
-             *      */
+             */
             device_type: number;
             /** @description a custom user ID */
             external_user_id?: string | null;
@@ -1522,46 +1602,44 @@ export interface components {
             external_user_id_auth_hash?: string;
             /** @description Email - Only required if you have enabled Identity Verification and device_type is email (11). */
             email_auth_hash?: string;
-            /** @description Recommended: For Push Notifications, this is the Push Token Identifier from Google or Apple. For Apple Push identifiers, you must strip all non alphanumeric characters.
+            /**
+             * @description Recommended: For Push Notifications, this is the Push Token Identifier from Google or Apple. For Apple Push identifiers, you must strip all non alphanumeric characters.
              *     Examples:
              *     iOS: 7abcd558f29d0b1f048083e2834ad8ea4b3d87d8ad9c088b33c132706ff445f0
              *     Android: APA91bHbYHk7aq-Uam_2pyJ2qbZvqllyyh2wjfPRaw5gLEX2SUlQBRvOc6sck1sa7H7nGeLNlDco8lXj83HWWwzV...
              *     For Email Addresses, set the full email address email@email.com and make sure to set device_type to 11.
-             *      */
+             */
             identifier?: string | null;
-            /** @description Language code. Typically lower case two letters, except for Chinese where it must be one of zh-Hans or zh-Hant. Example: en
-             *      */
+            /** @description Language code. Typically lower case two letters, except for Chinese where it must be one of zh-Hans or zh-Hant. Example: en */
             language?: string;
-            /** @description Number of seconds away from UTC. Example: -28800
-             *      */
+            /** @description Number of seconds away from UTC. Example: -28800 */
             timezone?: number | null;
-            /** @description Version of your app. Example: 1.1
-             *      */
+            /** @description Version of your app. Example: 1.1 */
             game_version?: string | null;
-            /** @description Device make and model. Example: iPhone5,1
-             *      */
+            /** @description Device make and model. Example: iPhone5,1 */
             device_model?: string | null;
-            /** @description Device operating system version. Example: 7.0.4
-             *      */
+            /** @description Device operating system version. Example: 7.0.4 */
             device_os?: string | null;
-            /** @description The ad id for the device's platform:
+            /**
+             * @description The ad id for the device's platform:
              *     Android = Advertising Id
              *     iOS = identifierForVendor
              *     WP8.0 = DeviceUniqueId
              *     WP8.1 = AdvertisingId
-             *      */
+             */
             ad_id?: string | null;
             /** @description Name and version of the sdk/plugin that's calling this API method (if any) */
             sdk?: string | null;
             /** @description Number of times the user has played the game, defaults to 1 */
             session_count?: number;
-            /** @description Custom tags for the player. Only support string and integer key value pairs. Does not support arrays or other nested objects. Setting a tag value to null or an empty string will remove the tag. Example: {"foo":"bar","this":"that"}
+            /**
+             * @description Custom tags for the player. Only support string and integer key value pairs. Does not support arrays or other nested objects. Setting a tag value to null or an empty string will remove the tag. Example: {"foo":"bar","this":"that"}
              *     Limitations:
              *     - 100 tags per call
              *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
              *     Recommended to only tag devices with 1 kilobyte of data
              *     Please consider using your own Database to save more than 1 kilobyte of data. See: Internal Database & CRM
-             *      */
+             */
             tags?: Record<string, never> | null;
             /** @description Amount the user has spent in USD, up to two decimal places */
             amount_spent?: number;
@@ -1575,23 +1653,26 @@ export interface components {
              * @description Seconds player was running your app.
              */
             playtime?: number;
-            /** @description Current iOS badge count displayed on the app icon
+            /**
+             * @description Current iOS badge count displayed on the app icon
              *     NOTE: Not supported for apps created after June 2018, since badge count for apps created after this date are handled on the client.
-             *      */
+             */
             badge_count?: number;
             /** @description Unixtime when the player was last active */
             last_active?: number;
-            /** @description 1 = subscribed
+            /**
+             * @description 1 = subscribed
              *     -2 = unsubscribed
              *     iOS - These values are set each time the user opens the app from the SDK. Use the SDK function set Subscription instead.
              *     Android - You may set this but you can no longer use the SDK method setSubscription later in your app as it will create synchronization issues.
-             *      */
+             */
             notification_types?: number;
-            /** @description This is used in deciding whether to use your iOS Sandbox or Production push certificate when sending a push when both have been uploaded. Set to the iOS provisioning profile that was used to build your app.
+            /**
+             * @description This is used in deciding whether to use your iOS Sandbox or Production push certificate when sending a push when both have been uploaded. Set to the iOS provisioning profile that was used to build your app.
              *     1 = Development
              *     2 = Ad-Hoc
              *     Omit this field for App Store builds.
-             *      */
+             */
             test_type?: number | null;
             /** @description Longitude of the device, used for geotagging to segment on. */
             long?: number;
@@ -1613,8 +1694,7 @@ export interface components {
             /** @description Returned if using include_player_ids and some were valid and others were not. */
             invalid_player_ids?: string[];
         };
-        /** @description Returned if no subscribed players.
-         *      */
+        /** @description Returned if no subscribed players. */
         NoSubscribersError: string[];
         Notification200Errors: components["schemas"]["InvalidIdentifierError"] | components["schemas"]["NoSubscribersError"];
         UpdateLiveActivityRequest: {
@@ -1800,12 +1880,13 @@ export interface operations {
                 limit?: number;
                 /** @description Page offset.  Default is 0.  Results are sorted by queued_at in descending order.  queued_at is a representation of the time that the notification was queued at. */
                 offset?: number;
-                /** @description Kind of notifications returned:
+                /**
+                 * @description Kind of notifications returned:
                  *       * unset - All notification types (default)
                  *       * `0` - Dashboard only
                  *       * `1` - API only
                  *       * `3` - Automated only
-                 *      */
+                 */
                 kind?: 0 | 1 | 3;
             };
             header?: never;
@@ -1856,12 +1937,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description OK, invalid_player_ids, invalid_external_user_ids or No Subscribed Players
+            /**
+             * @description OK, invalid_player_ids, invalid_external_user_ids or No Subscribed Players
              *     If a message was successfully created, you will get a 200 response and an id for the notification.
              *     If the 200 response contains "invalid_player_ids" or "invalid_external_user_ids" this will mark devices that exist in the provided app_id but are no longer subscribed.
              *     If no id is returned, then a message was not created and the targeted User IDs do not exist under the provided app_id.
              *     Any User IDs sent in the request that do not exist under the specified app_id will be ignored.
-             *      */
+             */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2303,37 +2385,42 @@ export interface operations {
     get_outcomes: {
         parameters: {
             query: {
-                /** @description Required
+                /**
+                 * @description Required
                  *     Comma-separated list of names and the value (sum/count) for the returned outcome data.
                  *     Note: Clicks only support count aggregation.
                  *     For out-of-the-box OneSignal outcomes such as click and session duration, please use the "os" prefix with two underscores. For other outcomes, please use the name specified by the user.
                  *     Example:os__session_duration.count,os__click.count,CustomOutcomeName.sum
-                 *      */
+                 */
                 outcome_names: string;
-                /** @description Optional
+                /**
+                 * @description Optional
                  *     If outcome names contain any commas, then please specify only one value at a time.
                  *     Example: outcome_names[]=os__click.count&outcome_names[]=Sales, Purchase.count
                  *     where "Sales, Purchase" is the custom outcomes with a comma in the name.
-                 *      */
+                 */
                 "outcome_names[]"?: string;
-                /** @description Optional
+                /**
+                 * @description Optional
                  *     Time range for the returned data. The values can be 1h (for the last 1 hour data), 1d (for the last 1 day data), or 1mo (for the last 1 month data).
                  *     Default is 1h if the parameter is omitted.
-                 *      */
+                 */
                 outcome_time_range?: string;
-                /** @description Optional
+                /**
+                 * @description Optional
                  *     Platform id. Refer device's platform ids for values.
                  *     Example:
                  *     outcome_platform=0 for iOS
                  *     outcome_platform=7,8 for Safari and Firefox
                  *     Default is data from all platforms if the parameter is omitted.
-                 *      */
+                 */
                 outcome_platforms?: string;
-                /** @description Optional
+                /**
+                 * @description Optional
                  *     Attribution type for the outcomes. The values can be direct or influenced or unattributed.
                  *     Example: outcome_attribution=direct
                  *     Default is total (returns direct+influenced+unattributed) if the parameter is omitted.
-                 *      */
+                 */
                 outcome_attribution?: string;
             };
             header?: never;
@@ -2595,13 +2682,14 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    /** @description Custom tags for the device record.  Only support string key value pairs.  Does not support arrays or other nested objects.  Example `{"foo":"bar","this":"that"}`.
+                    /**
+                     * @description Custom tags for the device record.  Only support string key value pairs.  Does not support arrays or other nested objects.  Example `{"foo":"bar","this":"that"}`.
                      *     Limitations:
                      *     - 100 tags per call
                      *     - Android SDK users: tags cannot be removed or changed via API if set through SDK sendTag methods.
                      *     Recommended to only tag devices with 1 kilobyte of ata
                      *     Please consider using your own Database to save more than 1 kilobyte of data.  See: Internal Database & CRM
-                     *      */
+                     */
                     tags?: Record<string, never>;
                 };
             };

@@ -122,7 +122,7 @@ export const resolveUrl = (options: ResolveUrlOptions): URL => {
   let result = !baseUrl.endsWith("/") ? `${baseUrl}/` : baseUrl;
   result += path.startsWith("/") ? path.substring(1) : path;
 
-  let origin: string | undefined = undefined;
+  let origin: string | undefined;
   if (typeof window !== "undefined") {
     origin = window.origin;
   }

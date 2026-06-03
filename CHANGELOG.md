@@ -1,6 +1,9 @@
 # (WIP) 0.13.0
 
 - add CLI to generate api-def from openapi spec
+- require Node.js 22 or newer and target ES2020
+- continue supporting browser consumers with ESM and CommonJS builds
+- fix ESM build output to include explicit `.js` import extensions
 
 ## 0.12.1
 

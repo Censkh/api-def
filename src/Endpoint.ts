@@ -1,6 +1,4 @@
 import type { Api } from "./Api";
-import * as Requester from "./Requester";
-
 import type { RequestMethod, ResponseType } from "./ApiConstants";
 import type {
   ApiResponse,
@@ -16,10 +14,11 @@ import type {
   State,
 } from "./ApiTypes";
 import { resolvePathParams } from "./ApiUtils";
+import type RequestBackend from "./backend/RequestBackend";
 import type * as Mocking from "./MockingTypes";
 import { processRequestConfigs } from "./RequestConfig";
+import * as Requester from "./Requester";
 import type { Validation } from "./Validation";
-import type RequestBackend from "./backend/RequestBackend";
 
 export interface EndpointResolveUrlOptions<TParams extends Params | undefined, TQuery extends Query | undefined> {
   baseUrl?: string;

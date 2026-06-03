@@ -3046,7 +3046,6 @@ export interface paths {
         /**
          * Create Hosted Verify Application
          * @description Create an application for Rapyd Verify where the client (applicant) provides information directly to Rapyd. After the applicant submits the application on the hosted page, Rapyd verifies the information. When the status of the application changes, Rapyd sends you a webhook.
-         *
          */
         post: operations["createHostedApplicationToken"];
         delete?: never;
@@ -3349,7 +3348,6 @@ export interface components {
             metadata?: Record<string, never>;
             /**
              * @description Indicates the status of the virtual account. * ACT (Active) * CLO (Closed)  * ERR (Error)  * PEN (Pending)  * REJ (REjected)  * DIS  * ENA
-             *
              * @example ACT
              * @enum {string}
              */
@@ -3359,8 +3357,7 @@ export interface components {
             /** @description Issuied virtual account funding instructions. */
             funding_instructions?: Record<string, never> | null;
             currency?: components["schemas"]["Currency_1"];
-            /** @description Currency received by the virtual account after conversion. One of the following: AUD - Australian Dollar EUR - Euro GBP - Pound Sterling HKD - Hong Kong Dollar SGD - Singapore Dollar USD - US Dollar
-             *      */
+            /** @description Currency received by the virtual account after conversion. One of the following: AUD - Australian Dollar EUR - Euro GBP - Pound Sterling HKD - Hong Kong Dollar SGD - Singapore Dollar USD - US Dollar */
             requested_currency?: string;
             /** @description Issuied virtual account transactions. */
             transactions?: components["schemas"]["VirtualAccountTransactionResponse"][];
@@ -3490,7 +3487,6 @@ export interface components {
             /**
              * @description Type of identification document for the beneficiary. When entity_type is company, this field must be company_registered_number.
              *     When entity_type is individual, one of the following values: * drivers_license * identification_id * international_passport * residence_permit* social_security * work_permit
-             *
              * @example drivers_license
              */
             identification_type?: string;
@@ -4153,7 +4149,6 @@ export interface components {
              *     For example, in a payout of $100 with a fee of 5%, the recipient receives $95.00 and the $5.00 fee goes to the client wallet.
              *     * gross - The fee is charged on top of the amount paid.
              *     For example, for a transaction of $100 with a fee of 5%, the sender pays $105.00. The recipient receives $100.00 and the $5.00 fee goes to the client wallet.
-             *
              * @example gross
              */
             calc_type?: string;
@@ -4347,8 +4342,7 @@ export interface components {
             identifier_type?: string | null;
             /** @description Reserved. Response only. */
             identifier_value?: string | null;
-            /** @description Describes how the customer collects the payout. Contains the following fields: * name - Short description of the instructions. * steps - A 'steps' object containing a list of steps for the customer to take. Each step is named stepN, where N is an integer.
-             *      */
+            /** @description Describes how the customer collects the payout. Contains the following fields: * name - Short description of the instructions. * steps - A 'steps' object containing a list of steps for the customer to take. Each step is named stepN, where N is an integer. */
             instructions?: components["schemas"]["Payout_instructions"][];
             /** @description Additional information from the merchant. For example, the merchant's instructions and transaction number that must be presented for collecting the payout. */
             instructions_value?: Record<string, never>;
@@ -4383,9 +4377,10 @@ export interface components {
              */
             payout_type?: "card" | "cash" | "ewallet" | "bank" | "rapyd_ewallet";
             sender?: components["schemas"]["Sender"];
-            /** @description Amount that the sender is paying in units of the currency defined in sender_currency.
+            /**
+             * @description Amount that the sender is paying in units of the currency defined in sender_currency.
              *     This amount remains the same regardless of FX fees. Required when payout_amount is not used. Decimal.
-             *      */
+             */
             sender_amount?: number;
             sender_country?: components["schemas"]["Country"];
             sender_currency?: components["schemas"]["Currency"];
@@ -4408,10 +4403,12 @@ export interface components {
             transaction_fee?: components["schemas"]["TransactionFee"];
         } | null;
         PayoutMethodType: {
-            /** @description An array of objects that describe limits on the amount, per currency. Contains the following fields:
+            /**
+             * @description An array of objects that describe limits on the amount, per currency. Contains the following fields:
              *     maximum_amount - Maximum amount supported by this payout method for the indicated currency. Decimal number.
              *     minimum_amount - Minimum amount supported by this payout method for the indicated currency. Decimal number.
-             *     * payout_currency - Currency of the payout. Three-letter ISO 4217 code. Uppercase. */
+             *     * payout_currency - Currency of the payout. Three-letter ISO 4217 code. Uppercase.
+             */
             amount_range_per_currency?: components["schemas"]["PayoutAmountRangePerCurrency"][];
             beneficiary_country?: components["schemas"]["Country"];
             /**
@@ -4462,7 +4459,6 @@ export interface components {
              *     company
              *     individual
              *     Response only.
-             *
              * @example [
              *       "company",
              *       "individual"
@@ -4589,8 +4585,7 @@ export interface components {
             is_required?: boolean;
             /** @description Name of the field */
             name?: string;
-            /** @description A regular expression that defines the format when type is string. Note: Rapyd uses a unique variant of the regex standard. See note in           "https://docs.rapyd.net/en/get-payment-method-required-fields.html"
-             *      */
+            /** @description A regular expression that defines the format when type is string. Note: Rapyd uses a unique variant of the regex standard. See note in           "https://docs.rapyd.net/en/get-payment-method-required-fields.html" */
             regex?: string;
             /** @description Indicates transfer type of the payout */
             transfer_type?: string;
@@ -4636,8 +4631,7 @@ export interface components {
             identifier_type?: string | null;
             /** @description Reserved. Response only. */
             identifier_value?: string | null;
-            /** @description Describes how the customer collects the payout. Contains the following fields: * name - Short description of the instructions. * steps - A 'steps' object containing a list of steps for the customer to take. Each step is named stepN, where N is an integer.
-             *      */
+            /** @description Describes how the customer collects the payout. Contains the following fields: * name - Short description of the instructions. * steps - A 'steps' object containing a list of steps for the customer to take. Each step is named stepN, where N is an integer. */
             instructions?: components["schemas"]["Payout_instructions"][];
             /** @description Additional information from the merchant. For example, the merchant's instructions and transaction number that must be presented for collecting the payout. */
             instructions_value?: Record<string, never>;
@@ -4672,9 +4666,10 @@ export interface components {
              */
             payout_type?: "card" | "cash" | "ewallet" | "bank" | "rapyd_ewallet";
             sender?: components["schemas"]["Sender"];
-            /** @description Amount that the sender is paying in units of the currency defined in sender_currency.
+            /**
+             * @description Amount that the sender is paying in units of the currency defined in sender_currency.
              *     This amount remains the same regardless of FX fees. Required when payout_amount is not used. Decimal.
-             *      */
+             */
             sender_amount?: number;
             sender_country?: components["schemas"]["Country"];
             sender_currency?: components["schemas"]["Currency"];
@@ -4688,7 +4683,7 @@ export interface components {
         PayoutReturnedStatus: "Returned" | "Created" | "Completed" | "Canceled" | "Rejected" | "Error" | "Confirmation" | "Expired";
         PutFundsOnHoldResponse: {
             /**
-             * @description  * **Transactions** - Amount of the transaction, in units of the currency defined in `currency`. Decimal, including the correct number of decimal places for the currency exponent, as defined in ISO 4217:2015.<BR> * **Wallet Account Operations** - Amount of the account limit.
+             * @description * **Transactions** - Amount of the transaction, in units of the currency defined in `currency`. Decimal, including the correct number of decimal places for the currency exponent, as defined in ISO 4217:2015.<BR> * **Wallet Account Operations** - Amount of the account limit.
              * @example 100
              */
             amount?: number;
@@ -4785,7 +4780,6 @@ export interface components {
              *     * international_passport
              *     * residence_permit* social_security
              *     * work_permit
-             *
              * @example drivers_license
              */
             identification_type?: string;
@@ -5031,7 +5025,6 @@ export interface components {
              *     For example, in a payout of $100 with a fee of 5%, the recipient receives $95.00 and the $5.00 fee goes to the client wallet.
              *     * gross - The fee is charged on top of the amount paid.
              *     For example, for a transaction of $100 with a fee of 5%, the sender pays $105.00. The recipient receives $100.00 and the $5.00 fee goes to the client wallet.
-             *
              * @example gross
              */
             calc_type?: string;
@@ -5039,7 +5032,6 @@ export interface components {
              * @description One of the following:
              *     percentage - A percentage of the transaction amount.
              *     For example, 5 percent is represented by value=5. absolute - A fixed amount
-             *
              * @example absolute
              */
             fee_type?: string;
@@ -5248,7 +5240,6 @@ export interface components {
              * @description Determines how long the discount remains in effect. One of the following:
              *     * forever
              *     * repeating
-             *
              * @example forever
              * @enum {string}
              */
@@ -5499,7 +5490,6 @@ export interface components {
             token?: string;
             /**
              * @description Indicates the status of the dispute operation. One of the following values: * ACT (Active) - The dispute was initiated and is awaiting action by the merchant. * RVW (Review) - Rapyd is reviewing the merchant's evidence contesting the dispute. * PRA (Pre-Arbitration) - Rapyd is reviewing the merchant's evidence contesting a previously contested dispute. * ARB (Arbitration) - The merchant rejected a pre-arbitration outcome. Rapyd is awaiting a ruling by an arbitration committee from the card schemes. * LOS (Lose) - The merchant lost the dispute. Funds were deducted from the merchant wallet. Final status. * WIN (Win) - The merchant won the dispute. Funds were credited to the merchant wallet. Final status. * REV (Reverse) - The card issuer reversed the dispute. Funds were credited to the merchant wallet. Final status.
-             *
              * @example ACT
              * @enum {string}
              */
@@ -5548,8 +5538,7 @@ export interface components {
             evidence_reason_code?: string;
             /** @description When true, indicates that the disputed payment was automatically refunded based on pre-determined criteria. Response only. */
             pre_dispute?: boolean;
-            /** @description An Acquirer Reference Number (ARN) is a unique number assigned to a credit card transaction as it moves through the payment flow. Banks can use it to help trace the payment/ refund if it appears to be missing. An ARN will be available for Visa and Mastercard charges.
-             *      */
+            /** @description An Acquirer Reference Number (ARN) is a unique number assigned to a credit card transaction as it moves through the payment flow. Banks can use it to help trace the payment/ refund if it appears to be missing. An ARN will be available for Visa and Mastercard charges. */
             arn?: string;
         };
         Escrow: {
@@ -5607,7 +5596,6 @@ export interface components {
         };
         /**
          * @description Status of the hosted page. One of the following: NEW - The hosted page was created. DON - Done. The card was added to the customer profile. EXP - The hosted page expired.
-         *
          * @enum {string}
          */
         HostedPageStatus: "NEW" | "DON" | "EXP";
@@ -5939,8 +5927,7 @@ export interface components {
             currency?: components["schemas"]["Currency_1"];
             /** @description Description of the item. */
             description?: string;
-            /** @description ID of the SKU object that represents the product. One of the following: ID of the SKU object. String starting with sku_ ID of the coupon. If generated by Rapyd, a string starting with coupon_.
-             *      */
+            /** @description ID of the SKU object that represents the product. One of the following: ID of the SKU object. String starting with sku_ ID of the coupon. If generated by Rapyd, a string starting with coupon_. */
             parent?: string;
             /** @description Quantity of the product in the line item. Integer. Required when type is sku. */
             quantity?: number;
@@ -6106,8 +6093,10 @@ export interface components {
             payment_method_data?: Record<string, never> | null;
             /** @description Object describing additional payment method fields required for the payment. These values are not saved as part of the payment method object. To determine the fields required, run Get Payment Method Required Fields. */
             payment_method_options?: Record<string, never>;
-            /** @description A type of payment method that a customer can use for making payments.
-             *      The payment method type has a suffix with one of the following values [_bank, _card, _cash, _ewallet] */
+            /**
+             * @description A type of payment method that a customer can use for making payments.
+             *      The payment method type has a suffix with one of the following values [_bank, _card, _cash, _ewallet]
+             */
             payment_method_type?: string;
             /**
              * @description Category of payment method type. Read-only.
@@ -6138,9 +6127,11 @@ export interface components {
             /** @description A text description suitable for a customer's payment statement. Limited to 22 characters. If this field is not specified, Rapyd populates it with the name of the merchant */
             statement_descriptor?: string;
             status?: components["schemas"]["PaymentStatus"];
-            /** @description A set of text codes for the customer to use to complete the steps described in the instructions field. Response only.
+            /**
+             * @description A set of text codes for the customer to use to complete the steps described in the instructions field. Response only.
              *      The name of the field is the local name of the code, or some other label. For example
-             *      * code * paycode * pay_code * payid * pairing_code * payment_code * response_code */
+             *      * code * paycode * pay_code * payid * pairing_code * payment_code * response_code
+             */
             textual_codes?: Record<string, never>;
             /** @description ID of the associated transaction. Response only */
             transaction_id?: string;
@@ -6357,7 +6348,6 @@ export interface components {
              *     * sum - The sum of all usage during a billing cycle. This is the default.
              *     * last_during_period - The last usage reported within the billing cycle.
              *     * last_ever - The last usage ever reported, if the latest billing cycles contain no usage at all. Required when usage_type is metered. Relevant when billing_scheme is set to per_unit.
-             *
              * @example sum
              * @enum {string}
              */
@@ -6371,7 +6361,6 @@ export interface components {
              * @description Describes how to compute the price. One of the following:
              *     * per_unit - The amount specified in amount is charged for each unit. Also set these related fields: amount, transform_usage, usage_type, aggregate_usage. This is the default.
              *     * tiered - The unit pricing is computed using a tiering strategy as defined with the tiers and tiers_mode fields.
-             *
              * @example tiered
              * @enum {string}
              */
@@ -6393,7 +6382,6 @@ export interface components {
              *     * week
              *     * month
              *     * year Maximum interval is 1 year.
-             *
              * @example month
              * @enum {string}
              */
@@ -6421,7 +6409,6 @@ export interface components {
              * @description Determines the mode for calculating the total tiered charge. One of the following values:
              *     * graduated - The total cost at each price tier is calculated separately, then all tier charges are added together.
              *     * volume - The total cost is calculated as the number of items times the applicable tier price. Relevant when billing_scheme is set to tiered
-             *
              * @example volume
              * @enum {string}
              */
@@ -6436,7 +6423,6 @@ export interface components {
              * @description Determines whether the customer is billed when the service is not actually used. Relevant when billing_scheme is set to per_unit. One of the following:
              *     * metered - The customer is billed only for actual usage. You must also set aggregate_usage.
              *     * licensed - The customer is billed even if the service is not used. This is the default.
-             *
              * @example licensed
              * @enum {string}
              */
@@ -6449,7 +6435,6 @@ export interface components {
              *     * sum - The sum of all usage during a billing cycle. This is the default.
              *     * last_during_period - The last usage reported within the billing cycle.
              *     * last_ever - The last usage ever reported, if the latest billing cycles contain no usage at all. Required when usage_type is metered. Relevant when billing_scheme is set to per_unit.
-             *
              * @example sum
              * @enum {string}
              */
@@ -6463,7 +6448,6 @@ export interface components {
              * @description Describes how to compute the price. One of the following:
              *     * per_unit - The amount specified in amount is charged for each unit. Also set these related fields: amount, transform_usage, usage_type, aggregate_usage. This is the default.
              *     * tiered - The unit pricing is computed using a tiering strategy as defined with the tiers and tiers_mode fields.
-             *
              * @example tiered
              */
             billing_scheme?: string;
@@ -6484,7 +6468,6 @@ export interface components {
              *     * week
              *     * month
              *     * year Maximum interval is 1 year.
-             *
              * @example month
              * @enum {string}
              */
@@ -6509,7 +6492,6 @@ export interface components {
              * @description Determines the mode for calculating the total tiered charge. One of the following values:
              *     * graduated - The total cost at each price tier is calculated separately, then all tier charges are added together.
              *     * volume - The total cost is calculated as the number of items times the applicable tier price. Relevant when billing_scheme is set to tiered
-             *
              * @example volume
              * @enum {string}
              */
@@ -6524,7 +6506,6 @@ export interface components {
              * @description Determines whether the customer is billed when the service is not actually used. Relevant when billing_scheme is set to per_unit. One of the following:
              *     * metered - The customer is billed only for actual usage. You must also set aggregate_usage.
              *     * licensed - The customer is billed even if the service is not used. This is the default.
-             *
              * @example licensed
              * @enum {string}
              */
@@ -6588,7 +6569,6 @@ export interface components {
              * @description One of the following:
              *     * services - Relevant to subscriptions and plans.
              *     * goods - Relevant to orders and SKUs.
-             *
              * @example goods
              * @enum {string}
              */
@@ -6700,7 +6680,6 @@ export interface components {
              *     * now - The present day. The next billing cycle starts right now.
              *     * Timestamp in Unix time - A time in the future, at or after the end of the free trial period, not more than the length of the billing cycle. The current billing cycle will be shorter than all other billing cycles. Relevant to creation of the subscription.
              *     * unchanged - The original billing cycle anchor is unchanged. Relevant to updating a subscription.
-             *
              * @example 1592379647
              */
             billing_cycle_anchor?: string | number;
@@ -6709,7 +6688,6 @@ export interface components {
              *     * When no trial period is set, after cancel_at_period_end is set to true the subscription will not be renewed at the next interval.
              *     * When a trial period is set after cancel_at_period_end is set to true, the subscription will not begin. false - This is the default.
              *     * When the subscription is created, no end is defined. * When Cancel Subscription is run, charges stop immediately and the subscription is canceled.
-             *
              * @example true
              */
             cancel_at_period_end?: boolean;
@@ -6763,7 +6741,6 @@ export interface components {
              * @description Determines whether each upcoming subscription invoice is issued immediately.
              *     * true - The invoice is issued when the subscription is created.
              *     * false - The invoice is issued an hour after the subscription is created. This is the default.
-             *
              * @example true
              */
             simultaneous_invoice?: boolean;
@@ -6773,7 +6750,6 @@ export interface components {
              *     * canceled - The customer has canceled this subscription, but it remains in the Rapyd database.
              *     * past_due - Payment for this subscription was not received by the end of the billing period.
              *     * trialing - The subscription is in its free trial period. * unpaid - An error occurred in the payment for this subscription. Response only.
-             *
              * @example active
              * @enum {string}
              */
@@ -6793,7 +6769,6 @@ export interface components {
              *     * payment
              *     * payout
              *     Response only.
-             *
              * @example payment
              * @enum {string|null}
              */
@@ -6810,7 +6785,6 @@ export interface components {
              *     * **now** - The present day. The next billing cycle starts right now.
              *     * <em>Timestamp</em> in Unix time - A time in the future, at or after the end of the free trial period, not more than the length of the billing cycle. The current billing cycle will be shorter than all other billing cycles. Relevant to creation of the subscription.
              *     * **unchanged** - The original billing cycle anchor is unchanged. Relevant to updating a subscription.
-             *
              * @example 1592379647
              */
             billing_cycle_anchor?: string | number;
@@ -6819,7 +6793,6 @@ export interface components {
              *     * When no trial period is set, after `cancel_at_period_end` is set to **true** the subscription will not be renewed at the next interval.
              *     * When a trial period is set after `cancel_at_period_end` is set to **true**, the subscription will not begin. <BR> * **false** - This is the default.
              *     * When the subscription is created, no end is defined. * When 'Cancel Subscription' is run, charges stop immediately and the subscription is canceled.
-             *
              * @example true
              */
             cancel_at_period_end?: boolean;
@@ -6907,7 +6880,6 @@ export interface components {
              *     * canceled - The customer has canceled this subscription, but it remains in the Rapyd database.
              *     * past_due - Payment for this subscription was not received by the end of the billing period.
              *     * trialing - The subscription is in its free trial period. * unpaid - An error occurred in the payment for this subscription. Response only.
-             *
              * @example active
              * @enum {string}
              */
@@ -7147,7 +7119,8 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["Payment"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_PAYMENT",
          *         "message": "The request tried to retrieve a payment, but the payment was not found. The request was rejected. Corrective action: Use a valid payment ID.",
@@ -7155,7 +7128,8 @@ export interface components {
          *         "response_code": "ERROR_GET_PAYMENT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7427,7 +7401,8 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["Product"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_PRODUCT",
          *         "message": "The request tried to perform an operation that requires a product, but the product was not found. The request was rejected. Corrective action: Use a valid product ID.",
@@ -7435,7 +7410,8 @@ export interface components {
          *         "response_code": "INVALID_PRODUCT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_1: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7548,14 +7524,16 @@ export interface components {
             /** @description The tax rate, defined as a percentage. */
             tax_percent?: number;
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_SUBSCRIPTION_TRIAL_END",
          *         "message": "The request tried to retrieve the upcoming invoice for a customer, but the 'trial_end' body parameter was set in the subscription and there were no invoice items in the 'lines' array. The request was rejected. Corrective action: Add valid items to the 'lines' array in the subscription or the invoice.",
          *         "response_code": "INVALID_SUBSCRIPTION_TRIAL_END",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_3: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7583,14 +7561,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_23_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_INVOICE_ID",
          *         "message": "The request attempted an operation that requires an invoice, but the invoice was not found. The request was rejected. Corrective action: Use the ID of a valid invoice.",
          *         "response_code": "INVALID_INVOICE_ID",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_4: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7598,25 +7578,29 @@ export interface components {
             /** @description ID of the payment method for paying the invoice. If not included in the body, then the customer's default_payment_method is used. */
             payment_method?: string;
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_MARK_UNCOLLECTIBLE_NOT_OPEN_INVOICE",
          *         "message": "The request tried to mark an invoice as uncollectible, but the invoice status was not 'open'. The request was rejected. Corrective action: None. Determine why the invoice was not in 'open' status.",
          *         "response_code": "ERROR_MARK_UNCOLLECTIBLE_NOT_OPEN_INVOICE",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_5: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_INVOICE_CUSTOMER",
          *         "message": "The request attempted an operation that requires a customer, but the customer specified in the request was not the same as the customer defined for the subscription. The request was rejected. Corrective action: For the invoice and all of its invoice items, use the customer identified in the subscription.",
          *         "response_code": "INVALID_INVOICE_CUSTOMER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_6: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7624,14 +7608,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["InvoiceItemResponse"][];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_INVOICE_ITEMS",
          *         "message": "The request tried to retrieve an invoice item, but the invoice item was not found. The request was rejected. Corrective action: Use a valid invoice item ID.",
          *         "response_code": "ERROR_GET_INVOICE_ITEMS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_7: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7657,14 +7643,16 @@ export interface components {
             /** @description Per-unit price of the product or service, adjusted as defined in the plan. Decimal. */
             unit_amount?: number;
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_INVOICE_ITEM_AMOUNT_PARAM",
          *         "message": "The request tried to create an invoice item, but the amount was not was not clear. The request was rejected. Corrective action: Specify the 'amount' field, or specify both 'unit_amount' and 'quantity'.",
          *         "response_code": "ERROR_INVOICE_ITEM_AMOUNT_PARAM",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_8: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7687,14 +7675,16 @@ export interface components {
             /** @description The percentage tax rate that is applied to the subtotal of the invoice, after subtracting all discounts. Decimal, up to four decimal places. Range: 0-100 */
             tax_percent?: number;
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_INVOICE_ITEM_ID",
          *         "message": "The request tried to update or delete an invoice item, but the invoice item could not be found. The request was rejected. Corrective action: Use the correct ID for a valid invoice item.",
          *         "response_code": "INVALID_INVOICE_ITEM_ID",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_9: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7702,14 +7692,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_25_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_DELETE_INVOICE_ITEMS",
          *         "message": "The request tried to delete an invoice item, but the invoice item was not found. The request was rejected. Corrective action: Determine whether the invoice item was already deleted, and why there were multiple requests to delete it.",
          *         "response_code": "ERROR_DELETE_INVOICE_ITEMS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_10: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7731,36 +7723,42 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["GroupPayment"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_CREATE_GROUP_PAYMENT_EXCEEDED_MAX_PARTICIPANTS",
          *         "message": "The request tried to create a group payment, but there were too many individual payments. The request was rejected. Corrective action: Use 2 to 10 payments.",
          *         "response_code": "ERROR_CREATE_GROUP_PAYMENT_EXCEEDED_MAX_PARTICIPANTS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_11: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_GROUP_PAYMENT",
          *         "message": "The request attempted an operation that requires a group payment, but the group payment was not found. The request was rejected. Corrective action: Use the ID of a valid group payment, a string starting with 'gp_'.",
          *         "response_code": "ERROR_GET_GROUP_PAYMENT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_12: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_MISSING_GROUP_PAYMENT",
          *         "message": "The request attempted an operation that requires a group payment, but the group payment was not found. The request was rejected. Corrective action: Use the ID of a valid group payment, a string starting with 'gp_'.",
          *         "response_code": "ERROR_MISSING_GROUP_PAYMENT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_13: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7768,14 +7766,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["EscrowResponse"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_ESCROW",
          *         "message": "The request attempted an operation that requires a payment and its escrow, but the payment or the escrow was not found. The request was rejected. Corrective action: Use a valid ID for the payment and for the escrow.",
          *         "response_code": "ERROR_GET_ESCROW",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_14: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7783,14 +7783,16 @@ export interface components {
         inline_response_200_29: {
             data?: components["schemas"]["EscrowResponse"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_CARD_VALIDATION_IN_PAYMENT_WITH_ESCROW",
          *         "message": "The request attempted to validate a card as part of an escrow transaction, but these two operations must be done separately. The request was rejected. Corrective action: Create a payment with a card payment method, set 'capture' to false, set 'amount’ to 0, and set 'escrow' to null. Next, create the payment with the escrow.",
          *         "response_code": "ERROR_CARD_VALIDATION_IN_PAYMENT_WITH_ESCROW",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_15: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7857,47 +7859,55 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["Customer"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_CREATE_CUSTOMER",
          *         "message": "The request tried to create or update a customer, but the wallet ID provided is already in use by another customer. The request was rejected. Corrective action: Create a new wallet.",
          *         "response_code": "ERROR_CREATE_CUSTOMER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_16: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_CUSTOMER",
          *         "message": "The request attempted an operation that requires the ID of a customer, but the customer was not found. The request was rejected. Corrective action: Use the correct ID of the customer, a string starting with \"cus_\"",
          *         "response_code": "ERROR_GET_CUSTOMER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_17: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_CUSTOMER_ID",
          *         "message": "The request attempted an operation that requires a valid customer ID, but the customer was not found. The request was rejected. Corrective action: Use the correct customer, or create a new customer.",
          *         "response_code": "INVALID_CUSTOMER_ID",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_18: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_DELETE_CUSTOMER",
          *         "message": "The request tried to delete a customer, but the operation failed. Corrective action: Determine whether the customer was already deleted, and why there were multiple requests to delete it.",
          *         "response_code": "ERROR_DELETE_CUSTOMER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_19: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7914,7 +7924,8 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["AddressResponse"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_ADDRESS_PHONE_NUMBER",
          *         "message": "The request tried to add or update a phone number for an address, but the phone number is not in proper E.164 format or is not valid. The request was rejected. Corrective action: Submit the phone number in proper E.164 format.",
@@ -7922,11 +7933,13 @@ export interface components {
          *         "response_code": "INVALID_ADDRESS_PHONE_NUMBER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_20: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_ADDRESS_GET",
          *         "message": "The request attempted an operation that requires an address, but the address was not found. The request was rejected. Corrective action: For the 'address' parameter, use a valid address ID.",
@@ -7934,11 +7947,13 @@ export interface components {
          *         "response_code": "ERROR_ADDRESS_GET",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_21: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_DELETE_ADDRESS",
          *         "message": "The request tried to delete the address, but this operation failed. The request was rejected. Corrective action: None. Only an address that is linked to a customer or not linked to any object can be deleted.",
@@ -7946,7 +7961,8 @@ export interface components {
          *         "response_code": "ERROR_DELETE_ADDRESS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_22: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7961,25 +7977,29 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["CustomerPaymentMethod"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_CREATE_PAYMENT_METHOD",
          *         "message": "The request attempted an operation that requires specific fields for payment method, but a required field was missing, or an extra, unallowed field was included. Corrective action: Run \"Get Payment Method Required Fields\" and check all input fields.",
          *         "response_code": "ERROR_CREATE_PAYMENT_METHOD",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_23: {
             status?: components["schemas"]["Status_1"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_CUSTOMER_PAYMENT_METHOD_NOT_FOUND",
          *         "message": "The request attempted an operation that requires the default payment method of a customer, but the customer does not have a default payment method. The request was rejected.",
          *         "response_code": "ERROR_CUSTOMER_PAYMENT_METHOD_NOT_FOUND",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_24: {
             status?: components["schemas"]["Status_1"];
         };
@@ -7987,14 +8007,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_43_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_DELETE_PAYMENT_METHOD_IN_USE",
          *         "message": "The request tried to delete a customer's default payment method, but the payment method was in use. The request was rejected. Corrective actionis to use \"List Subscriptions\", filtered by the customer's ID, then use \"Cancel Subscription\" to remove all subscriptions that use the customer's ID or the payment method that you want to delete.",
          *         "response_code": "ERROR_DELETE_PAYMENT_METHOD_IN_USE",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_25: {
             status?: components["schemas"]["Status_1"];
         };
@@ -8451,14 +8473,16 @@ export interface components {
              */
             nationality?: string;
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_BENEFICIARY",
          *         "message": "The request attempted an operation that requires a payout beneficiary, but the beneficiary was not found. The request was rejected. Corrective action: Use the ID of a valid beneficiary.",
          *         "response_code": "ERROR_GET_BENEFICIARY",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_26: {
             status?: components["schemas"]["Status"];
         };
@@ -8535,18 +8559,21 @@ export interface components {
             data?: components["schemas"]["HostedBeneficiaryTokenResponse"];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_HOSTED_PAGE_BENEFICIARY_INVALID_CATEGORY",
          *         "message": "The request tried to create a beneficiary tokenization page, but the payout category was not valid. The request was rejected. Corrective action: Set 'category' to 'bank' or 'card'.",
          *         "response_code": "ERROR_HOSTED_PAGE_BENEFICIARY_INVALID_CATEGORY",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_27: {
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_UPDATE_PAYOUT",
          *         "message": "The request tried to update a payout, but the payout was not found. The request was rejected. Corrective action: For the 'payout' path parameter, use the ID of a valid payout, a string starting with **payout_**.",
@@ -8554,7 +8581,8 @@ export interface components {
          *         "response_code": "ERROR_UPDATE_PAYOUT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_28: {
             status?: components["schemas"]["Status"];
         };
@@ -8592,7 +8620,8 @@ export interface components {
             data?: components["schemas"]["Sender"];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_SENDER",
          *         "message": "The request attempted an operation that requires a payout sender, but the sender was not found. The request was rejected. Corrective action: Use the ID of a valid sender.",
@@ -8600,7 +8629,8 @@ export interface components {
          *         "response_code": "ERROR_GET_SENDER",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_29: {
             status?: components["schemas"]["Status"];
         };
@@ -8612,7 +8642,8 @@ export interface components {
             data?: components["schemas"]["PayoutMethodType"][];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_PAYOUT",
          *         "message": "The request tried to retrieve a payout, but the payout was not found. The request was rejected. Corrective action: Use the ID of a valid payout.",
@@ -8620,7 +8651,8 @@ export interface components {
          *         "response_code": "ERROR_GET_PAYOUT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_30: {
             status?: components["schemas"]["Status"];
         };
@@ -8706,14 +8738,16 @@ export interface components {
             status?: components["schemas"]["Status"];
             data?: components["schemas"]["PutFundsOnHoldResponse"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_TRANSFER_FUNDS_DESTINATION_AND_SOURCE_CANNOT_BE_THE_SAME",
          *         "message": "The request tried to transfer funds, but the source was the same as the destination. The request was rejected. Corrective action: Set 'source_ewallet' and 'destination_ewallet' to the IDs of two different wallets.",
          *         "response_code": "ERROR_TRANSFER_FUNDS_DESTINATION_AND_SOURCE_CANNOT_BE_THE_SAME",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_31: {
             status?: components["schemas"]["Status"];
         };
@@ -8721,14 +8755,16 @@ export interface components {
             data?: components["schemas"]["Contact"][];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_EWALLET",
          *         "message": "The request attempted an operation that requires a wallet, but the wallet was not found. The request was rejected. Corrective action: Use the ID of a valid wallet, a string starting with **ewallet_**.",
          *         "response_code": "ERROR_GET_EWALLET",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_32: {
             status?: components["schemas"]["Status"];
         };
@@ -8744,8 +8780,7 @@ export interface components {
             email?: string;
             /** @description First name of the contact. */
             first_name?: string;
-            /** @description Family name of the personal contact or primary person associated with the business contact. For a personal contact type, alphabetic characters and spaces. Required for issuing a card to a personal contact.
-             *      */
+            /** @description Family name of the personal contact or primary person associated with the business contact. For a personal contact type, alphabetic characters and spaces. Required for issuing a card to a personal contact. */
             last_name?: string;
             /** @description Gender of the contact. One of the following values: male, female, other, not_applicable */
             gender?: string;
@@ -8778,36 +8813,42 @@ export interface components {
             data?: components["schemas"]["Contact"];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_ADD_CONTACT_TOO_MANY_CONTACTS",
          *         "message": "The request tried to add a contact to a personal wallet, but a personal wallet can have only one contact. The request was rejected. Corrective action: None. Determine why an attempt was made to give a personal wallet two contacts. Consider creating a company wallet.",
          *         "response_code": "ERROR_ADD_CONTACT_TOO_MANY_CONTACTS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_33: {
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_EWALLET_CONTACT",
          *         "message": "The request attempted an operation that requires a wallet contact, but the contact was not found. The request was rejected. Corrective action: In the path, specify the ID of a valid wallet, a string starting with \"ewallet\", and the ID of a valid contact belonging to that wallet, a string starting with \"cont\".",
          *         "response_code": "ERROR_GET_EWALLET_CONTACT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_34: {
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_UPDATE_EWALLET_CONTACT",
          *         "message": "The request tried to update a business wallet contact, but there was a format error in the business details. The request was rejected. Corrective action: Provide all data in the correct format. See the API reference.",
          *         "response_code": "ERROR_UPDATE_EWALLET_CONTACT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_35: {
             status?: components["schemas"]["Status"];
         };
@@ -8815,14 +8856,16 @@ export interface components {
             data?: components["schemas"]["inline_response_200_72_data"];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_DELETE_CONTACT_FROM_PERSONAL_EWALLET",
          *         "message": "The request tried to delete a contact, but the wallet was a personal wallet. A personal wallet can have only one contact and it cannot be deleted. The request was rejected. Corrective action: None. Determine why an attempt was made to delete the contact.",
          *         "response_code": "ERROR_DELETE_CONTACT_FROM_PERSONAL_EWALLET",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_36: {
             status?: components["schemas"]["Status"];
         };
@@ -8830,14 +8873,16 @@ export interface components {
             data?: components["schemas"]["inline_response_200_73_data"];
             status?: components["schemas"]["Status"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_GET_COMPLIANCE_LEVELS",
          *         "message": "",
          *         "response_code": "ERROR_GET_COMPLIANCE_LEVELS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_37: {
             status?: components["schemas"]["Status"];
         };
@@ -8848,10 +8893,11 @@ export interface components {
             language?: string;
             /** @description The URL of the logo image that appears on the card. If the logo is not specified, the name of the merchant appears. */
             logo?: string;
-            /** @description The orientation of the logo on the card:
+            /**
+             * @description The orientation of the logo on the card:
              *       `landscape`  `square` `portrait`
              *         Default value: `landscape`
-             *      */
+             */
             logo_orientation?: string;
         };
         inline_response_200_74: {
@@ -9020,7 +9066,8 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["CardTokenResponse"][];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_TOKENIZE_CARD_NO_PAYMENT_METHODS",
          *         "message": "The request tried to create a token for future use of a card, but there are no relevant card payment methods available in the country for the merchant. The request was rejected. Corrective action: Contact Client Support.",
@@ -9028,7 +9075,8 @@ export interface components {
          *         "response_code": "ERROR_TOKENIZE_CARD_NO_PAYMENT_METHODS",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_38: {
             status?: components["schemas"]["Status_1"];
         };
@@ -9367,14 +9415,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_111_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_ID_VERIFICATION",
          *         "message": "The request tried to validate identity, but the operation failed. The request was rejected. Corrective action: Check all parameters and provide a unique reference ID for each identity verification operation, whether successful or unsuccessful.",
          *         "response_code": "ERROR_ID_VERIFICATION",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_39: {
             status?: components["schemas"]["Status_1"];
         };
@@ -9450,14 +9500,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_117_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "ERROR_HOSTED_PAGE_INVALID_CONTACT",
          *         "message": "The request attempted a hosted page operation for identity verification process, but the contact was of type 'business' and the verification process is only for personal contacts. The request was rejected. Corrective action: Add a personal contact to the wallet and run the verification process on the personal contact.",
          *         "response_code": "ERROR_HOSTED_PAGE_INVALID_CONTACT",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_40: {
             status?: components["schemas"]["Status_1"];
         };
@@ -9551,14 +9603,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_118_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "INVALID_FIELDS",
          *         "message": "The request attempted an operation, but one of the fields contained a value that is not valid. The request was rejected. Corrective action: The name of the field appears at the end of the response code. Use a valid value.",
          *         "response_code": "INVALID_FIELDS - [SEARCH_CRITERIA]",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_41: {
             status?: components["schemas"]["Status_1"];
         };
@@ -9566,14 +9620,16 @@ export interface components {
             status?: components["schemas"]["Status_1"];
             data?: components["schemas"]["inline_response_200_119_data"];
         };
-        /** @example {
+        /**
+         * @example {
          *       "status": {
          *         "error_code": "BAD REQUEST",
          *         "message": "",
          *         "response_code": "BAD REQUEST",
          *         "status": "ERROR"
          *       }
-         *     } */
+         *     }
+         */
         inline_response_400_42: {
             status?: components["schemas"]["Status_1"];
         };
@@ -9598,8 +9654,7 @@ export interface components {
         VerifyHostedAppResponse_merchant_details: {
             /** @description The name that appears on the hosted page when merchant_logo is not specified. To change this value, contact Client Support. Response only. */
             merchant_alias?: string;
-            /** @description Determines the default language of the application page.  The values are documented in List Hosted Page Supported Languages.
-             *      */
+            /** @description Determines the default language of the application page.  The values are documented in List Hosted Page Supported Languages. */
             merchant_language?: string;
             /** @description URL for the image of the client's logo. Response only. To configure this feature, use the Client Portal. */
             merchant_logo?: string;
@@ -9919,18 +9974,18 @@ export interface components {
             flat_amount?: number;
             /**
              * @description The upper volume limit for this tier. Valid values: inf (infinite) or an integer.
-             *
              * @example inf
              */
             up_to?: string | number;
         };
-        /** @description Describes the physical size and weight of the product. Contains the following fields:
+        /**
+         * @description Describes the physical size and weight of the product. Contains the following fields:
          *     * height
          *     * length
          *     * weight
          *     * width
          *     These fields are represented as numbers, but it is the responsibility of the merchant to define and interpret the relevant units of length and weight.
-         *      */
+         */
         Product_package_dimensions: {
             /**
              * @description NA

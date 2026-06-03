@@ -1,8 +1,8 @@
 import type { Api } from "./Api";
 import type { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import type RequestBackend from "./backend/RequestBackend";
 import type RequestContext from "./RequestContext";
 import type { Validation } from "./Validation";
-import type RequestBackend from "./backend/RequestBackend";
 
 export type AcceptableStatus = number | [min: number, max: number];
 

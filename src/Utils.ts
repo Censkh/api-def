@@ -1,4 +1,6 @@
 // polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+const hasOwn = (object: object, key: PropertyKey): boolean => Object.prototype.hasOwnProperty.call(object, key);
+
 export const assign: (typeof Object)["assign"] =
   Object.assign ||
   ((target: any, ...varArgs: any) => {
@@ -14,7 +16,7 @@ export const assign: (typeof Object)["assign"] =
       if (nextSource !== null && nextSource !== undefined) {
         for (const nextKey in nextSource) {
           // Avoid bugs when hasOwnProperty is shadowed
-          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+          if (hasOwn(nextSource, nextKey)) {
             to[nextKey] = nextSource[nextKey];
           }
         }

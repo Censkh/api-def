@@ -2,11 +2,11 @@ import type { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
 import type { MockRequest, MockRequestError, MockResponse } from "../MockingTypes";
 import type RequestContext from "../RequestContext";
-import { RequestErrorCode, convertToRequestError } from "../RequestError";
+import { convertToRequestError, RequestErrorCode } from "../RequestError";
 import * as Utils from "../Utils";
 import { delayThenReturn, randInt } from "../Utils";
-import type { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 import type RequestBackend from "./RequestBackend";
+import type { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   readonly id = "mock";

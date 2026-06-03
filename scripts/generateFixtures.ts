@@ -1,4 +1,4 @@
-import {$} from "bun";
+import { $ } from "bun";
 
 await $`bun cli/index.ts generate --noHeader --noConfig cli/tests/fixtures/mastercard-processing-core-api-swagger.yaml cli/tests/fixtures/MastercardProcessingCoreApi.ts`;
 await $`bun cli/index.ts generate --noHeader --noConfig cli/tests/fixtures/mastercard-id-verification-api-swagger.yaml cli/tests/fixtures/MastercardIdVerificationApi.ts`;

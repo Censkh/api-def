@@ -915,7 +915,6 @@ export interface components {
              *     |UV|Unable to verify address.|
              *     |VA|Address is vacant (unoccupied in the past 90 days).|
              *     More details see [link](http://docs.payfone.com/v1.0/reference#reason-codes)
-             *
              * @example [
              *       "LP",
              *       "LS"

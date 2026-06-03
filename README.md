@@ -8,6 +8,9 @@ API def provides a unified way to type your endpoints allowing for compile time 
 npm i api-def
 ```
 
+Requires Node.js 22 or newer.
+Browser builds target ES2020 and support both ESM and CommonJS consumers.
+
 - [Documentation](https://censkh.github.io/api-def/)
 
 ```typescript

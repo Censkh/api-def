@@ -15,11 +15,11 @@ import type {
   State,
 } from "./ApiTypes";
 import { resolvePathParams, resolveUrl } from "./ApiUtils";
+import type RequestBackend from "./backend/RequestBackend";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import type { RequestError } from "./RequestError";
 import * as Utils from "./Utils";
 import type { Validation } from "./Validation";
-import type RequestBackend from "./backend/RequestBackend";
 
 let contextIdCounter = 0;
 
@@ -241,7 +241,7 @@ export default class RequestContext<
   }
 
   updateBody(body: TBody): void {
-    // @ts-ignore
+    // @ts-expect-error
     this.requestConfig.body = body;
     this.parseRequestBody();
   }
