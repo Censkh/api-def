@@ -1,4 +1,4 @@
-type RetryFunction<A> = (bail: (e: Error) => void, attemptCount: number) => A | Promise<A>;
+export type RetryFunction<A> = (bail: (e: Error) => void, attemptCount: number) => A | Promise<A>;
 
 export interface RetryOptionsCore {
   /**

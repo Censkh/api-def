@@ -5,13 +5,13 @@ export interface ApiMockingConfig {
 }
 
 export interface MockRequest<
-  TResponse = any,
+  _TResponse = any,
   TParams extends Params | undefined = Params | undefined,
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
 > {
-  params: TParams extends Params ? Record<TParams, string> : {};
+  params: TParams extends Params ? Record<TParams, string> : Record<keyof any, never>;
   body: TBody;
   query: TQuery;
   headers: Readonly<RawHeaders>;
@@ -21,10 +21,10 @@ export interface MockRequest<
 
 export interface MockResponse<
   TResponse = any,
-  TParams extends Params | undefined = Params | undefined,
-  TQuery extends Query | undefined = Query | undefined,
-  TBody extends Body | undefined = Body | undefined,
-  TState extends State = State,
+  _TParams extends Params | undefined = Params | undefined,
+  _TQuery extends Query | undefined = Query | undefined,
+  _TBody extends Body | undefined = Body | undefined,
+  _TState extends State = State,
 > {
   statusCode: number;
 

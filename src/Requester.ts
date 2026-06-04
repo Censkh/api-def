@@ -131,6 +131,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       });
     }
   }
+  context.parseBody();
 
   const retryOptions = parseRetryOptions(context.requestConfig?.retry);
 
@@ -257,7 +258,7 @@ const parseResponse = async <R = any>(
             try {
               const decodedData = (response.data = textDecode(data) as any);
               response.data = JSON.parse(decodedData);
-            } catch (e) {
+            } catch (_e) {
               throw convertToRequestError({
                 error: new Error(
                   `[api-def] Expected '${context.responseType}' response, got '${inferredResponseType}' (from 'Content-Type' of '${contentType}')`,

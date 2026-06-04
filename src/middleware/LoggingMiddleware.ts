@@ -61,7 +61,7 @@ const log = (
   type: LogType,
   message: string,
   config: LoggingMiddlewareOptions,
-  objects?: Object,
+  objects?: object,
 ) => {
   if (typeof config.predicate === "function" && !config.predicate()) {
     return;

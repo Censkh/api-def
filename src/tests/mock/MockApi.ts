@@ -54,6 +54,61 @@ export const postFormUrlEncoded = api
     },
   });
 
+export const postConfiguredFormUrlEncoded = api
+  .endpoint()
+  .bodyOf<{
+    test: number;
+    b: string;
+  }>({
+    encoding: "application/x-www-form-urlencoded",
+  })
+  .responseOf<{ body: string; contentType: unknown }>()
+  .build({
+    id: "sendConfiguredFormUrlEncoded",
+    method: "post",
+    path: "/send-configured-form-data",
+
+    mocking: {
+      handler: (req, res) => {
+        return res.status(200).send({
+          body: req.body.toString(),
+          contentType: req.headers["Content-Type"],
+        });
+      },
+    },
+  });
+
+export const postMultipartFormData = api
+  .endpoint()
+  .bodyOf<{
+    file: Blob;
+    processingOptions: {
+      keepAfterProcessing: boolean;
+    };
+    bytes: Uint8Array;
+  }>({
+    encoding: "multipart/form-data",
+  })
+  .responseOf<Array<[string, string]>>()
+  .build({
+    id: "sendMultipartFormData",
+    method: "post",
+    path: "/send-multipart-form-data",
+
+    mocking: {
+      handler: (req, res) => {
+        return res
+          .status(200)
+          .send(
+            Array.from((req.body as unknown as FormData).entries()).map(([key, value]) => [
+              key,
+              typeof value === "string" ? value : (value as Blob).constructor.name,
+            ]),
+          );
+      },
+    },
+  });
+
 export const postIdVerifStatus = api
   .endpoint()
   .bodyOf<{

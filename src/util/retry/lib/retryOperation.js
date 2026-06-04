@@ -42,7 +42,7 @@ RetryOperation.prototype.retry = function (err) {
   if (!err) {
     return false;
   }
-  const currentTime = new Date().getTime();
+  const currentTime = Date.now();
   if (err && currentTime - this._operationStart >= this._maxRetryTime) {
     this._errors.push(err);
     this._errors.unshift(new Error("RetryOperation timeout occurred"));
@@ -101,7 +101,7 @@ RetryOperation.prototype.attempt = function (fn, timeoutOps) {
     }, this._operationTimeout);
   }
 
-  this._operationStart = new Date().getTime();
+  this._operationStart = Date.now();
 
   this._fn(this._attempts);
 };

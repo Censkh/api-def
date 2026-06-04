@@ -3,7 +3,7 @@ import type { Api } from "./Api";
 import type { ResponseType } from "./ApiConstants";
 import type { Body, Params, Query, RawHeaders, State } from "./ApiTypes";
 import Endpoint, { type EndpointOptions } from "./Endpoint";
-import type { Validation } from "./Validation";
+import type { BodyValidationOptions, Validation, ValidationOptions } from "./Validation";
 
 type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
   ? string
@@ -12,6 +12,16 @@ type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
     : "stream" extends T
       ? AsyncIterable<Uint8Array>
       : unknown;
+
+const isSchema = <TValue>(
+  value: BodyValidationOptions<any> | ValidationOptions<TValue> | zod.Schema<TValue>,
+): value is zod.Schema<TValue> => {
+  return value !== undefined && "parse" in value;
+};
+
+const warnDeprecatedSchemaArgument = (methodName: string): void => {
+  console.warn(`[api-def] ${methodName}(schema) is deprecated. Use ${methodName}({ schema }) instead.`);
+};
 
 /*type ExtractParams<Path> = Path extends `${infer Segment}/${infer Rest}`
   ? Segment extends `:${infer Param}` ? Param | ExtractParams<Rest> : ExtractParams<Rest>
@@ -52,9 +62,24 @@ export default class EndpointBuilder<
   }
 
   queryOf<TNewQuery extends Query>(
+    options?: ValidationOptions<TNewQuery>,
+  ): EndpointBuilder<TResponse, TParams, TNewQuery, TBody, TState, TRequestHeaders, TResponseHeaders>;
+  /**
+   * @deprecated Pass `{ schema }` instead.
+   */
+  queryOf<TNewQuery extends Query>(
     schema?: zod.Schema<TNewQuery>,
+  ): EndpointBuilder<TResponse, TParams, TNewQuery, TBody, TState, TRequestHeaders, TResponseHeaders>;
+  queryOf<TNewQuery extends Query>(
+    optionsOrSchema?: ValidationOptions<TNewQuery> | zod.Schema<TNewQuery>,
   ): EndpointBuilder<TResponse, TParams, TNewQuery, TBody, TState, TRequestHeaders, TResponseHeaders> {
-    this.validation.query = schema as any;
+    if (optionsOrSchema && isSchema(optionsOrSchema)) {
+      warnDeprecatedSchemaArgument("queryOf");
+      this.validation.query = optionsOrSchema as any;
+      return this as any;
+    }
+
+    this.validation.query = optionsOrSchema?.schema as any;
     return this as any;
   }
 
@@ -71,23 +96,70 @@ export default class EndpointBuilder<
   }
 
   bodyOf<TNewBody extends Body>(
+    options?: BodyValidationOptions<TNewBody>,
+  ): EndpointBuilder<TResponse, TParams, TQuery, TNewBody, TState, TRequestHeaders, TResponseHeaders>;
+  /**
+   * @deprecated Pass `{ schema }` instead.
+   */
+  bodyOf<TNewBody extends Body>(
     schema?: zod.Schema<TNewBody>,
+  ): EndpointBuilder<TResponse, TParams, TQuery, TNewBody, TState, TRequestHeaders, TResponseHeaders>;
+  bodyOf<TNewBody extends Body>(
+    optionsOrSchema?: BodyValidationOptions<TNewBody> | zod.Schema<TNewBody>,
   ): EndpointBuilder<TResponse, TParams, TQuery, TNewBody, TState, TRequestHeaders, TResponseHeaders> {
-    this.validation.body = schema as any;
+    if (optionsOrSchema && isSchema(optionsOrSchema)) {
+      warnDeprecatedSchemaArgument("bodyOf");
+      this.validation.body = optionsOrSchema as any;
+      this.validation.bodyEncoding = "application/json";
+      return this as any;
+    }
+
+    this.validation.body = optionsOrSchema?.schema as any;
+    this.validation.bodyEncoding = optionsOrSchema?.encoding ?? "application/json";
     return this as any;
   }
 
   responseOf<TNewResponse>(
+    options?: ValidationOptions<TNewResponse>,
+  ): EndpointBuilder<TNewResponse, TParams, TQuery, TBody, TState, TRequestHeaders, TResponseHeaders>;
+  /**
+   * @deprecated Pass `{ schema }` instead.
+   */
+  responseOf<TNewResponse>(
     schema?: zod.Schema<TNewResponse>,
+  ): EndpointBuilder<TNewResponse, TParams, TQuery, TBody, TState, TRequestHeaders, TResponseHeaders>;
+  responseOf<TNewResponse>(
+    optionsOrSchema?: ValidationOptions<TNewResponse> | zod.Schema<TNewResponse>,
   ): EndpointBuilder<TNewResponse, TParams, TQuery, TBody, TState, TRequestHeaders, TResponseHeaders> {
-    this.validation.response = schema as any;
+    if (optionsOrSchema && isSchema(optionsOrSchema)) {
+      warnDeprecatedSchemaArgument("responseOf");
+      this.validation.response = optionsOrSchema as any;
+      return this as any;
+    }
+
+    this.validation.response = optionsOrSchema?.schema as any;
     return this as any;
   }
 
   stateOf<TNewState extends State>(
+    options?: ValidationOptions<TNewState>,
+  ): EndpointBuilder<TResponse, TParams, TQuery, TBody, TNewState, TRequestHeaders, TResponseHeaders>;
+  /**
+   * @deprecated Pass `{ schema }` instead.
+   */
+  stateOf<TNewState extends State>(
     schema?: zod.Schema<TNewState>,
+  ): EndpointBuilder<TResponse, TParams, TQuery, TBody, TNewState, TRequestHeaders, TResponseHeaders>;
+  stateOf<TNewState extends State>(
+    optionsOrSchema?: ValidationOptions<TNewState> | zod.Schema<TNewState>,
   ): EndpointBuilder<TResponse, TParams, TQuery, TBody, TNewState, TRequestHeaders, TResponseHeaders> {
-    this.validation.state = schema as any;
+    if (optionsOrSchema && isSchema(optionsOrSchema)) {
+      warnDeprecatedSchemaArgument("stateOf");
+      this.validation.state = optionsOrSchema as any;
+      return this as any;
+    }
+
+    this.validation.state = optionsOrSchema?.schema as any;
     return this as any;
   }
 

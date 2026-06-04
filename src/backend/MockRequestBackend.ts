@@ -11,7 +11,7 @@ import type { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   readonly id = "mock";
 
-  async convertResponse<T>(context: RequestContext, response: ApiResponse, error?: boolean): Promise<ApiResponse<T>> {
+  async convertResponse<T>(_context: RequestContext, response: ApiResponse, _error?: boolean): Promise<ApiResponse<T>> {
     return response;
   }
 
@@ -136,7 +136,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
     };
   }
 
-  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+  getErrorInfo(_error: Error, _response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
 }

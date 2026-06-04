@@ -168,6 +168,11 @@ export default class RequestContext<
         (key) => key.toLowerCase() === "content-type",
       );
       const contentType = contentTypeKey && this.requestConfig.headers[contentTypeKey]?.toString().split(";")[0].trim();
+      const bodyEncoding = this.validation.bodyEncoding ?? "application/json";
+      if (!contentTypeKey && bodyEncoding === "application/x-www-form-urlencoded") {
+        this.requestConfig.headers["Content-Type"] = "application/x-www-form-urlencoded";
+      }
+
       if (contentType === "application/x-www-form-urlencoded") {
         const searchParams = new URLSearchParams();
         for (const key of Object.keys(this.requestConfig.body)) {
@@ -175,6 +180,15 @@ export default class RequestContext<
           searchParams.append(key, value?.toString());
         }
         this.parsedBody = searchParams;
+      } else if (bodyEncoding === "application/x-www-form-urlencoded") {
+        const searchParams = new URLSearchParams();
+        for (const key of Object.keys(this.requestConfig.body)) {
+          const value = (this.requestConfig.body as any)[key];
+          searchParams.append(key, value?.toString());
+        }
+        this.parsedBody = searchParams;
+      } else if (bodyEncoding === "multipart/form-data") {
+        this.parsedBody = Utils.toFormData(this.requestConfig.body);
       } else {
         this.parsedBody = this.requestConfig.body;
       }
@@ -185,6 +199,10 @@ export default class RequestContext<
 
   getParsedBody(): any {
     return this.parsedBody;
+  }
+
+  parseBody(): void {
+    this.parseRequestBody();
   }
 
   updateQuery(newQuery: Partial<TQuery>): this {

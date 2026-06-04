@@ -19,7 +19,7 @@ const createTypeName = (...parts: string[]) => {
   ).replace(/\s/g, "");
 };
 
-const METHOD_COLORS = {
+const _METHOD_COLORS = {
   get: kleur.green,
   post: kleur.blue,
   put: kleur.yellow,
@@ -131,11 +131,15 @@ ${Object.entries(routes)
       }
 
       const bodyTypes = new Set<string>();
+      let bodyEncodingOption: string | undefined;
       if (methodDef.requestBody) {
         // find the schema
         const requestBodyDef = resolveComponent(schema, methodDef.requestBody);
         if (requestBodyDef?.content) {
           for (const mediaType in requestBodyDef.content) {
+            if (mediaType === "multipart/form-data" || mediaType === "application/x-www-form-urlencoded") {
+              bodyEncodingOption = mediaType;
+            }
             const schema = requestBodyDef.content[mediaType].schema;
             if (schema?.$ref) {
               const name = schema.$ref.split("/").pop();
@@ -221,7 +225,9 @@ ${Object.entries(routes)
               .join(" | ")}>()`
           : "",
         responseTypes.size > 0 ? `.responseOf<${Array.from(responseTypes).join(" | ")}>()` : "",
-        bodyTypes.size > 0 ? `.bodyOf<${Array.from(bodyTypes).join(" | ")}>()` : "",
+        bodyTypes.size > 0
+          ? `.bodyOf<${Array.from(bodyTypes).join(" | ")}>${bodyEncodingOption ? `({ encoding: "${bodyEncodingOption}" })` : "()"}`
+          : "",
         queryTypes.size > 0 ? `.queryOf<${Array.from(queryTypes).join(" | ")}>()` : "",
         requestHeaderTypes.size > 0 ? `.requestHeadersOf<${Array.from(requestHeaderTypes).join(" | ")}>()` : "",
         responseHeaderTypes.size > 0 ? `.responseHeadersOf<${Array.from(responseHeaderTypes).join(" | ")}>()` : "",

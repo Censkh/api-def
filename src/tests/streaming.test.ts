@@ -54,7 +54,7 @@ describe("Streaming Response Tests", () => {
         if (line.startsWith("data: ")) {
           try {
             results.push(JSON.parse(line.slice(6)));
-          } catch (e) {
+          } catch (_e) {
             // Ignore parsing errors
           }
         }

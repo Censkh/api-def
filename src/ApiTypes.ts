@@ -10,7 +10,8 @@ export type RawHeaders = Record<string, string | number | boolean | null | undef
 
 export type Params = string;
 export type Query = string | undefined | Record<string, any>;
-export type Body = string | number | Record<string, any>;
+export type Body = string | number | Record<string, any> | FormData;
+export type RequestBodyEncoding = "application/json" | "multipart/form-data" | "application/x-www-form-urlencoded";
 export type State = Record<string, any>;
 
 export interface ApiResponse<T = any> {
@@ -67,7 +68,7 @@ export type RequestConfig<
   : { params: Record<TParams extends Params ? TParams : never, string> }) &
   (TQuery extends undefined ? { query?: never } : { query: TQuery }) &
   (TBody extends undefined ? { body?: never } : { body: TBody }) &
-  ({} extends TState ? { state?: TState } : { state: TState }) &
+  (Record<never, never> extends TState ? { state?: TState } : { state: TState }) &
   (Omit<BaseRequestConfig, "headers"> & {
     headers?: TRequestHeaders & RawHeaders;
   });
@@ -101,19 +102,19 @@ export type ResponseEventResult<R> = BaseEventResult<"respond"> & {
   response: ApiResponse<R>;
 };
 
-export type RetryEventResult<R> = BaseEventResult<"retry">;
+export type RetryEventResult<_R> = BaseEventResult<"retry">;
 
 export type EventResult<R> = ResponseEventResult<R> | RetryEventResult<R>;
 
 export type RequestEventHandler<R> = (
   context: RequestContext<R>,
-) => EventResult<R> | void | Promise<EventResult<R> | void>;
+) => EventResult<R> | undefined | Promise<EventResult<R> | undefined>;
 
 export type RequestEventHandlers<R> = {
   [key in RequestEvent]?: Array<RequestEventHandler<R>>;
 };
 
-export type RequestMiddleware<O = undefined> = {
+export type RequestMiddleware<_O = undefined> = {
   [key in RequestEvent]?: RequestEventHandler<any> | undefined | false;
 };
 

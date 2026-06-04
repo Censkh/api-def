@@ -75,7 +75,7 @@ export const convertToRequestError = (config: RequestErrorConfig): RequestError 
         resultError.message
       }`,
     });
-  } catch (e) {
+  } catch (_e) {
     // ignore
   }
 

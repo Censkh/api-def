@@ -37,8 +37,8 @@ export interface EndpointOptions<
   TBody extends Body | undefined,
   TState extends State = State,
   TPath extends string = string,
-  TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
-  TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  _TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  _TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
 > {
   readonly id: string;
   readonly method: RequestMethod;

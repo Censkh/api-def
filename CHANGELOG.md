@@ -1,6 +1,14 @@
-# (WIP) 0.13.0
+# (WIP) 0.x.0
 
 - add CLI to generate api-def from openapi spec
+
+## 0.14.0
+
+- add native request body encoding options to `.bodyOf`, including multipart form data, indexed multipart arrays, and form URL encoded bodies
+- deprecate passing validation schemas directly to builder methods in favor of `{ schema }` options objects
+
+## 0.13.0
+
 - require Node.js 22 or newer and target ES2020
 - continue supporting browser consumers with ESM and CommonJS builds
 - fix ESM build output to include explicit `.js` import extensions

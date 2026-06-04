@@ -101,7 +101,8 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const body = context.getParsedBody();
 
-    const bodyJsonify = body !== null && typeof body === "object" && !Utils.isFormData(body);
+    const bodyJsonify =
+      body !== null && typeof body === "object" && !Utils.isFormData(body) && !(body instanceof URLSearchParams);
 
     const headers = Utils.assign(
       {
@@ -163,7 +164,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     };
   }
 
-  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+  getErrorInfo(_error: Error, _response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
 }

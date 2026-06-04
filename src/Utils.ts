@@ -80,5 +80,71 @@ export const randInt = (min: number, max: number): number => {
 };
 
 export const isFormData = (value: any): value is FormData => {
-  return value instanceof FormData;
+  return typeof FormData !== "undefined" && value instanceof FormData;
+};
+
+const isPlainObject = (value: any): value is Record<string, any> => {
+  return Object.prototype.toString.call(value) === "[object Object]";
+};
+
+const isBlob = (value: any): value is Blob => {
+  return typeof Blob !== "undefined" && value instanceof Blob;
+};
+
+const isArrayBuffer = (value: any): value is ArrayBuffer => {
+  return typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer;
+};
+
+const isArrayBufferView = (value: any): value is ArrayBufferView => {
+  return typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView(value);
+};
+
+const toFormDataValue = (value: any): Blob | string => {
+  if (isBlob(value)) {
+    return value;
+  }
+
+  if ((isArrayBuffer(value) || isArrayBufferView(value)) && typeof Blob !== "undefined") {
+    return new Blob([value as BlobPart]);
+  }
+
+  return String(value);
+};
+
+export const toFormData = (body: any): FormData => {
+  if (isFormData(body)) {
+    return body;
+  }
+
+  const formData = new FormData();
+
+  const appendValue = (key: string, value: any): void => {
+    if (value === undefined || value === null) {
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      for (const [index, item] of value.entries()) {
+        appendValue(`${key}.${index}`, item);
+      }
+      return;
+    }
+
+    if (isPlainObject(value) && !isBlob(value)) {
+      for (const nestedKey of Object.keys(value)) {
+        appendValue(`${key}.${nestedKey}`, value[nestedKey]);
+      }
+      return;
+    }
+
+    formData.append(key, toFormDataValue(value));
+  };
+
+  if (isPlainObject(body)) {
+    for (const key of Object.keys(body)) {
+      appendValue(key, body[key]);
+    }
+  }
+
+  return formData;
 };

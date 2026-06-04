@@ -116,7 +116,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
     };
   }
 
-  getErrorInfo(error: Error, response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
+  getErrorInfo(_error: Error, _response: ApiResponse | undefined | null): RequestBackendErrorInfo | undefined {
     return undefined;
   }
 }

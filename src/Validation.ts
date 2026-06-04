@@ -1,5 +1,13 @@
 import type * as zod from "zod";
-import type { Body, Params, Query, State } from "./ApiTypes";
+import type { Body, Params, Query, RequestBodyEncoding, State } from "./ApiTypes";
+
+export interface ValidationOptions<TValue> {
+  schema?: zod.Schema<TValue>;
+}
+
+export interface BodyValidationOptions<TBody extends Body> extends ValidationOptions<TBody> {
+  encoding?: RequestBodyEncoding;
+}
 
 export interface Validation<
   TResponse = any,
@@ -11,6 +19,7 @@ export interface Validation<
   query?: zod.Schema<TQuery>;
   params?: zod.Schema<TParams>;
   body?: zod.Schema<TBody>;
+  bodyEncoding?: RequestBodyEncoding;
   response?: zod.Schema<TResponse>;
   state?: zod.Schema<TState>;
 }
