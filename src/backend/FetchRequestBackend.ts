@@ -102,7 +102,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const body = context.getParsedBody();
 
     const bodyJsonify =
-      body !== null && typeof body === "object" && !Utils.isFormData(body) && !(body instanceof URLSearchParams);
+      body !== null && typeof body === "object" && !Utils.isFormDataLike(body) && !(body instanceof URLSearchParams);
+
+    if (context.validation.bodyEncoding === "multipart/form-data" && Utils.isFormDataLike(body)) {
+      Utils.assertFetchCompatibleFormData(body);
+    }
 
     const headers = Utils.assign(
       {

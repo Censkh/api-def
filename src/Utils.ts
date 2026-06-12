@@ -83,8 +83,17 @@ export const isFormData = (value: any): value is FormData => {
   return typeof FormData !== "undefined" && value instanceof FormData;
 };
 
+export const isFormDataLike = (value: any): value is FormData => {
+  return value !== null && typeof value === "object" && typeof value.append === "function";
+};
+
 const isPlainObject = (value: any): value is Record<string, any> => {
-  return Object.prototype.toString.call(value) === "[object Object]";
+  if (Object.prototype.toString.call(value) !== "[object Object]") {
+    return false;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 };
 
 const isBlob = (value: any): value is Blob => {
@@ -112,8 +121,16 @@ const toFormDataValue = (value: any): Blob | string => {
 };
 
 export const toFormData = (body: any): FormData => {
-  if (isFormData(body)) {
+  if (isFormDataLike(body)) {
     return body;
+  }
+
+  if (!isPlainObject(body)) {
+    throw new Error("[api-def] multipart/form-data body must be a plain object or FormData");
+  }
+
+  if (typeof FormData === "undefined") {
+    throw new Error("[api-def] multipart/form-data requires a FormData implementation");
   }
 
   const formData = new FormData();
@@ -140,11 +157,35 @@ export const toFormData = (body: any): FormData => {
     formData.append(key, toFormDataValue(value));
   };
 
-  if (isPlainObject(body)) {
-    for (const key of Object.keys(body)) {
-      appendValue(key, body[key]);
-    }
+  for (const key of Object.keys(body)) {
+    appendValue(key, body[key]);
   }
 
   return formData;
+};
+
+export const assertFetchCompatibleFormData = (body: FormData): void => {
+  if (typeof Request === "undefined") {
+    throw new Error("[api-def] multipart/form-data requires a fetch-compatible Request implementation");
+  }
+
+  let request: Request;
+  try {
+    request = new Request("https://api-def.local", {
+      method: "POST",
+      body: body as any,
+    });
+  } catch (error) {
+    throw Object.assign(
+      new Error("[api-def] multipart/form-data requires a fetch-compatible FormData implementation"),
+      {
+        cause: error,
+      },
+    );
+  }
+
+  const contentType = request.headers.get("content-type");
+  if (!contentType?.toLowerCase().startsWith("multipart/form-data")) {
+    throw new Error("[api-def] multipart/form-data requires a fetch-compatible FormData implementation");
+  }
 };

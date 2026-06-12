@@ -1,4 +1,4 @@
-import { Blob, FormData } from "formdata-node";
+import { Blob as PolyfillBlob, FormData as PolyfillFormData } from "formdata-node";
 import { Api } from "../Api";
 import FetchRequestBackend from "../backend/FetchRequestBackend";
 import { postConfiguredFormUrlEncoded, postFormUrlEncoded, postMultipartFormData } from "./mock/MockApi";
@@ -6,8 +6,15 @@ import { testAllBackends } from "./TestHelpers";
 
 const installFormDataPolyfill = (): void => {
   Object.assign(globalThis, {
-    Blob,
-    FormData,
+    Blob: PolyfillBlob,
+    FormData: PolyfillFormData,
+  });
+};
+
+const restoreFormDataGlobals = (formData: typeof globalThis.FormData, blob: typeof globalThis.Blob): void => {
+  Object.assign(globalThis, {
+    Blob: blob,
+    FormData: formData,
   });
 };
 
@@ -37,30 +44,34 @@ it("correctly parses body for configured form url encoded request", async () => 
 });
 
 it("correctly parses body for configured multipart form data request", async () => {
+  const originalFormData = globalThis.FormData;
+  const originalBlob = globalThis.Blob;
   installFormDataPolyfill();
 
-  const res = await postMultipartFormData.submit({
-    body: {
-      file: new Blob(["hello"]) as unknown as globalThis.Blob,
-      processingOptions: {
-        keepAfterProcessing: true,
+  try {
+    const res = await postMultipartFormData.submit({
+      body: {
+        file: new PolyfillBlob(["hello"]) as unknown as globalThis.Blob,
+        processingOptions: {
+          keepAfterProcessing: true,
+        },
+        bytes: new Uint8Array([1, 2, 3]),
       },
-      bytes: new Uint8Array([1, 2, 3]),
-    },
-  });
+    });
 
-  expect(res.data).toEqual([
-    ["file", "File"],
-    ["processingOptions.keepAfterProcessing", "true"],
-    ["bytes", "File"],
-  ]);
+    expect(res.data).toEqual([
+      ["file", "File"],
+      ["processingOptions.keepAfterProcessing", "true"],
+      ["bytes", "File"],
+    ]);
+  } finally {
+    restoreFormDataGlobals(originalFormData, originalBlob);
+  }
 });
 
 testAllBackends(
   "passes existing FormData through unchanged without setting Content-Type",
   async ({ backendName, requestBackend, getRequest }) => {
-    installFormDataPolyfill();
-
     const api = new Api({
       baseUrl: "example.com",
       name: "Example API",
@@ -103,8 +114,6 @@ testAllBackends(
 testAllBackends(
   "converts plain objects to FormData for multipart requests",
   async ({ backendName, requestBackend, getRequest }) => {
-    installFormDataPolyfill();
-
     const api = new Api({
       baseUrl: "example.com",
       name: "Example API",
@@ -131,7 +140,7 @@ testAllBackends(
 
     await endpoint.submit({
       body: {
-        file: new Blob(["hello"]) as unknown as globalThis.Blob,
+        file: new Blob(["hello"]),
         processingOptions: {
           keepAfterProcessing: true,
         },
@@ -144,14 +153,11 @@ testAllBackends(
 
     expect(body).toBeInstanceOf(FormData);
     expect(
-      Array.from(body.entries()).map(([key, value]) => [
-        key,
-        typeof value === "string" ? value : value.constructor.name,
-      ]),
+      Array.from(body.entries()).map(([key, value]) => [key, typeof value === "string" ? value : "binary"]),
     ).toEqual([
-      ["file", "File"],
+      ["file", "binary"],
       ["processingOptions.keepAfterProcessing", "true"],
-      ["bytes", "File"],
+      ["bytes", "binary"],
     ]);
     expect(request.headers["Content-Type"]).toBeUndefined();
     expect(request.headers["content-type"]).toBeUndefined();
@@ -161,8 +167,6 @@ testAllBackends(
 testAllBackends(
   "serializes multipart arrays with indexed dot keys",
   async ({ backendName, requestBackend, getRequest }) => {
-    installFormDataPolyfill();
-
     const api = new Api({
       baseUrl: "example.com",
       name: "Example API",
@@ -292,7 +296,7 @@ testAllBackends("sends plain object bodies as JSON by default", async ({ backend
   }
 });
 
-it("does not silently send text/plain when ambient FormData is incompatible with fetch", async () => {
+it("rejects incompatible ambient FormData before calling fetch", async () => {
   const originalFormData = globalThis.FormData;
   const originalBlob = globalThis.Blob;
   const calls: Array<[string, RequestInit]> = [];
@@ -310,7 +314,7 @@ it("does not silently send text/plain when ambient FormData is incompatible with
   }
 
   Object.assign(globalThis, {
-    Blob,
+    Blob: PolyfillBlob,
     FormData: ReactNativeFormData as any,
   });
 
@@ -356,34 +360,23 @@ it("does not silently send text/plain when ambient FormData is incompatible with
         path: "/upload",
       });
 
-    await uploadPart.submit({
-      body: {
-        totalParts: 2,
-        uploadedParts: [
-          {
-            partNumber: 1,
-            etag: "etag-1",
-          },
-        ],
-        data: new Blob(["hello"], { type: "text/plain" }) as unknown as globalThis.Blob,
-      },
-    });
+    await expect(
+      uploadPart.submit({
+        body: {
+          totalParts: 2,
+          uploadedParts: [
+            {
+              partNumber: 1,
+              etag: "etag-1",
+            },
+          ],
+          data: new PolyfillBlob(["hello"], { type: "text/plain" }) as unknown as globalThis.Blob,
+        },
+      }),
+    ).rejects.toThrow("multipart/form-data requires a fetch-compatible FormData implementation");
 
-    const [, request] = calls[0];
-    expect(calls).toHaveLength(1);
-    expect(request.headers).not.toMatchObject({
-      "Content-Type": expect.stringContaining("text/plain"),
-    });
-    expect((request.body as any).fields.map(([key]: [string, unknown]) => key)).toEqual([
-      "totalParts",
-      "uploadedParts.0.partNumber",
-      "uploadedParts.0.etag",
-      "data",
-    ]);
+    expect(calls).toHaveLength(0);
   } finally {
-    Object.assign(globalThis, {
-      Blob: originalBlob,
-      FormData: originalFormData,
-    });
+    restoreFormDataGlobals(originalFormData, originalBlob);
   }
 });
