@@ -1,5 +1,6 @@
 import { Blob, FormData } from "formdata-node";
 import { Api } from "../Api";
+import FetchRequestBackend from "../backend/FetchRequestBackend";
 import { postConfiguredFormUrlEncoded, postFormUrlEncoded, postMultipartFormData } from "./mock/MockApi";
 import { testAllBackends } from "./TestHelpers";
 
@@ -288,5 +289,101 @@ testAllBackends("sends plain object bodies as JSON by default", async ({ backend
   } else {
     expect(request.data).toEqual({ test: 123 });
     expect(request.headers["Content-Type"]).toBeUndefined();
+  }
+});
+
+it("does not silently send text/plain when ambient FormData is incompatible with fetch", async () => {
+  const originalFormData = globalThis.FormData;
+  const originalBlob = globalThis.Blob;
+  const calls: Array<[string, RequestInit]> = [];
+
+  class ReactNativeFormData {
+    readonly fields: Array<[string, unknown]> = [];
+
+    append(key: string, value: unknown): void {
+      this.fields.push([key, value]);
+    }
+
+    toString(): string {
+      return "[object FormData]";
+    }
+  }
+
+  Object.assign(globalThis, {
+    Blob,
+    FormData: ReactNativeFormData as any,
+  });
+
+  const fetch = async (url: string, init?: RequestInit) => {
+    const headers = { ...((init?.headers as Record<string, string>) ?? {}) };
+    if (init?.body instanceof ReactNativeFormData) {
+      headers["Content-Type"] = "text/plain;charset=UTF-8";
+    }
+
+    calls.push([url, { ...init, headers }]);
+
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  try {
+    const api = new Api({
+      baseUrl: "example.com",
+      name: "Example API",
+      requestBackend: new FetchRequestBackend(fetch as any),
+    });
+
+    const uploadPart = api
+      .endpoint()
+      .bodyOf<{
+        totalParts: number;
+        uploadedParts: Array<{
+          partNumber: number;
+          etag: string;
+        }>;
+        data: globalThis.Blob;
+      }>({
+        encoding: "multipart/form-data",
+      })
+      .responseOf<{ ok: boolean }>()
+      .build({
+        id: "uploadPart",
+        method: "post",
+        path: "/upload",
+      });
+
+    await uploadPart.submit({
+      body: {
+        totalParts: 2,
+        uploadedParts: [
+          {
+            partNumber: 1,
+            etag: "etag-1",
+          },
+        ],
+        data: new Blob(["hello"], { type: "text/plain" }) as unknown as globalThis.Blob,
+      },
+    });
+
+    const [, request] = calls[0];
+    expect(calls).toHaveLength(1);
+    expect(request.headers).not.toMatchObject({
+      "Content-Type": expect.stringContaining("text/plain"),
+    });
+    expect((request.body as any).fields.map(([key]: [string, unknown]) => key)).toEqual([
+      "totalParts",
+      "uploadedParts.0.partNumber",
+      "uploadedParts.0.etag",
+      "data",
+    ]);
+  } finally {
+    Object.assign(globalThis, {
+      Blob: originalBlob,
+      FormData: originalFormData,
+    });
   }
 });
