@@ -34,5 +34,6 @@ export const ResponseType = {
   TEXT: "text",
   ARRAY_BUFFER: "arraybuffer",
   STREAM: "stream",
+  WEBSOCKET: "websocket",
 } as const;
 export type ResponseType = EnumOf<typeof ResponseType>;

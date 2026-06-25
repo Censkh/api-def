@@ -91,6 +91,10 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
   }
 
   makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
+    if (context.responseType === "websocket") {
+      throw new Error("[api-def] WebSocket responseType is only supported by FetchRequestBackend");
+    }
+
     const { requestConfig } = context;
 
     const url = context.requestUrl;

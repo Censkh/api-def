@@ -120,6 +120,11 @@ const toFormDataValue = (value: any): Blob | string => {
   return String(value);
 };
 
+const getBlobFileName = (value: Blob): string => {
+  const name = (value as any).name;
+  return typeof name === "string" && name ? name : "blob";
+};
+
 export const toFormData = (body: any): FormData => {
   if (isFormDataLike(body)) {
     return body;
@@ -154,7 +159,12 @@ export const toFormData = (body: any): FormData => {
       return;
     }
 
-    formData.append(key, toFormDataValue(value));
+    const formValue = toFormDataValue(value);
+    if (isBlob(formValue)) {
+      formData.append(key, formValue, getBlobFileName(formValue));
+    } else {
+      formData.append(key, formValue);
+    }
   };
 
   for (const key of Object.keys(body)) {

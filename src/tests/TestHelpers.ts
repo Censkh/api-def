@@ -12,8 +12,8 @@ export interface TestAllBackendsOptions {
 export const testAllBackends = (name: string, testFn: (options: TestAllBackendsOptions) => Promise<void>): void => {
   it(`${name} using fetch backend`, async () => {
     let request: any;
-    const fetch = async (_url: string, options?: RequestInit) => {
-      request = options;
+    const fetch = async (input: RequestInfo | URL, _options?: RequestInit) => {
+      request = input;
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: {

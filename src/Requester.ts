@@ -153,7 +153,10 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       const response = await promise;
       const parsedResponse = (await parseResponse<R>(context, response))!;
 
-      if (!isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)) {
+      if (
+        !(context.responseType === "websocket" && parsedResponse.status === 101) &&
+        !isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)
+      ) {
         throw convertToRequestError({
           error: new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,

@@ -2,6 +2,10 @@
 
 - add CLI to generate api-def from openapi spec
 
+## 0.15.0
+
+- add fetch-backed websocket upgrade responses via `responseType: "websocket"`
+
 ## 0.14.0
 
 - add native request body encoding options to `.bodyOf`, including multipart form data, indexed multipart arrays, and form URL encoded bodies

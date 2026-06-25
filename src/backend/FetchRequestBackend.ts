@@ -65,6 +65,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
         data = JSON.parse(text);
       } else if (responseType === "stream") {
         data = response.body;
+      } else if (responseType === "websocket") {
+        data = (response as any).webSocket;
+        if (!data) {
+          throw new Error("[api-def] WebSocket upgrade response did not include a webSocket");
+        }
       } else {
         data = await response.text();
       }
@@ -104,14 +109,12 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     const bodyJsonify =
       body !== null && typeof body === "object" && !Utils.isFormDataLike(body) && !(body instanceof URLSearchParams);
 
-    if (context.validation.bodyEncoding === "multipart/form-data" && Utils.isFormDataLike(body)) {
-      Utils.assertFetchCompatibleFormData(body);
-    }
-
     const headers = Utils.assign(
       {
         // logic from axios
         "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : undefined,
+        Connection: context.responseType === "websocket" ? "Upgrade" : undefined,
+        Upgrade: context.responseType === "websocket" ? "websocket" : undefined,
       },
       requestConfig.headers,
     );
@@ -146,9 +149,18 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       console.log(`[api-def] Fetching '${url.href}' with options`, JSON.stringify(fetchOptions, null, 2));
     }
 
-    const promise: Promise<Response> = this.fetch(url.href, fetchOptions).then((response) => {
+    const request = new Request(url.href, fetchOptions);
+
+    if (context.validation.bodyEncoding === "multipart/form-data" && Utils.isFormDataLike(body)) {
+      const contentType = request.headers.get("content-type");
+      if (!contentType?.toLowerCase().startsWith("multipart/form-data")) {
+        throw new Error("[api-def] multipart/form-data requires a fetch-compatible FormData implementation");
+      }
+    }
+
+    const promise: Promise<Response> = this.fetch(request).then((response) => {
       responded = true;
-      if (!response.ok) {
+      if (!response.ok && !(context.responseType === "websocket" && response.status === 101)) {
         const error = new FetchError("Fetch failed");
         error.response = response;
         throw error;

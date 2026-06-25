@@ -18,6 +18,10 @@ const restoreFormDataGlobals = (formData: typeof globalThis.FormData, blob: type
   });
 };
 
+const formDataEntries = (formData: FormData): Array<[string, string]> => {
+  return Array.from(formData.entries()).map(([key, value]) => [key, typeof value === "string" ? value : "binary"]);
+};
+
 it("correctly parses body for form url encoded request", async () => {
   const res = await postFormUrlEncoded.submit({
     body: {
@@ -102,12 +106,14 @@ testAllBackends(
 
     const request = getRequest();
     if (backendName === "fetch") {
-      expect(request.body).toBe(body);
+      expect(request).toBeInstanceOf(Request);
+      expect(formDataEntries(await (request as Request).clone().formData())).toEqual(formDataEntries(body));
+      expect((request as Request).headers.get("content-type")).toContain("multipart/form-data");
     } else {
       expect(request.data).toBe(body);
+      expect(request.headers["Content-Type"]).toBeUndefined();
+      expect(request.headers["content-type"]).toBeUndefined();
     }
-    expect(request.headers["Content-Type"]).toBeUndefined();
-    expect(request.headers["content-type"]).toBeUndefined();
   },
 );
 
@@ -149,7 +155,7 @@ testAllBackends(
     });
 
     const request = getRequest();
-    const body = (backendName === "fetch" ? request.body : request.data) as FormData;
+    const body = (backendName === "fetch" ? await (request as Request).clone().formData() : request.data) as FormData;
 
     expect(body).toBeInstanceOf(FormData);
     expect(
@@ -159,8 +165,12 @@ testAllBackends(
       ["processingOptions.keepAfterProcessing", "true"],
       ["bytes", "binary"],
     ]);
-    expect(request.headers["Content-Type"]).toBeUndefined();
-    expect(request.headers["content-type"]).toBeUndefined();
+    if (backendName === "fetch") {
+      expect((request as Request).headers.get("content-type")).toContain("multipart/form-data");
+    } else {
+      expect(request.headers["Content-Type"]).toBeUndefined();
+      expect(request.headers["content-type"]).toBeUndefined();
+    }
   },
 );
 
@@ -208,7 +218,7 @@ testAllBackends(
     });
 
     const request = getRequest();
-    const body = (backendName === "fetch" ? request.body : request.data) as FormData;
+    const body = (backendName === "fetch" ? await (request as Request).clone().formData() : request.data) as FormData;
 
     expect(Array.from(body.entries())).toEqual([
       ["uploadedParts.0.partNumber", "1"],
@@ -253,11 +263,16 @@ testAllBackends(
     });
 
     const request = getRequest();
-    const body = backendName === "fetch" ? request.body : request.data;
+    const body = backendName === "fetch" ? await (request as Request).clone().text() : request.data;
 
-    expect(body).toBeInstanceOf(URLSearchParams);
-    expect(body.toString()).toBe("test=123&b=test");
-    expect(request.headers["Content-Type"]).toBe("application/x-www-form-urlencoded");
+    if (backendName === "fetch") {
+      expect(body).toBe("test=123&b=test");
+      expect((request as Request).headers.get("content-type")).toBe("application/x-www-form-urlencoded");
+    } else {
+      expect(body).toBeInstanceOf(URLSearchParams);
+      expect(body.toString()).toBe("test=123&b=test");
+      expect(request.headers["Content-Type"]).toBe("application/x-www-form-urlencoded");
+    }
   },
 );
 
@@ -288,8 +303,8 @@ testAllBackends("sends plain object bodies as JSON by default", async ({ backend
 
   const request = getRequest();
   if (backendName === "fetch") {
-    expect(request.body).toBe(JSON.stringify({ test: 123 }));
-    expect(request.headers["Content-Type"]).toBe("application/json;charset=utf-8");
+    expect(await (request as Request).clone().text()).toBe(JSON.stringify({ test: 123 }));
+    expect((request as Request).headers.get("content-type")).toBe("application/json;charset=utf-8");
   } else {
     expect(request.data).toEqual({ test: 123 });
     expect(request.headers["Content-Type"]).toBeUndefined();
@@ -379,4 +394,60 @@ it("rejects incompatible ambient FormData before calling fetch", async () => {
   } finally {
     restoreFormDataGlobals(originalFormData, originalBlob);
   }
+});
+
+test("multipart body preserves number fields and blob fields", async () => {
+  const fetchMock = jest.fn(async (url: string, init?: RequestInit) => {
+    const request = new Request(url, init);
+    const form = await request.formData();
+
+    expect(form.get("totalParts")).toBe("2");
+    expect(form.get("uploadedParts")).toBeNull();
+
+    const data = form.get("data");
+    expect(data).toBeInstanceOf(Blob);
+    expect((data as File).name).toBe("blob");
+    expect(await (data as Blob).text()).toBe("hello");
+
+    const namedFile = form.get("namedFile");
+    expect(namedFile).toBeInstanceOf(Blob);
+    expect((namedFile as File).name).toBe("custom.txt");
+    expect(await (namedFile as Blob).text()).toBe("named");
+
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  });
+
+  const api = new Api({
+    baseUrl: "http://api.test",
+    name: "test",
+    requestBackend: new FetchRequestBackend(fetchMock as any),
+  });
+
+  const uploadPart = api
+    .endpoint()
+    .bodyOf<{
+      totalParts: number;
+      uploadedParts: unknown[];
+      data: Blob;
+      namedFile: File;
+    }>({ encoding: "multipart/form-data" })
+    .responseOf<{ ok: boolean }>()
+    .build({
+      id: "uploadPart",
+      method: "post",
+      path: "/upload",
+      responseType: "json",
+    });
+
+  await uploadPart.submit({
+    body: {
+      totalParts: 2,
+      uploadedParts: [],
+      data: new Blob(["hello"], { type: "image/jpeg" }),
+      namedFile: new File(["named"], "custom.txt", { type: "text/plain" }),
+    },
+  });
 });

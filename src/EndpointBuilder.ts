@@ -9,9 +9,11 @@ type DefaultResponseOf<T extends ResponseType | undefined> = T extends "text"
   ? string
   : T extends "arraybuffer"
     ? ArrayBuffer
-    : "stream" extends T
+    : T extends "stream"
       ? AsyncIterable<Uint8Array>
-      : unknown;
+      : T extends "websocket"
+        ? WebSocket
+        : unknown;
 
 const isSchema = <TValue>(
   value: BodyValidationOptions<any> | ValidationOptions<TValue> | zod.Schema<TValue>,
