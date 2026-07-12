@@ -166,6 +166,10 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
 
     const request = new Request(url.href, fetchOptions);
 
+    if (requestConfig.credentials !== undefined && request.credentials !== requestConfig.credentials) {
+      Object.defineProperty(request, "credentials", { value: requestConfig.credentials });
+    }
+
     if (context.validation.bodyEncoding === "multipart/form-data" && Utils.isFormDataLike(body)) {
       const contentType = request.headers.get("content-type");
       if (!contentType?.toLowerCase().startsWith("multipart/form-data")) {
@@ -173,7 +177,10 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
       }
     }
 
-    const promise: Promise<Response> = this.fetch(request).then((response) => {
+    const promise: Promise<Response> = this.fetch(
+      request,
+      requestConfig.credentials === undefined ? undefined : { credentials: requestConfig.credentials },
+    ).then((response) => {
       responded = true;
       if (!response.ok) {
         const error = new FetchError("Fetch failed");

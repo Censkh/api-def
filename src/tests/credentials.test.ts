@@ -3,8 +3,10 @@ import FetchRequestBackend from "../backend/FetchRequestBackend";
 
 it.each(["omit", "same-origin", "include"] as const)("passes %s credentials to fetch", async (credentials) => {
   let request: Request | undefined;
-  const fetch = async (input: RequestInfo | URL): Promise<Response> => {
+  let fetchOptions: RequestInit | undefined;
+  const fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     request = input as Request;
+    fetchOptions = init;
     return new Response(JSON.stringify({ ok: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -26,4 +28,5 @@ it.each(["omit", "same-origin", "include"] as const)("passes %s credentials to f
   await endpoint.submit({ credentials });
 
   expect(request?.credentials).toBe(credentials);
+  expect(fetchOptions?.credentials).toBe(credentials);
 });
