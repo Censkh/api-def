@@ -21,7 +21,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install --no-package-lock
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
       - run: npm run build --if-present
       - run: npm test
 
@@ -34,10 +36,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-      - run: npm install --no-package-lock
-      - run: npm run build --if-present
-      - run: npm i -g bun
-      - run: bun --version
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build --if-present
       - run: bun test
 
   build-docs:
@@ -48,11 +50,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: npm
-          cache-dependency-path: website/package-lock.json
-      - run: npm install --no-package-lock
-      - run: npm ci --prefix website
-      - run: npm run docs:build
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun install --cwd website --frozen-lockfile
+      - run: bun run docs:build
 
   deploy-docs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -66,11 +68,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: npm
-          cache-dependency-path: website/package-lock.json
-      - run: npm install --no-package-lock
-      - run: npm ci --prefix website
-      - run: npm run docs:build
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun install --cwd website --frozen-lockfile
+      - run: bun run docs:build
       - name: Publish documentation
         uses: peaceiris/actions-gh-pages@v4
         with:
