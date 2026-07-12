@@ -226,16 +226,15 @@ export default class Endpoint<
     return Requester.submit(this, config, mock ? this.mocking : null);
   }
 
-  resolveUrl(options: EndpointResolveUrlOptions<TParams, TQuery>): URL {
-    const { query } = options;
-    const url = this.api.resolveUrl({
-      path: this.resolvePath(options),
-      baseUrl: options.baseUrl,
-    });
-    if (query) {
-      url.search = new URLSearchParams(query as any).toString();
-    }
-    return url;
+  async resolveUrl(options: EndpointResolveUrlOptions<TParams, TQuery>): Promise<URL> {
+    return Requester.resolveUrl(
+      this,
+      {
+        params: options.params,
+        query: options.query,
+      } as any,
+      options.baseUrl,
+    );
   }
 
   resolvePath(options: EndpointResolvePathOptions<TParams>): string {

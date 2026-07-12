@@ -145,6 +145,29 @@ it("endpoint-level middleware is executed after API-level middleware", async () 
   expect(res.url).toEqual("https://example.com/test-middleware?test=abc&endpoint=xyz");
 });
 
+it("resolveUrl applies middleware base URL rewrites", async () => {
+  const api = new Api({
+    baseUrl: "https://example.com",
+    name: "Resolve URL API",
+    middleware: [
+      {
+        beforeSend: (context) => {
+          context.updateBaseUrl("https://rewritten.example.com");
+        },
+      },
+    ],
+  });
+
+  const endpoint = api.endpoint().build({
+    name: "Resolve URL",
+    id: "resolveUrl",
+    method: RequestMethod.GET,
+    path: "/users",
+  });
+
+  expect((await endpoint.resolveUrl({})).href).toBe("https://rewritten.example.com/users");
+});
+
 it("api get/post accept URL object and full URL string", async () => {
   const requestBackend = {
     id: "test",

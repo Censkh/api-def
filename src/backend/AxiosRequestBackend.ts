@@ -4,6 +4,12 @@ import { inferResponseType } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
 import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import {
+  getGlobalWebSocketConstructor,
+  makeWebSocketRequest,
+  type WebSocketConstructor,
+  type WebSocketResponse,
+} from "./WebSocketRequest";
 
 let axios: AxiosStatic;
 
@@ -36,34 +42,54 @@ const getCacheHeaders = (browserCache?: RequestCache): Record<string, string> =>
   }
 };
 
-export default class AxiosRequestBackend implements RequestBackend<AxiosResponse> {
-  readonly id = "axios";
+type AxiosBackendResponse = AxiosResponse | WebSocketResponse;
 
-  constructor(axiosLibrary: any) {
+export default class AxiosRequestBackend implements RequestBackend<AxiosBackendResponse> {
+  readonly id = "axios";
+  webSocketConstructor: WebSocketConstructor | undefined = getGlobalWebSocketConstructor();
+
+  constructor(axiosLibrary: any, webSocketConstructor?: WebSocketConstructor) {
     axios = axiosLibrary;
+    if (webSocketConstructor !== undefined) {
+      this.webSocketConstructor = webSocketConstructor;
+    }
   }
 
-  async extractResponseFromError(error: Error): Promise<AxiosResponse | null | undefined> {
+  async extractResponseFromError(error: Error): Promise<AxiosBackendResponse | null | undefined> {
     if (isAxiosError(error)) {
       return error.response ? error.response : null;
     }
     return undefined;
   }
 
-  async convertResponse<T>(context: RequestContext, response: AxiosResponse): Promise<ConvertedApiResponse<T>> {
-    const contentType = response.headers["content-type"];
+  async convertResponse<T>(context: RequestContext, response: AxiosBackendResponse): Promise<ConvertedApiResponse<T>> {
+    if (context.responseType === "websocket") {
+      const webSocketResponse = response as WebSocketResponse;
+      return {
+        method: context.method,
+        url: webSocketResponse.url,
+        data: webSocketResponse.webSocket as any,
+        headers: webSocketResponse.headers as any,
+        status: webSocketResponse.status,
+        state: context.requestConfig.state,
+        stats: context.stats,
+      };
+    }
+
+    const axiosResponse = response as AxiosResponse;
+    const contentType = axiosResponse.headers["content-type"];
     const responseType =
       context.responseType ?? inferResponseType(contentType == null ? contentType : String(contentType));
 
     let data: any;
     if (responseType === "stream") {
       // For streaming responses, we create an async iterator from the response data
-      if (!response.data) {
+      if (!axiosResponse.data) {
         throw new Error("[api-def] Response data is null for streaming response");
       }
       data = {
         async *[Symbol.asyncIterator]() {
-          const stream = response.data;
+          const stream = axiosResponse.data;
           if (stream[Symbol.asyncIterator]) {
             yield* stream;
           } else if (stream.on) {
@@ -75,24 +101,24 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosResponse
         },
       };
     } else {
-      data = response.data;
+      data = axiosResponse.data;
     }
 
     return {
       method: context.method,
-      url: response.request.res?.responseUrl ?? response.request?._redirectable?._currentUrl,
+      url: axiosResponse.request.res?.responseUrl ?? axiosResponse.request?._redirectable?._currentUrl,
       data: data,
-      headers: response.headers as any,
-      status: response.status,
+      headers: axiosResponse.headers as any,
+      status: axiosResponse.status,
       state: context.requestConfig.state,
-      __lowercaseHeaders: (response as any)._lowerCaseResponseHeaders,
+      __lowercaseHeaders: (axiosResponse as any)._lowerCaseResponseHeaders,
       stats: context.stats,
     };
   }
 
-  makeRequest(context: RequestContext): RequestOperation<AxiosResponse> {
+  makeRequest(context: RequestContext): RequestOperation<AxiosBackendResponse> {
     if (context.responseType === "websocket") {
-      throw new Error("[api-def] WebSocket responseType is only supported by FetchRequestBackend");
+      return makeWebSocketRequest(context, this.webSocketConstructor);
     }
 
     const { requestConfig } = context;

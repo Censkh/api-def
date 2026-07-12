@@ -1,10 +1,16 @@
-# (WIP) 0.x.0
+## (WIP) 0.x.0
 
 - add CLI to generate api-def from openapi spec
 
 ## 0.15.0
 
-- add fetch-backed websocket upgrade responses via `responseType: "websocket"`
+### Breaking Changes
+
+- `Api.resolveUrl` and `Endpoint.resolveUrl` are now asynchronous and return `Promise<URL>` so middleware can rewrite resolved URLs
+
+### Changes
+
+- add WebSocket constructor responses via `responseType: "websocket"`
 
 ## 0.14.0
 

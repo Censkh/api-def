@@ -24,6 +24,33 @@ const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
 const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
+export const resolveUrl = async <
+  TResponse,
+  TParams extends Params | undefined,
+  TQuery extends Query | undefined,
+  TBody extends Body | undefined,
+  TState extends State,
+>(
+  host: RequestHost,
+  config: RequestConfig<TParams, TQuery, TBody, TState>,
+  baseUrl?: string,
+): Promise<URL> => {
+  const context = new RequestContext<TResponse, TParams, TQuery, TBody, TState>(
+    host.getRequestBackend(),
+    host,
+    host.computeConfig(config),
+    host.path,
+    null,
+  );
+
+  if (baseUrl !== undefined) {
+    context.updateBaseUrl(baseUrl);
+  }
+
+  await context.triggerEvent(RequestEvent.BEFORE_SEND);
+  return context.requestUrl;
+};
+
 export const submit = async <
   TResponse,
   TParams extends Params | undefined,

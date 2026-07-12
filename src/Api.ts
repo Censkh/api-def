@@ -12,7 +12,7 @@ import type {
   RequestMiddleware,
   State,
 } from "./ApiTypes";
-import { type ResolveUrlOptions, resolveUrl } from "./ApiUtils";
+import type { ResolveUrlOptions } from "./ApiUtils";
 import FetchRequestBackend from "./backend/FetchRequestBackend";
 import type RequestBackend from "./backend/RequestBackend";
 import type Endpoint from "./Endpoint";
@@ -207,10 +207,12 @@ export class Api implements ApiInfo {
   public delete = this.hotRequest(RequestMethod.DELETE);
   public patch = this.hotRequest(RequestMethod.PATCH);
 
-  resolveUrl(options: ApiResolveUrlOptions): URL {
-    return resolveUrl({
-      baseUrl: options.baseUrl ?? this.baseUrl,
-      path: options.path,
-    });
+  async resolveUrl(options: ApiResolveUrlOptions): Promise<URL> {
+    const host = new HotRequestHost(
+      this,
+      options.path instanceof URL ? options.path.href : options.path,
+      RequestMethod.GET,
+    );
+    return Requester.resolveUrl(host, {}, options.baseUrl);
   }
 }

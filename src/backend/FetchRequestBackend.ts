@@ -6,17 +6,26 @@ import * as Utils from "../Utils";
 import { type Fetch, getGlobal, getGlobalFetch } from "../Utils";
 import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import {
+  getGlobalWebSocketConstructor,
+  makeWebSocketRequest,
+  type WebSocketConstructor,
+  type WebSocketResponse,
+} from "./WebSocketRequest";
 
 class FetchError extends Error {
   response?: Response;
 }
 
-export default class FetchRequestBackend implements RequestBackend<Response> {
+type FetchBackendResponse = Response | WebSocketResponse;
+
+export default class FetchRequestBackend implements RequestBackend<FetchBackendResponse> {
   fetch = getGlobalFetch();
+  webSocketConstructor: WebSocketConstructor | undefined = getGlobalWebSocketConstructor();
 
   readonly id = "fetch";
 
-  constructor(fetchLibrary?: Fetch) {
+  constructor(fetchLibrary?: Fetch, webSocketConstructor?: WebSocketConstructor) {
     if (fetchLibrary !== undefined) {
       this.fetch = fetchLibrary;
 
@@ -25,9 +34,12 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
         this.fetch = fetchLibrary.bind(getGlobal());
       }
     }
+    if (webSocketConstructor !== undefined) {
+      this.webSocketConstructor = webSocketConstructor;
+    }
   }
 
-  async extractResponseFromError(error: Error): Promise<Response | null | undefined> {
+  async extractResponseFromError(error: Error): Promise<FetchBackendResponse | null | undefined> {
     if ("response" in error) {
       const fetchError = error as FetchError;
       return fetchError.response ? fetchError.response : null;
@@ -37,7 +49,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
   async convertResponse<T>(
     context: RequestContext,
-    response: Response & {
+    response: FetchBackendResponse & {
       __text?: string;
     },
   ): Promise<ConvertedApiResponse<T>> {
@@ -58,20 +70,20 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     let data: any;
 
     try {
-      if (responseType === "arraybuffer") {
-        data = await response.arrayBuffer();
+      if (responseType === "websocket") {
+        data = (response as WebSocketResponse).webSocket;
+        if (!data) {
+          throw new Error("[api-def] WebSocket response did not include a webSocket");
+        }
+      } else if (responseType === "arraybuffer") {
+        data = await (response as Response).arrayBuffer();
       } else if (responseType === "json") {
-        text = await response.text();
+        text = await (response as Response).text();
         data = JSON.parse(text);
       } else if (responseType === "stream") {
-        data = response.body;
-      } else if (responseType === "websocket") {
-        data = (response as any).webSocket;
-        if (!data) {
-          throw new Error("[api-def] WebSocket upgrade response did not include a webSocket");
-        }
+        data = (response as Response).body;
       } else {
-        data = await response.text();
+        data = await (response as Response).text();
       }
     } catch (error) {
       throw convertToRequestError({
@@ -92,7 +104,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     return convertedResponse;
   }
 
-  makeRequest(context: RequestContext): RequestOperation<Response> {
+  makeRequest(context: RequestContext): RequestOperation<FetchBackendResponse> {
     if (!this.fetch) {
       throw new Error("[api-def] No fetch impl was provided to FetchRequestBackend");
     }
@@ -104,6 +116,11 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
     let softAbort = false;
     let responded = false;
 
+    if (context.responseType === "websocket") {
+      responded = true;
+      return makeWebSocketRequest(context, this.webSocketConstructor);
+    }
+
     const body = context.getParsedBody();
 
     const bodyJsonify =
@@ -113,8 +130,6 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
       {
         // logic from axios
         "Content-Type": bodyJsonify ? "application/json;charset=utf-8" : undefined,
-        Connection: context.responseType === "websocket" ? "Upgrade" : undefined,
-        Upgrade: context.responseType === "websocket" ? "websocket" : undefined,
       },
       requestConfig.headers,
     );
@@ -160,7 +175,7 @@ export default class FetchRequestBackend implements RequestBackend<Response> {
 
     const promise: Promise<Response> = this.fetch(request).then((response) => {
       responded = true;
-      if (!response.ok && !(context.responseType === "websocket" && response.status === 101)) {
+      if (!response.ok) {
         const error = new FetchError("Fetch failed");
         error.response = response;
         throw error;
