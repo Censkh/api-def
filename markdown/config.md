@@ -1,0 +1,51 @@
+API, endpoint, and individual request configuration are merged in that order. Prefer `defaultRequestConfig`; `config` is retained as a deprecated alias.
+
+API defaults may also be a function when values must be computed per request:
+
+```typescript
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "https://api.example.com",
+  defaultRequestConfig: () => ({
+    headers: { Authorization: `Bearer ${getToken()}` },
+  }),
+});
+```
+
+```typescript {4,5,6,7,8,9,15,16,17,18}
+import { Api } from "api-def";
+
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "http://localhost:5000/v1",
+  defaultRequestConfig: {
+    retry: 2,
+    headers: {
+      "Cool-Header": "hello!",
+    },
+  },
+});
+
+export const fetchData = API.endpoint().build({
+  id: "fetch_data",
+  defaultRequestConfig: {
+    retry: false,
+    clientCache: 1000 * 60 * 15, // 15 mins
+    browserCache: "force-cache", // Use browser's cache
+  },
+});
+```
+
+## Properties
+
+Request config properties:
+
+| Name | Type | Default | Usage |
+| --- | --- | --- | --- |
+| `retry` | `number`, `false`, or `RetryOptions` | `false` | Retry failed requests; a number is the retry count. |
+| `clientCache` | `number` or `boolean` | `false` | Cache successful `GET` responses for a duration in milliseconds. |
+| `browserCache` | `RequestCache` | `undefined` | Fetch cache mode; Axios maps it to cache headers. |
+| `headers` | `Readonly<RawHeaders>` | `undefined` | Headers sent with the request. |
+| `acceptableStatus` | `AcceptableStatus[]` | `200`–`299` | Status codes or inclusive ranges treated as successful. |
+| `credentials` | `"omit"`, `"same-origin"`, or `"include"` | `undefined` | Credential policy for the request backend. |
+| `lock` | `string` or `false` | `undefined` | Cancel an earlier request using the same lock key. |

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#17221b"/>
+  <circle cx="1010" cy="110" r="220" fill="#2e8555" opacity=".35"/>
+  <circle cx="1080" cy="540" r="280" fill="#2e8555" opacity=".2"/>
+  <text x="100" y="275" fill="white" font-family="Arial, sans-serif" font-size="96" font-weight="700">api-def</text>
+  <text x="104" y="355" fill="#b8d9c3" font-family="Arial, sans-serif" font-size="36">Typed API definitions with middleware support</text>
+</svg>

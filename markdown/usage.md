@@ -1,0 +1,146 @@
+API def provides a unified way to type your endpoints allowing for compile time checking of query, body, response and even url parameters.
+
+## Getting Started
+
+```shell
+npm i api-def
+```
+
+First we define our base API and give it a base URL which is the root path of your remote service:
+
+```typescript title="/api.ts"
+import { Api } from "api-def";
+
+const api = new Api({
+  name: "My Backend",
+  baseUrl: "http://localhost:5000/v1",
+});
+
+export default api;
+```
+
+## Defining Endpoints
+
+Now let's define some endpoints we can call! Let's start with a simple definition of a health check endpoint:
+
+```typescript title="/api.ts"
+export const fetchHealthCheck = api
+  .endpoint()
+  .responseOf<{ success: boolean }>()
+  .build({
+    id: "fetch_health_check",
+    path: "/status/health-check",
+    method: "get",
+
+    // optional
+    name: "Health Check",
+    description: "Returns success as true",
+  });
+```
+
+You can see that we give the endpoint an `id`, `path` and `method`. The `path` will be appended to the `baseUrl` in our API object.
+
+We can also provide optional `name` and `description`, which help with debugging and generated documentation.
+
+## Calling an Endpoint
+
+To call our endpoint we can use the `submit` function, which will `GET` the URL `http://localhost:5000/v1/status/health-check`:
+
+```typescript {2}
+const makeRequest = async () => {
+  const res = await fetchHealthCheck.submit({});
+  return res.data.success; // true
+};
+```
+
+## Typing Body, Query & Params
+
+In most cases we will want to make more complex requests, for example fetching and updating user information. Using `api-def` you can also type the query, body and URL params that you pass in when you want to make one of these queries:
+```typescript title="/api.ts"
+interface UserData {
+  firstName: string;
+  age: number;
+}
+
+export const fetchUser = api
+  .endpoint()
+  .paramsOf<"uid">()
+  .responseOf<UserData & { id: string }>()
+  .build({
+    id: "fetch_user",
+
+    name: "Fetch User",
+    description:
+      "Fetch a user, will respond with error code 'auth/permission-denied' if unauthorized",
+
+    path: "/user/:uid",
+    method: "get",
+  });
+```
+
+When calling this endpoint, it is verified that all params are resolved in the path:
+
+```typescript
+const res = await fetchUser.submit({
+  params: {
+      uid: "exampleId"
+  }
+});
+return res.data; // { id: "exampleId", firstName: "Hello World", age: 22 }
+```
+
+---
+
+Now let's add the endpoint to update a user and see how we can type our body:
+
+```typescript title="/api.ts"
+export const updateUser = api.endpoint()
+  .paramsOf<"uid">()
+  .bodyOf<{ data: Partial<UserData> }>()
+  .responseOf<UserData & { id: string }>()
+  .build({
+    id: "update_user",
+
+    name       : "Update User",
+    description: "Updates a user, will respond with error code 'auth/permission-denied' if unauthorized",
+
+    path        : "/user/:uid",
+    method      : "post",
+  });
+```
+
+```typescript
+const res = await updateUser.submit({
+  params: {
+    uid: "exampleId",
+  },
+  body: {
+    data: {
+      firstName: "Test",
+    },
+  },
+});
+return res.data; // { id: "exampleId", firstName: "Test", age: 22 }
+```
+
+## Setting Expected Return Statuses
+
+By default a successful call returns a status from `200` to `299`. You can override this in endpoint or request config with ranges and single values.
+
+```typescript title="/api.ts (status override)"
+export const fetchHealthCheck = api
+  .endpoint()
+  .responseOf<{ success: boolean }>()
+  .build({
+    id: "fetch_health_check",
+
+    name: "Health Check",
+    description: "Returns success as true",
+
+    path: "/status/health-check",
+    method: "get",
+    defaultRequestConfig: {
+      acceptableStatus: [[301, 302], 200],
+    },
+  });
+```

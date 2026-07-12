@@ -1,0 +1,47 @@
+# api-def
+
+> Typed API definitions for TypeScript applications, with middleware, validation, retries, caching, mocking, and multiple request backends.
+
+The current documentation targets api-def 0.15.x, Node.js 22+, ES2020 browser builds, and ESM/CommonJS consumers.
+
+## Documentation
+
+- [usage](https://censkh.github.io/api-def/): Install api-def and define typed endpoints with params, query, body, and response types.
+  - [Markdown](https://censkh.github.io/api-def/markdown/usage.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/usage.mdx)
+- [config](https://censkh.github.io/api-def/config/): Configure defaults, headers, retries, caching, credentials, locks, and acceptable statuses.
+  - [Markdown](https://censkh.github.io/api-def/markdown/config.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/config.mdx)
+- [middleware](https://censkh.github.io/api-def/middleware/): Add API- and endpoint-level middleware, event handlers, and request mutation.
+  - [Markdown](https://censkh.github.io/api-def/markdown/middleware.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/middleware.mdx)
+- [caching](https://censkh.github.io/api-def/caching/): Use client-side local caching or browser and Axios cache controls.
+  - [Markdown](https://censkh.github.io/api-def/markdown/caching.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/caching.mdx)
+- [query-handling](https://censkh.github.io/api-def/query-handling/): Pass query objects or strings and configure custom query parsing and stringification.
+  - [Markdown](https://censkh.github.io/api-def/markdown/query-handling.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/query-handling.mdx)
+- [validation](https://censkh.github.io/api-def/validation/): Validate query, body, response, and middleware state with Zod schemas.
+  - [Markdown](https://censkh.github.io/api-def/markdown/validation.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/validation.mdx)
+- [errors-and-retries](https://censkh.github.io/api-def/errors-and-retries/): Handle RequestError values, retry failed requests, and define acceptable statuses.
+  - [Markdown](https://censkh.github.io/api-def/markdown/errors-and-retries.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/errors-and-retries.mdx)
+- [advanced-requests](https://censkh.github.io/api-def/advanced-requests/): Use response types, WebSockets, typed headers, URL resolution, locks, and hot requests.
+  - [Markdown](https://censkh.github.io/api-def/markdown/advanced-requests.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/advanced-requests.mdx)
+- [mocking](https://censkh.github.io/api-def/mocking/): Create endpoint mocks for disconnected development and tests.
+  - [Markdown](https://censkh.github.io/api-def/markdown/mocking.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/mocking.mdx)
+- [node](https://censkh.github.io/api-def/node/): Configure Fetch and Axios backends for Node.js, browsers, and other runtimes.
+  - [Markdown](https://censkh.github.io/api-def/markdown/node.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/node.mdx)
+- [api-reference](https://censkh.github.io/api-def/api-reference/): Browse the generated TypeScript API reference.
+  - [Markdown](https://censkh.github.io/api-def/markdown/api-reference.md)
+  - [Source](https://github.com/Censkh/api-def/blob/master/docs/api-reference.mdx)
+
+## Machine-readable resources
+
+- [Full documentation](https://censkh.github.io/api-def/llms-full.txt): All current guides in one Markdown document.
+- [Generated API reference](https://censkh.github.io/api-def/api/): Public TypeScript API reference.
+- [Repository](https://github.com/Censkh/api-def): Source, tests, changelog, and issue tracker.

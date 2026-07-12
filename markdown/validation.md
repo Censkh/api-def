@@ -1,0 +1,73 @@
+`api-def` can validate query, body, response, and state values at runtime while keeping the corresponding TypeScript types.
+
+## Zod schemas
+
+Install Zod and pass schemas through the `{ schema }` option:
+
+```shell
+npm install zod
+```
+
+```typescript
+import { Api } from "api-def";
+import { z } from "zod";
+
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "https://api.example.com",
+});
+
+const fetchUser = API
+  .endpoint()
+  .queryOf({
+    schema: z.object({
+      includeProfile: z.boolean(),
+    }),
+  })
+  .responseOf({
+    schema: z.object({
+      id: z.string(),
+      name: z.string(),
+    }),
+  })
+  .build({
+    id: "fetch_user",
+    method: "get",
+    path: "/users/me",
+  });
+```
+
+Query and body validation runs before the request is sent. Response validation runs after the backend response is parsed. Validation failures reject with a `RequestError` whose `code` identifies the failing part, such as `validation/query-validate-error` or `validation/response-validate-error`.
+
+## Body encoding
+
+Use the `encoding` option with `bodyOf` when the server expects a non-JSON body:
+
+```typescript
+const submitForm = API
+  .endpoint()
+  .bodyOf<{ name: string }>({ encoding: "application/x-www-form-urlencoded" })
+  .responseOf<{ accepted: boolean }>()
+  .build({
+    id: "submit_form",
+    method: "post",
+    path: "/forms",
+  });
+```
+
+Supported encodings are `application/json`, `application/x-www-form-urlencoded`, and `multipart/form-data`. Multipart arrays and nested objects are expanded into indexed and dotted field names, and `Blob`, `ArrayBuffer`, and typed-array values are converted to file parts when supported by the runtime.
+
+## State validation
+
+State is local request context intended for middleware. It is not sent to the server:
+
+```typescript
+const request = API
+  .endpoint()
+  .stateOf({ schema: z.object({ requestId: z.string() }) })
+  .build({ id: "request", method: "get", path: "/request" });
+
+await request.submit({ state: { requestId: "request-123" } });
+```
+
+Passing a schema directly to `queryOf`, `bodyOf`, `responseOf`, or `stateOf` is supported for compatibility but deprecated. Prefer `{ schema }`.
