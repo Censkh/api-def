@@ -16,11 +16,11 @@ const ClientCacheMiddleware = (options: ClientCacheMiddlewareOptions = {}): Requ
       const shouldCache = !options.predicate || options.predicate();
 
       if (clientCache && shouldCache) {
-        const expiry =
+        const duration =
           typeof clientCache === "number"
             ? clientCache
             : options.defaultExpiry || ClientCaching.DEFAULT_CLIENT_CACHE_EXPIRY;
-        await ClientCaching.setClientCachedItem(context.key, context.response, expiry);
+        await ClientCaching.setClientCachedItem(context.key, context.response, Date.now() + duration);
       }
     },
     [RequestEvent.BEFORE_SEND]: async (context) => {

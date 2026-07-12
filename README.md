@@ -12,6 +12,7 @@ Requires Node.js 22 or newer.
 Browser builds target ES2020 and support both ESM and CommonJS consumers.
 
 - [Documentation](https://censkh.github.io/api-def/)
+- [API Reference](https://censkh.github.io/api-def/api/)
 
 ```typescript
 import { Api } from "api-def";

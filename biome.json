@@ -1,7 +1,17 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!bin", "!cjs", "!esm", "!example", "!cli/tests/fixtures"]
+    "includes": [
+      "**",
+      "!bin",
+      "!cjs",
+      "!esm",
+      "!example",
+      "!cli/tests/fixtures",
+      "!website/.docusaurus",
+      "!website/build",
+      "!website/static/api"
+    ]
   },
   "linter": {
     "enabled": true,

@@ -46,7 +46,7 @@ export const fetchHealthCheck = api
 
 You can see that we give the endpoint an `id`, `path` and `method`. The `path` will be appended to the `baseUrl` in our API object.
 
-We can also provide optional `name` and `description` which will help document our API and can be used in dev tools ect.
+We can also provide optional `name` and `description`, which help with debugging and generated documentation.
 
 ## Calling an Endpoint
 
@@ -92,7 +92,7 @@ const res = await fetchUser.submit({
       uid: "exampleId"
   }
 });
-return res.data // { uid: "exampleId", firstName: "Hello World", age: 22 }
+return res.data; // { id: "exampleId", firstName: "Hello World", age: 22 }
 ```
 
 ---
@@ -126,12 +126,12 @@ const res = await updateUser.submit({
     },
   },
 });
-return res.data; // { uid: "exampleId", firstName: "Test", age: 22 }
+return res.data; // { id: "exampleId", firstName: "Test", age: 22 }
 ```
 
 ## Setting Expected Return Statuses
 
-By default a successful call is one that returns a status of `200` to `299`. You can override this in the endpoint config with a combination of ranges, and single values.
+By default a successful call returns a status from `200` to `299`. You can override this in endpoint or request config with ranges and single values.
 
 ```typescript title="/api.ts (status override)"
 export const fetchHealthCheck = api
@@ -145,7 +145,7 @@ export const fetchHealthCheck = api
 
     path: "/status/health-check",
     method: "get",
-    config: {
+    defaultRequestConfig: {
       acceptableStatus: [[301, 302], 200],
     },
   });

@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "tsconfig": "tsconfig.esm.json",
+  "out": "website/static/api",
+  "name": "api-def API Reference",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "categorizeByGroup": false,
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  }
+}

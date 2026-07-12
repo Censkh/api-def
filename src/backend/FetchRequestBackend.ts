@@ -157,7 +157,7 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
     }
 
     if ("credentials" in Request.prototype) {
-      fetchOptions.credentials = requestConfig.credentials ? "include" : undefined;
+      fetchOptions.credentials = requestConfig.credentials;
     }
 
     if (requestConfig.debug) {

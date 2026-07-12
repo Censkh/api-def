@@ -2,6 +2,9 @@ usage
 config
 middleware
 caching
-mocking
 query-handling
+validation
+errors-and-retries
+advanced-requests
+mocking
 node

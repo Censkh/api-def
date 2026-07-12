@@ -1,0 +1,91 @@
+---
+id: errors-and-retries
+title: Errors and Retries
+---
+
+## Handling errors
+
+Requests reject with a `RequestError` for network failures, unacceptable status codes, response parsing failures, and validation failures.
+
+```typescript
+import { getErrorResponse, isRequestError } from "api-def";
+
+try {
+  const response = await fetchHealthCheck.submit({});
+  console.log(response.data);
+} catch (error: unknown) {
+  if (isRequestError(error)) {
+    const response = getErrorResponse(error);
+    console.error(error.code, error.attempts, response?.status);
+  }
+}
+```
+
+Useful error codes include:
+
+- `request/network-error` for a failed network operation.
+- `request/host-name-not-found` when the host cannot be resolved.
+- `request/invalid-status` when the response status is not acceptable.
+- `request/mismatch-response-type` when the response cannot be parsed as requested.
+- `validation/query-validate-error`, `validation/body-validate-error`, and `validation/response-validate-error` for schema failures.
+
+The error also includes the attempted request details and the last response when one was available.
+
+## Retry configuration
+
+Set `retry` to a number for a simple retry count, or pass a `RetryOptions` object for control over retry timing and eligibility:
+
+```typescript
+import { Api, isRequestError } from "api-def";
+
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "https://api.example.com",
+  defaultRequestConfig: {
+    retry: {
+      maxAttempts: 3,
+      minDelay: 200,
+      maxDelay: 1000,
+      shouldRetry: (error) => isRequestError(error) && error.response == null,
+    },
+  },
+});
+```
+
+`maxAttempts` is the number of retries after the initial attempt. `shouldRetry` returning `true` allows the retry; returning `false` stops retrying and triggers `unrecoverableError` middleware.
+
+By default, failed requests are retried when `retry` is enabled. Supply `shouldRetry` when only particular failures should be retried, such as transient network errors.
+
+Middleware can return `{ type: "retry" }` from the `error` event to force a retry. Use that carefully because forced retries can loop indefinitely if the middleware never stops returning the result.
+
+## Acceptable statuses
+
+Successful responses default to `200` through `299`. Override that per endpoint or request:
+
+```typescript
+const redirect = API.endpoint().build({
+  id: "redirect",
+  method: "get",
+  path: "/redirect",
+  defaultRequestConfig: {
+    acceptableStatus: [[301, 302], 200],
+  },
+});
+```
+
+## Low-level retry helper
+
+The exported `retry` helper is useful outside request submission:
+
+```typescript
+import { retry } from "api-def";
+
+const result = await retry(
+  async (bail, attempt) => {
+    if (attempt === 2) return "ready";
+    if (attempt > 3) bail(new Error("not ready"));
+    throw new Error("try again");
+  },
+  { retries: 3, minTimeout: 100, maxTimeout: 500 },
+);
+```

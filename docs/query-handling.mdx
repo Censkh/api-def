@@ -3,7 +3,7 @@ id: query-handling
 title: Query Handling
 ---
 
-You can pass query parameters as either a raw query string or a query object.
+You can pass query parameters as either a raw query string or a query object. The default object serializer is intentionally simple and does not URL-encode values; use a custom serializer for nested or encoded parameters.
 
 #### Object
 
@@ -45,17 +45,21 @@ queryByStringEndpoint.submit({
 
 ## Custom Query Handling
 
-You can pass a custom query stringifier/parser with the `queryHandling` option:
+You can pass a custom query `stringify`/`parse` pair in default, endpoint, or request config:
 
 ```typescript
+import { Api } from "api-def";
+
 const API = new Api({
   baseUrl: "https://example.com",
-  queryHandling: {
-    stringifier: (query) => {
+  defaultRequestConfig: {
+    queryHandling: {
+      stringify: (query) => {
       // stringify query object to string
-    },
-    parse: (query) => {
+      },
+      parse: (query) => {
       // parse query string to object
+      },
     },
   },
 });
@@ -68,9 +72,11 @@ import * as qs from "qs";
 
 const API = new Api({
   baseUrl: "https://example.com",
-  queryHandling: {
-    stringifier: qs.stringify,
-    parse: qs.parse,
+  defaultRequestConfig: {
+    queryHandling: {
+      stringify: qs.stringify,
+      parse: qs.parse,
+    },
   },
 });
 

@@ -5,3 +5,9 @@ esm
 public
 .cache
 bin
+website/build
+website/.docusaurus
+website/static/api
+website/static/llms.txt
+website/static/llms-full.txt
+website/static/markdown
