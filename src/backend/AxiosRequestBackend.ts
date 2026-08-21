@@ -48,6 +48,10 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
   readonly id = "axios";
   webSocketConstructor: WebSocketConstructor | undefined = getGlobalWebSocketConstructor();
 
+  static isSupported(axiosLibrary?: unknown): boolean {
+    return typeof axiosLibrary === "function";
+  }
+
   constructor(axiosLibrary: any, webSocketConstructor?: WebSocketConstructor) {
     axios = axiosLibrary;
     if (webSocketConstructor !== undefined) {

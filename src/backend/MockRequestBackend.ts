@@ -1,12 +1,39 @@
 import type { ApiResponse } from "../ApiTypes";
 import { inferResponseType } from "../ApiUtils";
-import type { MockRequest, MockRequestError, MockResponse } from "../MockingTypes";
+import { createHeaders } from "../Headers";
+import type { MockContext, MockRequestError, MockResponse } from "../MockingTypes";
 import type RequestContext from "../RequestContext";
 import { convertToRequestError, RequestErrorCode } from "../RequestError";
 import * as Utils from "../Utils";
 import { delayThenReturn, randInt } from "../Utils";
 import type RequestBackend from "./RequestBackend";
 import type { RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import { convertStandardResponse, isStandardResponse } from "./StandardResponse";
+
+const defineMockContextProperty = <TValue>(
+  mockContext: Record<string, unknown>,
+  property: string,
+  value: TValue,
+): void => {
+  Object.defineProperty(mockContext, property, {
+    enumerable: true,
+    get() {
+      return value;
+    },
+  });
+};
+
+const isBlob = (value: unknown): value is Blob => {
+  return typeof Blob !== "undefined" && value instanceof Blob;
+};
+
+const isArrayBuffer = (value: unknown): value is ArrayBuffer => {
+  return typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer;
+};
+
+const isArrayBufferView = (value: unknown): value is ArrayBufferView => {
+  return typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView(value);
+};
 
 export default class MockRequestBackend implements RequestBackend<ApiResponse> {
   readonly id = "mock";
@@ -23,6 +50,78 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
     return undefined;
   }
 
+  private createStandardRequest(context: RequestContext): Request {
+    if (typeof Request === "undefined") {
+      throw convertToRequestError({
+        error: new Error("[api-def] Mock handler context.request requires a standard Request implementation"),
+        code: RequestErrorCode.REQUEST_INVALID_CONFIG,
+        context,
+      });
+    }
+
+    const headers = createHeaders();
+    for (const key of Object.keys(context.requestConfig.headers ?? {})) {
+      const value = context.requestConfig.headers?.[key];
+      if (value !== undefined && value !== null) {
+        headers.set(key, value.toString());
+      }
+    }
+
+    const parsedBody = context.getParsedBody();
+    const method = context.method.toUpperCase();
+    let body: BodyInit | undefined;
+
+    if (parsedBody !== undefined && method !== "GET" && method !== "HEAD") {
+      if (
+        typeof parsedBody === "string" ||
+        parsedBody instanceof URLSearchParams ||
+        Utils.isFormDataLike(parsedBody) ||
+        isBlob(parsedBody) ||
+        isArrayBuffer(parsedBody) ||
+        isArrayBufferView(parsedBody)
+      ) {
+        body = parsedBody as BodyInit;
+      } else if (parsedBody !== null && typeof parsedBody === "object") {
+        body = JSON.stringify(parsedBody);
+        if (!headers.has("content-type")) {
+          headers.set("content-type", "application/json;charset=utf-8");
+        }
+      } else {
+        body = String(parsedBody);
+      }
+    }
+
+    return new Request(context.requestUrl.href, {
+      method,
+      headers,
+      body,
+      cache: context.requestConfig.browserCache,
+      credentials: context.requestConfig.credentials,
+    });
+  }
+
+  private createMockContext(context: RequestContext): MockContext {
+    const mockContext: Record<string, unknown> = {};
+    let request: Request | undefined;
+
+    Object.defineProperty(mockContext, "request", {
+      enumerable: true,
+      get: () => {
+        request ??= this.createStandardRequest(context);
+        return request;
+      },
+    });
+
+    defineMockContextProperty(mockContext, "body", context.getParsedBody());
+    defineMockContextProperty(mockContext, "params", context.requestConfig.params ?? {});
+    defineMockContextProperty(mockContext, "query", context.requestConfig.queryObject);
+    defineMockContextProperty(mockContext, "headers", context.requestConfig.headers ?? {});
+    defineMockContextProperty(mockContext, "url", context.requestUrl.toString());
+    defineMockContextProperty(mockContext, "state", context.requestConfig.state);
+
+    return mockContext as unknown as MockContext;
+  }
+
   private async runRequest(context: RequestContext): Promise<ApiResponse> {
     const mockingFunc = context.mocking?.handler;
 
@@ -34,14 +133,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       });
     }
 
-    const req: MockRequest = {
-      body: context.getParsedBody(),
-      params: context.requestConfig.params ?? {},
-      query: context.requestConfig.queryObject,
-      headers: context.requestConfig.headers ?? {},
-      url: context.requestUrl.toString(),
-      state: context.requestConfig.state,
-    };
+    const mockContext = this.createMockContext(context);
 
     const res: MockResponse = {
       statusCode: -1,
@@ -60,6 +152,8 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       },
     };
 
+    let returnedResponse: Response | undefined;
+
     if (context.mocking?.delay) {
       const delay = context.mocking.delay;
       let delayMs: number;
@@ -76,9 +170,15 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
         }
         delayMs = randInt(min, max);
       }
-      await delayThenReturn(await mockingFunc(req, res), delayMs);
+      const result = await delayThenReturn(await mockingFunc(mockContext, res), delayMs);
+      returnedResponse = isStandardResponse(result) ? result : undefined;
     } else {
-      await mockingFunc(req, res);
+      const result = await mockingFunc(mockContext, res);
+      returnedResponse = isStandardResponse(result) ? result : undefined;
+    }
+
+    if (returnedResponse) {
+      return convertStandardResponse(context, returnedResponse);
     }
 
     if (res.response === undefined) {
@@ -92,7 +192,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
     const parsedHeaders = Object.keys(res.headers).reduce((parsedHeaders, key) => {
       parsedHeaders.set(key, res.headers[key]!.toString());
       return parsedHeaders;
-    }, new Headers());
+    }, createHeaders());
 
     const responseType = context.responseType ?? inferResponseType(res.headers["content-type"]?.toString());
     let data: any;

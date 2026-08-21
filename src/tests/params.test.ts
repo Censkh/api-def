@@ -30,8 +30,8 @@ const withColons = api
     path: "/users/:id/:sub_id",
 
     mocking: {
-      handler: (req, res) => {
-        return res.status(200).send([{ name: "Test", data: req.url }]);
+      handler: (context, res) => {
+        return res.status(200).send([{ name: "Test", data: context.request.url }]);
       },
     },
   });
@@ -46,8 +46,8 @@ const withColonsInMiddle = api
     path: "/users/:id/account:update",
 
     mocking: {
-      handler: (req, res) => {
-        return res.status(200).send([{ name: "Test", data: req.url }]);
+      handler: (context, res) => {
+        return res.status(200).send([{ name: "Test", data: context.request.url }]);
       },
     },
   });
@@ -62,8 +62,8 @@ const withBrackets = api
     path: "/users/{id}/{sub_id}",
 
     mocking: {
-      handler: (req, res) => {
-        return res.status(200).send([{ name: "Test", data: req.url }]);
+      handler: (context, res) => {
+        return res.status(200).send([{ name: "Test", data: context.request.url }]);
       },
     },
   });

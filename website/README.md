@@ -11,4 +11,4 @@ From the repository root:
 
 The build also publishes `llms.txt`, `llms-full.txt`, and clean Markdown pages under `markdown/` for AI agents and other automated documentation consumers.
 
-The production output is `website/build/`. CI publishes that directory to the `gh-pages` branch; deployment is not a local package script.
+The production output is `website/build/`. CI deploys that directory to Cloudflare Workers for `api-def.com`.

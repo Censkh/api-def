@@ -6,7 +6,7 @@ const docsDirectory = path.join(repositoryRoot, "docs");
 const agentDocsDirectory = path.join(repositoryRoot, "website", "static", "markdown");
 const llmsIndexPath = path.join(repositoryRoot, "website", "static", "llms.txt");
 const llmsFullPath = path.join(repositoryRoot, "website", "static", "llms-full.txt");
-const siteUrl = "https://censkh.github.io/api-def/";
+const siteUrl = "https://api-def.com/";
 const repositoryUrl = "https://github.com/Censkh/api-def/blob/master/docs/";
 
 const descriptions = {

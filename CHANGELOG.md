@@ -2,6 +2,21 @@
 
 - add CLI to generate api-def from openapi spec
 
+## 0.16.0
+
+### Features
+
+- add `XHRRequestBackend` for browser `XMLHttpRequest` support, including text, JSON, `ArrayBuffer`, cancellation, cache directives, and WebSocket responses
+- add backend support checks via `FetchRequestBackend.isSupported()`, `XHRRequestBackend.isSupported()`, and `AxiosRequestBackend.isSupported()`
+- add `context.request` to mock handlers as a standard WHATWG `Request`
+- allow mock handlers to return a standard `Response`
+
+### Changes
+
+- add legacy XHR completion handling and preserve native XHR network events on request errors
+- fall back to `XHRRequestBackend` as the default backend when `fetch` is unavailable but XHR is supported
+- support XHR response headers without requiring a native `Headers` implementation
+
 ## 0.15.0
 
 ### Breaking Changes

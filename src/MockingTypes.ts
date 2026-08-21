@@ -4,13 +4,14 @@ export interface ApiMockingConfig {
   enabled: boolean | (() => boolean);
 }
 
-export interface MockRequest<
+export interface MockContext<
   _TResponse = any,
   TParams extends Params | undefined = Params | undefined,
   TQuery extends Query | undefined = Query | undefined,
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
 > {
+  request: Request;
   params: TParams extends Params ? Record<TParams, string> : Record<keyof any, never>;
   body: TBody;
   query: TQuery;
@@ -18,6 +19,14 @@ export interface MockRequest<
   url: string;
   state: TState;
 }
+
+export type MockRequest<
+  TResponse = any,
+  TParams extends Params | undefined = Params | undefined,
+  TQuery extends Query | undefined = Query | undefined,
+  TBody extends Body | undefined = Body | undefined,
+  TState extends State = State,
+> = MockContext<TResponse, TParams, TQuery, TBody, TState>;
 
 export interface MockResponse<
   TResponse = any,
@@ -46,9 +55,13 @@ export type EndpointMockingFunction<
   TBody extends Body | undefined = Body | undefined,
   TState extends State = State,
 > = (
-  req: MockRequest<TResponse, TParams, TQuery, TBody, TState>,
+  context: MockContext<TResponse, TParams, TQuery, TBody, TState>,
   res: MockResponse<TResponse, TParams, TQuery, TBody, TState>,
-) => Promise<MockResponse<TResponse, TParams, TQuery, TBody>> | MockResponse<TResponse, TParams, TQuery, TBody, TState>;
+) =>
+  | Promise<MockResponse<TResponse, TParams, TQuery, TBody> | Response | undefined>
+  | MockResponse<TResponse, TParams, TQuery, TBody, TState>
+  | Response
+  | undefined;
 
 export interface EndpointMockingConfig<
   TResponse = any,

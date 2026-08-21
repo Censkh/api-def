@@ -127,10 +127,8 @@ export const resolveUrl = (options: ResolveUrlOptions): URL => {
     origin = window.origin;
   }
 
-  if (!origin) {
-    if (!isAbsoluteUrl(result)) {
-      result = `https://${result}`;
-    }
+  if (!isAbsoluteUrl(result) && !result.startsWith("/")) {
+    result = `https://${result}`;
   }
 
   return new URL(result, origin);

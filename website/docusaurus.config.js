@@ -1,12 +1,12 @@
 const path = require("node:path");
-const baseUrl = "/api-def/";
-const apiReferenceUrl = "https://censkh.github.io/api-def/api/";
+const baseUrl = "/";
+const apiReferenceUrl = "https://api-def.com/api/";
 
 const config = {
   title: "api-def",
   tagline: "Typed API definitions with middleware support",
   favicon: "img/favicon.svg",
-  url: "https://censkh.github.io",
+  url: "https://api-def.com",
   baseUrl,
   organizationName: "Censkh",
   projectName: "api-def",

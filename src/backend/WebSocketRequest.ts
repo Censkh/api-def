@@ -1,3 +1,4 @@
+import { createHeaders } from "../Headers";
 import type RequestContext from "../RequestContext";
 import type { RequestOperation } from "./RequestBackend";
 
@@ -71,7 +72,7 @@ export const makeWebSocketRequest = (
       cleanup();
       resolve({
         status: 101,
-        headers: new Headers(),
+        headers: createHeaders(),
         url: url.href,
         webSocket,
       });

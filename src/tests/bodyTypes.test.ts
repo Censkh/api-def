@@ -1,14 +1,16 @@
-import { Blob as PolyfillBlob, FormData as PolyfillFormData } from "formdata-node";
 import { Api } from "../Api";
 import FetchRequestBackend from "../backend/FetchRequestBackend";
 import { postConfiguredFormUrlEncoded, postFormUrlEncoded, postMultipartFormData } from "./mock/MockApi";
+import { nodeOnlyIt } from "./runtime";
 import { testAllBackends } from "./TestHelpers";
 
-const installFormDataPolyfill = (): void => {
+const installFormDataPolyfill = async (): Promise<typeof import("formdata-node")> => {
+  const formDataNode = await import("formdata-node");
   Object.assign(globalThis, {
-    Blob: PolyfillBlob,
-    FormData: PolyfillFormData,
+    Blob: formDataNode.Blob,
+    FormData: formDataNode.FormData,
   });
+  return formDataNode;
 };
 
 const restoreFormDataGlobals = (formData: typeof globalThis.FormData, blob: typeof globalThis.Blob): void => {
@@ -47,10 +49,10 @@ it("correctly parses body for configured form url encoded request", async () => 
   });
 });
 
-it("correctly parses body for configured multipart form data request", async () => {
+nodeOnlyIt("correctly parses body for configured multipart form data request", async () => {
   const originalFormData = globalThis.FormData;
   const originalBlob = globalThis.Blob;
-  installFormDataPolyfill();
+  const { Blob: PolyfillBlob } = await installFormDataPolyfill();
 
   try {
     const res = await postMultipartFormData.submit({
@@ -311,10 +313,11 @@ testAllBackends("sends plain object bodies as JSON by default", async ({ backend
   }
 });
 
-it("rejects incompatible ambient FormData before calling fetch", async () => {
+nodeOnlyIt("rejects incompatible ambient FormData before calling fetch", async () => {
   const originalFormData = globalThis.FormData;
   const originalBlob = globalThis.Blob;
   const calls: Array<[string, RequestInit]> = [];
+  const { Blob: PolyfillBlob } = await import("formdata-node");
 
   class ReactNativeFormData {
     readonly fields: Array<[string, unknown]> = [];

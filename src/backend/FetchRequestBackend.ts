@@ -1,11 +1,11 @@
 import type { ApiResponse } from "../ApiTypes";
-import { inferResponseType } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
 import { convertToRequestError, RequestErrorCode } from "../RequestError";
 import * as Utils from "../Utils";
 import { type Fetch, getGlobal, getGlobalFetch } from "../Utils";
 import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
+import { convertStandardResponse } from "./StandardResponse";
 import {
   getGlobalWebSocketConstructor,
   makeWebSocketRequest,
@@ -24,6 +24,15 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
   webSocketConstructor: WebSocketConstructor | undefined = getGlobalWebSocketConstructor();
 
   readonly id = "fetch";
+
+  static isSupported(fetchLibrary: Fetch | undefined = getGlobalFetch()): boolean {
+    return (
+      typeof fetchLibrary === "function" &&
+      typeof Request !== "undefined" &&
+      typeof Response !== "undefined" &&
+      typeof Headers !== "undefined"
+    );
+  }
 
   constructor(fetchLibrary?: Fetch, webSocketConstructor?: WebSocketConstructor) {
     if (fetchLibrary !== undefined) {
@@ -53,52 +62,29 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
       __text?: string;
     },
   ): Promise<ConvertedApiResponse<T>> {
-    const { status, headers } = response;
+    if (context.responseType !== "websocket") {
+      return convertStandardResponse(context, response as Response);
+    }
 
     const convertedResponse = {
       method: context.method,
       url: response.url,
       data: undefined as any,
-      status: status,
-      headers: headers,
+      status: response.status,
+      headers: response.headers,
       state: context.requestConfig.state,
       stats: context.stats,
     } satisfies ApiResponse<T>;
-    const responseType = context.responseType ?? inferResponseType(response.headers.get("Content-Type"));
 
-    let text: string | undefined;
-    let data: any;
-
-    try {
-      if (responseType === "websocket") {
-        data = (response as WebSocketResponse).webSocket;
-        if (!data) {
-          throw new Error("[api-def] WebSocket response did not include a webSocket");
-        }
-      } else if (responseType === "arraybuffer") {
-        data = await (response as Response).arrayBuffer();
-      } else if (responseType === "json") {
-        text = await (response as Response).text();
-        data = JSON.parse(text);
-      } else if (responseType === "stream") {
-        data = (response as Response).body;
-      } else {
-        data = await (response as Response).text();
-      }
-    } catch (error) {
+    const data = (response as WebSocketResponse).webSocket;
+    if (!data) {
       throw convertToRequestError({
-        error: Object.assign(
-          new Error(`[api-def] Failed to parse response as '${responseType}'${text ? `, got: ${text}` : ""}`),
-          {
-            cause: error,
-          },
-        ),
+        error: new Error("[api-def] WebSocket response did not include a webSocket"),
         code: RequestErrorCode.REQUEST_MISMATCH_RESPONSE_TYPE,
-        context: context,
+        context,
         response: convertedResponse,
       });
     }
-
     convertedResponse.data = data;
 
     return convertedResponse;

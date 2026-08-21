@@ -24,7 +24,7 @@ export const fetchHealthCheck = api
 
     mocking: {
       delay: [200, 2000],
-      handler: ({ body, params, query }, res) => {
+      handler: (context, res) => {
         return res.status(200).send({
           success: true,
         });
@@ -33,7 +33,32 @@ export const fetchHealthCheck = api
   });
 ```
 
-As you have access to all of the request parts, your mock function could give a conditional response, or simply a static response as in the example above.
+Mock handlers receive a context object. Use `context.request` for the standard WHATWG `Request`:
+
+```typescript
+mocking: {
+  handler: async (context, res) => {
+    const body = await context.request.json();
+
+    return res.status(200).send({
+      id: new URL(context.request.url).searchParams.get("id"),
+      body,
+    });
+  },
+}
+```
+
+The convenience properties on the mock context, such as `context.body`, `context.query`, `context.headers`, `context.url`, and `context.state`, are also supported. They are exposed as getters, so the API can evolve without changing the handler shape.
+
+Mock handlers can also return a standard `Response` directly:
+
+```typescript
+mocking: {
+  handler: () => {
+    return Response.json({ success: true }, { status: 200 });
+  },
+}
+```
 
 Mocks are then enabled/disabled for all endpoints at the API level:
 

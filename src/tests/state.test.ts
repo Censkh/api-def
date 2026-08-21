@@ -34,9 +34,9 @@ it("can provide extra state to a request that a middleware can use ", async () =
       path: "/200",
 
       mocking: {
-        handler: (req, res) => {
+        handler: (context, res) => {
           return res.status(200).send({
-            cookies: req.headers.Cookie as any,
+            cookies: context.headers.Cookie as any,
           });
         },
       },

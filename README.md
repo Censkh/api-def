@@ -1,4 +1,4 @@
-# [api-def](https://github.com/Censkh/api-def/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Censkh/api-def/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/api-def.svg?style=flat)](https://www.npmjs.com/package/api-def) [![build status](https://img.shields.io/github/actions/workflow/status/censkh/api-def/workflow.yml)](https://github.com/Censkh/api-def/actions)
+# [api-def](https://api-def.com/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Censkh/api-def/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/api-def.svg?style=flat)](https://www.npmjs.com/package/api-def) [![build status](https://img.shields.io/github/actions/workflow/status/censkh/api-def/workflow.yml)](https://github.com/Censkh/api-def/actions)
 
 Typed APIs with middleware support
 
@@ -11,8 +11,8 @@ npm i api-def
 Requires Node.js 22 or newer.
 Browser builds target ES2020 and support both ESM and CommonJS consumers.
 
-- [Documentation](https://censkh.github.io/api-def/)
-- [API Reference](https://censkh.github.io/api-def/api/)
+- [Documentation](https://api-def.com/)
+- [API Reference](https://api-def.com/api/)
 
 ```typescript
 import { Api } from "api-def";

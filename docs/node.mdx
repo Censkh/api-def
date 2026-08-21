@@ -3,7 +3,7 @@ id: node
 title: Node & Browser Support
 ---
 
-Node.js 22 and modern browsers provide `fetch` by default. In environments without `fetch`, provide a compatible request backend:
+Node.js 22 and modern browsers provide `fetch` by default. `api-def` uses `FetchRequestBackend` automatically when the runtime supports `fetch`, `Request`, `Response`, and `Headers`. In browser environments without supported `fetch`, it falls back to `XHRRequestBackend` when `XMLHttpRequest` is available. In other environments, provide a compatible request backend:
 
 ### Fetch Backend
 
@@ -30,6 +30,14 @@ Install and provide a fetch-compatible implementation when targeting an older ru
 npm install cross-fetch
 ```
 
+You can check native support before choosing a backend:
+
+```typescript
+FetchRequestBackend.isSupported();
+XHRRequestBackend.isSupported();
+AxiosRequestBackend.isSupported(axios);
+```
+
 ### Axios Backend
 
 ```typescript {4,5} title="/api.ts"
@@ -51,3 +59,20 @@ Install Axios separately when using `AxiosRequestBackend`:
 ```shell
 npm install axios
 ```
+
+### XHR Backend
+
+Use `XHRRequestBackend` directly in browsers that need `XMLHttpRequest` support instead of `fetch`:
+
+```typescript title="/api.ts"
+import { Api, setRequestBackend, XHRRequestBackend } from "api-def";
+
+setRequestBackend(new XHRRequestBackend());
+
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "https://api.example.com",
+});
+```
+
+The XHR backend supports text, JSON, and `ArrayBuffer` responses. Set `responseType: "arraybuffer"` for binary endpoints so XHR can preserve the response bytes. It does not support streaming responses; use `FetchRequestBackend` for streams. `credentials: "include"` maps to `XMLHttpRequest.withCredentials`; browsers do not let XHR omit same-origin cookies.

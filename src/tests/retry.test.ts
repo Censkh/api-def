@@ -50,17 +50,31 @@ it("allow for retries in middleware", async () => {
 });
 
 it("make sure retry only happens a max number of times", async () => {
+  let attempts = 0;
   const api = new Api({
-    baseUrl: "www.google.com",
-    name: "Http Status API",
+    baseUrl: "example.com",
+    name: "Retry API",
+    mocking: {
+      enabled: true,
+    },
   });
 
   const endpoint = api.endpoint().build({
-    id: "404",
+    id: "always404",
     method: "get",
-    path: "/thispagedoesnotexist",
+    path: "/always-404",
     config: {
-      retry: 3,
+      retry: {
+        maxAttempts: 3,
+        minDelay: 1,
+        maxDelay: 1,
+      },
+    },
+    mocking: {
+      handler: (_req, res) => {
+        attempts++;
+        return res.status(404).send({ error: "not-found" });
+      },
     },
   });
 
@@ -73,4 +87,5 @@ it("make sure retry only happens a max number of times", async () => {
 
   expect(error.response.status).toBe(404);
   expect(error.attempts).toBe(4);
+  expect(attempts).toBe(4);
 });

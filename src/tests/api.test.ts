@@ -66,6 +66,135 @@ it("query as string", async () => {
   ]);
 });
 
+it("mocking handlers can return a Response", async () => {
+  const endpoint = api
+    .endpoint()
+    .responseOf<{ success: boolean; query: unknown }>()
+    .queryOf<{ id: string }>()
+    .build({
+      name: "Response Mock",
+      id: "responseMock",
+      method: RequestMethod.GET,
+      path: "/response-mock",
+
+      mocking: {
+        handler: (context) => {
+          return Response.json(
+            {
+              success: true,
+              query: context.query,
+            },
+            {
+              status: 201,
+              headers: {
+                "x-mock-source": "response",
+              },
+            },
+          );
+        },
+      },
+    });
+
+  const res = await endpoint.submit({
+    query: {
+      id: "123",
+    },
+  });
+
+  expect(res.status).toBe(201);
+  expect(res.url).toBe("https://example.com/response-mock?id=123&test=abc");
+  expect(res.headers.get("x-mock-source")).toBe("response");
+  expect(res.data).toEqual({
+    success: true,
+    query: {
+      test: "abc",
+      id: "123",
+    },
+  });
+});
+
+it("mocking handlers receive a standard Request on context.request", async () => {
+  const endpoint = api
+    .endpoint()
+    .bodyOf<{ name: string }>()
+    .responseOf<{ body: unknown; header: string | null; method: string; url: string }>()
+    .build({
+      name: "Standard Request Mock",
+      id: "standardRequestMock",
+      method: RequestMethod.POST,
+      path: "/standard-request-mock",
+
+      mocking: {
+        handler: async (context) => {
+          return Response.json({
+            body: await context.request.json(),
+            header: context.request.headers.get("x-test"),
+            method: context.request.method,
+            url: context.request.url,
+          });
+        },
+      },
+    });
+
+  const res = await endpoint.submit({
+    body: {
+      name: "test",
+    },
+    headers: {
+      "x-test": "abc",
+    },
+  });
+
+  expect(res.data).toEqual({
+    body: {
+      name: "test",
+    },
+    header: "abc",
+    method: "POST",
+    url: "https://example.com/standard-request-mock?test=abc",
+  });
+});
+
+it("mock context convenience properties are getters", async () => {
+  let stateDescriptor: PropertyDescriptor | undefined;
+  const endpoint = api.endpoint().build({
+    name: "Mock Context Getter",
+    id: "mockContextGetter",
+    method: RequestMethod.GET,
+    path: "/legacy-context-warning-mock",
+
+    mocking: {
+      handler: (context, res) => {
+        stateDescriptor = Object.getOwnPropertyDescriptor(context, "state");
+        return res.status(200).send({ state: context.state });
+      },
+    },
+  });
+
+  await endpoint.submit({});
+
+  expect(stateDescriptor?.get).toEqual(expect.any(Function));
+});
+
+it("mocking handlers can return text Responses", async () => {
+  const endpoint = api.endpoint().build({
+    name: "Text Response Mock",
+    id: "textResponseMock",
+    method: RequestMethod.GET,
+    path: "/text-response-mock",
+    responseType: "text",
+
+    mocking: {
+      handler: () => new Response("plain text", { status: 202 }),
+    },
+  });
+
+  const res = await endpoint.submit({});
+
+  expect(res.status).toBe(202);
+  expect(res.data).toBe("plain text");
+});
+
 it("qs", async () => {
   let res = await queryReturnEndpoint.submit({
     query: "id[0]=1&id[1]=2",

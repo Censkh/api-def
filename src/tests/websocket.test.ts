@@ -58,18 +58,20 @@ class TestWebSocket {
 
 const createTestWebSocketConstructor = () => {
   const sockets: TestWebSocket[] = [];
-  const WebSocketConstructor = jest.fn((url: string | URL, protocols?: string | string[]) => {
+  const WebSocketConstructor = jest.fn(function (this: unknown, url: string | URL, protocols?: string | string[]) {
     const socket = new TestWebSocket(url, protocols);
     sockets.push(socket);
     return socket as unknown as WebSocket;
-  });
+  } as any);
 
   return { WebSocketConstructor, sockets };
 };
 
 testWebSocketBackends("returns websocket constructor responses", async ({ createBackend }) => {
   const webSocket = { close: jest.fn(), readyState: 1 } as unknown as WebSocket;
-  const WebSocketConstructor = jest.fn(() => webSocket);
+  const WebSocketConstructor = jest.fn(function (this: unknown) {
+    return webSocket;
+  });
 
   const api = new Api({
     baseUrl: "https://example.com",
@@ -94,7 +96,9 @@ testWebSocketBackends("returns websocket constructor responses", async ({ create
 
 testWebSocketBackends("passes websocket protocols from Sec-WebSocket-Protocol header", async ({ createBackend }) => {
   const webSocket = { close: jest.fn(), readyState: 1 } as unknown as WebSocket;
-  const WebSocketConstructor = jest.fn(() => webSocket);
+  const WebSocketConstructor = jest.fn(function (this: unknown) {
+    return webSocket;
+  });
 
   const api = new Api({
     baseUrl: "http://example.com",

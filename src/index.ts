@@ -6,6 +6,7 @@ export * from "./ApiTypes";
 export { default as AxiosRequestBackend } from "./backend/AxiosRequestBackend";
 export { default as FetchRequestBackend } from "./backend/FetchRequestBackend";
 export { default as RequestBackend } from "./backend/RequestBackend";
+export { default as XHRRequestBackend } from "./backend/XHRRequestBackend";
 export { clearClientCache, setClientCacheBackend } from "./cache/ClientCaching";
 export { default as LocalForageClientCacheBackend } from "./cache/LocalForageClientCacheBackend";
 export { default as LocalStorageClientCacheBackend } from "./cache/LocalStorageClientCacheBackend";

@@ -17,8 +17,8 @@ export const fetchRequiresToken = api.endpoint().build({
   path: "/requires-token",
 
   mocking: {
-    handler: (req, res) => {
-      if (!req.headers.token) {
+    handler: (context, res) => {
+      if (!context.request.headers.get("token")) {
         return res.status(400).send({
           code: "auth/invalid-token",
         });
@@ -48,8 +48,8 @@ export const postFormUrlEncoded = api
     },
 
     mocking: {
-      handler: (req, res) => {
-        return res.status(200).send([req.body.toString()]);
+      handler: async (context, res) => {
+        return res.status(200).send([await context.request.text()]);
       },
     },
   });
@@ -69,10 +69,10 @@ export const postConfiguredFormUrlEncoded = api
     path: "/send-configured-form-data",
 
     mocking: {
-      handler: (req, res) => {
+      handler: async (context, res) => {
         return res.status(200).send({
-          body: req.body.toString(),
-          contentType: req.headers["Content-Type"],
+          body: await context.request.text(),
+          contentType: context.request.headers.get("content-type"),
         });
       },
     },
@@ -96,11 +96,11 @@ export const postMultipartFormData = api
     path: "/send-multipart-form-data",
 
     mocking: {
-      handler: (req, res) => {
+      handler: (context, res) => {
         return res
           .status(200)
           .send(
-            Array.from((req.body as unknown as FormData).entries()).map(([key, value]) => [
+            Array.from((context.body as unknown as FormData).entries()).map(([key, value]) => [
               key,
               typeof value === "string" ? value : (value as Blob).constructor.name,
             ]),
@@ -130,8 +130,8 @@ export const postIdVerifStatus = api
       retry: false, // outcome screen has it's own retry
     },
     mocking: {
-      handler: (req, res) => {
-        return res.status(200).send({ url: req.url } as any);
+      handler: (context, res) => {
+        return res.status(200).send({ url: context.request.url } as any);
       },
     },
   });

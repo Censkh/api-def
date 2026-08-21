@@ -1,16 +1,16 @@
-import { createServer } from "node:http";
-import type { AddressInfo } from "node:net";
 import axios from "axios";
 import { Api } from "../Api";
 import type { RequestMethod } from "../ApiConstants";
 import AxiosRequestBackend from "../backend/AxiosRequestBackend";
 import FetchRequestBackend from "../backend/FetchRequestBackend";
+import { nodeOnlyDescribe } from "./runtime";
 
-describe("Streaming Response Tests", () => {
-  let server: ReturnType<typeof createServer>;
+nodeOnlyDescribe("Streaming Response Tests", () => {
+  let server: import("node:http").Server;
   let baseUrl: string;
 
   beforeAll(async () => {
+    const { createServer } = await import("node:http");
     server = createServer((req, res) => {
       if (req.url === "/stream" && req.method === "GET") {
         res.setHeader("Content-Type", "text/event-stream");
@@ -34,7 +34,7 @@ describe("Streaming Response Tests", () => {
 
     await new Promise<void>((resolve) => {
       server.listen(0, () => {
-        const port = (server.address() as AddressInfo).port;
+        const port = (server.address() as import("node:net").AddressInfo).port;
         baseUrl = `http://localhost:${port}`;
         resolve();
       });

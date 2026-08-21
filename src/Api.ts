@@ -15,16 +15,25 @@ import type {
 import type { ResolveUrlOptions } from "./ApiUtils";
 import FetchRequestBackend from "./backend/FetchRequestBackend";
 import type RequestBackend from "./backend/RequestBackend";
+import XHRRequestBackend from "./backend/XHRRequestBackend";
 import type Endpoint from "./Endpoint";
 import EndpointBuilder from "./EndpointBuilder";
 import type { ApiMockingConfig } from "./MockingTypes";
 import { processRequestConfigs } from "./RequestConfig";
 import * as Requester from "./Requester";
-import * as Utils from "./Utils";
 import type { Validation } from "./Validation";
 
-// use fetch as default if it is present
-let requestBackend: RequestBackend | null = Utils.getGlobalFetch() ? new FetchRequestBackend() : null;
+export const createDefaultRequestBackend = (): RequestBackend | null => {
+  if (FetchRequestBackend.isSupported()) {
+    return new FetchRequestBackend();
+  }
+  if (XHRRequestBackend.isSupported()) {
+    return new XHRRequestBackend();
+  }
+  return null;
+};
+
+let requestBackend: RequestBackend | null = createDefaultRequestBackend();
 let requestBackendIsDefault = true;
 
 export const getRequestBackend = (): RequestBackend | null => {

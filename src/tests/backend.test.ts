@@ -2,6 +2,7 @@ import axios from "axios";
 import { Api, setRequestBackend } from "../Api";
 import AxiosRequestBackend from "../backend/AxiosRequestBackend";
 import FetchRequestBackend from "../backend/FetchRequestBackend";
+import { nodeOnlyIt } from "./runtime";
 
 const cleanResponse = (response: any) => {
   response.headers = undefined;
@@ -10,7 +11,7 @@ const cleanResponse = (response: any) => {
   return response;
 };
 
-it("request backends output", async () => {
+nodeOnlyIt("request backends output", async () => {
   const api = new Api({
     baseUrl: "www.google.com",
     name: "Example API",
