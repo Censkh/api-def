@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        deno-version: [v2.1.5, v2.x]
+        deno-version: [v2.1.5, latest]
 
     steps:
       - uses: actions/checkout@v4
