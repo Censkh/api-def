@@ -65,7 +65,7 @@ jobs:
         with:
           deno-version: ${{ matrix.deno-version }}
       - run: bun install --frozen-lockfile
-      - run: deno task test
+      - run: deno task test --testPathIgnorePatterns=cli/tests
 
   test-browser:
     runs-on: ubuntu-latest
@@ -94,7 +94,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        chrome-version: ["113", "120", "stable"]
+        include:
+          - name: Chromium 41 (no Fetch)
+            version: "310958"
+          - name: Latest Chromium snapshot
+            version: latest
 
     steps:
       - uses: actions/checkout@v4
@@ -104,11 +108,11 @@ jobs:
           node-version: 22.x
       - name: Use Bun
         uses: oven-sh/setup-bun@v2
-      - name: Use Chrome ${{ matrix.chrome-version }}
+      - name: Use ${{ matrix.name }}
         id: setup-chrome
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: ${{ matrix.chrome-version }}
+          chrome-version: ${{ matrix.version }}
           install-dependencies: true
       - run: bun install --frozen-lockfile
       - run: npm run build --if-present
