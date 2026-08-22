@@ -1,4 +1,5 @@
 import { Api } from "../Api";
+import { RequestErrorCode } from "../RequestError";
 
 it("1. error should include path", async () => {
   const api = new Api({
@@ -20,8 +21,7 @@ it("1. error should include path", async () => {
   }
 
   expect(error).toBeDefined();
-  expect(error.message.startsWith("A GET request to 'http://localhost:1111/test' failed [misc/unknown-error]:")).toBe(
-    true,
-  );
+  expect(error.message).toContain("A GET request to 'http://localhost:1111/test' failed");
+  expect(error.code).toBe(RequestErrorCode.REQUEST_NETWORK_ERROR);
   expect(error instanceof Error).toBe(true);
 });

@@ -23,7 +23,8 @@ const replaceGlobal = (key: string, value: unknown): (() => void) => {
 class FakeXMLHttpRequest {}
 
 it("detects supported request backends", () => {
-  expect(FetchRequestBackend.isSupported(fetch as any)).toBe(true);
+  const fetchImplementation = () => Promise.resolve();
+  expect(FetchRequestBackend.isSupported(fetchImplementation as any)).toBe(true);
   expect(XHRRequestBackend.isSupported(FakeXMLHttpRequest as any)).toBe(true);
   expect(AxiosRequestBackend.isSupported(() => Promise.resolve())).toBe(true);
 });

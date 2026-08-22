@@ -17,6 +17,16 @@ class FetchError extends Error {
   response?: Response;
 }
 
+class FetchNetworkError extends Error {
+  readonly cause: unknown;
+
+  constructor(error: unknown) {
+    super(error instanceof Error ? error.message : String(error));
+    this.name = "NetworkError";
+    this.cause = error;
+  }
+}
+
 type FetchBackendResponse = Response | WebSocketResponse;
 
 export default class FetchRequestBackend implements RequestBackend<FetchBackendResponse> {
@@ -94,6 +104,7 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
     if (!this.fetch) {
       throw new Error("[api-def] No fetch impl was provided to FetchRequestBackend");
     }
+    const fetch = this.fetch;
 
     const { requestConfig } = context;
     // abort controller is a newer feature than fetch
@@ -163,21 +174,28 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
       }
     }
 
-    const promise: Promise<Response> = this.fetch(
-      request,
-      requestConfig.credentials === undefined ? undefined : { credentials: requestConfig.credentials },
-    ).then((response) => {
-      responded = true;
-      if (!response.ok) {
-        const error = new FetchError("Fetch failed");
-        error.response = response;
-        throw error;
-      }
-      if (softAbort) {
-        throw new Error("[api-def] Request was aborted");
-      }
-      return response;
-    });
+    const promise: Promise<Response> = Promise.resolve()
+      .then(() =>
+        fetch(
+          request,
+          requestConfig.credentials === undefined ? undefined : { credentials: requestConfig.credentials },
+        ),
+      )
+      .catch((error: unknown) => {
+        throw new FetchNetworkError(error);
+      })
+      .then((response) => {
+        responded = true;
+        if (!response.ok) {
+          const error = new FetchError("Fetch failed");
+          error.response = response;
+          throw error;
+        }
+        if (softAbort) {
+          throw new Error("[api-def] Request was aborted");
+        }
+        return response;
+      });
     return {
       promise: promise,
       canceler: abortSignal
