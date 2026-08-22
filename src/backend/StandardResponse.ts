@@ -23,6 +23,7 @@ export const convertStandardResponse = async <T>(
     url: response.url || context.requestUrl.href,
     data: undefined as any,
     status: response.status,
+    ok: response.ok,
     headers: response.headers,
     state: context.requestConfig.state,
     stats: context.stats,

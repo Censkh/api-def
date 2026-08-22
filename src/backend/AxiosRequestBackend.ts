@@ -1,6 +1,6 @@
 import type { AxiosError, AxiosResponse, AxiosStatic } from "axios";
 import type { ApiResponse } from "../ApiTypes";
-import { inferResponseType } from "../ApiUtils";
+import { inferResponseType, isOkStatus } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
 import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
@@ -75,6 +75,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
         data: webSocketResponse.webSocket as any,
         headers: webSocketResponse.headers as any,
         status: webSocketResponse.status,
+        ok: isOkStatus(webSocketResponse.status),
         state: context.requestConfig.state,
         stats: context.stats,
       };
@@ -114,6 +115,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
       data: data,
       headers: axiosResponse.headers as any,
       status: axiosResponse.status,
+      ok: isOkStatus(axiosResponse.status),
       state: context.requestConfig.state,
       __lowercaseHeaders: (axiosResponse as any)._lowerCaseResponseHeaders,
       stats: context.stats,
@@ -140,6 +142,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
       },
       responseType: context.responseType,
       withCredentials: requestConfig.credentials === "include" || requestConfig.credentials === "same-origin",
+      validateStatus: () => true,
       cancelToken: new axios.CancelToken((cancellerFunc) => {
         canceler = cancellerFunc;
       }),

@@ -129,6 +129,63 @@ const res = await updateUser.submit({
 return res.data; // { id: "exampleId", firstName: "Test", age: 22 }
 ```
 
+## Typed Status Responses
+
+Use `responsesOf` when more than one HTTP status is part of an endpoint's normal contract. Each declared status is accepted by `submit` and produces a discriminated response type; every other status still throws a `RequestError`.
+
+```typescript
+import { z } from "zod";
+
+const getUser = api
+  .endpoint()
+  .paramsOf<"id">()
+  .responsesOf({
+    200: {
+      schema: z.object({
+        id: z.string(),
+        name: z.string(),
+      }),
+    },
+    404: {
+      schema: z.object({
+        code: z.literal("not_found"),
+      }),
+    },
+  })
+  .build({
+    id: "get_user",
+    method: "get",
+    path: "/users/:id",
+  });
+
+const response = await getUser.submit({ params: { id: "user-123" } });
+
+if (response.status === 404) {
+  response.ok; // false
+  response.data.code; // "not_found"
+} else {
+  response.ok; // true
+  response.data.name; // string
+}
+```
+
+`response.ok` mirrors the Fetch API: it is `true` for statuses from `200` through `299`, otherwise `false`.
+
+Use `schema` when you only need TypeScript types and do not need runtime validation:
+
+```typescript
+import { schema } from "api-def";
+
+const deleteUser = api
+  .endpoint()
+  .paramsOf<"id">()
+  .responsesOf({
+    202: schema<{ jobId: string }>(),
+    409: schema<{ code: "in_progress" }>(),
+  })
+  .build({ id: "delete_user", method: "delete", path: "/users/:id" });
+```
+
 ## Setting Expected Return Statuses
 
 By default a successful call returns a status from `200` to `299`. You can override this in endpoint or request config with ranges and single values.

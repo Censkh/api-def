@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../ApiTypes";
-import { inferResponseType } from "../ApiUtils";
+import { inferResponseType, isOkStatus } from "../ApiUtils";
 import { createHeaders } from "../Headers";
 import type RequestContext from "../RequestContext";
 import { convertToRequestError, RequestErrorCode } from "../RequestError";
@@ -100,6 +100,7 @@ export default class XHRRequestBackend implements RequestBackend<XHRBackendRespo
         data: webSocketResponse.webSocket as any,
         headers: webSocketResponse.headers,
         status: webSocketResponse.status,
+        ok: isOkStatus(webSocketResponse.status),
         state: context.requestConfig.state,
         stats: context.stats,
       };
@@ -114,6 +115,7 @@ export default class XHRRequestBackend implements RequestBackend<XHRBackendRespo
       url: xhr.responseURL || context.requestUrl.href,
       data: undefined as any,
       status: xhr.status,
+      ok: isOkStatus(xhr.status),
       headers,
       state: context.requestConfig.state,
       stats: context.stats,

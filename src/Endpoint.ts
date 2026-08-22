@@ -2,6 +2,7 @@ import type { Api } from "./Api";
 import type { RequestMethod, ResponseType } from "./ApiConstants";
 import type {
   ApiResponse,
+  ApiStatusResponses,
   BaseRequestConfig,
   Body,
   ComputedRequestConfig,
@@ -11,6 +12,7 @@ import type {
   RequestConfig,
   RequestHost,
   RequestMiddleware,
+  ResponseStatusMap,
   State,
 } from "./ApiTypes";
 import { resolvePathParams } from "./ApiUtils";
@@ -127,6 +129,7 @@ export default class Endpoint<
   TPath extends string = string,
   TRequestHeaders extends RawHeaders | undefined = RawHeaders | undefined,
   TResponseHeaders extends RawHeaders | undefined = RawHeaders | undefined,
+  TStatusResponses extends ResponseStatusMap | undefined = undefined,
 > implements
     EndpointInfo<TResponse, TParams, TQuery, TBody, TState, TPath, TRequestHeaders, TResponseHeaders>,
     RequestHost
@@ -207,7 +210,9 @@ export default class Endpoint<
 
   public async submit(
     config: RequestConfig<TParams, TQuery, TBody, TState, TRequestHeaders>,
-  ): Promise<ApiResponse<TResponse>> {
+  ): Promise<
+    TStatusResponses extends ResponseStatusMap ? ApiStatusResponses<TStatusResponses> : ApiResponse<TResponse>
+  > {
     let mock = false;
 
     const apiMocking = this.api.mocking;
@@ -223,7 +228,7 @@ export default class Endpoint<
       }
     }
 
-    return Requester.submit(this, config, mock ? this.mocking : null);
+    return Requester.submit(this, config, mock ? this.mocking : null) as any;
   }
 
   async resolveUrl(options: EndpointResolveUrlOptions<TParams, TQuery>): Promise<URL> {

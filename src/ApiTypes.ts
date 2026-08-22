@@ -18,11 +18,26 @@ export interface ApiResponse<T = any> {
   readonly method: RequestMethod;
   readonly url: string;
   readonly status: number;
+  readonly ok: boolean;
   readonly data: T;
   readonly headers: Headers;
   readonly state: State;
   readonly stats: RequestStats;
 }
+
+export type ResponseStatusMap = Record<number, unknown>;
+
+export type ApiStatusResponse<TStatus extends number, TData> = Omit<ApiResponse<TData>, "status" | "ok"> & {
+  readonly status: TStatus;
+  readonly ok: number extends TStatus ? boolean : `${TStatus}` extends `2${number}${number}` ? true : false;
+};
+
+export type ApiStatusResponses<TResponses extends ResponseStatusMap> = {
+  [TStatus in keyof TResponses]: ApiStatusResponse<
+    TStatus extends number ? TStatus : TStatus extends `${infer TCode extends number}` ? TCode : never,
+    TResponses[TStatus]
+  >;
+}[keyof TResponses];
 
 export type RequestLock = string | false;
 

@@ -307,6 +307,7 @@ it("api get/post accept URL object and full URL string", async () => {
           url: context.requestUrl.href,
           method: context.method,
           status: 200,
+          ok: true,
           data: { ok: true },
           headers: new Headers({ "content-type": "application/json" }),
           state: context.requestConfig.state ?? {},

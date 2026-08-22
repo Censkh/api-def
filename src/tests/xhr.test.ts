@@ -137,6 +137,7 @@ it("sends configured XHR requests and converts JSON responses", async () => {
     url: "https://example.com/users",
   });
   expect(response.headers.get("x-request-id")).toBe("request-123");
+  expect(response.ok).toBe(true);
   expect(xhr.method).toBe("POST");
   expect(xhr.url).toBe("https://example.com/users");
   expect(xhr.sentBody).toBe('{"name":"Ada"}');

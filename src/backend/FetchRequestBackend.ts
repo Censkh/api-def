@@ -1,4 +1,5 @@
 import type { ApiResponse } from "../ApiTypes";
+import { isOkStatus } from "../ApiUtils";
 import type RequestContext from "../RequestContext";
 import { convertToRequestError, RequestErrorCode } from "../RequestError";
 import * as Utils from "../Utils";
@@ -12,10 +13,6 @@ import {
   type WebSocketConstructor,
   type WebSocketResponse,
 } from "./WebSocketRequest";
-
-class FetchError extends Error {
-  response?: Response;
-}
 
 class FetchNetworkError extends Error {
   readonly cause: unknown;
@@ -58,11 +55,7 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
     }
   }
 
-  async extractResponseFromError(error: Error): Promise<FetchBackendResponse | null | undefined> {
-    if ("response" in error) {
-      const fetchError = error as FetchError;
-      return fetchError.response ? fetchError.response : null;
-    }
+  async extractResponseFromError(_error: Error): Promise<FetchBackendResponse | null | undefined> {
     return undefined;
   }
 
@@ -81,6 +74,7 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
       url: response.url,
       data: undefined as any,
       status: response.status,
+      ok: isOkStatus(response.status),
       headers: response.headers,
       state: context.requestConfig.state,
       stats: context.stats,
@@ -186,11 +180,6 @@ export default class FetchRequestBackend implements RequestBackend<FetchBackendR
       })
       .then((response) => {
         responded = true;
-        if (!response.ok) {
-          const error = new FetchError("Fetch failed");
-          error.response = response;
-          throw error;
-        }
         if (softAbort) {
           throw new Error("[api-def] Request was aborted");
         }

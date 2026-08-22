@@ -42,7 +42,7 @@ const fetchUser = API
   });
 ```
 
-Query and body validation runs before the request is sent. Response validation runs after the backend response is parsed. Validation failures reject with a `RequestError` whose `code` identifies the failing part, such as `validation/query-validate-error` or `validation/response-validate-error`.
+Query and body validation runs before the request is sent. Response validation runs after the backend response is parsed. `responsesOf` selects a response schema from the received HTTP status. Validation failures reject with a `RequestError` whose `code` identifies the failing part, such as `validation/query-validate-error` or `validation/response-validate-error`.
 
 ## Body encoding
 

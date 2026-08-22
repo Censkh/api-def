@@ -18,6 +18,8 @@ export const isNetworkError = (error: Error): boolean => {
   );
 };
 
+export const isOkStatus = (status: number): boolean => status >= 200 && status < 300;
+
 export const isAbsoluteUrl = (url: string): boolean => {
   return /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(url);
 };

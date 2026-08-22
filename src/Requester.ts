@@ -179,11 +179,15 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       context.addCanceller(canceler);
       const response = await promise;
       const parsedResponse = (await parseResponse<R>(context, response))!;
+      const isDeclaredStatusResponse =
+        context.validation.responses !== undefined &&
+        Object.prototype.hasOwnProperty.call(context.validation.responses, parsedResponse.status);
+      const isAcceptableResponse =
+        context.validation.responses === undefined
+          ? isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)
+          : isDeclaredStatusResponse;
 
-      if (
-        !(context.responseType === "websocket" && parsedResponse.status === 101) &&
-        !isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)
-      ) {
+      if (!(context.responseType === "websocket" && parsedResponse.status === 101) && !isAcceptableResponse) {
         throw convertToRequestError({
           error: new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
           response: parsedResponse,
@@ -241,9 +245,10 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
 
   const response = await retry(performRequest, internalRetryOptions);
 
-  if (context.validation.response) {
+  const responseValidation = context.validation.responses?.[response.status] ?? context.validation.response;
+  if (responseValidation) {
     try {
-      response.data = context.validation.response.parse(response.data) as any;
+      response.data = responseValidation.parse(response.data) as any;
     } catch (error: any) {
       throw convertToRequestError({
         error: error,
@@ -322,11 +327,7 @@ const parseError = async (context: RequestContext, rawError: Error) => {
     let code: string = isNetworkError(rawError)
       ? RequestErrorCode.REQUEST_NETWORK_ERROR
       : RequestErrorCode.MISC_UNKNOWN_ERROR;
-    if (errorResponse) {
-      if (!isAcceptableStatus(errorResponse.status, context.requestConfig.acceptableStatus)) {
-        code = RequestErrorCode.REQUEST_INVALID_STATUS;
-      }
-    } else {
+    if (!errorResponse) {
       if ((rawError as any).code === "ENOTFOUND" || (rawError as any).cause?.code === "ENOTFOUND") {
         code = RequestErrorCode.REQUEST_HOST_NAME_NOT_FOUND;
       }

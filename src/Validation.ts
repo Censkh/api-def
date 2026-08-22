@@ -5,6 +5,8 @@ export interface ValidationOptions<TValue> {
   schema?: zod.Schema<TValue>;
 }
 
+export const schema = <TValue>(): ValidationOptions<TValue> => ({});
+
 export interface BodyValidationOptions<TBody extends Body> extends ValidationOptions<TBody> {
   encoding?: RequestBodyEncoding;
 }
@@ -21,5 +23,6 @@ export interface Validation<
   body?: zod.Schema<TBody>;
   bodyEncoding?: RequestBodyEncoding;
   response?: zod.Schema<TResponse>;
+  responses?: Record<number, zod.Schema<any> | undefined>;
   state?: zod.Schema<TState>;
 }

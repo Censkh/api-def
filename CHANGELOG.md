@@ -10,9 +10,13 @@
 - add backend support checks via `FetchRequestBackend.isSupported()`, `XHRRequestBackend.isSupported()`, and `AxiosRequestBackend.isSupported()`
 - add `context.request` to mock handlers as a standard WHATWG `Request`
 - allow mock handlers to return a standard `Response`
+- add `responsesOf` for status-discriminated response contracts
+- add Fetch-compatible `ApiResponse.ok` status indicator
+- add `schema` for schema-free typed response contracts
 
 ### Changes
 
+- let Fetch and Axios return all HTTP responses so `acceptableStatus` and `responsesOf` behave consistently across backends
 - add legacy XHR completion handling and preserve native XHR network events on request errors
 - fall back to `XHRRequestBackend` as the default backend when `fetch` is unavailable but XHR is supported
 - support XHR response headers without requiring a native `Headers` implementation

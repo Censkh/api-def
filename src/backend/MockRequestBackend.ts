@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../ApiTypes";
-import { inferResponseType } from "../ApiUtils";
+import { inferResponseType, isOkStatus } from "../ApiUtils";
 import { createHeaders } from "../Headers";
 import type { MockContext, MockRequestError, MockResponse } from "../MockingTypes";
 import type RequestContext from "../RequestContext";
@@ -224,6 +224,7 @@ export default class MockRequestBackend implements RequestBackend<ApiResponse> {
       headers: parsedHeaders,
       data: data,
       status: res.statusCode,
+      ok: isOkStatus(res.statusCode),
       state: context.requestConfig.state,
       stats: context.stats,
     };
