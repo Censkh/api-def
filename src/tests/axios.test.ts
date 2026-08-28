@@ -52,3 +52,40 @@ nodeOnlyIt("request backends output", async () => {
   expect(cleanResponse(fetchResult)).toEqual(cleanResponse(axiosResult));
   expect(fetchResult.url).toBe("https://www.google.com/generate_204?test=true&id=abc");
 });
+
+it("keeps Axios clients isolated between backend instances", async () => {
+  const createAxios = (client: string) => {
+    const axios = ((config: { url: string }) =>
+      Promise.resolve({
+        data: { client },
+        status: 200,
+        headers: {
+          "content-type": "application/json",
+          get: (key: string) => (key.toLowerCase() === "content-type" ? "application/json" : undefined),
+        },
+        request: { res: { responseUrl: config.url } },
+      })) as any;
+    axios.CancelToken = class {
+      constructor(registerCanceller: (cancel: () => void) => void) {
+        registerCanceller(() => {});
+      }
+    };
+    return axios;
+  };
+
+  const firstApi = new Api({
+    baseUrl: "https://example.com",
+    name: "First Axios API",
+    requestBackend: new AxiosRequestBackend(createAxios("first")),
+  });
+  const secondApi = new Api({
+    baseUrl: "https://example.com",
+    name: "Second Axios API",
+    requestBackend: new AxiosRequestBackend(createAxios("second")),
+  });
+
+  const firstEndpoint = firstApi.endpoint().build({ id: "first", method: "get", path: "/first" });
+  secondApi.endpoint().build({ id: "second", method: "get", path: "/second" });
+
+  await expect(firstEndpoint.submit({})).resolves.toMatchObject({ data: { client: "first" } });
+});
