@@ -10,12 +10,48 @@ export const isCancelledError = (error: Error): error is CancelledRequestError =
   return "isCancelledRequest" in error;
 };
 
+const NETWORK_ERROR_CODES = new Set([
+  "ECONNABORTED",
+  "ECONNREFUSED",
+  "ECONNRESET",
+  "EHOSTUNREACH",
+  "ENETUNREACH",
+  "EPIPE",
+  "ERR_NETWORK",
+  "ETIMEDOUT",
+]);
+
 export const isNetworkError = (error: Error): boolean => {
-  return (
-    error.name === "NetworkError" ||
-    error.message === "Network Error" ||
-    (error as any).constructor?.name === "NetworkError"
-  );
+  const pending: unknown[] = [error];
+  const seen = new Set<unknown>();
+
+  while (pending.length > 0) {
+    const current = pending.shift();
+    if (!current || typeof current !== "object" || seen.has(current)) {
+      continue;
+    }
+    seen.add(current);
+
+    const candidate = current as {
+      cause?: unknown;
+      code?: unknown;
+      constructor?: { name?: string };
+      message?: unknown;
+      name?: unknown;
+    };
+    if (
+      candidate.name === "NetworkError" ||
+      candidate.message === "Network Error" ||
+      candidate.constructor?.name === "NetworkError" ||
+      (typeof candidate.code === "string" && NETWORK_ERROR_CODES.has(candidate.code))
+    ) {
+      return true;
+    }
+
+    pending.push(candidate.cause);
+  }
+
+  return false;
 };
 
 export const isOkStatus = (status: number): boolean => status >= 200 && status < 300;

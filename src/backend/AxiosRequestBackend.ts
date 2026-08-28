@@ -11,8 +11,6 @@ import {
   type WebSocketResponse,
 } from "./WebSocketRequest";
 
-let axios: AxiosStatic;
-
 export const isAxiosError = (error: Error): error is AxiosError => {
   return "isAxiosError" in error;
 };
@@ -46,6 +44,7 @@ type AxiosBackendResponse = AxiosResponse | WebSocketResponse;
 
 export default class AxiosRequestBackend implements RequestBackend<AxiosBackendResponse> {
   readonly id = "axios";
+  private readonly axios: AxiosStatic;
   webSocketConstructor: WebSocketConstructor | undefined = getGlobalWebSocketConstructor();
 
   static isSupported(axiosLibrary?: unknown): boolean {
@@ -53,7 +52,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
   }
 
   constructor(axiosLibrary: any, webSocketConstructor?: WebSocketConstructor) {
-    axios = axiosLibrary;
+    this.axios = axiosLibrary;
     if (webSocketConstructor !== undefined) {
       this.webSocketConstructor = webSocketConstructor;
     }
@@ -128,6 +127,7 @@ export default class AxiosRequestBackend implements RequestBackend<AxiosBackendR
     }
 
     const { requestConfig } = context;
+    const axios = this.axios;
 
     const url = context.requestUrl;
 

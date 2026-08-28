@@ -17,6 +17,7 @@
 ### Changes
 
 - let Fetch and Axios return all HTTP responses so `acceptableStatus` and `responsesOf` behave consistently across backends
+- classify Axios and nested runtime socket failures as network errors consistently
 - add legacy XHR completion handling and preserve native XHR network events on request errors
 - fall back to `XHRRequestBackend` as the default backend when `fetch` is unavailable but XHR is supported
 - support XHR response headers without requiring a native `Headers` implementation
