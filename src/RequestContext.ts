@@ -1,5 +1,5 @@
 import type { Api } from "./Api";
-import type { RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import { RequestEvent, type RequestMethod, type ResponseType } from "./ApiConstants";
 import type {
   ApiResponse,
   Body,
@@ -9,7 +9,9 @@ import type {
   Query,
   RawHeaders,
   RequestCacheInfo,
+  RequestEventHandler,
   RequestEventHandlers,
+  RequestEventObserver,
   RequestHost,
   RequestStats,
   State,
@@ -18,6 +20,7 @@ import { resolvePathParams, resolveUrl } from "./ApiUtils";
 import type RequestBackend from "./backend/RequestBackend";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import type { RequestError } from "./RequestError";
+import { runRequestTask } from "./RequestTask";
 import * as Utils from "./Utils";
 import type { Validation } from "./Validation";
 
@@ -130,8 +133,16 @@ export default class RequestContext<
       const eventTypes = Object.keys(events);
       for (let n = 0; n < eventTypes.length; n++) {
         const eventType = eventTypes[n] as RequestEvent;
-        const eventHandlersForType = this.eventHandlers[eventType] || (this.eventHandlers[eventType] = []);
-        const middlewareEventHandlers = events[eventType];
+        const allEventHandlers = this.eventHandlers as Record<
+          RequestEvent,
+          Array<RequestEventHandler<TResponse> | RequestEventObserver<TResponse>>
+        >;
+        const eventHandlersForType = allEventHandlers[eventType] || (allEventHandlers[eventType] = []);
+        const middlewareEventHandlers = events[eventType] as
+          | RequestEventHandler<TResponse>
+          | RequestEventObserver<TResponse>
+          | undefined
+          | false;
         if (middlewareEventHandlers) {
           eventHandlersForType.push(middlewareEventHandlers);
         }
@@ -216,13 +227,17 @@ export default class RequestContext<
     if (eventHandlers) {
       for (let i = 0; i < eventHandlers.length; i++) {
         const eventHandler = eventHandlers[i];
-        const eventResult = await eventHandler(this as RequestContext);
-        if (eventResult) {
+        const eventResult = await runRequestTask(this, () => eventHandler(this as RequestContext));
+        if (eventResult && eventType !== RequestEvent.ERROR && eventType !== RequestEvent.FINALLY) {
           return eventResult;
         }
       }
     }
     return undefined;
+  }
+
+  hasEventHandlers(eventType: RequestEvent): boolean {
+    return Boolean(this.eventHandlers[eventType]?.length);
   }
 
   addCanceller(canceler: () => void): void {

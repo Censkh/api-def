@@ -11,9 +11,11 @@ export type RequestMethod = EnumOf<typeof RequestMethod>;
 
 export const RequestEvent = {
   BEFORE_SEND: "beforeSend",
+  BEFORE_REQUEST: "beforeRequest",
   SUCCESS: "success",
+  ATTEMPT_ERROR: "attemptError",
   ERROR: "error",
-  UNRECOVERABLE_ERROR: "unrecoverableError",
+  FINALLY: "finally",
 } as const;
 export type RequestEvent = EnumOf<typeof RequestEvent>;
 

@@ -3,6 +3,7 @@ import { inferResponseType, isOkStatus } from "../ApiUtils";
 import { createHeaders } from "../Headers";
 import type RequestContext from "../RequestContext";
 import { convertToRequestError, RequestErrorCode } from "../RequestError";
+import { bindRequestTask } from "../RequestTask";
 import * as Utils from "../Utils";
 import type RequestBackend from "./RequestBackend";
 import type { ConvertedApiResponse, RequestBackendErrorInfo, RequestOperation } from "./RequestBackend";
@@ -174,44 +175,44 @@ export default class XHRRequestBackend implements RequestBackend<XHRBackendRespo
 
     let settled = false;
     const promise = new Promise<XMLHttpRequest>((resolve, reject) => {
-      const complete = () => {
+      const complete = bindRequestTask(context, () => {
         if (settled) {
           return;
         }
         settled = true;
         resolve(xhr);
-      };
+      });
       if ("onloadend" in (xhr as object)) {
         xhr.onloadend = complete;
       } else {
-        xhr.onreadystatechange = () => {
+        xhr.onreadystatechange = bindRequestTask(context, () => {
           if (xhr.readyState !== 4 || (xhr.status === 0 && !xhr.responseURL.startsWith("file:"))) {
             return;
           }
           setTimeout(complete);
-        };
+        });
       }
-      xhr.onerror = (event) => {
+      xhr.onerror = bindRequestTask(context, (event: Event) => {
         if (settled) {
           return;
         }
         settled = true;
         reject(new XHRNetworkError("[api-def] XMLHttpRequest network request failed", event));
-      };
-      xhr.onabort = (event) => {
+      });
+      xhr.onabort = bindRequestTask(context, (event: Event) => {
         if (settled) {
           return;
         }
         settled = true;
         reject(new XHRNetworkError("[api-def] XMLHttpRequest request was aborted", event));
-      };
-      xhr.ontimeout = (event) => {
+      });
+      xhr.ontimeout = bindRequestTask(context, (event: Event) => {
         if (settled) {
           return;
         }
         settled = true;
         reject(new XHRNetworkError("[api-def] XMLHttpRequest request timed out", event));
-      };
+      });
 
       xhr.open(context.method.toUpperCase(), context.requestUrl.href, true);
       xhr.withCredentials = requestConfig.credentials === "include";

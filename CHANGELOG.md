@@ -2,6 +2,22 @@
 
 - add CLI to generate api-def from openapi spec
 
+## 0.17.0
+
+### Breaking Changes
+
+- change `error` middleware to run once when the overall request is about to reject, including middleware and validation failures; it is now an observer and cannot recover or retry a request
+- move per-attempt error handling and `{ type: "retry" }` results from `error` to `attemptError`
+- remove `unrecoverableError`; use the final `error` event instead
+
+### Features
+
+- add `beforeRequest` middleware after request mutation and validation but before the backend operation
+- add `finally` middleware that runs once after every successful or failed request
+- add opt-in `RequestCoalescingMiddleware` to share identical in-flight `GET` requests
+- expose whether a response joined an in-flight request through `response.stats.coalesced`
+- link request middleware, retry attempts, and XHR/WebSocket callbacks to the submit caller in DevTools using `console.createTask` when available
+
 ## 0.16.0
 
 ### Features

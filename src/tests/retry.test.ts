@@ -31,7 +31,7 @@ it("allow for retries in middleware", async () => {
   });
 
   api.middleware.push({
-    error: (context) => {
+    attemptError: (context) => {
       if (context.error?.response?.data?.code === "auth/invalid-token") {
         context.updateHeaders({
           token: "updated-token",

@@ -14,6 +14,10 @@ export { default as Endpoint, type EndpointConfig } from "./Endpoint";
 export { default as EndpointBuilder, type EndpointBuildOptions } from "./EndpointBuilder";
 export { default as ClientCacheMiddleware } from "./middleware/ClientCacheMiddleware";
 export { default as LoggingMiddleware } from "./middleware/LoggingMiddleware";
+export {
+  default as RequestCoalescingMiddleware,
+  type RequestCoalescingMiddlewareOptions,
+} from "./middleware/RequestCoalescingMiddleware";
 export { getErrorResponse, isRequestError, type RequestError } from "./RequestError";
 export * from "./UtilTypes";
 export { default as retry } from "./util/retry";

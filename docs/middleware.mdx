@@ -53,12 +53,16 @@ export default API;
 
 ## Events
 
-| Name                  | Usage
-| ---                   | ---
-| `beforeSend`          | Called before send.
-| `success`             | When the request was a success.
-| `error`               | The request failed. May be called multiple times due to retries
-| `unrecoverableError`  | The request failed after retries are exhausted or `shouldRetry` returns false. |
+| Name           | Usage |
+| ---            | --- |
+| `beforeSend`   | Runs before validation and the backend request. |
+| `beforeRequest` | Runs after request mutation and validation, immediately before the backend request. |
+| `success`      | Runs once when the request succeeds. |
+| `attemptError` | Runs for each failed backend attempt and may respond or request a retry. |
+| `error`        | Runs once when the overall request is about to reject, including middleware and validation failures. |
+| `finally`      | Runs once after every successful or failed request. |
+
+`error` and `finally` are observers; their return values are ignored. Use `attemptError` when middleware needs to recover from a failed attempt or trigger a retry.
 
 
 ## Event Results
@@ -67,7 +71,7 @@ Your event listeners can also return special objects that will trigger certain t
 
 ### Respond
 
-Applicable in the `beforeSend` event.
+Applicable in the `beforeSend`, `beforeRequest`, and `attemptError` events.
 
 Your middleware can respond instead of going to the network, as used by the built-in [client cache middleware](/caching).
 
@@ -84,13 +88,25 @@ return {
 
 ### Retry
 
-Applicable in the `error` event.
+Applicable in the `attemptError` event.
 
 Trigger a retry despite the `retry` option. Be careful of causing infinite loops with this!
 
 ```typescript
 return {
   type: "retry"
+};
+```
+
+## Cleanup
+
+Use `finally` to release resources registered for a request. Inspect `context.response` and `context.error` to determine the outcome:
+
+```typescript
+const cleanupMiddleware: RequestMiddleware = {
+  finally: (context) => {
+    pendingRequests.delete(context.id);
+  },
 };
 ```
 

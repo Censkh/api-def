@@ -81,6 +81,35 @@ const path = request.resolvePath({ params: {} });
 
 `Api.resolveUrl` provides the same behavior for direct API requests. A request with a string `lock` cancels an earlier in-flight request using the same lock key.
 
+## Request coalescing
+
+Add `RequestCoalescingMiddleware` to share one network operation when identical `GET` requests overlap:
+
+```typescript
+import { Api, RequestCoalescingMiddleware } from "api-def";
+
+const API = new Api({
+  name: "My Backend",
+  baseUrl: "https://api.example.com",
+  middleware: [AuthMiddleware(), RequestCoalescingMiddleware()],
+});
+```
+
+The default key includes the API and backend instances, resolved URL, response type, credentials, browser cache mode, headers, retry policy, accepted statuses, and response contract. Coalescing runs during `beforeRequest`, after all `beforeSend` mutation and request validation, so authentication and endpoint middleware changes are included. Non-`GET` requests, locked requests, streams, and WebSockets are not coalesced.
+
+Each caller receives its own response metadata and runs its own `success`, `error`, and `finally` middleware. Only the request that owns the shared network operation emits `attemptError`. Joined responses set `response.stats.coalesced` to `true`.
+
+Use `predicate` to opt out selectively or `key` to provide custom identity rules:
+
+```typescript
+RequestCoalescingMiddleware({
+  predicate: (context) => context.requestUrl.pathname.startsWith("/catalog"),
+  key: (context) => `${context.method}:${context.requestUrl.href}`,
+});
+```
+
+Custom keys must include every request property that can change the returned representation, such as authorization or locale headers.
+
 Path parameters may use either `:id` or `{id}` syntax:
 
 ```typescript

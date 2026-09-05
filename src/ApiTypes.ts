@@ -1,5 +1,5 @@
 import type { Api } from "./Api";
-import type { CacheSource, EventResultType, RequestEvent, RequestMethod, ResponseType } from "./ApiConstants";
+import type { CacheSource, EventResultType, RequestMethod, ResponseType } from "./ApiConstants";
 import type RequestBackend from "./backend/RequestBackend";
 import type RequestContext from "./RequestContext";
 import type { Validation } from "./Validation";
@@ -125,16 +125,29 @@ export type RequestEventHandler<R> = (
   context: RequestContext<R>,
 ) => EventResult<R> | undefined | Promise<EventResult<R> | undefined>;
 
+export type RequestEventObserver<R> = (context: RequestContext<R>) => void | Promise<void>;
+
 export type RequestEventHandlers<R> = {
-  [key in RequestEvent]?: Array<RequestEventHandler<R>>;
+  beforeSend?: Array<RequestEventHandler<R>>;
+  beforeRequest?: Array<RequestEventHandler<R>>;
+  success?: Array<RequestEventHandler<R>>;
+  attemptError?: Array<RequestEventHandler<R>>;
+  error?: Array<RequestEventObserver<R>>;
+  finally?: Array<RequestEventObserver<R>>;
 };
 
 export type RequestMiddleware<_O = undefined> = {
-  [key in RequestEvent]?: RequestEventHandler<any> | undefined | false;
+  beforeSend?: RequestEventHandler<any> | false;
+  beforeRequest?: RequestEventHandler<any> | false;
+  success?: RequestEventHandler<any> | false;
+  attemptError?: RequestEventHandler<any> | false;
+  error?: RequestEventObserver<any> | false;
+  finally?: RequestEventObserver<any> | false;
 };
 
 export interface RequestStats {
   cached: false | { is: true; by: "local" | "api" };
+  coalesced?: boolean;
   attempt: number;
   startTimestamp: number;
   endTimestamp: number | undefined;

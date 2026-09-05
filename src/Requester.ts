@@ -15,12 +15,12 @@ import MockRequestBackend from "./backend/MockRequestBackend";
 import type { EndpointMockingConfig } from "./MockingTypes";
 import RequestContext from "./RequestContext";
 import { convertToRequestError, isRequestError, type RequestError, RequestErrorCode } from "./RequestError";
+import { bindRequestTask, createRequestTask } from "./RequestTask";
 import { textDecode } from "./TextDecoding";
 import retry from "./util/retry";
 import type { RetryOptions as InternalRetryOptions, RetryFunction } from "./util/retry/interfaces";
 
 const locks: Record<string, RequestContext> = {};
-const runningOperations: Record<string, Promise<ApiResponse>> = {};
 
 const MOCK_REQUEST_BACKEND = new MockRequestBackend();
 
@@ -74,16 +74,7 @@ export const submit = async <
     mocking,
   );
 
-  const { key } = context;
-
-  // don't do this -- should only be for GET requests anyway and should be opt-in
-  /*
-  // if we are already running this request just return the same promise, no need to do it again
-  const sameRequest = runningOperations[key];
-  if (sameRequest) {
-    return sameRequest;
-  }
-  */
+  createRequestTask(context, host.method, host.path);
 
   const { lock } = context.requestConfig || {};
 
@@ -96,22 +87,26 @@ export const submit = async <
   }
 
   try {
-    let response = await (runningOperations[key] = makeRequest(context as RequestContext<TResponse>));
+    let response = await makeRequest(context as RequestContext<TResponse>);
+    context.error = null;
+    context.response = response;
 
     const successEventResult = await context.triggerEvent(RequestEvent.SUCCESS);
     if (successEventResult && successEventResult.type === EventResultType.RESPOND) {
       context.response = response = successEventResult.response;
     }
 
-    delete runningOperations[key];
     return response;
-  } catch (error) {
-    delete runningOperations[key];
+  } catch (rawError: any) {
+    const error = await setContextError(context, rawError);
+    await context.triggerEvent(RequestEvent.ERROR);
     throw error;
   } finally {
-    if (typeof lock === "string") {
+    context.stats.endTimestamp = Date.now();
+    if (typeof lock === "string" && locks[lock]?.id === context.id) {
       delete locks[lock];
     }
+    await context.triggerEvent(RequestEvent.FINALLY);
   }
 };
 
@@ -160,6 +155,15 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
   }
   context.parseBody();
 
+  if (context.hasEventHandlers(RequestEvent.BEFORE_REQUEST)) {
+    const beforeRequestEventResult = await context.triggerEvent(RequestEvent.BEFORE_REQUEST);
+    if (beforeRequestEventResult && beforeRequestEventResult.type === EventResultType.RESPOND) {
+      context.response = beforeRequestEventResult.response;
+      assertAcceptableResponse(context, beforeRequestEventResult.response);
+      return validateResponse(context, beforeRequestEventResult.response);
+    }
+  }
+
   const retryOptions = parseRetryOptions(context.requestConfig?.retry);
 
   const internalRetryOptions: InternalRetryOptions = {
@@ -179,38 +183,18 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       context.addCanceller(canceler);
       const response = await promise;
       const parsedResponse = (await parseResponse<R>(context, response))!;
-      const isDeclaredStatusResponse =
-        context.validation.responses !== undefined &&
-        Object.prototype.hasOwnProperty.call(context.validation.responses, parsedResponse.status);
-      const isAcceptableResponse =
-        context.validation.responses === undefined
-          ? isAcceptableStatus(parsedResponse.status, context.requestConfig.acceptableStatus)
-          : isDeclaredStatusResponse;
+      assertAcceptableResponse(context, parsedResponse);
 
-      if (!(context.responseType === "websocket" && parsedResponse.status === 101) && !isAcceptableResponse) {
-        throw convertToRequestError({
-          error: new Error(`[api-def] Invalid response status code '${parsedResponse.status}'`),
-          response: parsedResponse,
-          code: RequestErrorCode.REQUEST_INVALID_STATUS,
-          context: context,
-        });
-      }
-
+      context.error = null;
       context.response = parsedResponse;
       context.stats.endTimestamp = Date.now();
       return parsedResponse;
     } catch (rawError: any) {
-      if (context.cancelled) {
-        rawError.isCancelledRequest = true;
-      }
-
-      const error = await parseError(context, rawError);
-      context.error = error;
-      context.response = error.response;
-      context.stats.endTimestamp = Date.now();
-
-      const errorEventResult = await context.triggerEvent(RequestEvent.ERROR);
+      const error = await setContextError(context, rawError);
+      const errorEventResult = await context.triggerEvent(RequestEvent.ATTEMPT_ERROR);
       if (errorEventResult?.type === EventResultType.RESPOND) {
+        context.error = null;
+        context.response = errorEventResult.response;
         return errorEventResult.response;
       }
 
@@ -223,7 +207,7 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
       // if we have an event that tells us to retry, we must do it
       const forceRetry = errorEventResult?.type === EventResultType.RETRY;
       if (forceRetry) {
-        return performRequest(fnBail, attemptCount);
+        return bindRequestTask(context, performRequest)(fnBail, attemptCount);
       }
 
       // allow retry logic to handle
@@ -231,34 +215,66 @@ const makeRequest = async <R>(context: RequestContext<R>): Promise<ApiResponse<R
         throw error;
       }
 
-      // error is unrecoverable, bail
-      const unrecoverableErrorEventResult = await context.triggerEvent(RequestEvent.UNRECOVERABLE_ERROR);
-      if (unrecoverableErrorEventResult) {
-        if (unrecoverableErrorEventResult.type === EventResultType.RESPOND) {
-          return unrecoverableErrorEventResult.response;
-        }
-      }
-
       fnBail(error);
     }
   };
 
-  const response = await retry(performRequest, internalRetryOptions);
+  const response = await retry(bindRequestTask(context, performRequest), internalRetryOptions);
+  return validateResponse(context, response);
+};
 
+const assertAcceptableResponse = (context: RequestContext, response: ApiResponse): void => {
+  const isDeclaredStatusResponse =
+    context.validation.responses !== undefined &&
+    Object.prototype.hasOwnProperty.call(context.validation.responses, response.status);
+  const isAcceptableResponse =
+    context.validation.responses === undefined
+      ? isAcceptableStatus(response.status, context.requestConfig.acceptableStatus)
+      : isDeclaredStatusResponse;
+
+  if (!(context.responseType === "websocket" && response.status === 101) && !isAcceptableResponse) {
+    throw convertToRequestError({
+      error: new Error(`[api-def] Invalid response status code '${response.status}'`),
+      response,
+      code: RequestErrorCode.REQUEST_INVALID_STATUS,
+      context,
+    });
+  }
+};
+
+const validateResponse = <R>(context: RequestContext<R>, response: ApiResponse<R>): ApiResponse<R> => {
   const responseValidation = context.validation.responses?.[response.status] ?? context.validation.response;
   if (responseValidation) {
     try {
-      response.data = responseValidation.parse(response.data) as any;
+      (response as any).data = responseValidation.parse(response.data) as R;
     } catch (error: any) {
       throw convertToRequestError({
-        error: error,
+        error,
+        response,
         code: RequestErrorCode.VALIDATION_RESPONSE_VALIDATE_ERROR,
-        context: context,
+        context,
       });
     }
   }
 
   return response;
+};
+
+const setContextError = async (
+  context: RequestContext<any, any, any, any, any>,
+  rawError: Error,
+): Promise<RequestError> => {
+  if (context.cancelled) {
+    (rawError as any).isCancelledRequest = true;
+  }
+
+  const error = await parseError(context, rawError);
+  context.error = error;
+  if (error.response !== undefined) {
+    context.response = error.response;
+  }
+  context.stats.endTimestamp = Date.now();
+  return error;
 };
 
 const parseResponse = async <R = any>(

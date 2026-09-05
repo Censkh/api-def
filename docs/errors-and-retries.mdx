@@ -52,11 +52,11 @@ const API = new Api({
 });
 ```
 
-`maxAttempts` is the number of retries after the initial attempt. `shouldRetry` returning `true` allows the retry; returning `false` stops retrying and triggers `unrecoverableError` middleware.
+`maxAttempts` is the number of retries after the initial attempt. `shouldRetry` returning `true` allows the retry; returning `false` stops retrying. The final failure is then observed by `error` middleware.
 
 By default, failed requests are retried when `retry` is enabled. Supply `shouldRetry` when only particular failures should be retried, such as transient network errors.
 
-Middleware can return `{ type: "retry" }` from the `error` event to force a retry. Use that carefully because forced retries can loop indefinitely if the middleware never stops returning the result.
+Middleware can return `{ type: "retry" }` from the `attemptError` event to force a retry. Use that carefully because forced retries can loop indefinitely if the middleware never stops returning the result.
 
 ## Acceptable statuses
 
@@ -72,6 +72,12 @@ const redirect = API.endpoint().build({
   },
 });
 ```
+
+## Debugging async requests
+
+When `console.createTask` is available, api-def automatically tags each submission so DevTools can link middleware, retry attempts, and XHR/WebSocket connection callbacks back to the original `.submit()` caller. Task names use the method and endpoint path template, such as `api-def GET /users/:id`, without query strings or fragments.
+
+This needs no configuration and falls back to normal execution when the API is unavailable. It improves DevTools async stack traces; it does not add distributed tracing headers or change request errors.
 
 ## Low-level retry helper
 

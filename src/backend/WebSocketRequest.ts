@@ -1,5 +1,6 @@
 import { createHeaders } from "../Headers";
 import type RequestContext from "../RequestContext";
+import { bindRequestTask } from "../RequestTask";
 import type { RequestOperation } from "./RequestBackend";
 
 export type WebSocketConstructor = new (url: string | URL, protocols?: string | string[]) => WebSocket;
@@ -67,7 +68,7 @@ export const makeWebSocketRequest = (
   };
 
   const promise = new Promise<WebSocketResponse>((resolve, reject) => {
-    handleOpen = () => {
+    handleOpen = bindRequestTask(context, () => {
       settled = true;
       cleanup();
       resolve({
@@ -76,9 +77,9 @@ export const makeWebSocketRequest = (
         url: url.href,
         webSocket,
       });
-    };
+    });
 
-    handleError = (event: Event) => {
+    handleError = bindRequestTask(context, (event: Event) => {
       settled = true;
       cleanup();
       reject(
@@ -86,9 +87,9 @@ export const makeWebSocketRequest = (
           cause: event,
         }),
       );
-    };
+    });
 
-    handleClose = (event: Event) => {
+    handleClose = bindRequestTask(context, (event: Event) => {
       if (settled) {
         return;
       }
@@ -99,7 +100,7 @@ export const makeWebSocketRequest = (
           cause: event,
         }),
       );
-    };
+    });
 
     addEventListener("open", handleOpen);
     addEventListener("error", handleError);

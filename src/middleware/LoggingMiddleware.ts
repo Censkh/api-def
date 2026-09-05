@@ -97,7 +97,7 @@ const LoggingMiddleware = (config: LoggingMiddlewareOptions = {}): RequestMiddle
         config,
       );
     },
-    [RequestEvent.ERROR]: (context) => {
+    [RequestEvent.ATTEMPT_ERROR]: (context) => {
       if (context.error) {
         const { error, message } = diagnoseError(context.error);
         log(context, LogType.WARNING, `error on attempt ${context.stats.attempt} - ${message}`, config, {
@@ -105,7 +105,7 @@ const LoggingMiddleware = (config: LoggingMiddlewareOptions = {}): RequestMiddle
         });
       }
     },
-    [RequestEvent.UNRECOVERABLE_ERROR]: (context) => {
+    [RequestEvent.ERROR]: (context) => {
       if (context.error) {
         const { error, message } = diagnoseError(context.error);
         log(context, LogType.ERROR, `failed - ${message}`, config, {
