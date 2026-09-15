@@ -131,7 +131,7 @@ const config = {
           ],
         },
       ],
-      copyright: `<div class="developer-credit"><div>Developed by James Waterhouse of <a href="https://knownquantity.net/">Known Quantity</a><br/><span>Copyright © ${new Date().getFullYear()} api-def contributors.</span></div><a class="known-quantity" href="https://knownquantity.net/" aria-label="Known Quantity website"><img src="/img/known-quantity.svg" alt="Known Quantity" width="181" height="48" /></a></div>`,
+      copyright: `<div class="developer-credit"><div>Developed by <a href="https://github.com/Censkh">James Waterhouse</a> of <a href="https://knownquantity.net/">Known Quantity</a><br/><span>Copyright © ${new Date().getFullYear()} api-def contributors.</span></div><a class="known-quantity" href="https://knownquantity.net/" aria-label="Known Quantity website"><img src="/img/known-quantity.svg" alt="Known Quantity" width="181" height="48" /></a></div>`,
     },
   },
 };

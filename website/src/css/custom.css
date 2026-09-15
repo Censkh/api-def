@@ -180,12 +180,17 @@ html[data-theme="dark"] {
 .markdown > p { margin-bottom: 1.5rem; }
 .markdown > header + p { font-size: 1.0625rem; color: var(--brand-muted); line-height: 1.85; }
 .markdown :not(pre) > code { border: 1px solid var(--brand-border); border-radius: 5px; padding: .12rem .3rem; }
-.markdown table {
-  display: block;
+.markdown .table-scroll {
+  width: 100%;
   overflow-x: auto;
   margin-block: 1.5rem 2rem;
   border: 1px solid var(--brand-border);
   border-radius: 10px;
+}
+.markdown table {
+  display: table;
+  width: 100%;
+  margin: 0;
   border-collapse: separate;
   border-spacing: 0;
   font-size: .9375rem;

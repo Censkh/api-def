@@ -70,9 +70,9 @@ try {
   }
   await page.setViewportSize({ width: 320, height: 900 });
   await visit('/config/');
-  await page.locator('table').focus();
+  await page.locator('.table-scroll').focus();
   await page.keyboard.press('ArrowRight');
-  await page.waitForFunction(() => document.querySelector('table').scrollLeft > 0);
+  await page.waitForFunction(() => document.querySelector('.table-scroll').scrollLeft > 0);
   fs.mkdirSync('output/accessibility', { recursive: true });
   fs.writeFileSync('output/accessibility/interaction-results.json', JSON.stringify(results, null, 2));
   console.log('Passed: skip link, mobile focus/escape, copy menu, search states/navigation, text spacing, 200% text, keyboard table scrolling.');
