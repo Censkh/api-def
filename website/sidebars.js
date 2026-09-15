@@ -10,6 +10,6 @@ module.exports = {
     "advanced-requests",
     "mocking",
     "node",
-    "api-reference",
+    { type: "link", label: "API Reference", href: "https://api-def.com/api/" },
   ],
 };

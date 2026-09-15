@@ -1,6 +1,7 @@
 ---
 id: config
 title: Config
+description: Configure api-def requests with base URLs, headers, retries, caching, credentials and acceptable response statuses.
 ---
 
 API, endpoint, and individual request configuration are merged in that order. Prefer `defaultRequestConfig`; `config` is retained as a deprecated alias.
@@ -22,7 +23,7 @@ import { Api } from "api-def";
 
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   defaultRequestConfig: {
     retry: 2,
     headers: {

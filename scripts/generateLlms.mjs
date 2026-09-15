@@ -20,7 +20,6 @@ const descriptions = {
   "advanced-requests": "Use response types, WebSockets, typed headers, URL resolution, locks, and hot requests.",
   mocking: "Create endpoint mocks for disconnected development and tests.",
   node: "Configure Fetch and Axios backends for Node.js, browsers, and other runtimes.",
-  "api-reference": "Browse the generated TypeScript API reference.",
 };
 
 const orderedIds = fs

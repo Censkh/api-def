@@ -1,0 +1,87 @@
+@import url("/fonts/fonts.css");
+p a, .tsd-comment a, a[class*="tsd-kind"] { text-decoration: underline; text-underline-offset: .18em; }
+:root { --brand-secondary: #70b7ff; }
+:focus-visible,
+.tsd-filter-input input[type="checkbox"]:focus-visible + svg {
+  border-radius: 8px !important;
+  outline: 3px solid var(--brand-secondary);
+  outline-offset: 3px;
+}
+.tsd-accordion-summary:focus-visible svg { outline: none; }
+html { scroll-padding-top: 4rem; }
+/* The section is already linked in the contents; keep its summary a single toggle. */
+summary .tsd-anchor-icon { display: none; }
+.tsd-breadcrumb a, .tsd-hierarchy a, .tsd-typography li > a { display: inline-block; min-height: 24px; line-height: 24px; }
+.col-content { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .tsd-parameters, .tsd-type-parameters { padding-left: 1rem; }
+}
+
+.tsd-tag, button { font-size: .875rem; }
+
+/* Match the dark documentation palette regardless of saved OS/theme preference. */
+html:root, html:root[data-theme] {
+  color-scheme: dark;
+  --color-scheme: dark;
+  --color-background: #191a1d;
+  --color-background-secondary: #222429;
+  --color-background-active: #202f40;
+  --color-background-warning: #ff8a3d;
+  --color-warning-text: #191a1d;
+  --color-accent: #58585f;
+  --color-active-menu-item: #202f40;
+  --color-text: #fafafa;
+  --color-contrast-text: #fafafa;
+  --color-text-aside: #d4d4d8;
+  --color-link: #70b7ff;
+  --color-focus-outline: #70b7ff;
+  --color-icon-background: #222429;
+  --color-icon-text: #fafafa;
+  --color-comment-tag-text: #b5daff;
+  --color-comment-tag: #202f40;
+  --color-ts-accessor: #70b7ff;
+  --color-ts-call-signature: #70b7ff;
+  --color-ts-class: #b5daff;
+  --color-ts-constructor: #b5daff;
+  --color-ts-constructor-signature: #70b7ff;
+  --color-ts-enum: #ff9b50;
+  --color-ts-enum-member: #ff9b50;
+  --color-ts-function: #b5daff;
+  --color-ts-get-signature: #70b7ff;
+  --color-ts-index-signature: #70b7ff;
+  --color-ts-interface: #70b7ff;
+  --color-ts-keyword: #ff9b50;
+  --color-ts-method: #b5daff;
+  --color-ts-module: #70b7ff;
+  --color-ts-namespace: #70b7ff;
+  --color-ts-parameter: #70b7ff;
+  --color-ts-project: #70b7ff;
+  --color-ts-property: #70b7ff;
+  --color-ts-reference: #70b7ff;
+  --color-ts-set-signature: #70b7ff;
+  --color-ts-type-alias: #70b7ff;
+  --color-ts-type-parameter: #ff9b50;
+  --color-ts-variable: #70b7ff;
+  --code-background: #2b2b30;
+  --hl-0: #b5daff;
+  --hl-1: #ededee;
+  --hl-2: #70b7ff;
+  --hl-3: #ff9b50;
+  --hl-4: #ededee;
+  --hl-5: #ff9b50;
+  --hl-6: #ffb183;
+  --hl-7: #b5daff;
+  --hl-8: #a8a8b0;
+}
+body { font-family: 'JetBrains Sans', system-ui, sans-serif; line-height: 1.75; }
+h1, h2, h3, h4, h5, h6, code, pre, .tsd-signature {
+  font-family: 'JetBrains Mono', monospace;
+}
+button, input, select { font-family: inherit; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.35; }
+.tsd-page-toolbar { background: #1d1e22; }
+.tsd-theme-toggle { display: none; }
+pre { border: 1px solid #58585f; border-left: 3px solid #70b7ff; border-radius: 8px; }
+
+.tsd-page-toolbar .title { color: #ff8a3d; font-family: 'JetBrains Mono', monospace; }
+.tsd-navigation a.current { box-shadow: inset 2px 0 #ff8a3d; }

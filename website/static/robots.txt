@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://api-def.com/sitemap.xml
+Sitemap: https://api-def.com/api/sitemap.xml

@@ -1,6 +1,7 @@
 ---
 id: node
 title: Node & Browser Support
+description: Use api-def in Node.js and browsers with Fetch or Axios request backends and runtime-specific configuration.
 ---
 
 Node.js 22 and modern browsers provide `fetch` by default. `api-def` uses `FetchRequestBackend` automatically when the runtime supports `fetch`, `Request`, `Response`, and `Headers`. In browser environments without supported `fetch`, it falls back to `XHRRequestBackend` when `XMLHttpRequest` is available. In other environments, provide a compatible request backend:

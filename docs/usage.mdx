@@ -1,10 +1,11 @@
 ---
 slug: /
 id: usage
-title: Usage
+title: Typed API definitions for TypeScript
+sidebar_label: Usage
+hide_title: true
+description: Typed API definitions with middleware support. Install api-def and define typed queries, bodies, responses and URL parameters.
 ---
-
-API def provides a unified way to type your endpoints allowing for compile time checking of query, body, response and even url parameters.
 
 ## Getting Started
 
@@ -19,7 +20,7 @@ import { Api } from "api-def";
 
 const api = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
 });
 
 export default api;
@@ -50,7 +51,7 @@ We can also provide optional `name` and `description`, which help with debugging
 
 ## Calling an Endpoint
 
-To call our endpoint we can use the `submit` function, which will `GET` the URL `http://localhost:5000/v1/status/health-check`:
+To call our endpoint we can use the `submit` function, which will `GET` the URL `https://api.example.com/v1/status/health-check`:
 
 ```typescript {2}
 const makeRequest = async () => {

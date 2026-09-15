@@ -1,6 +1,7 @@
 ---
 id: middleware
 title: Middleware
+description: Add type-safe middleware to api-def APIs and endpoints for authentication, request changes, events and shared behaviour.
 ---
 
 When we make requests a lot of the time there is some consistent logic between all of our endpoints such as authentication or error handling. This is where middleware come in!
@@ -44,7 +45,7 @@ import { Api } from "api-def";
 
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   middleware: [AuthMiddleware()],
 });
 

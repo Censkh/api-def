@@ -1,4 +1,6 @@
-# [api-def](https://api-def.com/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Censkh/api-def/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/api-def.svg?style=flat)](https://www.npmjs.com/package/api-def) [![build status](https://img.shields.io/github/actions/workflow/status/censkh/api-def/workflow.yml)](https://github.com/Censkh/api-def/actions)
+[![api-def — Typed APIs. Clearly defined. Orange Interlock logo on a charcoal background.](website/static/img/api-def-social-card.png)](https://api-def.com/)
+
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Censkh/api-def/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/api-def.svg?style=flat)](https://www.npmjs.com/package/api-def) [![build status](https://img.shields.io/github/actions/workflow/status/censkh/api-def/workflow.yml)](https://github.com/Censkh/api-def/actions)
 
 Typed APIs with middleware support
 

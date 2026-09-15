@@ -1,6 +1,7 @@
 ---
 id: mocking
 title: Mocking
+description: Mock api-def endpoints for tests and disconnected development while preserving endpoint types.
 ---
 
 Mocking lets you work without calling the live service during development or tests.
@@ -67,7 +68,7 @@ import { Api } from "api-def";
 
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   mocking: { enabled: true },
 });
 

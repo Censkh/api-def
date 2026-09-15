@@ -1,6 +1,7 @@
 ---
 id: caching
 title: Caching
+description: Cache api-def responses locally or configure browser and Axios caching to control repeated requests.
 ---
 
 There are two types of caching available in api-def:
@@ -17,7 +18,7 @@ import { Api, ClientCacheMiddleware } from "api-def";
 
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   middleware: [
     ClientCacheMiddleware({ defaultExpiry: 1000 * 60 * 20 }),
   ],
@@ -31,7 +32,7 @@ You can also pass in a predicate function to disable caching upon certain condit
 ```typescript
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   middleware: [
     ClientCacheMiddleware({
       predicate: () => isCacheEnabled(),
@@ -60,7 +61,7 @@ You can use the browser's built-in cache by setting the `browserCache` option in
 ```typescript
 const API = new Api({
   name: "My Backend",
-  baseUrl: "http://localhost:5000/v1",
+  baseUrl: "https://api.example.com/v1",
   defaultRequestConfig: {
     browserCache: "force-cache", // Use cached response if available
   },
